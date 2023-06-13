@@ -1,0 +1,45 @@
+services:
+  tpay.context:
+    class: 'Context'
+    public: true
+    factory: ['Tpay\Factory\ContextFactory', 'getContext']
+
+  tpay.cart:
+    class: 'Cart'
+    public: true
+    factory: [ 'Tpay\Factory\ContextFactory', 'getCart' ]
+
+  tpay.controller:
+    class: 'Controller'
+    public: true
+    factory: ['Tpay\Factory\ContextFactory', 'getController']
+
+  tpay.cookie:
+    class: 'Cookie'
+    public: true
+    factory: ['Tpay\Factory\ContextFactory', 'getCookie']
+
+  tpay.language:
+    class: 'Language'
+    public: true
+    factory: ['Tpay\Factory\ContextFactory', 'getLanguage']
+
+  tpay.currency:
+    class: 'Currency'
+    public: true
+    factory: ['Tpay\Factory\ContextFactory', 'getCurrency']
+
+  tpay.smarty:
+    class: 'Smarty'
+    public: true
+    factory: ['Tpay\Factory\ContextFactory', 'getSmarty']
+
+  tpay.shop:
+    class: 'Shop'
+    public: true
+    factory: ['Tpay\Factory\ContextFactory', 'getShop']
+
+  tpay.link:
+    class: 'Link'
+    public: true
+    factory: ['Tpay\Factory\ContextFactory', 'getLink']

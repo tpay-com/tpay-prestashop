@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS `_DB_PREFIX_tpay_transaction`;
+DROP TABLE IF EXISTS `_DB_PREFIX_tpay_refund`;
+DROP TABLE IF EXISTS `_DB_PREFIX_tpay_credit_card`;
+DROP TABLE IF EXISTS `_DB_PREFIX_tpay_blik`;

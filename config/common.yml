@@ -1,0 +1,88 @@
+imports:
+  - { resource: ./context.yml }
+
+services:
+
+  tpay.handler.repository_query_handler:
+    class: Tpay\Handler\RepositoryQueryHandler
+
+  tpay.handler.install_query_handler:
+    class: Tpay\Handler\InstallQueryHandler
+
+  tpay.repository.credit_card:
+    class: Tpay\Repository\CreditCardsRepository
+    arguments:
+      - "@doctrine.dbal.default_connection"
+      - "@doctrine.orm.default_entity_manager"
+      - "@tpay.handler.repository_query_handler"
+      - "%database_prefix%"
+
+  tpay.repository.blik:
+    class: Tpay\Repository\BlikRepository
+    arguments:
+      - "@doctrine.dbal.default_connection"
+      - "@doctrine.orm.default_entity_manager"
+      - "@tpay.handler.repository_query_handler"
+      - "%database_prefix%"
+
+  tpay.repository.transaction:
+    class: Tpay\Repository\TransactionsRepository
+    public: true
+    arguments:
+      - "@doctrine.dbal.default_connection"
+      - "@doctrine.orm.default_entity_manager"
+      - "@tpay.handler.repository_query_handler"
+      - "%database_prefix%"
+
+  tpay.repository.refund:
+    class: Tpay\Repository\RefundsRepository
+    public: true
+    arguments:
+      - "@doctrine.dbal.default_connection"
+      - "@doctrine.orm.default_entity_manager"
+      - "@tpay.handler.repository_query_handler"
+      - "%database_prefix%"
+
+  tpay.service.surcharge:
+    class: Tpay\Service\SurchargeService
+    public: true
+
+  tpay.service.transaction:
+    class: Tpay\Service\TransactionService
+    public: true
+    arguments:
+      - "@tpay.cart"
+      - "@tpay.repository.transaction"
+      - "@tpay.service.surcharge"
+      - "@tpay.context"
+
+  tpay.service.card_service:
+    class: Tpay\Service\CardService
+    public: true
+    arguments:
+      - "@tpay.repository.credit_card"
+
+  tpay.order_history:
+    class: OrderHistory
+    public: true
+
+  tpay.handler.order_status_handler:
+    class: Tpay\Handler\OrderStatusHandler
+    public: true
+    arguments:
+      - "@tpay.order_history"
+      - "@tpay.repository.transaction"
+
+  tpay.util.secret_hash:
+    class: Tpay\Util\SecretHash
+    public: true
+    factory: [ 'Tpay\Util\SecretHash', 'getHash' ]
+    arguments:
+      - "%secret%"
+
+
+  tpay:
+    class: 'Tpay'
+    factory: [ 'Module', 'getInstanceByName' ]
+    arguments:
+      - 'tpay'
