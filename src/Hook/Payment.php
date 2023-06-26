@@ -77,4 +77,5 @@ class Payment extends AbstractHook
 
         return $this->module->fetch('module:tpay/views/templates/hook/paymentReturn.tpl');
     }
+
 }

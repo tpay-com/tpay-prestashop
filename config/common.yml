@@ -11,6 +11,7 @@ services:
 
   tpay.repository.credit_card:
     class: Tpay\Repository\CreditCardsRepository
+    public: true
     arguments:
       - "@doctrine.dbal.default_connection"
       - "@doctrine.orm.default_entity_manager"
@@ -19,6 +20,7 @@ services:
 
   tpay.repository.blik:
     class: Tpay\Repository\BlikRepository
+    public: true
     arguments:
       - "@doctrine.dbal.default_connection"
       - "@doctrine.orm.default_entity_manager"

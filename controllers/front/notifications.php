@@ -15,6 +15,7 @@
 use Configuration as Cfg;
 use Tpay\Service\NotificationService;
 use tpaySDK\Utilities\TpayException;
+use tpaySDK\Webhook\JWSVerifiedPaymentNotification;
 
 class TpayNotificationsModuleFrontController extends ModuleFrontController
 {
@@ -36,12 +37,18 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
             } else {
                 // default process transaction
                 try {
-                    $notification = (new NotificationService())->checkPayment(); // checkNotification
+                    $isProduction = (false === Cfg::get('TPAY_SANDBOX'));
+                    $NotificationWebhook = new JWSVerifiedPaymentNotification(
+                        Cfg::get('TPAY_MERCHANT_SECRET'),
+                        $isProduction
+                    );
+                    $notification = $NotificationWebhook->getNotification();
                     $notificationData = $notification->getNotificationAssociative();
 
                     if (!empty($notificationData)) {
                         $this->notificationTransaction($notification, $notificationData);
                     }
+                    echo 'TRUE';
                 } catch (\Exception $exception) {
                     \PrestaShopLogger::addLog($exception, 3);
                 }
@@ -113,7 +120,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                 $cardsRepository = $this->module->get('tpay.repository.credit_card');
 
                 //check if token is empty
-                $hasToken = (bool) $cardsRepository->getCreditCardTokenByCardCrc($trCrc);
+                $hasToken = (bool)$cardsRepository->getCreditCardTokenByCardCrc($trCrc);
 
                 if (!$hasToken) {
                     $cardsRepository->updateToken(
@@ -139,7 +146,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
             /// Charge
             if ($status === 'CHARGEBACK') {
                 $sqlTransaction = $transactionRepository->getTransactionByCrc($transaction['crc']);
-                $orderId = (int) $sqlTransaction['order_id'];
+                $orderId = (int)$sqlTransaction['order_id'];
 
                 $orderHistory = new \OrderHistory();
                 $orderHistory->id_order = $orderId;
@@ -161,13 +168,13 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
 
         if ($eventType === 'ALIAS_REGISTER') {
             $blikRepository->saveBlikAlias(
-                (int) $userId,
-                (string) $alias['value']
+                (int)$userId,
+                (string)$alias['value']
             );
         } elseif ($eventType === 'ALIAS_UNREGISTER') {
             $blikRepository->removeBlikAlias(
-                (int) $userId,
-                (string) $alias['value']
+                (int)$userId,
+                (string)$alias['value']
             );
         }
     }

@@ -173,12 +173,15 @@ class TpayConfigurationController extends ModuleAdminController
                     return false;
                 }
 
+                $output = '';
+
                 $settings = new ConfigurationSaveForm(new ConfigurationAdapter(0));
                 $settings->execute(true);
 
                 \Tools::clearSmartyCache();
 
                 if ($this->errors) {
+                    echo $output;
                     return false;
                 } else {
                     return true;
@@ -251,24 +254,24 @@ class TpayConfigurationController extends ModuleAdminController
                 ],
                 [
                     'type' => 'switch',
-                    'label' => $this->l('Use test Account'),
-                    'name' => 'TPAY_DEBUG',
+                    'label' => $this->l('Use Sandbox Account'),
+                    'name' => 'TPAY_SANDBOX',
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
                         [
-                            'id' => 'tpay_debug_on',
+                            'id' => 'tpay_sandbox_on',
                             'value' => 1,
                             'label' => $this->l('Yes'),
                         ],
                         [
-                            'id' => 'tpay_debug_off',
+                            'id' => 'tpay_sandbox_off',
                             'value' => 0,
                             'label' => $this->l('No'),
                         ],
                     ],
                     'desc' => '<b>' . $this->l('WARNING') . '</b>'
-                        . $this->l(' turn off in production mode'),
+                        . $this->l(' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!'),
                 ],
                 [
                     'type' => 'text',

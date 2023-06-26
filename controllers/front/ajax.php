@@ -36,6 +36,8 @@ class TpayAjaxModuleFrontController extends ModuleFrontController
      */
     public function initContent()
     {
+        //https://srv55300.seohost.com.pl/presta804/index.php?fc=module&module=tpay&controller=payment&id_lang=2
+        //https://srv55300.seohost.com.pl/presta804/index.php?tpay=1&type=transfer&tpay_transfer_id=160
         parent::initContent();
         $ajax = true;
         $state = Tools::getValue('state');

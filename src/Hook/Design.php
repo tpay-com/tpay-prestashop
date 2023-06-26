@@ -23,8 +23,8 @@ use Tpay\Config\Config;
 class Design extends AbstractHook
 {
     public const AVAILABLE_HOOKS = [
-        'header',
-        'displayProductButtons',
+        'displayHeader',
+        'displayProductAdditionalInfo',
         'displayCustomerAccount',
     ];
 
@@ -33,7 +33,7 @@ class Design extends AbstractHook
      *
      * @return void
      */
-    public function header(): void
+    public function displayHeader(): void
     {
         $this->context->controller->addCSS($this->module->getPath() . 'views/css/main.css');
         $this->context->controller->addJS($this->module->getPath() . 'views/js/main.min.js');
@@ -111,7 +111,7 @@ class Design extends AbstractHook
      *
      * @return string|void
      */
-    public function displayProductButtons()
+    public function displayProductAdditionalInfo()
     {
         if (Cfg::get('PS_CATALOG_MODE') || !Cfg::get('TPAY_BANNER')) {
             return;

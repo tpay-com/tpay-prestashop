@@ -37,8 +37,6 @@ use tpaySDK\Api\TpayApi;
 
 class Tpay extends PaymentModule
 {
-    public $api;
-
     // phpcs:ignore
     public $_errors;
 
@@ -120,6 +118,8 @@ class Tpay extends PaymentModule
      */
     private $hookDispatcher;
 
+    private $api;
+
 
     public $tabs = [
         [
@@ -136,48 +136,59 @@ class Tpay extends PaymentModule
      */
     public function __construct()
     {
-        $this->name                   = 'tpay';
-        $this->tab                    = 'payments_gateways';
-        $this->version                = '1.7.5';
-        $this->author                 = 'Krajowy Integrator Płatności S.A.';
-        $this->need_instance          = 0;
+        $this->name = 'tpay';
+        $this->tab = 'payments_gateways';
+        $this->version = '1.8.0';
+        $this->author = 'Krajowy Integrator Płatności S.A.';
+        $this->need_instance = 0;
         $this->ps_versions_compliancy = [
             'min' => '1.7',
             'max' => _PS_VERSION_,
         ];
-        $this->bootstrap              = true;
-        $this->currencies             = true;
-        $this->currencies_mode        = 'checkbox';
-        $this->is_eu_compatible       = 1;
-        $this->module_key             = 'f2eb0ce26233d0b517ba41e81f2e62fe';
+        $this->bootstrap = true;
+        $this->currencies = true;
+        $this->currencies_mode = 'checkbox';
+        $this->is_eu_compatible = 1;
+        $this->module_key = 'f2eb0ce26233d0b517ba41e81f2e62fe';
 
         parent::__construct();
 
-        $this->displayName      = $this->l('Tpay');
-        $this->description      = $this->l('Accepting online payments');
+        $this->displayName = $this->l('Tpay');
+        $this->description = $this->l('Accepting online payments');
         $this->confirmUninstall = $this->l('Delete this module?');
         $this->hookDispatcher = new HookDispatcher($this);
-        $this->initAPI();
     }
 
+    /*
+     * Boot API when it's needed
+     */
+    public function __get($name)
+    {
+        if ('api' === $name) {
+            if (null === $this->api) {
+                $this->initAPI();
+            }
+            return $this->api;
+        }
+    }
 
     /**
      * Module call API.
      */
     private function initAPI()
     {
-        $clientId  = Cfg::get('TPAY_CLIENT_ID');
+        $clientId = Cfg::get('TPAY_CLIENT_ID');
         $secretKey = Cfg::get('TPAY_SECRET_KEY');
+        $isProduction = (true !== (bool)Cfg::get('TPAY_SANDBOX'));
 
         if ($clientId && $secretKey) {
             try {
-                $this->api = new TpayApi($clientId, $secretKey, true, 'read');
+                $this->api = new TpayApi($clientId, $secretKey, $isProduction, 'read');
             } catch (\Exception $exception) {
                 PrestaShopLogger::addLog($exception->getMessage(), 3);
             }
         }
     }
-
 
     /**
      * @param string $serviceName
@@ -205,9 +216,9 @@ class Tpay extends PaymentModule
     /**
      * Module installation.
      *
-     * @throws BaseException
-     * @throws Exception
      * @return boolean
+     * @throws Exception
+     * @throws BaseException
      */
     public function install(): bool
     {
@@ -226,7 +237,7 @@ class Tpay extends PaymentModule
             !parent::install() || false === (new Install(
                 $this,
                 new InstallQueryHandler()
-            ) )->install()
+            ))->install()
         ) {
             $this->_errors[] = $this->l('Installation error');
         }
@@ -258,9 +269,9 @@ class Tpay extends PaymentModule
     /**
      * Module uninstall.
      *
-     * @throws BaseException
-     * @throws PrestaShopException
      * @return boolean
+     * @throws PrestaShopException
+     * @throws BaseException
      */
     public function uninstall(): bool
     {

@@ -77,6 +77,7 @@ class FactoryState
     {
         if (!empty($this->getStatusTypes())) {
             foreach ($this->getStatusTypes() as $type) {
+
                 $status = $this->statusBuilder(
                     $type,
                     new OrderState()
@@ -87,6 +88,7 @@ class FactoryState
                 }
 
                 $this->assignConfiguration($status, $type);
+
             }
         }
     }
@@ -140,6 +142,7 @@ class FactoryState
     {
         if (!empty($names->stateLanguage)) {
             foreach (\Language::getLanguages() as $lang) {
+
                 return OrderState::existsLocalizedNameInDatabase(
                     $names->stateLanguage[$lang['iso_code']],
                     (int)$lang['id_lang'],
