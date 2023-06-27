@@ -37,7 +37,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
             } else {
                 // default process transaction
                 try {
-                    $isProduction = (false === Cfg::get('TPAY_SANDBOX'));
+                    $isProduction = (true !== (bool)Cfg::get('TPAY_SANDBOX'));
                     $NotificationWebhook = new JWSVerifiedPaymentNotification(
                         Cfg::get('TPAY_MERCHANT_SECRET'),
                         $isProduction
