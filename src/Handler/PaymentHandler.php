@@ -77,7 +77,7 @@ class PaymentHandler
      */
     public function getCustomerDetails(): array
     {
-        $customer = new CustomerData($this->address, $this->customer, $this->context, $this->context->cart);
+        $customer = new CustomerData($this->address, $this->customer, $this->context, $this->context->cart, $this->order);
         $customer->createCallbacks($this->order, $this->paymentMethodHandler->getName());
         $customer->createDescription($this->order);
 

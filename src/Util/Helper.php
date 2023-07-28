@@ -49,6 +49,7 @@ class Helper
             'TPAY_CARD_ACTIVE',
             'TPAY_CARD_RSA',
             'TPAY_MERCHANT_SECRET',
+            'TPAY_CRC_FORM',
             'TPAY_GPAY_ACTIVE',
             'TPAY_APPLEPAY_ACTIVE',
             'TPAY_SANDBOX',

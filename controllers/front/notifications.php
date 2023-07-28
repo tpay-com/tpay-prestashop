@@ -13,6 +13,7 @@
  */
 
 use Configuration as Cfg;
+use Tpay\Exception\NotificationHandlingException;
 use Tpay\Service\NotificationService;
 use tpaySDK\Utilities\TpayException;
 use tpaySDK\Webhook\JWSVerifiedPaymentNotification;
@@ -74,8 +75,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         $merchantSecret = Cfg::get('TPAY_MERCHANT_SECRET');
 
         if (!$merchantSecret) {
-            echo 'FALSE';
-            \PrestaShopLogger::addLog('No merchant secret', 3);
+            throw new NotificationHandlingException('No or empty merchant secret');
         }
 
         // check transaction status
@@ -92,19 +92,15 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
             Verification of md5sum
             */
             if ($trMd5sum !== $md5sum) {
-                \PrestaShopLogger::addLog('Wrong transaction md5 sum', 3);
                 \PrestaShopLogger::addLog($loggerTransactionData, 3);
-                echo 'FALSE';
-                return;
+                throw new NotificationHandlingException('Wrong transaction md5 sum - ' . $trId);
             }
 
             /*
             Verification transaction by CRC
             */
             if ($crc !== $trCrc) {
-                \PrestaShopLogger::addLog('Wrong crc', 3);
-                echo 'FALSE';
-                return;
+                throw new NotificationHandlingException('CRC mismatch expected from database: ' . $crc . '. given: ' . $trCrc);
             }
 
             $this->transactionStatusUpdate(
@@ -129,7 +125,6 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                     );
                 }
             }
-            echo 'TRUE';
         }
     }
 

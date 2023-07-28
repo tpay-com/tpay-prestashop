@@ -253,6 +253,21 @@ class TpayConfigurationController extends ModuleAdminController
                     'required' => true,
                 ],
                 [
+                    'type' => 'select',
+                    'label' => $this->l('CRC field form'),
+                    'name' => 'TPAY_CRC_FORM',
+                    'options' => [
+                        'query' => [
+                            ['id' => 'md5_all', 'name' => 'md5($order->id . $customer->secure_key . time())'],
+                            ['id' => 'order_id_and_rest', 'name' => '$order->id . "-" . md5($customer->secure_key . time())'],
+                            ['id' => 'order_id', 'name' => '$order->id'],
+                        ],
+                        'id' => 'id',
+                        'name' => 'name',
+                    ],
+                    'class' => 't'
+                ],
+                [
                     'type' => 'switch',
                     'label' => $this->l('Use Sandbox Account'),
                     'name' => 'TPAY_SANDBOX',

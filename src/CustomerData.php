@@ -43,20 +43,27 @@ class CustomerData
 
 
     private $customerDetails;
+    /**
+     * @var \Order
+     */
+    private $order;
 
     /**
      * @throws \Exception
      */
     public function __construct(
         \AddressCore $address,
-        \Customer $customer,
-        \Context $context,
-        \Cart $cart
-    ) {
+        \Customer    $customer,
+        \Context     $context,
+        \Cart        $cart,
+        \Order       $order
+    )
+    {
         $this->address = $address;
         $this->customer = $customer;
         $this->context = $context;
         $this->cart = $cart;
+        $this->order = $order;
 
         $this->setBasicClient();
     }
@@ -79,15 +86,15 @@ class CustomerData
         $surchargeTotal = $surcharge->getSurchargeValue($orderTotal);
         $total = $orderTotal + $surchargeTotal;
 
-        return (string) $total;
+        return (string)$total;
     }
 
 
     /**
      * Create basic client data
      *
-     * @throws \Exception
      * @return void
+     * @throws \Exception
      */
     private function setBasicClient(): void
     {
@@ -104,7 +111,7 @@ class CustomerData
                 '.',
                 ''
             ),
-            'hiddenDescription' => $this->createCrc($this->context),
+            'hiddenDescription' => $this->createCrc(),
             'payer' => [
                 'email' => $this->context->cookie->email,
                 'name' => sprintf(
@@ -112,7 +119,7 @@ class CustomerData
                     $this->context->cookie->customer_firstname,
                     $this->context->cookie->customer_lastname
                 ),
-                'phone' => $this->address->phone ? : '000',
+                'phone' => $this->address->phone ?: '000',
                 'address' => $this->address->address1 . ' ' . $this->address->address2,
                 'code' => $this->address->postcode,
                 'city' => $this->address->city,
@@ -138,7 +145,7 @@ class CustomerData
         $lastName = $customer->lastname;
 
         $context->cookie->customer_firstname = $firstName;
-        $context->cookie->customer_lastname  = $lastName;
+        $context->cookie->customer_lastname = $lastName;
 
         $this->customerDetails['description'] = '#BLIK - ' . $firstName . ' ' . $lastName;
 
@@ -152,7 +159,7 @@ class CustomerData
     public function createCallbacks($order, $type): void
     {
         $data = [
-            'payerUrls'    => [
+            'payerUrls' => [
                 'success' => $this->context->link->getModuleLink(
                     'tpay',
                     'confirmation',
@@ -161,7 +168,7 @@ class CustomerData
                         'order_id' => $order->id
                     ]
                 ),
-                'error'   => $this->context->link->getModuleLink(
+                'error' => $this->context->link->getModuleLink(
                     'tpay',
                     'ordererror',
                     [
@@ -186,7 +193,7 @@ class CustomerData
     public function createBlikCallbacks($type): void
     {
         $data = [
-            'payerUrls'    => [
+            'payerUrls' => [
                 'success' => $this->context->link->getModuleLink(
                     'tpay',
                     'confirmation',
@@ -194,7 +201,7 @@ class CustomerData
                         'type' => $type,
                     ]
                 ),
-                'error'   => $this->context->link->getModuleLink(
+                'error' => $this->context->link->getModuleLink(
                     'tpay',
                     'ordererror',
                     [
@@ -215,9 +222,6 @@ class CustomerData
     }
 
 
-
-
-
     public function getCustomerTitle($reference, $context): string
     {
         return '#' . $reference . ' - ' . $context->customer_firstname . ' ' . $context->customer_lastname;
@@ -230,8 +234,19 @@ class CustomerData
      *
      * @return string
      */
-    private function createCrc($context): string
+    private function createCrc(): string
     {
-        return md5($context->cart->id . $context->cookie->mail . $this->customer->secure_key . time());
+        $order = $this->order;
+        $customer = $this->customer;
+
+        switch (\Configuration::get('TPAY_CRC_FORM')) {
+            case 'order_id_and_rest':
+                return $order->id . '-' . md5($customer->secure_key . time());
+            case 'order_id':
+                return (string)$order->id;
+            case 'md5_all':
+            default:
+                return md5($order->id . $customer->secure_key . time());
+        }
     }
 }
