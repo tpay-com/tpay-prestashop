@@ -1,0 +1,160 @@
+/// Account page
+.tpay-account-cards {
+  margin-bottom: 1.875rem;
+  font-size: .875rem;
+  color: #232323;
+  background: #fff;
+
+  &__body {
+	padding: 1rem;
+  }
+
+  &__footer {
+	padding: 0.5rem 1rem;
+	border-top: 1px solid #f6f6f6;
+  }
+}
+
+#card-number {
+  width: 100%;
+}
+
+#exp-container {
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 50%;
+}
+
+#card-exp {
+  width: 150px;
+}
+
+#card-cvc {
+  width: 100px;
+}
+
+.tpay-card {
+  position: relative;
+  background: #f6f6f6;
+  width: 390px;
+  height: 210px;
+  border-radius: 6px;
+  padding: 25px 20px 0;
+  box-sizing: border-box;
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-weight: 300;
+  margin-bottom: 10px;
+
+  &__wrap {
+	display: flex;
+	justify-content: space-between;
+	margin-left: -10px;
+	margin-right: -10px;
+  }
+
+  label {
+	display: block;
+	margin: 0 auto 7px;
+	font-size: 11px;
+	font-weight: 600;
+	color: #2c2c2c;
+  }
+
+  input::placeholder {
+	color: #3c3c3c;
+  }
+
+  input {
+	outline: none;
+	background-color: #ffffff;
+	line-height: 30px;
+	padding: 3px 12px;
+	margin: 0 0 25px;
+	color: #2c2c2c;
+	font-size: 15px;
+	font-weight: 400;
+	box-sizing: border-box;
+	font-family: lato, 'helvetica-light', 'sans-serif';
+	letter-spacing: .7px;
+	border: 1px solid #e4e4e4;
+	border-radius: 6px;
+	width: 100%;
+
+	&.wrong {
+	  border: 1px solid red;
+	}
+
+  }
+
+  &__save {
+	display: flex;
+	align-items: center;
+	//margin-bottom: 20px;
+	label {
+	  margin-left: 10px;
+	  margin-bottom:0;
+	}
+  }
+
+}
+
+
+.tpay-cards {
+	&__item {
+	  padding-bottom: 12px;
+	  padding-right: 15px;
+	  padding-left: 15px;
+
+	  &-inner {
+		display: flex;
+		align-content: center;
+		margin:0;
+
+		padding: 12px 15px;
+		height: 100%;
+		border: 1px solid #DDDDDD;
+		border-radius: 3px;
+		cursor: pointer;
+
+		&:hover {
+		  box-shadow: 0 0 20px #C9CCE7;
+		  transition: box-shadow 125ms ease-out;
+		  -webkit-transition: box-shadow 125ms ease-out;
+		  -moz-transition: box-shadow 125ms ease-out;
+		  -o-transition: box-shadow 125ms ease-out;
+		}
+
+	  }
+
+	  label {
+		font-weight: 700;
+		text-align: left;
+		margin: 0;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		cursor: pointer;
+	  }
+
+	  p {
+		font-size: 0.70rem;
+		padding: 0;
+		margin: 0;
+		line-height: 1;
+	  }
+
+	  input {
+		//display: none;
+
+		&:checked + label {
+		  border-bottom: 2px solid #56df83 !important;
+		}
+	  }
+
+	}
+}
+
+
+
+
