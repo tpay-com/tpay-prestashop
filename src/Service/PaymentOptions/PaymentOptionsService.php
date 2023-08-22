@@ -45,15 +45,15 @@ class PaymentOptionsService
      * @throws \Exception
      */
     public function __construct(
-        \Tpay $module,
+        \Tpay         $module,
         PaymentOption $paymentOption,
-        \Cart $cart
-    ) {
+        \Cart         $cart
+    )
+    {
         $this->module = $module;
         $this->paymentOption = $paymentOption;
         $this->cart = $cart;
         $this->surchargeService = $this->module->getService('tpay.service.surcharge');
-
         $this->getGroup();
     }
 
@@ -121,7 +121,7 @@ class PaymentOptionsService
         $this->createApplePayPaymentChannel();
 
         foreach ($this->channels as $payment_data) {
-            $optionClass = PaymentOptionsFactory::getOptionById((int) $payment_data['mainChannel']);
+            $optionClass = PaymentOptionsFactory::getOptionById((int)$payment_data['mainChannel']);
 
             if (is_object($optionClass)) {
                 $gateway = new PaymentType(new $optionClass());
@@ -138,31 +138,31 @@ class PaymentOptionsService
     }
 
     /**
-     * @throws \Exception
      * @return array
+     * @throws \Exception
      */
     private function getSeparatePayments(): array
     {
         $paymentsMethods = [
-            Config::GATEWAY_BLIK => (bool) Helper::getMultistoreConfigurationValue('TPAY_BLIK_ACTIVE'),
-            Config::GATEWAY_GOOGLE_PAY => (bool) Helper::getMultistoreConfigurationValue('TPAY_GPAY_ACTIVE'),
-            Config::GATEWAY_APPLE_PAY => (bool) Helper::getMultistoreConfigurationValue('TPAY_APPLEPAY_ACTIVE'),
+            Config::GATEWAY_BLIK => (bool)Helper::getMultistoreConfigurationValue('TPAY_BLIK_ACTIVE'),
+            Config::GATEWAY_GOOGLE_PAY => (bool)Helper::getMultistoreConfigurationValue('TPAY_GPAY_ACTIVE'),
+            Config::GATEWAY_APPLE_PAY => (bool)Helper::getMultistoreConfigurationValue('TPAY_APPLEPAY_ACTIVE'),
         ];
 
         if ($this->aliorBetweenPriceRange()) {
-            $paymentsMethods[Config::GATEWAY_ALIOR_RATY] = (bool) Helper::getMultistoreConfigurationValue(
+            $paymentsMethods[Config::GATEWAY_ALIOR_RATY] = (bool)Helper::getMultistoreConfigurationValue(
                 'TPAY_INSTALLMENTS_ACTIVE'
             );
         }
 
         if ($this->twistoBetweenPriceRange()) {
-            $paymentsMethods[Config::GATEWAY_TWISTO] = (bool) Helper::getMultistoreConfigurationValue(
+            $paymentsMethods[Config::GATEWAY_TWISTO] = (bool)Helper::getMultistoreConfigurationValue(
                 'TPAY_TWISTO_ACTIVE'
             );
         }
 
         if ($this->hasActiveCard()) {
-            $paymentsMethods[Config::GATEWAY_CARD] = (bool) Helper::getMultistoreConfigurationValue(
+            $paymentsMethods[Config::GATEWAY_CARD] = (bool)Helper::getMultistoreConfigurationValue(
                 'TPAY_CARD_ACTIVE'
             );
         }
@@ -201,11 +201,12 @@ class PaymentOptionsService
     /**
      * Grouping of payments delivered from api
      *
-     * @throws \Exception
      * @return void
+     * @throws \Exception
      */
     private function getPaymentGroups(): void
     {
+
         $bankGroups = $this->module->api->Transactions->getBankGroups();
         if ($bankGroups) {
             $this->channels = $this->groupChannel($bankGroups['groups'], $this->getSeparatePayments());
@@ -232,8 +233,8 @@ class PaymentOptionsService
      * @param array $group
      * @param array $compareArray
      *
-     * @throws \Exception
      * @return array
+     * @throws \Exception
      */
     private function groupTransfer(array $group, array $compareArray): array
     {

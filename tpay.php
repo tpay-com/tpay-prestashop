@@ -23,7 +23,9 @@ if (file_exists($autoloadPath)) {
     include_once $autoloadPath;
 }
 
-
+use Doctrine\DBAL\Connection;
+use PrestaShop\PrestaShop\Core\Foundation\Database\EntityManager;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Configuration as Cfg;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Tpay\Exception\BaseException;
@@ -31,7 +33,7 @@ use Tpay\Handler\InstallQueryHandler;
 use Tpay\HookDispatcher;
 use Tpay\Install\Install;
 use Tpay\Install\Uninstall;
-use Tpay\Service\SurchargeService;
+use Tpay\Util\Container;
 use Tpay\States\FactoryState;
 use tpaySDK\Api\TpayApi;
 
@@ -198,15 +200,13 @@ class Tpay extends PaymentModule
      */
     public function getService(string $serviceName)
     {
-        $container = SymfonyContainer::getInstance();
-
+        $container = Container::getInstance();
         if ($container !== null) {
             return $container->get($serviceName);
         }
 
-        return $this->get($serviceName);
+        throw new \Exception('Cannot get service ' . $serviceName);
     }
-
 
     public function getPath(): string
     {
@@ -403,5 +403,29 @@ class Tpay extends PaymentModule
         }
 
         return false;
+    }
+
+    public function fetch($templatePath, $cache_id = null, $compile_id = null)
+    {
+        global $smarty;
+        $isOldPresta = false;
+        if (version_compare(_PS_VERSION_, '1.7.6.0', '<')) {
+            $isOldPresta = true;
+            if (false === ($smarty->registered_resources['module'] instanceof \Tpay\Util\LegacySmartyResourceModule)) {
+                $module_resources = array('theme' => _PS_THEME_DIR_ . 'modules/');
+                if (_PS_PARENT_THEME_DIR_) {
+                    $module_resources['parent'] = _PS_PARENT_THEME_DIR_ . 'modules/';
+                }
+                $module_resources['modules'] = _PS_MODULE_DIR_;
+                $smarty->registerResource(
+                    'module',
+                    new \Tpay\Util\LegacySmartyResourceModule(
+                        $module_resources,
+                        $smarty->registered_resources['module']->isAdmin
+                    ));
+            }
+        }
+        $smarty->assign('tpay_is_old_presta', $isOldPresta);
+        return parent::fetch($templatePath, $cache_id, $compile_id);
     }
 }

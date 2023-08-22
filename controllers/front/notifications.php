@@ -84,7 +84,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                 ' Paid ' . $trPaid . ' Status ' . $trDate;
 
             $md5sum = md5($id . $trId . $trAmount . $trCrc . $merchantSecret);
-            $transactionRepository = $this->module->get('tpay.repository.transaction');
+            $transactionRepository = $this->module->getService('tpay.repository.transaction');
             $transaction = $transactionRepository->getTransactionByCrc($trCrc);
             $crc = $transaction['crc'] ?? '';
 
@@ -113,7 +113,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
              Payment card update token card
              */
             if ($notification->card_token->getValue()) {
-                $cardsRepository = $this->module->get('tpay.repository.credit_card');
+                $cardsRepository = $this->module->getService('tpay.repository.credit_card');
 
                 //check if token is empty
                 $hasToken = (bool)$cardsRepository->getCreditCardTokenByCardCrc($trCrc);
@@ -159,7 +159,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
     public function blikAliasProcess($eventType, $alias): void
     {
         $userId = explode('_', $alias['value'])[1];
-        $blikRepository = $this->module->get('tpay.repository.blik');
+        $blikRepository = $this->module->getService('tpay.repository.blik');
 
         if ($eventType === 'ALIAS_REGISTER') {
             $blikRepository->saveBlikAlias(

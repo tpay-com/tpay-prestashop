@@ -71,8 +71,8 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         $this->context = $context;
 
         $savedId = $data['savedId'] ?? null;
-        $this->cardRepository = $module->get('tpay.repository.credit_card');
-        $this->cardService = $module->get('tpay.service.card_service');
+        $this->cardRepository = $module->getService('tpay.repository.credit_card');
+        $this->cardService = $module->getService('tpay.service.card_service');
 
         if ($savedId) {
             $this->processSavedCardPayment($savedId);
@@ -155,7 +155,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     public function initTransactionProcess($transaction, $orderId): void
     {
         if (isset($transaction['transactionId'])) {
-            $transactionService = $this->module->get('tpay.service.transaction');
+            $transactionService = $this->module->getService('tpay.service.transaction');
             $transactionService->transactionProcess(
                 $transaction,
                 self::TYPE,
@@ -185,7 +185,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         );
 
         if (isset($result['result'], $result['status']) && $result['status'] === 'correct') {
-            $transactionService = $this->module->get('tpay.service.transaction');
+            $transactionService = $this->module->getService('tpay.service.transaction');
             $transactionService->transactionProcess(
                 $transaction,
                 self::TYPE,
@@ -238,7 +238,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     {
         $cardDataInput = filter_input(INPUT_POST, 'carddata', FILTER_SANITIZE_STRING);
         $cardHashInput = filter_input(INPUT_POST, 'card_hash', FILTER_SANITIZE_STRING);
-        $cartHash = $this->module->get('tpay.util.secret_hash');
+        $cartHash = $this->module->getService('tpay.util.secret_hash');
 
         $cardHash = SHA1($cardHashInput . $cartHash);
         $saveCard = false;

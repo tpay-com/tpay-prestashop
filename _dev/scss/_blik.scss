@@ -1,0 +1,84 @@
+.tpay-blik {
+  padding-top: 10px;
+  box-sizing: border-box;
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-weight: 300;
+  max-width: 220px;
+  position: relative;
+
+  .tpay-input-label {
+	display: block;
+	margin: 0 auto 7px;
+	font-size: 11px;
+	letter-spacing: 1px;
+	font-weight: 600;
+	color: #2c2c2c;
+  }
+
+  input::placeholder {
+	color: #3c3c3c;
+  }
+
+  input {
+	outline: none;
+	background-color: #ffffff;
+	height: 40px;
+	line-height: 30px;
+	padding: 0 10px;
+	letter-spacing: 5px;
+	width: 100%;
+	color: #2c2c2c;
+	text-align: center;
+	font-size: 17px;
+	font-weight: 500;
+	box-sizing: border-box;
+	border-radius: 6px;
+	font-family: lato, 'helvetica-light', 'sans-serif';
+	border: 1px solid #e7e7e7;
+
+	&.success {
+	  border: 1px solid #00c062;
+	}
+
+	.btn {
+	  width: 100%;
+	}
+
+  }
+
+}
+
+
+
+#tpay-blik-submit {
+  margin-top: 20px;
+  max-width: 220px;
+  width:100%;
+
+  color: #ffffff;
+  background-color: #24b9d7;
+  border-color: rgba(0,0,0,0);
+
+  &.disabled, &:disabled {
+	cursor: pointer;
+	opacity: 1;
+  }
+
+}
+
+.tpay-blik-response {
+  display: none;
+  transition: all 0.4s cubic-bezier(0.335, 0.01, 0.03, 1.36);
+
+  -webkit-animation-name: tpayFadeOut;
+  animation-name: tpayFadeOut;
+
+  &--open {
+	-webkit-animation-name: tpayFadeIn;
+	animation-name: tpayFadeIn;
+	display: block;
+	transition: all 0.4s cubic-bezier(0.335, 0.01, 0.03, 1.36);
+  }
+
+}

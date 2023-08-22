@@ -1,0 +1,70 @@
+.tpay-animated {
+  //-webkit-animation-duration: 1s;
+  //animation-duration: 1s;
+  //-webkit-animation-fill-mode: both;
+  //animation-fill-mode: both;
+  transition: all .2s cubic-bezier(0.335, 0.010, 0.030, 1.360);
+}
+
+.tpay-animated-fast {
+  -webkit-animation-duration: .3s;
+  animation-duration: .3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both
+}
+
+@keyframes tpayFadeIn {
+  0% {
+	opacity: 0;
+	visibility: hidden;
+  }
+  to {
+	opacity: 1;
+	visibility: visible;
+  }
+}
+
+@keyframes tpayFadeIn {
+  0% {
+	opacity: 0;
+	visibility: hidden;
+  }
+  to {
+	opacity: 1;
+	visibility: visible;
+  }
+}
+
+.tpay-fadeIn {
+  -webkit-animation-name: tpayFadeIn;
+  animation-name: tpayFadeIn;
+  display: block;
+}
+
+@keyframes tpayFadeOut {
+  0% {
+	opacity: 1;
+	visibility: visible;
+  }
+  to {
+	opacity: 0;
+	visibility: hidden;
+  }
+}
+
+@keyframes tpayFadeOut {
+  0% {
+	opacity: 1;
+	visibility: visible;
+  }
+  to {
+	opacity: 0;
+	visibility: hidden;
+  }
+}
+
+.tpay-fadeOut {
+  -webkit-animation-name: tpayFadeOut;
+  animation-name: tpayFadeOut;
+  display: none;
+}
