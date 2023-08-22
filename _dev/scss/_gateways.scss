@@ -1,0 +1,59 @@
+.tpay-payment-gateways {
+  display:grid;
+  margin-left:-0.6rem;
+  margin-right:-0.6rem;
+
+  &--grid {
+	grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));
+  }
+
+  &__item {
+	padding-left: 0.6rem;
+	padding-right: 0.6rem;
+	margin-bottom: 1.2rem;
+
+	img {
+	  width: auto;
+	  display: block;
+	  height: 36px;
+	  margin-left: auto;
+	  margin-right: auto;
+	  /*display: flex;*/
+	  margin-bottom: 6px;
+	}
+
+	span {
+	  text-align: center;
+	  font-weight: 600;
+	  font-size: 0.72rem;
+	  color: #1B2257;
+	}
+
+	&:hover .tpay-payment-gateways__item-inner,
+	&--active .tpay-payment-gateways__item-inner {
+	  box-shadow: 0 0 20px #C9CCE7;
+	  transition: box-shadow 125ms ease-out;
+	  -webkit-transition: box-shadow 125ms ease-out;
+	  -moz-transition: box-shadow 125ms ease-out;
+	  -o-transition: box-shadow 125ms ease-out;
+	}
+  }
+
+  &__item-inner {
+	width: 100%;
+	border: 1px solid #DDDDDD;
+	border-radius: 3px;
+	display: flex;
+	flex-direction: column;
+	padding: 16px 10px;
+	height: 100%;
+	justify-content: center;
+	cursor: pointer;
+
+	transition: box-shadow 125ms ease-out;
+	-webkit-transition: box-shadow 125ms ease-out;
+	-moz-transition: box-shadow 125ms ease-out;
+	-o-transition: box-shadow 125ms ease-out;
+  }
+
+}

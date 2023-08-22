@@ -73,3 +73,24 @@ npm run build # środowisko produkcyjne, minifikacja plików)
 - opłacona płatność
 - oczekująca płatność
 - niepoprawna niepoprawna
+
+## Frontend
+
+### Wymagania
+
+- Lokalnie zainstalowany Node.js w aktualnej wersji LTS
+
+### Budowanie
+
+1. Przejdź do folderu [_dev](_dev)
+1. Zainstaluj zależności
+
+    ```shell
+    npm i
+    ```
+
+1. Zbuduj projekt - output zostanie automatycznie skopiowany do katalogu [views/js](views/js)
+
+    ```shell
+    npm run build
+    ```

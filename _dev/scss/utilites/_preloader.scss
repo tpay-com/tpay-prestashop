@@ -1,0 +1,83 @@
+/// Preloader
+$blue: #1c2f77;
+$green: #71e496;
+$yellow: #2953c5;
+
+.tpay-preload {
+  position: relative;
+
+  &__inner {
+	margin-top: 0.7rem;
+	display: flex;
+  }
+
+  &__content {
+	margin-left: 12px;
+	font-size: 0.7rem;
+  }
+
+  &__loader {
+	position: relative;
+	width: 20px;
+	&:before {
+	  content: '';
+	  display: block;
+	}
+  }
+
+  &__circular {
+	animation: rotate 2s linear infinite;
+	height: 100%;
+	transform-origin: center center;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+  }
+
+  &__path {
+	stroke-dasharray: 1, 200;
+	stroke-dashoffset: 0;
+	animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+	stroke-linecap: round;
+  }
+
+}
+
+@keyframes rotate {
+  100% {
+	transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+	stroke-dasharray: 1, 200;
+	stroke-dashoffset: 0;
+  }
+  50% {
+	stroke-dasharray: 89, 200;
+	stroke-dashoffset: -35px;
+  }
+  100% {
+	stroke-dasharray: 89, 200;
+	stroke-dashoffset: -124px;
+  }
+}
+
+@keyframes color {
+  100%,
+  0% {
+	stroke: $green;
+  }
+  50% {
+	stroke: $yellow;
+  }
+  80%,
+  90% {
+	stroke: $blue;
+  }
+}
