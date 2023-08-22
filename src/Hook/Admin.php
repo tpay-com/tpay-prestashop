@@ -17,43 +17,45 @@ declare(strict_types=1);
 namespace Tpay\Hook;
 
 use Order;
+use Currency;
 use Tools;
 use Configuration as Cfg;
 
 class Admin extends AbstractHook
 {
-    public const AVAILABLE_HOOKS = [
+    const AVAILABLE_HOOKS = [
         'displayAdminOrderMainBottom',
         'displayAdminOrder'
     ];
+    private static $refundsRendered = false;
+
 
     /**
      * Returns on the order page in the administration
      * @param array $params
      * @return string|void
      */
-    public function displayAdminOrderMainBottom(array $params)
+    public function displayAdminOrderMainBottom(array $params, $legacyTheme = false)
     {
-
-        \PrestaShopLogger::addLog('tpay HOOK', 2);
-
         if (!$this->module->active) {
             return;
         }
+        if (true === self::$refundsRendered) {
+            return;
+        }
+        self::$refundsRendered = true;
 
-        $orderId = (int) $params['id_order'];
+        $orderId = (int)$params['id_order'];
         $order = new Order($orderId);
         $orderPayments = $order->getOrderPayments()[0] ?? false;
-        $refundSubmit = (bool) Tools::getValue('tpay-refund');
+        $refundSubmit = (bool)Tools::getValue('tpay-refund');
         $errors = [];
-
         if ($orderPayments && $orderPayments->payment_method === 'Tpay') {
             $this->getOrderRefunds($orderId);
 
             $transactionId = $orderPayments->transaction_id;
             $refundAmount = $this->parseRefundAmount(Tools::getValue('tpay_refund_amount'));
-            $maxRefundAmount = (float) $orderPayments->amount;
-
+            $maxRefundAmount = (float)$orderPayments->amount;
             if ($refundSubmit) {
                 if ($this->validRefundAllowedAmount($refundAmount, $maxRefundAmount)) {
                     $errors = sprintf(
@@ -68,13 +70,12 @@ class Admin extends AbstractHook
                 if (empty($errors)) {
                     try {
                         $result = $this->processRefund($transactionId, (float)$refundAmount);
-
                         if (
                             isset($result['result']) &&
                             $result['result'] === 'success' &&
                             $result['status'] === 'correct'
                         ) {
-                            $refunds = $this->module->get('tpay.repository.refund');
+                            $refunds = $this->module->getService('tpay.repository.refund');
                             $refunds->insertRefund(
                                 $orderId,
                                 $transactionId,
@@ -93,7 +94,7 @@ class Admin extends AbstractHook
                         if (isset($result['result']) && $result['result'] === 'failed') {
                             $this->context->smarty->assign([
                                 'tpay_refund_status' => $this->module->displayError(
-                                    $this->module->l('Refund error. 
+                                    $this->module->l('Refund error.
                                     Check that the refund amount is correct and does not exceed the value of the order')
                                 ),
                             ]);
@@ -111,11 +112,13 @@ class Admin extends AbstractHook
                     'tpay_refund_status' => $this->module->displayError($errors),
                 ]);
             }
-
-            return $this->module->fetch('module:tpay/views/templates/hook/refunds.tpl');
+            $view = 'module:tpay/views/templates/hook/refunds.tpl';
+            if($legacyTheme){
+                $view = 'module:tpay/views/templates/hook/refundsLegacy.tpl';
+            }
+            return $this->module->fetch($view);
         }
     }
-
 
 
     private function createHistory($order, \OrderHistory $orderHistory)
@@ -129,7 +132,7 @@ class Admin extends AbstractHook
     private function parseRefundAmount($amount)
     {
         return number_format(
-            (float) str_replace([',', ' '], ['.', ''], $amount),
+            (float)str_replace([',', ' '], ['.', ''], $amount),
             2,
             '.',
             ''
@@ -195,7 +198,7 @@ class Admin extends AbstractHook
      */
     private function getOrderRefunds(int $orderId)
     {
-        $refunds = $this->module->get('tpay.repository.refund');
+        $refunds = $this->module->getService('tpay.repository.refund');
         $orderRefunds = $refunds->getOrderRefunds($orderId);
         $smartyRefunds = [];
         foreach ($orderRefunds as $refund) {
@@ -211,22 +214,17 @@ class Admin extends AbstractHook
     }
 
 
-
-
-
     public function displayAdminOrder($params): string
     {
-
-        \PrestaShopLogger::addLog('tpay HOOK2', 2);
-
         if ($this->module->name != 'tpay') {
             return '';
         }
 
         $orderId = $params['id_order'];
-        $surchargeService = $this->module->get('tpay.service.surcharge');
-        $transactionService = $this->module->get('tpay.repository.transaction');
-
+        $order = new Order($orderId);
+        $currency = new Currency($order->id_currency);
+        $surchargeService = $this->module->getService('tpay.service.surcharge');
+        $transactionService = $this->module->getService('tpay.repository.transaction');
 
         if ($surchargeService->hasOrderSurcharge($transactionService, $orderId)) {
             $surchargeValue = $surchargeService->getOrderSurcharge($transactionService, $orderId);
@@ -234,13 +232,19 @@ class Admin extends AbstractHook
                 $this->context->smarty->assign(
                     [
                         'surcharge_title' => $this->module->l('Online payment fee'),
-                        'surcharge_cost' => $surchargeValue . ' ' . $this->module->getContext()->currency->symbol
+                        'surcharge_cost' => $surchargeValue,
+                        'currency' => $currency
                     ]
                 );
             }
         }
+        $content = $this->module->fetch('module:tpay/views/templates/_admin/orderView.tpl');
 
-        return $this->module->fetch('module:tpay/views/templates/_admin/orderView.tpl');
+        //there is no displayAdminOrderMainBottom hook
+        if (version_compare(_PS_VERSION_, '1.7.7.0', '<')) {
+            $content .= $this->displayAdminOrderMainBottom($params, true);
+        }
+        return $content;
     }
 
 }

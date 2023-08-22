@@ -29,7 +29,6 @@ class Transfer implements GatewayType
         PaymentOption $paymentOption,
         array $data = []
     ): PaymentOption {
-
         $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
         Context::getContext()->smarty->assign([
             'transfer_gateway' => $data['id'],

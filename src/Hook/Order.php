@@ -18,8 +18,11 @@ namespace Tpay\Hook;
 
 use Cart;
 use Tools;
+use Order as PrestaOrder;
+use Currency;
 use Exception;
 use PrestaShopException;
+use tpaySDK\Utilities\Util;
 
 class Order extends AbstractHook
 {
@@ -34,8 +37,8 @@ class Order extends AbstractHook
      *
      * @param $params
      *
-     * @throws Exception
      * @return string
+     * @throws Exception
      */
     public function displayOrderDetail($params): string
     {
@@ -47,8 +50,8 @@ class Order extends AbstractHook
      *
      * @param $params
      *
-     * @throws Exception
      * @return string
+     * @throws Exception
      */
     public function displayOrderConfirmation($params): string
     {
@@ -65,6 +68,8 @@ class Order extends AbstractHook
         }
 
         $orderId = $params['order']->id;
+        $order = new PrestaOrder($orderId);
+        $currency = new Currency($order->id_currency);
         $surchargeService = $this->module->getService('tpay.service.surcharge');
         $transactionService = $this->module->getService('tpay.repository.transaction');
 
@@ -74,7 +79,7 @@ class Order extends AbstractHook
                 $this->context->smarty->assign(
                     [
                         'surcharge_title' => $this->module->l('Online payment fee'),
-                        'surcharge_cost' => $surchargeValue . ' ' . $this->module->getContext()->currency->symbol
+                        'surcharge_cost' => Util::numberFormat($surchargeValue).' '.$currency->getSign(),
                     ]
                 );
                 return $this->module->fetch('module:tpay/views/templates/hook/orderConfirmationSurcharge.tpl');
@@ -120,27 +125,33 @@ class Order extends AbstractHook
         if (!$order instanceof \Order) {
             return;
         }
+        $computePresicion = 2;
+        if (method_exists($this->context, 'getComputingPrecision')) {
+            $computePresicion = $this->context->getComputingPrecision();
+        } elseif (defined(_PS_PRICE_COMPUTE_PRECISION_) && _PS_PRICE_COMPUTE_PRECISION_ !== null) {
+            $computePresicion = _PS_PRICE_COMPUTE_PRECISION_;
+        }
 
         $amountWithTax = $cart->getOrderTotal(true, Cart::BOTH);
         $amountWithoutTax = $cart->getOrderTotal(false, Cart::BOTH);
 
         $order->total_paid_tax_excl = Tools::ps_round(
             $amountWithTax + $surchargeValue,
-            $this->context->getComputingPrecision()
+            $computePresicion
         );
         $order->total_paid_tax_incl = Tools::ps_round(
             $amountWithoutTax + $surchargeValue,
-            $this->context->getComputingPrecision()
+            $computePresicion
         );
 
         $order->total_paid = Tools::ps_round(
             $order->total_paid + $surchargeValue,
-            $this->context->getComputingPrecision()
+            $computePresicion
         );
 
         $order->total_paid_real = Tools::ps_round(
             $order->total_paid_real + $surchargeValue,
-            $this->context->getComputingPrecision()
+            $computePresicion
         );
 
         $order->update();

@@ -12,36 +12,53 @@
 *  @license   LICENSE.txt
 *}
 <script type="text/javascript">
-	document.addEventListener("DOMContentLoaded", function (event) {
-		$(document).ready(function () {
-            {literal}const surchargeTitle = "{/literal}{$surcharge_title}";
-            {literal}const surchargeCost = "{/literal}{$surcharge_cost}";
+  document.addEventListener("DOMContentLoaded", function (event) {
+    $(document).ready(function () {
+        {literal}const surchargeTitle = "{/literal}{$surcharge_title}";
+        {literal}const surchargeCost = "{/literal}{$surcharge_cost}"
 
-			createBackOfficeSurchargeCost(surchargeTitle, surchargeCost);
-			createFrontOfficeSurchargeCost(surchargeTitle, surchargeCost);
+      createBackOfficeSurchargeCost(surchargeTitle, surchargeCost);
+      createFrontOfficeSurchargeCost(surchargeTitle, surchargeCost);
 
-			function createBackOfficeSurchargeCost(surchargeTitle, surchargeCost) {
-				const orderTotal = $(".order-confirmation-table").find(".total-value");
-				if (orderTotal.length !== 0) {
-					orderTotal.before('<tr>' +
-						'<td>' + surchargeTitle + '</td>' +
-						'<td>' + surchargeCost + '</td>' +
-						'</tr>'
-					);
-				}
-			}
+        {if $tpay_is_old_presta}
+          legacyCreateFrontOfficeSurchargeCost(surchargeTitle, surchargeCost);
+        {else}
+          createFrontOfficeSurchargeCost(surchargeTitle, surchargeCost);
+        {/if}
 
-			function createFrontOfficeSurchargeCost(surchargeTitle, surchargeCost) {
-				const orderTotal = $("#order-products").find(".line-shipping");
-				if (orderTotal.length !== 0) {
-					orderTotal.before('<tr class="text-xs-right line-surcharge">' +
-						'<td colspan="3">' + surchargeTitle + '</td>' +
-						'<td>' + surchargeCost + '</td>' +
-						'</tr>'
-					);
-				}
-			}
+      function createBackOfficeSurchargeCost(surchargeTitle, surchargeCost) {
+        const orderTotal = $(".order-confirmation-table").find(".total-value");
+        if (orderTotal.length !== 0) {
+          orderTotal.before('<tr>' +
+            '<td>' + surchargeTitle + '</td>' +
+            '<td>' + surchargeCost + '</td>' +
+            '</tr>'
+          );
+        }
+      }
 
-		});
-	});
+      function createFrontOfficeSurchargeCost(surchargeTitle, surchargeCost) {
+        const orderTotal = $("#order-products").find(".line-shipping");
+        if (orderTotal.length !== 0) {
+          orderTotal.before('<tr class="text-xs-right line-surcharge">' +
+            '<td colspan="3">' + surchargeTitle + '</td>' +
+            '<td>' + surchargeCost + '</td>' +
+            '</tr>'
+          );
+        }
+      }
+
+      function legacyCreateFrontOfficeSurchargeCost(surchargeTitle, surchargeCost) {
+        const orderTotal = $("#order-items table .font-weight-bold");
+        if (orderTotal.length !== 0) {
+          orderTotal.before('<tr class="line-surcharge">' +
+            '<td>' + surchargeTitle + '</td>' +
+            '<td>' + surchargeCost + '</td>' +
+            '</tr>'
+          );
+        }
+      }
+
+    });
+  });
 </script>

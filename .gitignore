@@ -1,8 +1,5 @@
-# Node
+/vendor
+.idea
 node_modules
-
-# MacOS
 .DS_Store
 
-# Composer
-/vendor

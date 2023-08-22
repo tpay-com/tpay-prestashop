@@ -29,7 +29,7 @@ class TpaySavedCardsModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         parent::initContent();
-        $this->repositoryCreditCard = $this->module->get('tpay.repository.credit_card');
+        $this->repositoryCreditCard = $this->module->getService('tpay.repository.credit_card');
         $customerId = (int) $this->context->customer->id;
 
         if (empty($customerId)) {
@@ -65,6 +65,6 @@ class TpaySavedCardsModuleFrontController extends ModuleFrontController
             (int) $this->context->customer->id
         );
 
-        $this->ajaxRender(json_encode(['results' => $delete ? 'error' : 'success']));
+        $this->ajaxDie(json_encode(['results' => $delete ? 'error' : 'success']));
     }
 }
