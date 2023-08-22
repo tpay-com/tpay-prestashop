@@ -65,15 +65,25 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
         switch ($action) {
             case 'createTransaction':
-                $this->createTransaction($address, $customer, $context, $cart);
+                // firstly - create order
+                $order = new \Order(\Order::getIdByCartId($cart->id));
+                if (!$order->id) {
+                    if (Validate::isLoadedObject($cart) && !$cart->OrderExists()) {
+                        $this->blikValidateOrder($cart->id, $this->getOrderTotal($cart), $customer);
+                        $order = new \Order($this->module->currentOrder);
+                    }
+                }
+
+                // I create an order if it does not exist with such a transaction id
+                $this->createTransaction($address, $customer, $context, $cart, $order);
                 break;
 
             case 'createTransactionById':
                 $this->createTransactionById($cart);
                 break;
 
-            case 'createOrderByTransactionId':
-                $this->createOrderByTransactionId($customer);
+            case 'assignTransactionId':
+                $this->assignTransactionId($customer);
                 break;
         }
         exit;
@@ -100,9 +110,9 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
      * @throws PrestaShopException
      * @throws Exception
      */
-    public function createTransaction($address, $customer, $context, $cart)
+    public function createTransaction($address, $customer, $context, $cart, $order)
     {
-        $transactionParams = $this->getCustomerData($address, $customer, $context, $cart);
+        $transactionParams = $this->getCustomerData($address, $customer, $context, $cart, $order);
         $transactionParams['pay'] = ['groupId' => Config::GATEWAY_BLIK_0,];
 
         $transaction = $this->module->api->Transactions->createTransaction($transactionParams);
@@ -178,7 +188,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
      */
-    public function createOrderByTransactionId($customer)
+    public function assignTransactionId($customer)
     {
         $transactionId = Tools::getValue('transactionId');
         $cartId = Tools::getValue('cartId');
@@ -191,12 +201,6 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $order = new \Order(\Order::getIdByCartId($cart->id));
         if ($order->id) {
             $orderId = $order->id;
-        }
-
-        // I create an order if it does not exist with such a transaction id
-        if (Validate::isLoadedObject($cart) && !$cart->OrderExists() && !$orderId) {
-            $this->blikValidateOrder($cart->id, $this->getOrderTotal($cart), $customer);
-            $orderId = (int) $this->module->currentOrder;
         }
 
         $transactionRepository->setTransactionOrderId($transactionId, $orderId);
@@ -257,9 +261,9 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
      * @throws Exception
      * @return array
      */
-    public function getCustomerData($address, $customer, $context, $cart): array
+    public function getCustomerData($address, $customer, $context, $cart, $order): array
     {
-        $customerData = new CustomerData($address, $customer, $context, $cart);
+        $customerData = new CustomerData($address, $customer, $context, $cart, $order);
         $customerData->createBlikCallbacks(self::TYPE);
         $customerData->createDescription();
 
