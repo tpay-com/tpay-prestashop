@@ -21,7 +21,7 @@ export function blikCheckNotification(
     const submitBtn = document.querySelector<HTMLButtonElement>('#tpay-blik-submit');
 
     const params = {
-        action: 'createOrderByTransactionId',
+        action: 'assignTransactionId',
         ajax: true,
         cartId: blikData.cartId,
         transactionId: transactionId,
