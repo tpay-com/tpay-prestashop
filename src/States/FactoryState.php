@@ -143,7 +143,7 @@ class FactoryState
         if (!empty($names->stateLanguage)) {
             foreach (\Language::getLanguages() as $lang) {
 
-                return OrderState::existsLocalizedNameInDatabase(
+                return $this->existsLocalizedNameInDatabase(
                     $names->stateLanguage[$lang['iso_code']],
                     (int)$lang['id_lang'],
                     \Tools::getIsset('id_order_state') ? (int)\Tools::getValue('id_order_state') : null
@@ -152,5 +152,23 @@ class FactoryState
         }
 
         return false;
+    }
+
+
+    private function existsLocalizedNameInDatabase($name, $idLang, $excludeIdOrderState): bool
+    {
+        if(method_exists(OrderState::class, 'existsLocalizedNameInDatabase')){
+            return OrderState::existsLocalizedNameInDatabase($name, $idLang, $excludeIdOrderState);
+        }
+
+        return (bool) \Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
+            'SELECT COUNT(*) AS count' .
+            ' FROM ' . _DB_PREFIX_ . 'order_state_lang osl' .
+            ' INNER JOIN ' . _DB_PREFIX_ . 'order_state os ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = ' . $idLang . ')' .
+            ' WHERE osl.id_lang = ' . $idLang .
+            ' AND osl.name =  \'' . pSQL($name) . '\'' .
+            ' AND os.deleted = 0' .
+            ($excludeIdOrderState ? ' AND osl.id_order_state != ' . $excludeIdOrderState : '')
+        );
     }
 }
