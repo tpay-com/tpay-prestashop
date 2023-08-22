@@ -22,7 +22,7 @@ class TpayConfirmationModuleFrontController extends ModuleFrontController
      */
     public function initContent()
     {
-        $this->statusHandler = $this->module->get('tpay.handler.order_status_handler');
+        $this->statusHandler = $this->module->getService('tpay.handler.order_status_handler');
 
         $type = Tools::getValue('type');
 
@@ -50,7 +50,7 @@ class TpayConfirmationModuleFrontController extends ModuleFrontController
                 throw new \Exception('No order exist in Tpay table for the specified crc');
             }
 
-            $transactionRepository = $this->module->get('tpay.repository.transaction');
+            $transactionRepository = $this->module->getService('tpay.repository.transaction');
             $transactionId = $transactionRepository->getTransactionIdByOrderId($orderId);
 
             $this->setConfirmed($orderId, $transactionId);

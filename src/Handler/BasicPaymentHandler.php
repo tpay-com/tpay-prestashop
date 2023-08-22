@@ -96,7 +96,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
     public function initTransactionProcess($transaction, $orderId, bool $redirect = true): void
     {
         if (isset($transaction['transactionId'])) {
-            $transactionService = $this->module->get('tpay.service.transaction');
+            $transactionService = $this->module->getService('tpay.service.transaction');
             $transactionService->transactionProcess(
                 $transaction,
                 self::TYPE,

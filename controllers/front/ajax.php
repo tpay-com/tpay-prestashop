@@ -36,8 +36,6 @@ class TpayAjaxModuleFrontController extends ModuleFrontController
      */
     public function initContent()
     {
-        //https://srv55300.seohost.com.pl/presta804/index.php?fc=module&module=tpay&controller=payment&id_lang=2
-        //https://srv55300.seohost.com.pl/presta804/index.php?tpay=1&type=transfer&tpay_transfer_id=160
         parent::initContent();
         $ajax = true;
         $state = Tools::getValue('state');
@@ -57,7 +55,7 @@ class TpayAjaxModuleFrontController extends ModuleFrontController
      */
     private function surcharge($state)
     {
-        $surchargeService = $this->module->get("tpay.service.surcharge");
+        $surchargeService = $this->module->getService("tpay.service.surcharge");
         $cart = $this->context->cart;
         $orderTotal = (float) $cart->getOrderTotal();
         $tpayPayment = $state;
@@ -133,7 +131,7 @@ class TpayAjaxModuleFrontController extends ModuleFrontController
     {
         ob_end_clean();
         header('Content-Type: application/json');
-        $this->ajaxRender(
+        $this->ajaxDie(
             json_encode(
                 [
                     'cart_summary_subtotals_container' => $this->render('checkout/_partials/cart-summary-subtotals'),

@@ -107,7 +107,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
         $transaction = $this->module->api->Transactions->createTransaction($transactionParams);
 
-        $this->ajaxRender(
+        $this->ajaxDie(
             json_encode(
                 ['transaction' => $transaction]
             )
@@ -151,14 +151,14 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         );
 
 
-        $transactionRepository = $this->module->get('tpay.repository.transaction');
+        $transactionRepository = $this->module->getService('tpay.repository.transaction');
         $transactionExists = $transactionRepository->getTransactionByTransactionId($transactionId);
 
         if (!$transactionExists) {
             $this->createTransactionInDb($transaction, 0, false);
         }
 
-        $this->ajaxRender(
+        $this->ajaxDie(
             json_encode(
                 [
                     'response'    => $transaction,
@@ -184,7 +184,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $cartId = Tools::getValue('cartId');
         $cart = new \Cart($cartId);
 
-        $transactionRepository = $this->module->get('tpay.repository.transaction');
+        $transactionRepository = $this->module->getService('tpay.repository.transaction');
         $orderId = null;
 
         // If repay
@@ -205,7 +205,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $paymentResponse =  $this->getTransactionInfo($transactionId);
 
         if ($transaction['order_id'] !== 0) {
-            $this->ajaxRender(
+            $this->ajaxDie(
                 json_encode([
                     'status' => $transaction['status'],
                     'backUrl' => $this->module->getContext()->link->getModuleLink(
@@ -237,7 +237,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
     public function createTransactionInDb($transaction, $orderId, bool $redirect = true): void
     {
         if (isset($transaction['transactionId'])) {
-            $transactionService = $this->module->get('tpay.service.transaction');
+            $transactionService = $this->module->getService('tpay.service.transaction');
             $transactionService->transactionProcess(
                 $transaction,
                 self::TYPE,
@@ -328,7 +328,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
         // Use alias
         if (empty($blikCode)) {
-            $userAlias = $this->module->get("tpay.repository.blik")->getBlikAliasIdByUserId(
+            $userAlias = $this->module->getService("tpay.repository.blik")->getBlikAliasIdByUserId(
                 $cart->id_customer
             );
         }
