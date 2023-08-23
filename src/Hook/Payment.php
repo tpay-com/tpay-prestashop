@@ -41,10 +41,12 @@ class Payment extends AbstractHook
         if (!$this->module->checkCurrency($params['cart'])) {
             return [];
         }
+        $surcharge = $this->getSurchargeCost();
 
         $this->context->smarty->assign([
             'tpay_path' => Tools::getHttpHost(true) . __PS_BASE_URI__ . 'modules/tpay/views/',
-            'regulation_url' => 'https://secure.tpay.com/regulamin.pdf'
+            'regulation_url' => 'https://secure.tpay.com/regulamin.pdf',
+            'surcharge' => $surcharge > 0 ? Tools::displayPrice($this->getSurchargeCost()) : false
         ]);
 
         $paymentService = new PaymentOptionsService(
@@ -53,7 +55,16 @@ class Payment extends AbstractHook
             new Cart($this->context->cart->id)
         );
 
-        return $paymentService->getActivePayments();
+        $payments = $paymentService->getActivePayments();
+        if ($surcharge > 0) {
+            $surchargeInfo = $this->module->fetch('module:tpay/views/templates/hook/tpay_surcharge_cost.tpl');
+            foreach ($payments as $payment) {
+                $info = $surchargeInfo;
+                $info .= $payment->getAdditionalInformation();
+                $payment->setAdditionalInformation($info);
+            }
+        }
+        return $payments;
     }
 
 
@@ -76,6 +87,13 @@ class Payment extends AbstractHook
         ]);
 
         return $this->module->fetch('module:tpay/views/templates/hook/paymentReturn.tpl');
+    }
+
+    private function getSurchargeCost()
+    {
+        $orderTotal = (float)$this->context->cart->getOrderTotal();
+        $surchargeService = $this->module->getService('tpay.service.surcharge');
+        return $surchargeService->getSurchargeValue($orderTotal);
     }
 
 }
