@@ -69,7 +69,6 @@ class SurchargeService
     public function activeSurcharge(): bool
     {
         $surchargeActive = (bool) Cfg::get('TPAY_SURCHARGE_ACTIVE');
-
         if (!$surchargeActive || $this->parseSurchargeValue() <= 0.00) {
             return false;
         }
