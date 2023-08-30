@@ -37,7 +37,7 @@ class Admin extends AbstractHook
      */
     public function displayAdminOrderMainBottom(array $params, $legacyTheme = false)
     {
-        if (!$this->module->active) {
+        if (!$this->module->active || null === $this->module->api) {
             return;
         }
         if (true === self::$refundsRendered) {
@@ -233,7 +233,8 @@ class Admin extends AbstractHook
                     [
                         'surcharge_title' => $this->module->l('Online payment fee'),
                         'surcharge_cost' => $surchargeValue,
-                        'currency' => $currency
+                        'currency' => $currency,
+                        'order'=>$order
                     ]
                 );
             }
