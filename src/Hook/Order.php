@@ -79,7 +79,7 @@ class Order extends AbstractHook
                 $this->context->smarty->assign(
                     [
                         'surcharge_title' => $this->module->l('Online payment fee'),
-                        'surcharge_cost' => Util::numberFormat($surchargeValue).' '.$currency->getSign(),
+                        'surcharge_cost' => Util::numberFormat($surchargeValue) . ' ' . $currency->getSign(),
                     ]
                 );
                 return $this->module->fetch('module:tpay/views/templates/hook/orderConfirmationSurcharge.tpl');
@@ -136,11 +136,11 @@ class Order extends AbstractHook
         $amountWithoutTax = $cart->getOrderTotal(false, Cart::BOTH);
 
         $order->total_paid_tax_excl = Tools::ps_round(
-            $amountWithTax + $surchargeValue,
+            $amountWithoutTax + $surchargeValue,
             $computePresicion
         );
         $order->total_paid_tax_incl = Tools::ps_round(
-            $amountWithoutTax + $surchargeValue,
+            $amountWithTax + $surchargeValue,
             $computePresicion
         );
 
