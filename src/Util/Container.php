@@ -3,6 +3,7 @@
 namespace Tpay\Util;
 
 use Symfony\Component\HttpKernel\KernelInterface;
+use Tpay\Entity\TpayRefund;
 
 final class Container
 {
@@ -40,6 +41,9 @@ final class Container
                 //just try to fetch random Tpay service
                 //if exception occures - it means that container is built with only core presta modules (v 1.7.3 and lower)
                 $kernel->getContainer()->get('tpay.service.surcharge');
+
+                //if exception <<class>> was not found in the chain configured namespaces occur, we should instantiate legacy container
+                $kernel->getContainer()->get('doctrine')->getRepository(TpayRefund::class);
                 return true;
             }
         } catch (\Exception $e) {

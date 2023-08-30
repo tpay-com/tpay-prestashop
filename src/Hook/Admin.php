@@ -101,7 +101,7 @@ class Admin extends AbstractHook
                         }
                     } catch (\Exception $TException) {
                         $this->context->smarty->assign([
-                            'tpay_refund_status' => $this->module->displayError($TException->getMessage()[0]),
+                            'tpay_refund_status' => $this->module->displayError($TException->getMessage()),
                         ]);
                     }
                 }
