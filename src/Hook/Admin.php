@@ -132,7 +132,7 @@ class Admin extends AbstractHook
     private function parseRefundAmount($amount)
     {
         return number_format(
-            (float)str_replace([',', ' '], ['.', ''], $amount),
+            (float)str_replace([',', ' '], ['.', ''], (string)$amount),
             2,
             '.',
             ''
