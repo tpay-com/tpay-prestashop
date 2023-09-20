@@ -61,7 +61,7 @@ class EmailOrder extends AbstractHook
             $total += $this->getSurchargeCost();
             $total = Tools::displayPrice($total, $this->context->currency);
 
-            $emailFooter = str_replace("{total_paid}", $total, $emailFooter);
+            $emailFooter = str_replace("{total_paid}", $total, (string)$emailFooter);
             $params['template_html'] = $emailHeader . $this->renderExtraChargeDataInMail(
                 $this->getSurchargeCost()
             ) . $emailFooter;
