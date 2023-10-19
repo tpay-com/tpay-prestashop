@@ -33,8 +33,10 @@ use Tpay\Handler\InstallQueryHandler;
 use Tpay\HookDispatcher;
 use Tpay\Install\Install;
 use Tpay\Install\Uninstall;
+use Tpay\OpenApi\Utilities\Logger;
 use Tpay\Util\Container;
 use Tpay\States\FactoryState;
+use Tpay\Util\PsrLogger;
 use tpaySDK\Api\TpayApi;
 
 class Tpay extends PaymentModule
@@ -185,6 +187,7 @@ class Tpay extends PaymentModule
 
         if ($clientId && $secretKey) {
             try {
+                Logger::setLogger(new PsrLogger());
                 $this->api = new TpayApi($clientId, $secretKey, $isProduction, 'read');
             } catch (\Exception $exception) {
                 PrestaShopLogger::addLog($exception->getMessage(), 3);

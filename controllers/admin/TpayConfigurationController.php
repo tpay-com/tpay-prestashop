@@ -444,6 +444,27 @@ class TpayConfigurationController extends ModuleAdminController
 
                 [
                     'type' => 'switch',
+                    'label' => $this->l('Pekao Installment (from 100 PLN to 20 000 PLN)'),
+                    'name' => 'TPAY_PEKAO_INSTALLMENTS_ACTIVE',
+                    'desc' => $this->l('Show the method as a separate payment'),
+                    'is_bool' => true,
+                    'class' => 't',
+                    'values' => [
+                        [
+                            'id' => 'tpay_pekao_installments_on',
+                            'value' => 1,
+                            'label' => $this->l('Yes'),
+                        ],
+                        [
+                            'id' => 'tpay_pekao_installments_off',
+                            'value' => 0,
+                            'label' => $this->l('No'),
+                        ],
+                    ],
+                ],
+
+                [
+                    'type' => 'switch',
                     'label' => $this->l('Twisto Installment (from 1 PLN to 1 500 PLN)'),
                     'name' => 'TPAY_TWISTO_ACTIVE',
                     'desc' => $this->l('Show the method as a separate payment'),

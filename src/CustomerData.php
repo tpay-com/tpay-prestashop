@@ -105,7 +105,7 @@ class CustomerData
                 (float)str_replace(
                     [',', ' ',],
                     ['.', '',],
-                    $orderTotal
+                    (string)$orderTotal
                 ),
                 2,
                 '.',
