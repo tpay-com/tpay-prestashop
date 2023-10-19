@@ -82,6 +82,7 @@ class PaymentOptionsService
             'id' => Config::GATEWAY_TRANSFER,
             'mainChannel' => Config::GATEWAY_TRANSFER,
         ];
+
         $this->createGateway($payment);
     }
 
@@ -122,9 +123,8 @@ class PaymentOptionsService
 
         foreach ($this->channels as $payment_data) {
             $optionClass = PaymentOptionsFactory::getOptionById((int)$payment_data['mainChannel']);
-
             if (is_object($optionClass)) {
-                $gateway = new PaymentType(new $optionClass());
+                $gateway = new PaymentType($optionClass);
 
                 $paymentOptions[] = $gateway->getPaymentOption(
                     $this->module,
@@ -161,6 +161,20 @@ class PaymentOptionsService
             );
         }
 
+        if ($this->pekaoBetweenPriceRange()) {
+            $paymentsMethods[Config::GATEWAYS_PEKAO_RATY] =
+            $paymentsMethods[Config::GATEWAYS_PEKAO_RATY_50] =
+            $paymentsMethods[Config::GATEWAYS_PEKAO_RATY_10x0] = (bool)Helper::getMultistoreConfigurationValue(
+                'TPAY_PEKAO_INSTALLMENTS_ACTIVE'
+            );
+        }
+
+        if ($this->pekao3x0BetweenPriceRange()) {
+            $paymentsMethods[Config::GATEWAYS_PEKAO_RATY_3x0] = (bool)Helper::getMultistoreConfigurationValue(
+                'TPAY_PEKAO_INSTALLMENTS_ACTIVE'
+            );
+        }
+
         if ($this->hasActiveCard()) {
             $paymentsMethods[Config::GATEWAY_CARD] = (bool)Helper::getMultistoreConfigurationValue(
                 'TPAY_CARD_ACTIVE'
@@ -193,6 +207,18 @@ class PaymentOptionsService
         return $total >= Config::TWISTO_MIN && $total <= Config::TWISTO_MAX;
     }
 
+    private function pekaoBetweenPriceRange(): bool
+    {
+        $total = $this->surchargeService->getTotalOrderAndSurchargeCost();
+        return $total >= Config::PEKAO_RATY_MIN && $total <= Config::PEKAO_RATY_MAX;
+    }
+
+    private function pekao3x0BetweenPriceRange(): bool
+    {
+        $total = $this->surchargeService->getTotalOrderAndSurchargeCost();
+        return $total >= Config::PEKAO_RATY_MIN && $total <= Config::PEKAO_RATY_MAX_3x0;
+    }
+
     private function hasActiveCard(): bool
     {
         return \Configuration::get('TPAY_CARD_ACTIVE') || !empty(\Configuration::get('TPAY_CARD_RSA'));
@@ -209,8 +235,9 @@ class PaymentOptionsService
 
         $bankGroups = $this->module->api->Transactions->getBankGroups();
         if ($bankGroups) {
-            $this->channels = $this->groupChannel($bankGroups['groups'], $this->getSeparatePayments());
-            $this->transfers = $this->groupTransfer($bankGroups['groups'], $this->getSeparatePayments());
+            $separatePayments = $this->getSeparatePayments();
+            $this->channels = $this->groupChannel($bankGroups['groups'], $separatePayments);
+            $this->transfers = $this->groupTransfer($bankGroups['groups'], $separatePayments);
         }
     }
 
@@ -222,6 +249,13 @@ class PaymentOptionsService
      */
     private function groupChannel(array $group, array $compareArray): array
     {
+        if (isset($group[Config::TPAY_GATEWAY_PEKAO_RATY])) {
+            $availableChannels = array_filter($group[Config::TPAY_GATEWAY_PEKAO_RATY]['availablePaymentChannels'], function ($val) use ($compareArray) {
+                return in_array($val, $compareArray);
+            });
+            $availableChannels = array_values($availableChannels);
+            $group[Config::TPAY_GATEWAY_PEKAO_RATY]['availablePaymentChannels'] = $availableChannels;
+        }
         return array_filter($group, function ($val) use ($compareArray) {
             return in_array($val['mainChannel'], $compareArray);
         });
@@ -246,6 +280,17 @@ class PaymentOptionsService
         // If not price range hide id gateway
         if (!$this->twistoBetweenPriceRange()) {
             $compareArray[] = Config::GATEWAY_TWISTO;
+        }
+
+        // If not price range hide id gateway
+        if (!$this->pekaoBetweenPriceRange()) {
+            $compareArray[] = Config::GATEWAYS_PEKAO_RATY;
+            $compareArray[] = Config::GATEWAYS_PEKAO_RATY_50;
+            $compareArray[] = Config::GATEWAYS_PEKAO_RATY_10x0;
+        }
+
+        if (!$this->pekao3x0BetweenPriceRange()) {
+            $compareArray[] = Config::GATEWAYS_PEKAO_RATY_3x0;
         }
 
         return array_filter($group, function ($val) use ($compareArray) {

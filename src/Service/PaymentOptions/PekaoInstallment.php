@@ -20,7 +20,7 @@ use Tpay\Config\Config;
 use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
-class Installment implements GatewayType
+class PekaoInstallment implements GatewayType
 {
     private $method = 'payment';
 
@@ -33,32 +33,24 @@ class Installment implements GatewayType
         $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
         Context::getContext()->smarty->assign([
             'installments_moduleLink' => $moduleLink,
+            'available_channels' => $data['availablePaymentChannels']
         ]);
-
-        $paymentOption->setCallToActionText($module->l('Alior installments'))
+        $paymentOption->setCallToActionText($module->l('Pekao installments'))
             ->setAction($moduleLink)
-            ->setInputs([
-                [
-                    'type' => 'hidden',
-                    'name' => 'tpay',
-                    'value' => true,
-                ],
-                [
-                    'type' => 'hidden',
-                    'name' => 'type',
-                    'value' => Config::TPAY_PAYMENT_INSTALLMENTS,
-                ],
-                [
-                    'type' => 'hidden',
-                    'name' => 'tpay_transfer_id',
-                    'value' => Config::TPAY_GATEWAY_ALIOR_RATY,
-                ],
-           ])
             ->setLogo($data['img'])
-            ->setAdditionalInformation(
-                $module->fetch('module:tpay/views/templates/hook/installments.tpl')
-            );
+            ->setForm($this->generateForm());
 
         return $paymentOption;
+    }
+    protected function generateForm()
+    {
+        Context::getContext()->smarty->assign([
+            'action' => Context::getContext()->link->getModuleLink('tpay', $this->method, [], true),
+            'tpay' => true,
+            'type' => Config::TPAY_PAYMENT_INSTALLMENTS,
+            'tpay_channel_id' => 0,
+        ]);
+
+        return Context::getContext()->smarty->fetch('module:tpay/views/templates/hook/pekao_installments.tpl');
     }
 }

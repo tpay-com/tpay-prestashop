@@ -132,16 +132,18 @@ function handleClickRadioPayments()
 }
 
 handleClickRadioPayments();
-
-
-
 bindChangeConditionsToApprove();
 
 function bindChangeConditionsToApprove() {
     const checkbox = <HTMLInputElement>document.querySelector('#conditions-to-approve input[type="checkbox"]');
     if(checkbox) {
         checkbox.addEventListener("change", () => {
-            validateSelectedTransfer();
+            validateSelectedTransfer(document.querySelector('.tpay-payment-gateways__item--active')?.closest('.tpay-payment-gateways'));
         });
     }
+    document.querySelectorAll('[name="payment-option"]').forEach(function(element){
+      element.addEventListener('change', () => {
+        validateSelectedTransfer(document.querySelector('.tpay-payment-gateways__item--active')?.closest('.tpay-payment-gateways'));
+      })
+    });
 }

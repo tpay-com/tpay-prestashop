@@ -25,6 +25,7 @@ class Config
     public const TPAY_PAYMENT_INSTALLMENTS = 'installments';
 
     public const TPAY_GATEWAY_ALIOR_RATY = 109;
+    public const TPAY_GATEWAY_PEKAO_RATY = 169;
     public const TPAY_GATEWAY_TWISTO = 167;
     public const TPAY_GATEWAY_GOOGLE_PAY = 166;
 
@@ -35,8 +36,15 @@ class Config
     public const GATEWAY_BLIK = 64;
     public const GATEWAY_BLIK_0 = 150;
     public const GATEWAY_GOOGLE_PAY = 68;
-    public const GATEWAY_APPLE_PAY = 9999;
+
     public const GATEWAY_TRANSFER = 999;
+
+    public const GATEWAY_APPLE_PAY = 9999;
+    public const GATEWAYS_PEKAO_RATY_3x0 = 78;
+    public const GATEWAYS_PEKAO_RATY_10x0 = 80;
+
+    public const GATEWAYS_PEKAO_RATY_50 = 81;
+    public const GATEWAYS_PEKAO_RATY = 77;
 
     public const CARD_GROUP_ID = 103;
 
@@ -49,4 +57,9 @@ class Config
     public const TWISTO_MAX = 1500;
     public const ALIOR_RATY_MIN = 300;
     public const ALIOR_RATY_MAX = 9259.25;
+
+    public const PEKAO_RATY_MIN = 100;
+    public const PEKAO_RATY_MAX = 20000;
+
+    public const PEKAO_RATY_MAX_3x0 = 2000;
 }

@@ -4,6 +4,6 @@ doctrine:
             TpayPaymentModule:
                 type: annotation
                 is_bundle: false
-                dir: %kernel.root_dir%/../modules/tpay/src/Entity
+                dir: "%kernel.root_dir%/../modules/tpay/src/Entity"
                 prefix: Tpay\Entity
                 alias: Tpay
