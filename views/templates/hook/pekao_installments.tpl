@@ -20,13 +20,13 @@
         <input type="hidden" name="type" value="{$type}">
         <ul class="tpay-payment-gateways tpay-payment-gateways--grid">
             {foreach $available_channels as $id}
-              <label for="transfer_{$id}" class="tpay-payment-gateways__item">
+              <label for="transfer_{$id}" class="tpay-payment-gateways__item installments">
                 <input
                   id="transfer_{$id}"
                   type="radio" name="tpay_channel_id"
                   value="{$id}" required="required" style="display: none"/>
                 <div class="tpay-payment-gateways__item-inner">
-                  <img class="img-fluid col-xs-12" src="https://secure.sandbox.tpay.com/_/banks/b{$id}e.png" width="80"/>
+                  <img class="img-fluid col-xs-12" src="https://secure.sandbox.tpay.com/_/banks/b{$id}e.png"/>
                 </div>
               </label>
             {/foreach}

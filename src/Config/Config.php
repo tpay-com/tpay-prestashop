@@ -60,6 +60,4 @@ class Config
 
     public const PEKAO_RATY_MIN = 100;
     public const PEKAO_RATY_MAX = 20000;
-
-    public const PEKAO_RATY_MAX_3x0 = 2000;
 }

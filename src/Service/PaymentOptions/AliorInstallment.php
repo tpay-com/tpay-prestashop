@@ -35,7 +35,7 @@ class AliorInstallment implements GatewayType
             'installments_moduleLink' => $moduleLink,
         ]);
 
-        $paymentOption->setCallToActionText($module->l('Alior installments'))
+        $paymentOption->setCallToActionText($module->l('Alior Raty'))
             ->setAction($moduleLink)
             ->setInputs([
                 [
