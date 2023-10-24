@@ -35,7 +35,7 @@ class PekaoInstallment implements GatewayType
             'installments_moduleLink' => $moduleLink,
             'available_channels' => $data['availablePaymentChannels']
         ]);
-        $paymentOption->setCallToActionText($module->l('Pekao installments'))
+        $paymentOption->setCallToActionText($module->l('Raty Pekao'))
             ->setAction($moduleLink)
             ->setLogo($data['img'])
             ->setForm($this->generateForm());
