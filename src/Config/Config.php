@@ -27,10 +27,13 @@ class Config
     public const TPAY_GATEWAY_ALIOR_RATY = 109;
     public const TPAY_GATEWAY_PEKAO_RATY = 169;
     public const TPAY_GATEWAY_TWISTO = 167;
+    public const TPAY_GATEWAY_PAYPO = 172;
     public const TPAY_GATEWAY_GOOGLE_PAY = 166;
 
     /// IDS to get bank channels
     public const GATEWAY_TWISTO = 71; //71
+
+    public const GATEWAY_PAYPO = 83;
     public const GATEWAY_ALIOR_RATY = 49; // 49
     public const GATEWAY_CARD = 53;
     public const GATEWAY_BLIK = 64;
@@ -60,4 +63,8 @@ class Config
 
     public const PEKAO_RATY_MIN = 100;
     public const PEKAO_RATY_MAX = 20000;
+
+    public const PAYPO_MIN = 40;
+
+    public const PAYPO_MAX = 3000;
 }

@@ -208,6 +208,12 @@ class PaymentOptionsService
         return $total >= Config::PEKAO_RATY_MIN && $total <= Config::PEKAO_RATY_MAX;
     }
 
+    private function paypoBetweenPriceRange(): bool
+    {
+        $total = $this->surchargeService->getTotalOrderAndSurchargeCost();
+        return $total >= Config::PAYPO_MIN && $total <= Config::PAYPO_MAX;
+    }
+
     private function hasActiveCard(): bool
     {
         return \Configuration::get('TPAY_CARD_ACTIVE') || !empty(\Configuration::get('TPAY_CARD_RSA'));
@@ -262,19 +268,23 @@ class PaymentOptionsService
      */
     private function groupTransfer(array $group, array $compareArray): array
     {
-        if (Helper::getMultistoreConfigurationValue('TPAY_INSTALLMENTS_ACTIVE')) {
+        if (Helper::getMultistoreConfigurationValue('TPAY_INSTALLMENTS_ACTIVE') || !$this->aliorBetweenPriceRange()) {
             $compareArray[] = Config::GATEWAY_ALIOR_RATY;
         }
 
-        if (Helper::getMultistoreConfigurationValue('TPAY_TWISTO_ACTIVE')) {
+        if (Helper::getMultistoreConfigurationValue('TPAY_TWISTO_ACTIVE') || $this->twistoBetweenPriceRange()) {
             $compareArray[] = Config::GATEWAY_TWISTO;
         }
-        if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE')) {
+        if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') || !$this->pekaoBetweenPriceRange()) {
             $compareArray[] = Config::TPAY_GATEWAY_PEKAO_RATY;
             $compareArray[] = Config::GATEWAYS_PEKAO_RATY_3x0;
             $compareArray[] = Config::GATEWAYS_PEKAO_RATY;
             $compareArray[] = Config::GATEWAYS_PEKAO_RATY_10x0;
             $compareArray[] = Config::GATEWAYS_PEKAO_RATY_50;
+        }
+
+        if(!$this->paypoBetweenPriceRange()){
+            $compareArray[] = Config::GATEWAY_PAYPO;
         }
 
         return array_filter($group, function ($val) use ($compareArray) {
