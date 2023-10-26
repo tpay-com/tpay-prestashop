@@ -57,7 +57,7 @@ class TpayConfigurationController extends ModuleAdminController
         $content = '';
         if ($this->postProcess()) {
             $content .= $this->module->displayConfirmation(
-                $this->l('Settings saved'),
+                $this->module->l('Settings saved'),
                 [],
                 'Admin.Notifications.Success'
             );
@@ -95,7 +95,7 @@ class TpayConfigurationController extends ModuleAdminController
     {
         if (\Shop::getContext() == \Shop::CONTEXT_GROUP) {
             return '<p class="alert alert-warning">' .
-                $this->l('You cannot manage from a "Group Shop" context, select directly the shop you want to edit') .
+                $this->module->l('You cannot manage from a "Group Shop" context, select directly the shop you want to edit') .
                 '</p>';
         } else {
             return '';
@@ -132,29 +132,29 @@ class TpayConfigurationController extends ModuleAdminController
 
         if (Tools::getValue('TPAY_CARD_ACTIVE')) {
             if (empty(Tools::getValue('TPAY_CARD_RSA'))) {
-                $this->errors['rsa'] = $this->l('Invalid RSA key');
+                $this->errors['rsa'] = $this->module->l('Invalid RSA key');
                 $res = false;
             }
         }
 
         if (empty(Tools::getValue('TPAY_CLIENT_ID'))) {
-            $this->errors['client_id'] = $this->l('Please fill in the client id');
+            $this->errors['client_id'] = $this->module->l('Please fill in the client id');
             $res = false;
         }
 
         if (empty(Tools::getValue('TPAY_SECRET_KEY'))) {
-            $this->errors['secret_key'] = $this->l('Please complete the secret key');
+            $this->errors['secret_key'] = $this->module->l('Please complete the secret key');
             $res = false;
         }
 
         if (empty(Tools::getValue('TPAY_MERCHANT_SECRET'))) {
-            $this->errors['merchant_secret'] = $this->l('Please complete the secret merchant key');
+            $this->errors['merchant_secret'] = $this->module->l('Please complete the secret merchant key');
             $res = false;
         }
 
         if (Tools::getValue('TPAY_NOTIFICATION_EMAILS')) {
             if (!Validate::isEmail(Tools::getValue('TPAY_NOTIFICATION_EMAILS'))) {
-                $this->errors['notification_emails'] = $this->l('Invalid email notification');
+                $this->errors['notification_emails'] = $this->module->l('Invalid email notification');
                 $res = false;
             }
         }
@@ -188,7 +188,7 @@ class TpayConfigurationController extends ModuleAdminController
                 }
             } catch (\Exception $exception) {
                 \PrestaShopLogger::addLog($exception, 3);
-                $this->errors[] = $this->l('Settings not saved');
+                $this->errors[] = $this->module->l('Settings not saved');
             }
         }
     }
@@ -227,34 +227,34 @@ class TpayConfigurationController extends ModuleAdminController
     {
         $form['form'] = [
             'legend' => [
-                'title' => $this->l('Basic settings'),
+                'title' => $this->module->l('Basic settings'),
                 'icon' => 'icon-cogs'
             ],
             'input' => [
                 [
                     'type' => 'text',
-                    'label' => $this->l('Client ID'),
+                    'label' => $this->module->l('Client ID'),
                     'name' => 'TPAY_CLIENT_ID',
                     'size' => 50,
                     'required' => true,
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->l('Secret key'),
+                    'label' => $this->module->l('Secret key'),
                     'name' => 'TPAY_SECRET_KEY',
                     'size' => 50,
                     'required' => true,
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->l('Merchant secret key (in notifications)'),
+                    'label' => $this->module->l('Merchant secret key (in notifications)'),
                     'name' => 'TPAY_MERCHANT_SECRET',
                     'size' => 400,
                     'required' => true,
                 ],
                 [
                     'type' => 'select',
-                    'label' => $this->l('CRC field form'),
+                    'label' => $this->module->l('CRC field form'),
                     'name' => 'TPAY_CRC_FORM',
                     'options' => [
                         'query' => [
@@ -269,7 +269,7 @@ class TpayConfigurationController extends ModuleAdminController
                 ],
                 [
                     'type' => 'switch',
-                    'label' => $this->l('Use Sandbox Account'),
+                    'label' => $this->module->l('Use Sandbox Account'),
                     'name' => 'TPAY_SANDBOX',
                     'is_bool' => true,
                     'class' => 't',
@@ -277,28 +277,28 @@ class TpayConfigurationController extends ModuleAdminController
                         [
                             'id' => 'tpay_sandbox_on',
                             'value' => 1,
-                            'label' => $this->l('Yes'),
+                            'label' => $this->module->l('Yes'),
                         ],
                         [
                             'id' => 'tpay_sandbox_off',
                             'value' => 0,
-                            'label' => $this->l('No'),
+                            'label' => $this->module->l('No'),
                         ],
                     ],
-                    'desc' => '<b>' . $this->l('WARNING') . '</b>'
-                        . $this->l(' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!'),
+                    'desc' => '<b>' . $this->module->l('WARNING') . '</b>'
+                        . $this->module->l(' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!'),
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->l('Notification email'),
-                    'desc' => $this->l('Set your own email with notifications.  Leave blank to use the email configured in the tpay panel.'),
+                    'label' => $this->module->l('Notification email'),
+                    'desc' => $this->module->l('Set your own email with notifications.  Leave blank to use the email configured in the tpay panel.'),
                     'name' => 'TPAY_NOTIFICATION_EMAILS',
                     'size' => 50,
                     'required' => false,
                 ],
                 [
                     'type' => 'switch',
-                    'label' => $this->l('Surcharge for the use of payment'),
+                    'label' => $this->module->l('Surcharge for the use of payment'),
                     'name' => 'TPAY_SURCHARGE_ACTIVE',
                     'is_bool' => true,
                     'class' => 't',
@@ -306,18 +306,18 @@ class TpayConfigurationController extends ModuleAdminController
                         [
                             'id' => 'tpay_surcharge_on',
                             'value' => 1,
-                            'label' => $this->l('Yes'),
+                            'label' => $this->module->l('Yes'),
                         ],
                         [
                             'id' => 'tpay_surcharge_off',
                             'value' => 0,
-                            'label' => $this->l('No'),
+                            'label' => $this->module->l('No'),
                         ],
                     ],
                 ],
                 [
                     'type' => 'radio',
-                    'label' => $this->l('Surcharge type'),
+                    'label' => $this->module->l('Surcharge type'),
                     'name' => 'TPAY_SURCHARGE_TYPE',
                     'is_bool' => false,
                     'class' => 'child',
@@ -325,25 +325,25 @@ class TpayConfigurationController extends ModuleAdminController
                         [
                             'id' => 'tpay_surcharge_type_on',
                             'value' => Config::TPAY_SURCHARGE_AMOUNT,
-                            'label' => $this->l('Quota'),
+                            'label' => $this->module->l('Quota'),
                         ],
                         [
                             'id' => 'tpay_surcharge_type_off',
                             'value' => Config::TPAY_SURCHARGE_PERCENT,
-                            'label' => $this->l('Percentage'),
+                            'label' => $this->module->l('Percentage'),
                         ],
                     ],
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->l('Surcharge value'),
+                    'label' => $this->module->l('Surcharge value'),
                     'name' => 'TPAY_SURCHARGE_VALUE',
                     'size' => 50,
                     'required' => false,
                 ]
             ],
             'submit' => [
-                'title' => $this->l('Save'),
+                'title' => $this->module->l('Save'),
             ],
         ];
 
@@ -354,159 +354,159 @@ class TpayConfigurationController extends ModuleAdminController
     {
         $form['form'] = [
             'legend' => [
-                'title' => $this->l('Settings for standard payment'),
+                'title' => $this->module->l('Settings for standard payment'),
                 'icon' => 'icon-cogs'
             ],
             'input' => [
                 [
                     'type' => 'switch',
-                    'label' => $this->l('BLIK payments active'),
+                    'label' => $this->module->l('BLIK payments active'),
                     'name' => 'TPAY_BLIK_ACTIVE',
-                    'desc' => $this->l('Show the method as a separate payment'),
+                    'desc' => $this->module->l('Show the method as a separate payment'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->l('Yes'),
+                            'label' => $this->module->l('Yes'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->l('No'),
+                            'label' => $this->module->l('No'),
                         ],
                     ],
                 ],
 
                 [
                     'type' => 'switch',
-                    'label' => $this->l('BLIK widget'),
+                    'label' => $this->module->l('BLIK widget'),
                     'name' => 'TPAY_BLIK_WIDGET',
-                    'desc' => $this->l('Display the payment method in the widget'),
+                    'desc' => $this->module->l('Display the payment method in the widget'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->l('Yes'),
+                            'label' => $this->module->l('Yes'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->l('No'),
+                            'label' => $this->module->l('No'),
                         ],
                     ],
                 ],
 
                 [
                     'type' => 'switch',
-                    'label' => $this->l('GooglePay'),
+                    'label' => $this->module->l('GooglePay'),
                     'name' => 'TPAY_GPAY_ACTIVE',
-                    'desc' => $this->l('Show the method as a separate payment'),
+                    'desc' => $this->module->l('Show the method as a separate payment'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->l('Yes'),
+                            'label' => $this->module->l('Yes'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->l('No'),
+                            'label' => $this->module->l('No'),
                         ],
                     ],
                 ],
 
                 [
                     'type' => 'switch',
-                    'label' => $this->l('Alior Installment (from 300 PLN to 9 259,25 PLN)'),
+                    'label' => $this->module->l('Alior Installment (from 300 PLN to 9 259,25 PLN)'),
                     'name' => 'TPAY_INSTALLMENTS_ACTIVE',
-                    'desc' => $this->l('Show the method as a separate payment'),
+                    'desc' => $this->module->l('Show the method as a separate payment'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
                         [
                             'id' => 'tpay_installments_on',
                             'value' => 1,
-                            'label' => $this->l('Yes'),
+                            'label' => $this->module->l('Yes'),
                         ],
                         [
                             'id' => 'tpay_installments_off',
                             'value' => 0,
-                            'label' => $this->l('No'),
+                            'label' => $this->module->l('No'),
                         ],
                     ],
                 ],
 
                 [
                     'type' => 'switch',
-                    'label' => $this->l('Pekao Installment (from 100 PLN to 20 000 PLN)'),
+                    'label' => $this->module->l('Pekao Installment (from 100 PLN to 20 000 PLN)'),
                     'name' => 'TPAY_PEKAO_INSTALLMENTS_ACTIVE',
-                    'desc' => $this->l('Show the method as a separate payment'),
+                    'desc' => $this->module->l('Show the method as a separate payment'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
                         [
                             'id' => 'tpay_pekao_installments_on',
                             'value' => 1,
-                            'label' => $this->l('Yes'),
+                            'label' => $this->module->l('Yes'),
                         ],
                         [
                             'id' => 'tpay_pekao_installments_off',
                             'value' => 0,
-                            'label' => $this->l('No'),
+                            'label' => $this->module->l('No'),
                         ],
                     ],
                 ],
 
                 [
                     'type' => 'switch',
-                    'label' => $this->l('Twisto Installment (from 1 PLN to 1 500 PLN)'),
+                    'label' => sprintf('Twisto - %s (from 1 PLN to 1 500 PLN)', $this->module->l('Buy now, pay later')),
                     'name' => 'TPAY_TWISTO_ACTIVE',
-                    'desc' => $this->l('Show the method as a separate payment'),
+                    'desc' => $this->module->l('Show the method as a separate payment'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
                         [
                             'id' => 'tpay_installments_on',
                             'value' => 1,
-                            'label' => $this->l('Yes'),
+                            'label' => $this->module->l('Yes'),
                         ],
                         [
                             'id' => 'tpay_installments_off',
                             'value' => 0,
-                            'label' => $this->l('No'),
+                            'label' => $this->module->l('No'),
                         ],
                     ],
                 ],
             ],
             'submit' => [
-                'title' => $this->l('Save'),
+                'title' => $this->module->l('Save'),
             ],
         ];
 
         if (Shop::getContext() == Shop::CONTEXT_SHOP) {
             $globalSettingsSwitcher = [
                 'type' => 'switch',
-                'label' => $this->l('Use global settings'),
+                'label' => $this->module->l('Use global settings'),
                 'name' => 'TPAY_GLOBAL_SETTINGS',
-                'desc' => $this->l('Use global settings'),
+                'desc' => $this->module->l('Use global settings'),
                 'is_bool' => true,
                 'class' => 'd-none',
                 'values' => [
                     [
                         'id' => 'tpay_active_on',
                         'value' => 1,
-                        'label' => $this->l('Yes'),
+                        'label' => $this->module->l('Yes'),
                     ],
                     [
                         'id' => 'tpay_active_off',
                         'value' => 0,
-                        'label' => $this->l('No'),
+                        'label' => $this->module->l('No'),
                     ],
                 ],
             ];
@@ -521,34 +521,34 @@ class TpayConfigurationController extends ModuleAdminController
     {
         $form['form'] = [
             'legend' => [
-                'title' => $this->l('Credit card settings'),
+                'title' => $this->module->l('Credit card settings'),
                 'icon' => 'icon-cogs'
             ],
             'input' => [
                 [
                     'type' => 'switch',
-                    'label' => $this->l('Payment credit card'),
+                    'label' => $this->module->l('Payment credit card'),
                     'name' => 'TPAY_CARD_ACTIVE',
-                    'desc' => $this->l('Show the method as a separate payment'),
+                    'desc' => $this->module->l('Show the method as a separate payment'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->l('Yes'),
+                            'label' => $this->module->l('Yes'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->l('No'),
+                            'label' => $this->module->l('No'),
                         ],
                     ],
                 ],
 
                 [
                     'type' => 'text',
-                    'label' => $this->l('RSA key'),
+                    'label' => $this->module->l('RSA key'),
                     'name' => 'TPAY_CARD_RSA',
                     'size' => 400,
                     'required' => false,
@@ -556,7 +556,7 @@ class TpayConfigurationController extends ModuleAdminController
 
             ],
             'submit' => [
-                'title' => $this->l('Save'),
+                'title' => $this->module->l('Save'),
             ],
         ];
 
@@ -567,13 +567,13 @@ class TpayConfigurationController extends ModuleAdminController
     {
         $form['form'] = [
             'legend' => [
-                'title' => $this->l('Transaction statuses'),
+                'title' => $this->module->l('Transaction statuses'),
                 'icon' => 'icon-cogs'
             ],
             'input' => [
                 [
                     'type' => 'select',
-                    'label' => $this->l('Status of the transaction in process'),
+                    'label' => $this->module->l('Status of the transaction in process'),
                     'name' => 'TPAY_PENDING',
                     'options' => [
                         'query' => $this->getOrderStates(),
@@ -583,7 +583,7 @@ class TpayConfigurationController extends ModuleAdminController
                 ],
                 [
                     'type' => 'select',
-                    'label' => $this->l('Status of paid transaction'),
+                    'label' => $this->module->l('Status of paid transaction'),
                     'name' => 'TPAY_CONFIRMED',
                     'options' => [
                         'query' => $this->getOrderStates(),
@@ -593,7 +593,7 @@ class TpayConfigurationController extends ModuleAdminController
                 ],
                 [
                     'type' => 'select',
-                    'label' => $this->l('Payment error status'),
+                    'label' => $this->module->l('Payment error status'),
                     'name' => 'TPAY_ERROR',
                     'options' => [
                         'query' => $this->getOrderStates(),
@@ -603,7 +603,7 @@ class TpayConfigurationController extends ModuleAdminController
                 ],
             ],
             'submit' => [
-                'title' => $this->l('Save'),
+                'title' => $this->module->l('Save'),
             ],
         ];
         return $form;
