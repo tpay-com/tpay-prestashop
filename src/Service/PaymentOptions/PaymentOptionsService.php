@@ -272,9 +272,10 @@ class PaymentOptionsService
             $compareArray[] = Config::GATEWAY_ALIOR_RATY;
         }
 
-        if (Helper::getMultistoreConfigurationValue('TPAY_TWISTO_ACTIVE') || $this->twistoBetweenPriceRange()) {
+        if (Helper::getMultistoreConfigurationValue('TPAY_TWISTO_ACTIVE') || !$this->twistoBetweenPriceRange()) {
             $compareArray[] = Config::GATEWAY_TWISTO;
         }
+
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') || !$this->pekaoBetweenPriceRange()) {
             $compareArray[] = Config::TPAY_GATEWAY_PEKAO_RATY;
             $compareArray[] = Config::GATEWAYS_PEKAO_RATY_3x0;
