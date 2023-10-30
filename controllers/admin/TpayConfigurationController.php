@@ -465,7 +465,7 @@ class TpayConfigurationController extends ModuleAdminController
 
                 [
                     'type' => 'switch',
-                    'label' => sprintf('Twisto - %s (from 1 PLN to 1 500 PLN)', $this->module->l('Buy now, pay later')),
+                    'label' => sprintf($this->module->l('Twisto - Buy now, pay later (from 1 PLN to 1 500 PLN)')),
                     'name' => 'TPAY_TWISTO_ACTIVE',
                     'desc' => $this->module->l('Show the method as a separate payment'),
                     'is_bool' => true,
