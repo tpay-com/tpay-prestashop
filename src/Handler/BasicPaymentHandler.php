@@ -51,28 +51,29 @@ class BasicPaymentHandler implements PaymentMethodHandler
      * @throws \Exception
      */
     public function createPayment(
-        \Tpay $module,
-        \Order $order,
+        \Tpay     $module,
+        \Order    $order,
         \Customer $customer,
-        \Context $context,
-        array $clientData,
-        array $data
-    ) {
-
+        \Context  $context,
+        array     $clientData,
+        array     $data
+    )
+    {
         $this->module = $module;
         $this->order = $order;
         $this->customer = $customer;
         $this->context = $context;
         $this->clientData = $clientData;
 
-        $gatewayId = $data['tpay_transfer_id'] ?? false;
+        $gatewayId = $data['tpay_transfer_id'] ?? 0;
+        $channelId = $data['tpay_channel_id'] ?? 0;
 
-        if (!$gatewayId) {
-            \PrestaShopLogger::addLog('No gateway id ' . print_r($data), 3);
-            return;
+        if ($channelId) {
+            $this->clientData['pay']['channelId'] = (int)$channelId;
+        } else {
+            $this->clientData['pay']['groupId'] = (int)$gatewayId;
         }
 
-        $this->clientData['pay']['groupId'] = (int) $gatewayId;
 
         $transaction = $this->createTransaction();
 
@@ -100,7 +101,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
             $transactionService->transactionProcess(
                 $transaction,
                 self::TYPE,
-                (int) $orderId,
+                (int)$orderId,
                 $redirect
             );
         }
@@ -122,6 +123,10 @@ class BasicPaymentHandler implements PaymentMethodHandler
             throw new TransactionException(
                 'Unable to create transaction. Response: ' . json_encode($result)
             );
+        }
+
+        if (isset($this->clientData['pay']['channelId']) && $this->clientData['pay']['channelId']) {
+            $result['transactionPaymentUrl'] = str_replace('gtitle', 'title', $result['transactionPaymentUrl']);
         }
 
         return $result;

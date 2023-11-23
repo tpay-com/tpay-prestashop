@@ -62,43 +62,16 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
 
     public function notificationTransaction($notification, $notificationData): void
     {
-        $id = $notificationData['id'];
         $trStatus = $notificationData['tr_status'];
-        $trId = $notificationData['tr_id'];
-        $trAmount = $notificationData['tr_amount'];
-        $trPaid = $notificationData['tr_paid'];
         $trError = $notificationData['tr_error'];
-        $trDate = $notificationData['tr_date'];
         $trCrc = $notificationData['tr_crc'];
-        $trMd5sum = $notificationData['md5sum'];
-
-        $merchantSecret = Cfg::get('TPAY_MERCHANT_SECRET');
-
-        if (!$merchantSecret) {
-            throw new NotificationHandlingException('No or empty merchant secret');
-        }
 
         // check transaction status
         if (($trStatus === 'TRUE' || $trStatus === 'CHARGEBACK') && $trError === 'none') {
-            $loggerTransactionData = ' Transaction id ' . $trId . ' Date ' . $trDate . ' Amount ' . $trAmount .
-                ' Paid ' . $trPaid . ' Status ' . $trDate;
-
-            $md5sum = md5($id . $trId . $trAmount . $trCrc . $merchantSecret);
             $transactionRepository = $this->module->getService('tpay.repository.transaction');
             $transaction = $transactionRepository->getTransactionByCrc($trCrc);
             $crc = $transaction['crc'] ?? '';
 
-            /*
-            Verification of md5sum
-            */
-            if ($trMd5sum !== $md5sum) {
-                \PrestaShopLogger::addLog($loggerTransactionData, 3);
-                throw new NotificationHandlingException('Wrong transaction md5 sum - ' . $trId);
-            }
-
-            /*
-            Verification transaction by CRC
-            */
             if ($crc !== $trCrc) {
                 throw new NotificationHandlingException('CRC mismatch expected from database: ' . $crc . '. given: ' . $trCrc);
             }

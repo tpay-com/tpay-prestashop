@@ -33,8 +33,10 @@ use Tpay\Handler\InstallQueryHandler;
 use Tpay\HookDispatcher;
 use Tpay\Install\Install;
 use Tpay\Install\Uninstall;
+use Tpay\OpenApi\Utilities\Logger;
 use Tpay\Util\Container;
 use Tpay\States\FactoryState;
+use Tpay\Util\PsrLogger;
 use tpaySDK\Api\TpayApi;
 
 class Tpay extends PaymentModule
@@ -140,7 +142,7 @@ class Tpay extends PaymentModule
     {
         $this->name = 'tpay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.8.1';
+        $this->version = '1.8.2';
         $this->author = 'Krajowy Integrator Płatności S.A.';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
@@ -185,6 +187,7 @@ class Tpay extends PaymentModule
 
         if ($clientId && $secretKey) {
             try {
+                Logger::setLogger(new PsrLogger());
                 $this->api = new TpayApi($clientId, $secretKey, $isProduction, 'read');
             } catch (\Exception $exception) {
                 PrestaShopLogger::addLog($exception->getMessage(), 3);

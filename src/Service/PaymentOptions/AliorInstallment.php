@@ -20,7 +20,7 @@ use Tpay\Config\Config;
 use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
-class Installment implements GatewayType
+class AliorInstallment implements GatewayType
 {
     private $method = 'payment';
 
@@ -35,7 +35,7 @@ class Installment implements GatewayType
             'installments_moduleLink' => $moduleLink,
         ]);
 
-        $paymentOption->setCallToActionText($module->l('Alior installments'))
+        $paymentOption->setCallToActionText($module->l('Alior Raty'))
             ->setAction($moduleLink)
             ->setInputs([
                 [

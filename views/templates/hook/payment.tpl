@@ -35,7 +35,7 @@
 		</ul>
 	</form>
 
-	<div id="transfer-error" style="display: none">
+	<div class="transfer-error" style="display: none">
 		<span class="tpay-error">
 			{l s='Please choose payment gateway' mod='tpay'}
 		</span>
