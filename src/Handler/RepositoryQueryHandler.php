@@ -49,7 +49,7 @@ class RepositoryQueryHandler
                     $statement = $qb->execute();
             }
         } catch (\Exception $exception) {
-            \PrestaShopLogger::addLog($exception, 3);
+            \PrestaShopLogger::addLog($exception->getMessage(), 3);
             throw new BaseException($exception->getMessage());
         }
 
