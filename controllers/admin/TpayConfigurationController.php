@@ -187,7 +187,7 @@ class TpayConfigurationController extends ModuleAdminController
                     return true;
                 }
             } catch (\Exception $exception) {
-                \PrestaShopLogger::addLog($exception, 3);
+                \PrestaShopLogger::addLog($exception->getMessage(), 3);
                 $this->errors[] = $this->module->l('Settings not saved');
             }
         }

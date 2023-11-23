@@ -51,7 +51,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                     }
                     echo 'TRUE';
                 } catch (\Exception $exception) {
-                    \PrestaShopLogger::addLog($exception, 3);
+                    \PrestaShopLogger::addLog($exception->getMessage(), 3);
                 }
             }
         }
@@ -122,7 +122,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                 $orderHistory->addWithemail(true, []);
             }
         } catch (\Exception $exception) {
-            \PrestaShopLogger::addLog($exception, 3);
+            \PrestaShopLogger::addLog($exception->getMessage(), 3);
         }
     }
 
