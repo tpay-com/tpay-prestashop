@@ -19,6 +19,7 @@ $_MODULE['<{tpay}prestashop>tpay_d62cfd7f41ceeeaf4185ee2c09b0ddf0'] = 'Kod blik 
 $_MODULE['<{tpay}prestashop>tpay_d1cf53dfa3bb10cc0364b5901c9791bb'] = 'Opłata za płatność online: ';
 $_MODULE['<{tpay}prestashop>tpay_fff2aa1cada298840d85be1dae59b1b0'] = 'Nie można przetworzyć zwrotu - kwota jest większa niż dozwolone %s';
 $_MODULE['<{tpay}prestashop>tpay_82ed753b208ffd8fbe2900424d720d5f'] = 'Nie można przetworzyć zwrotu - nieprawidłowa kwota';
+$_MODULE['<{tpay}prestashop>tpay_32d357380657f524d6cd7aa8eccbf916'] = 'Zwrot wykonany pomyślnie. Proces zwrotu jest w trakcie przetwarzania, proszę czekać.';
 $_MODULE['<{tpay}prestashop>tpay_c080652f58d146ae2e6d28fd90f1d440'] = 'Zwrot wykonany pomyślnie. Proces jest w trakcie przetwarzania, proszę czekać';
 $_MODULE['<{tpay}prestashop>tpay_7ceb0fe522e1fef2a94ab3a62fcc87d1'] = 'Błąd podczas wykonywania zwrotu. Sprawdź czy wartość zwrotu nie przekracza wartości zamówienia.';
 $_MODULE['<{tpay}prestashop>tpay_93b4afaba65d5574b270072b3c243ef5'] = 'Zaakceptuj kod blik w aplikacji mobilnej';
