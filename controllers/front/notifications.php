@@ -20,6 +20,8 @@ use tpaySDK\Webhook\JWSVerifiedPaymentNotification;
 
 class TpayNotificationsModuleFrontController extends ModuleFrontController
 {
+    private $statusHandler;
+
     /**
      * @throws TpayException|Exception
      */
@@ -28,6 +30,8 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         if (!$_POST) {
             echo 'FALSE';
         } else {
+            $this->statusHandler = $this->module->getService('tpay.handler.order_status_handler');
+
             $event = $_POST['event'] ?? false;
             $alias = $_POST['msg_value'] ?? false;
 
@@ -81,7 +85,6 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                 $transaction,
                 $trStatus
             );
-
             /*
              Payment card update token card
              */
@@ -109,6 +112,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
             if ($currentStatus === 'pending') {
                 $changeStatus = $status === 'TRUE' ? 'success' : 'error';
                 $transactionRepository->updateTransactionStatus($transaction['crc'], $changeStatus);
+                $this->setConfirmed($transaction['order_id'], $transaction['transaction_id']);
             }
 
             /// Charge
@@ -145,5 +149,13 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                 (string)$alias['value']
             );
         }
+    }
+
+    private function setConfirmed($orderId, $transactionId): void
+    {
+        $this->statusHandler->setOrdersAsConfirmed(
+            new \Order($orderId),
+            $transactionId
+        );
     }
 }
