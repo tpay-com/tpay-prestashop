@@ -15,15 +15,11 @@ use Tpay\Handler\ExceptionHandler;
 
 class TpayConfirmationModuleFrontController extends ModuleFrontController
 {
-    private $statusHandler;
-
     /**
      * @throws PrestaShopException
      */
     public function initContent()
     {
-        $this->statusHandler = $this->module->getService('tpay.handler.order_status_handler');
-
         $type = Tools::getValue('type');
 
         switch ($type) {
@@ -50,10 +46,6 @@ class TpayConfirmationModuleFrontController extends ModuleFrontController
                 throw new \Exception('No order exist in Tpay table for the specified crc');
             }
 
-            $transactionRepository = $this->module->getService('tpay.repository.transaction');
-            $transactionId = $transactionRepository->getTransactionIdByOrderId($orderId);
-
-            $this->setConfirmed($orderId, $transactionId);
             $this->redirectSuccess($orderId);
 
         } catch (\Exception $e) {
@@ -70,14 +62,6 @@ class TpayConfirmationModuleFrontController extends ModuleFrontController
         Tools::redirect(
             'index.php?controller=order-confirmation&id_cart=' . (int)$cart->id . '&id_module=' .
             (int)$this->module->id . '&id_order=' . $order->id . '&key=' . $customer->secure_key
-        );
-    }
-
-    private function setConfirmed($orderId, $transactionId): void
-    {
-        $this->statusHandler->setOrdersAsConfirmed(
-            new \Order($orderId),
-            $transactionId
         );
     }
 }
