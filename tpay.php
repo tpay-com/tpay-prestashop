@@ -190,6 +190,14 @@ class Tpay extends PaymentModule
             try {
                 Logger::setLogger(new PsrLogger());
                 $this->api = new TpayApi($clientId, $secretKey, $isProduction, 'read');
+                $this->api->authorization()->setClientName(implode(
+                    '|',
+                    [
+                        'presta:' . $this->getPrestaVersion(),
+                        'tpay-com/tpay-openapi-php:' . $this->getPackageVersion(),
+                        'PHP:' . phpversion(),
+                    ]
+                ));
             } catch (\Exception $exception) {
                 PrestaShopLogger::addLog($exception->getMessage(), 3);
             }
@@ -431,5 +439,33 @@ class Tpay extends PaymentModule
         }
         $smarty->assign('tpay_is_old_presta', $isOldPresta);
         return parent::fetch($templatePath, $cache_id, $compile_id);
+    }
+
+    private function getPrestaVersion(): string
+    {
+        $dir = realpath(__DIR__ . '/../../config/settings.inc.php');
+        if (file_exists($dir)) {
+            include($dir);
+
+            if (defined('_PS_VERSION_')) {
+                return _PS_VERSION_;
+            }
+
+            return 'n/a';
+        }
+
+        return 'n/a';
+    }
+
+    private function getPackageVersion(): string
+    {
+        $dir = __DIR__ . '/composer.json';
+        if (file_exists($dir)) {
+            $composerJson = json_decode(file_get_contents($dir), true)['require'] ?? [];
+
+            return $composerJson['tpay-com/tpay-openapi-php'];
+        }
+
+        return 'n/a';
     }
 }
