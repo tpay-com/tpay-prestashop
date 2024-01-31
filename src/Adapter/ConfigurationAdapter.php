@@ -16,6 +16,7 @@ namespace Tpay\Adapter;
 
 use Configuration as Cfg;
 use Shop;
+use Tools;
 
 class ConfigurationAdapter
 {
@@ -42,6 +43,10 @@ class ConfigurationAdapter
     {
         if ($idShop === null) {
             $idShop = $this->shopId;
+        }
+
+        if ($key == "TPAY_MERCHANT_SECRET"){
+            $value = Tools::safeOutput($value, true);
         }
 
         return Cfg::updateValue($key, $value, $html, $idShopGroup, $idShop);
