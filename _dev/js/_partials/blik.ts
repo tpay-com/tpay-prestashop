@@ -191,21 +191,14 @@ async function blikCreateTransaction(
 
 }
 
-
-
-
-
-
-
-
 function blikChangeRegulations() {
     const elm = <HTMLInputElement>document.querySelector('#conditions-to-approve input[type="checkbox"]');
     const input = <HTMLInputElement>document.querySelector('.tpay-blik-input');
 
-    elm.addEventListener('click', () => {
+    elm?.addEventListener('click', () => {
         blikUpdateValidateState();
     });
-    input.addEventListener('change', () => {
+    input?.addEventListener('change', () => {
         blikUpdateValidateState();
     });
 }
