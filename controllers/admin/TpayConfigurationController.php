@@ -233,16 +233,18 @@ class TpayConfigurationController extends ModuleAdminController
             'input' => [
                 [
                     'type' => 'text',
-                    'label' => $this->module->l('Client ID'),
+                    'label' => $this->module->l('API Client ID'),
                     'name' => 'TPAY_CLIENT_ID',
                     'size' => 50,
+                    'desc' => $this->module->l('Find in Merchant’s panel: Integration -> API -> Open API Keys'),
                     'required' => true,
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->module->l('Secret key'),
+                    'label' => $this->module->l('API Secret'),
                     'name' => 'TPAY_SECRET_KEY',
                     'size' => 50,
+                    'desc' => $this->module->l('Find in Merchant’s panel: Integration -> API -> Open API Keys'),
                     'required' => true,
                 ],
                 [
@@ -250,6 +252,7 @@ class TpayConfigurationController extends ModuleAdminController
                     'label' => $this->module->l('Merchant secret key (in notifications)'),
                     'name' => 'TPAY_MERCHANT_SECRET',
                     'size' => 400,
+                    'desc' => $this->module->l('Find in Merchant’s panel: Settings -> Notifications'),
                     'required' => true,
                 ],
                 [
@@ -550,6 +553,7 @@ class TpayConfigurationController extends ModuleAdminController
                     'type' => 'text',
                     'label' => $this->module->l('RSA key'),
                     'name' => 'TPAY_CARD_RSA',
+                    'desc' => $this->module->l('Find in Merchant’s panel: Credit cards payment -> API'),
                     'size' => 400,
                     'required' => false,
                 ],
