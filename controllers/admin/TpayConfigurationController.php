@@ -343,7 +343,7 @@ class TpayConfigurationController extends ModuleAdminController
                 ],
                 [
                     'label' => $this->module->l('Your address for notifications'),
-                    'desc' => Tools::getShopDomain(true).'/module/tpay/notifications',
+                    'desc' => $this->context->link->getModuleLink('tpay', 'notifications'),
                 ]
             ],
             'submit' => [
