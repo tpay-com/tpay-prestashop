@@ -24,11 +24,7 @@ if (file_exists($autoloadPath)) {
     include_once $autoloadPath;
 }
 
-use Doctrine\DBAL\Connection;
-use PrestaShop\PrestaShop\Core\Foundation\Database\EntityManager;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Configuration as Cfg;
-use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Tpay\Exception\BaseException;
 use Tpay\Handler\InstallQueryHandler;
 use Tpay\HookDispatcher;
@@ -175,6 +171,15 @@ class Tpay extends PaymentModule
             }
             return $this->api;
         }
+    }
+
+    public function api(): TpayApi
+    {
+        if (null === $this->api) {
+            $this->initAPI();
+        }
+
+        return $this->api;
     }
 
     /**

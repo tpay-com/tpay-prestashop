@@ -27,6 +27,8 @@ class TpayConfigurationController extends ModuleAdminController
     public const SEPARATE_PAYMENT_INFO = 'Show the method as a separate payment';
     public $errors = [];
     public $configuration = [];
+
+    /** @var \Tpay */
     public $module;
 
     public function __construct()
@@ -34,7 +36,7 @@ class TpayConfigurationController extends ModuleAdminController
         parent::__construct();
 
         $this->bootstrap = true;
-        $lang = new Language((int)Cfg::get('PS_LANG_DEFAULT'));
+        $lang = new Language((int) Cfg::get('PS_LANG_DEFAULT'));
 
         if (!$this->module->active) {
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminHome'));
@@ -101,7 +103,9 @@ class TpayConfigurationController extends ModuleAdminController
     {
         if (\Shop::getContext() == \Shop::CONTEXT_GROUP) {
             return '<p class="alert alert-warning">' .
-                $this->module->l('You cannot manage from a "Group Shop" context, select directly the shop you want to edit') .
+                $this->module->l(
+                    'You cannot manage from a "Group Shop" context, select directly the shop you want to edit'
+                ) .
                 '</p>';
         } else {
             return '';
@@ -128,6 +132,7 @@ class TpayConfigurationController extends ModuleAdminController
         $form[] = $this->formPaymentOptions();
         $form[] = $this->formCardOptions();
         $form[] = $this->formStatusesOptions();
+        $form[] = $this->formGenericPaymentOptions();
 
         return $form;
     }
@@ -170,11 +175,8 @@ class TpayConfigurationController extends ModuleAdminController
 
     public function postProcess()
     {
-
         if (Tools::isSubmit('submit' . $this->module->name)) {
-
             try {
-
                 if (!$this->validatePostProcess()) {
                     return false;
                 }
@@ -201,7 +203,7 @@ class TpayConfigurationController extends ModuleAdminController
 
     public function displayForm(): string
     {
-        $langId = (int)Cfg::get('PS_LANG_DEFAULT');
+        $langId = (int) Cfg::get('PS_LANG_DEFAULT');
         $helper = new \HelperForm();
 
         $fields_form = $this->createForm();
@@ -268,7 +270,10 @@ class TpayConfigurationController extends ModuleAdminController
                     'options' => [
                         'query' => [
                             ['id' => 'md5_all', 'name' => 'md5($order->id . $customer->secure_key . time())'],
-                            ['id' => 'order_id_and_rest', 'name' => '$order->id . "-" . md5($customer->secure_key . time())'],
+                            [
+                                'id' => 'order_id_and_rest',
+                                'name' => '$order->id . "-" . md5($customer->secure_key . time())'
+                            ],
                             ['id' => 'order_id', 'name' => '$order->id'],
                         ],
                         'id' => 'id',
@@ -295,12 +300,16 @@ class TpayConfigurationController extends ModuleAdminController
                         ],
                     ],
                     'desc' => '<b>' . $this->module->l('WARNING') . '</b>'
-                        . $this->module->l(' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!'),
+                        . $this->module->l(
+                            ' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!'
+                        ),
                 ],
                 [
                     'type' => 'text',
                     'label' => $this->module->l('Notification email'),
-                    'desc' => $this->module->l('Set your own email with notifications.  Leave blank to use the email configured in the tpay panel.'),
+                    'desc' => $this->module->l(
+                        'Set your own email with notifications.  Leave blank to use the email configured in the tpay panel.'
+                    ),
                     'name' => 'TPAY_NOTIFICATION_EMAILS',
                     'size' => 50,
                     'required' => false,
@@ -621,5 +630,31 @@ class TpayConfigurationController extends ModuleAdminController
             ],
         ];
         return $form;
+    }
+
+    private function formGenericPaymentOptions(): array
+    {
+        $channels = $this->module->api()->transactions()->getChannels();
+
+        return [
+            'form' => [
+                'legend' => ['title' => 'Generic payments', 'icon' => 'icon-cogs'],
+                'input' => [
+                    [
+                        'type' => 'select',
+                        'label' => 'Select payments to generic onsite mechanism to: ',
+                        'name' => 'TPAY_GENERIC_PAYMENTS',
+                        'multiple' => true,
+                        'size' => 20,
+                        'options' => [
+                            'query' => $this->module->api()->transactions()->getChannels()['channels'],
+                            'id' => 'value',
+                            'name' => 'name'
+                        ],
+                    ]
+                ],
+                'submit' => ['title' => $this->module->l('Save')],
+            ]
+        ];
     }
 }

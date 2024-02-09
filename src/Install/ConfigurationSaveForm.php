@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Tpay\Install;
 
 use Shop;
-use Tpay;
 use Tpay\Adapter\ConfigurationAdapter;
 use Tpay\Util\Helper;
 

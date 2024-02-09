@@ -18,8 +18,6 @@ namespace Tpay\States;
 
 use Configuration as Cfg;
 use OrderState;
-use Tools;
-use Validate;
 
 class FactoryState
 {
