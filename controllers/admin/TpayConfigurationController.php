@@ -46,7 +46,13 @@ class TpayConfigurationController extends ModuleAdminController
         $fields = [];
 
         foreach (Helper::getFields() as $field) {
-            $fields[$field] = Tools::getValue($field, Cfg::get($field));
+            $value = Tools::getValue($field, Cfg::get($field));
+
+            if ($field == "TPAY_MERCHANT_SECRET"){
+                $value = html_entity_decode($value);
+            }
+
+            $fields[$field] = $value;
         }
 
         return $fields;
