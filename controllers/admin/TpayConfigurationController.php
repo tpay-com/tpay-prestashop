@@ -346,6 +346,10 @@ class TpayConfigurationController extends ModuleAdminController
                     'name' => 'TPAY_SURCHARGE_VALUE',
                     'size' => 50,
                     'required' => false,
+                ],
+                [
+                    'label' => $this->module->l('Your address for notifications'),
+                    'desc' => $this->context->link->getModuleLink('tpay', 'notifications'),
                 ]
             ],
             'submit' => [
