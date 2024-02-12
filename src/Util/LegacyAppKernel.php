@@ -19,6 +19,10 @@ class LegacyAppKernel extends \AppKernel
 
     public function getCacheDir()
     {
+        if (_PS_CACHE_DIR_) {
+            return _PS_CACHE_DIR_;
+        }
+
         return _PS_ROOT_DIR_ . '/app/cache/' . $this->getEnvironment();
     }
 
