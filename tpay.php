@@ -450,8 +450,6 @@ class Tpay extends PaymentModule
             if (defined('_PS_VERSION_')) {
                 return _PS_VERSION_;
             }
-
-            return 'n/a';
         }
 
         return 'n/a';
