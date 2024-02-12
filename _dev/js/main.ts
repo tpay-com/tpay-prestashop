@@ -11,10 +11,13 @@ import * as clause from "./_partials/clause";
 
 import {checkSurcharge} from "./_partials/surcharge";
 import {removeBlikAddept} from "./_partials/blikAddepts";
-
+import { elementReady } from './utils/elementReady';
 
 /// init blik
-blikWidget();
+elementReady("#tpay-blik-form").then(() => {
+    blikWidget()
+})
+
 basicTransferPayments();
 
 
