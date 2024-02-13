@@ -144,7 +144,7 @@ class FactoryState
             foreach (\Language::getLanguages() as $lang) {
 
                 return $this->existsLocalizedNameInDatabase(
-                    $names->stateLanguage[$lang['iso_code']],
+                    $names->stateLanguage[$lang['iso_code']] ?? $names->stateLanguage['en'],
                     (int)$lang['id_lang'],
                     \Tools::getIsset('id_order_state') ? (int)\Tools::getValue('id_order_state') : null
                 );
