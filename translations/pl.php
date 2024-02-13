@@ -146,6 +146,7 @@ $_MODULE['<{tpay}prestashop>tpay_952bf87c967660b7bbd4e1eb08cefc92'] = 'Secret';
 $_MODULE['<{tpay}prestashop>tpay_a2436f156896e30797fae5cb4625ff06'] = 'Kod bezpieczeństwa (w powiadomieniach)';
 $_MODULE['<{tpay}prestashop>tpay_321d4f2bb69eb9edd173cfd0c02500f2'] = 'Forma pola CRC';
 $_MODULE['<{tpay}prestashop>tpay_18059342ab22f4ce9dcb766714593cf1'] = 'Używaj konta Sandbox';
+$_MODULE['<{tpay}prestashop>tpay_d8061fcea5d39a9ff0f6c054a90fa9d1'] = 'Bezpośrednie przekierowanie do banku';
 $_MODULE['<{tpay}prestashop>tpay_93cba07454f06a4a960172bbd6e2a435'] = 'Tak';
 $_MODULE['<{tpay}prestashop>tpay_bafd7322c6e97d25b6299b5d6fe8920b'] = 'Nie';
 $_MODULE['<{tpay}prestashop>tpay_059e9861e0400dfbe05c98a841f3f96b'] = 'UWAGA';

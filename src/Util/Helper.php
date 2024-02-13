@@ -54,6 +54,7 @@ class Helper
             'TPAY_GPAY_ACTIVE',
             'TPAY_APPLEPAY_ACTIVE',
             'TPAY_SANDBOX',
+            'TPAY_REDIRECT_TO_CHANNEL',
             'TPAY_SURCHARGE_ACTIVE',
             'TPAY_SURCHARGE_TYPE',
             'TPAY_SURCHARGE_VALUE',
@@ -63,7 +64,8 @@ class Helper
             'TPAY_CONFIRMED',
             'TPAY_ERROR',
             'TPAY_PENDING',
-            'TPAY_GLOBAL_SETTINGS'
+            'TPAY_GLOBAL_SETTINGS',
+            'TPAY_NOTIFICATION_ADDRESS'
         ];
     }
 
@@ -79,6 +81,7 @@ class Helper
             'TPAY_GPAY_ACTIVE' => '0',
             'TPAY_APPLEPAY_ACTIVE' => '0',
             'TPAY_SANDBOX' => '0',
+            'TPAY_REDIRECT_TO_CHANNEL' => '0',
             'TPAY_SURCHARGE_ACTIVE' => '0',
             'TPAY_SURCHARGE_TYPE' => '0',
             'TPAY_SURCHARGE_VALUE' => '0',
