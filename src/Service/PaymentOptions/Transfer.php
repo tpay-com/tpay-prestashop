@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Tpay\Service\PaymentOptions;
 
 use Tpay\Config\Config;
+use Configuration;
 use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
@@ -33,7 +34,8 @@ class Transfer implements GatewayType
         Context::getContext()->smarty->assign([
             'transfer_gateway' => $data['id'],
             'transfer_moduleLink' => $moduleLink,
-            'gateways' => $data['gateways']
+            'gateways' => $data['gateways'],
+            'isDirect' => (bool) Configuration::get('TPAY_REDIRECT_TO_CHANNEL'),
         ]);
 
         $paymentOption->setCallToActionText($module->l('Pay by online transfer with Tpay'))
