@@ -62,6 +62,7 @@ class Helper
             'TPAY_NOTIFICATION_EMAILS',
             'TPAY_SUMMARY',
             'TPAY_CONFIRMED',
+            'TPAY_VIRTUAL_CONFIRMED',
             'TPAY_ERROR',
             'TPAY_PENDING',
             'TPAY_GLOBAL_SETTINGS',

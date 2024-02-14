@@ -628,6 +628,16 @@ class TpayConfigurationController extends ModuleAdminController
                 ],
                 [
                     'type' => 'select',
+                    'label' => $this->module->l('Status of a paid transaction with virtual products only'),
+                    'name' => 'TPAY_VIRTUAL_CONFIRMED',
+                    'options' => [
+                        'query' => $this->getOrderStates(),
+                        'id' => 'id_order_state',
+                        'name' => 'name',
+                    ],
+                ],
+                [
+                    'type' => 'select',
                     'label' => $this->module->l('Payment error status'),
                     'name' => 'TPAY_ERROR',
                     'options' => [

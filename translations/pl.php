@@ -175,6 +175,7 @@ $_MODULE['<{tpay}prestashop>tpay_ed49333351d1fde4bcdb1faa5c33677d'] = 'Klucz RSA
 $_MODULE['<{tpay}prestashop>tpay_b1b2bdeab48fdfb1e53da7d7ce10b22f'] = 'Statusy transakcji';
 $_MODULE['<{tpay}prestashop>tpay_267e2ea73e5af21b7f89d2643d58ce78'] = 'Status transakcji oczekującej na płatność';
 $_MODULE['<{tpay}prestashop>tpay_0bca037451ac432ae9fae53a78387a6e'] = 'Status transakcji opłaconej';
+$_MODULE['<{tpay}prestashop>tpay_f69d7a9f87546d78e76e0ee400dabeac'] = 'Status opłaconej transakcji, wyłącznie z produktami wirtualnymi';
 $_MODULE['<{tpay}prestashop>tpay_0af709feff4fe0f53053a235f7678645'] = 'Status transakcji zakończonej błędem';
 $_MODULE['<{tpay}prestashop>invoicesurcharge_bb8278c756e2855300ee104481ad7d27'] = 'Opłata za płatność online';
 $_MODULE['<{tpay}prestashop>renewpayment_26e79570e8d6e15ee7168fc8bfdbf805'] = 'Błąd podczas zlecenia';
