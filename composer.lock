@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20c06cf6f77ef4bc2a557d46d29bd350",
+    "content-hash": "9ff6fc2b8a802e3b9fa02c1291bdd19f",
     "packages": [
         {
             "name": "paragonie/constant_time_encoding",
@@ -285,16 +285,16 @@
         },
         {
             "name": "tpay-com/tpay-openapi-php",
-            "version": "1.6.2",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tpay-com/tpay-openapi-php.git",
-                "reference": "ef72ebf452bebec2bd013316cb8f1ba340142226"
+                "reference": "1a7550c921603855d38c99925240f229b17deac6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tpay-com/tpay-openapi-php/zipball/ef72ebf452bebec2bd013316cb8f1ba340142226",
-                "reference": "ef72ebf452bebec2bd013316cb8f1ba340142226",
+                "url": "https://api.github.com/repos/tpay-com/tpay-openapi-php/zipball/1a7550c921603855d38c99925240f229b17deac6",
+                "reference": "1a7550c921603855d38c99925240f229b17deac6",
                 "shasum": ""
             },
             "require": {
@@ -337,9 +337,9 @@
                 "docs": "https://openapi.tpay.com",
                 "email": "support@tpay.com",
                 "issues": "https://github.com/tpay-com/tpay-openapi-php/issues",
-                "source": "https://github.com/tpay-com/tpay-openapi-php/tree/1.6.2"
+                "source": "https://github.com/tpay-com/tpay-openapi-php/tree/1.7.0"
             },
-            "time": "2023-10-30T13:03:38+00:00"
+            "time": "2024-02-19T08:52:44+00:00"
         }
     ],
     "packages-dev": [
