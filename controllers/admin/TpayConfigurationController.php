@@ -298,6 +298,25 @@ class TpayConfigurationController extends ModuleAdminController
                         . $this->module->l(' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!'),
                 ],
                 [
+                    'type' => 'switch',
+                    'label' => $this->module->l('Redirect directly to bank'),
+                    'name' => 'TPAY_REDIRECT_TO_CHANNEL',
+                    'is_bool' => true,
+                    'class' => 't',
+                    'values' => [
+                        [
+                            'id' => 'tpay_redirect_to_channel_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Yes'),
+                        ],
+                        [
+                            'id' => 'tpay_redirect_to_channel_off',
+                            'value' => 0,
+                            'label' => $this->module->l('No'),
+                        ],
+                    ],
+                ],
+                [
                     'type' => 'text',
                     'label' => $this->module->l('Notification email'),
                     'desc' => $this->module->l('Set your own email with notifications.  Leave blank to use the email configured in the tpay panel.'),
@@ -351,6 +370,8 @@ class TpayConfigurationController extends ModuleAdminController
                     'required' => false,
                 ],
                 [
+                    'type' => '',
+                    'name' => 'TPAY_NOTIFICATION_ADDRESS',
                     'label' => $this->module->l('Your address for notifications'),
                     'desc' => $this->context->link->getModuleLink('tpay', 'notifications'),
                 ]
@@ -599,6 +620,16 @@ class TpayConfigurationController extends ModuleAdminController
                     'type' => 'select',
                     'label' => $this->module->l('Status of paid transaction'),
                     'name' => 'TPAY_CONFIRMED',
+                    'options' => [
+                        'query' => $this->getOrderStates(),
+                        'id' => 'id_order_state',
+                        'name' => 'name',
+                    ],
+                ],
+                [
+                    'type' => 'select',
+                    'label' => $this->module->l('Status of a paid transaction with virtual products only'),
+                    'name' => 'TPAY_VIRTUAL_CONFIRMED',
                     'options' => [
                         'query' => $this->getOrderStates(),
                         'id' => 'id_order_state',
