@@ -19,6 +19,7 @@ namespace Tpay\Handler;
 use Tpay\Exception\PaymentException;
 use Tpay\Exception\TransactionException;
 use Tpay\Service\TransactionService;
+use Tpay\Util\Helper;
 
 class BasicPaymentHandler implements PaymentMethodHandler
 {
@@ -66,15 +67,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
         $this->context = $context;
         $this->clientData = $clientData;
 
-        $gatewayId = $data['tpay_transfer_id'] ?? 0;
-        $channelId = $data['tpay_channel_id'] ?? 0;
-
-        if ($channelId) {
-            $this->clientData['pay']['channelId'] = (int)$channelId;
-        } else {
-            $this->clientData['pay']['groupId'] = (int)$gatewayId;
-        }
-
+        $this->updatePayData($data);
 
         $transaction = $this->createTransaction();
 
@@ -109,7 +102,6 @@ class BasicPaymentHandler implements PaymentMethodHandler
         }
     }
 
-
     /**
      * Create api transaction
      *
@@ -132,5 +124,26 @@ class BasicPaymentHandler implements PaymentMethodHandler
         }
 
         return $result;
+    }
+
+    private function updatePayData(array $data)
+    {
+        if ($data['type'] == 'transfer' && !Helper::getMultistoreConfigurationValue('TPAY_TRANSFER_WIDGET')) {
+            unset($this->clientData['pay']);
+        } else {
+            $this->checkPayType($data);
+        }
+    }
+
+    private function checkPayType(array $data)
+    {
+        $gatewayId = $data['tpay_transfer_id'] ?? 0;
+        $channelId = $data['tpay_channel_id'] ?? 0;
+
+        if ($channelId) {
+            $this->clientData['pay']['channelId'] = (int)$channelId;
+        } else {
+            $this->clientData['pay']['groupId'] = (int)$gatewayId;
+        }
     }
 }
