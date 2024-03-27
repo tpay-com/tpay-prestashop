@@ -20,6 +20,7 @@ use Tpay\Config\Config;
 use Configuration;
 use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
+use Tpay\Util\Helper;
 
 class Transfer implements GatewayType
 {
@@ -32,6 +33,7 @@ class Transfer implements GatewayType
     ): PaymentOption {
         $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
         Context::getContext()->smarty->assign([
+            'transfer_type' => Helper::getMultistoreConfigurationValue('TPAY_TRANSFER_WIDGET') ? 'widget' : 'redirect',
             'transfer_gateway' => $data['id'],
             'transfer_moduleLink' => $moduleLink,
             'gateways' => $data['gateways'],
