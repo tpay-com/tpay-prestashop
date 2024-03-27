@@ -19,6 +19,12 @@ function CardPayment(url, pubkey)
 
     function SubmitPayment()
     {
+        let cardRedirectType = document.querySelector('input[name=redirect_type]');
+
+        if (cardRedirectType.value === 'redirect'){
+            return;
+        }
+
         var cardNumber = numberInput.val().replace(/\s/g, ''),
             cd = cardNumber + '|' + expiryInput.val()
 	            .replace(/\s/g, '') + '|' + cvcInput.val().replace(/\s/g, '') + '|' + document.location.origin,
@@ -165,7 +171,11 @@ function CardPayment(url, pubkey)
 
     function checkForm()
     {
-	    const savedCards = document.querySelector('input[name=savedId]');
+        const savedCards = document.querySelector('input[name=savedId]');
+        let cardRedirectType = document.querySelector('input[name=redirect_type]');
+        if (cardRedirectType.value === 'redirect'){
+            return validateClause(termsOfServiceInput)
+        }
 
         let isValidForm = false;
         if (
@@ -187,7 +197,6 @@ function CardPayment(url, pubkey)
     }
 
     $('#card_continue_btn').click(function (e) {
-
 		if(checkForm()) {
 			SubmitPayment();
 		} else {
@@ -212,7 +221,6 @@ function CardPayment(url, pubkey)
 			validateClause(termsOfServiceInput);
 		})
 }
-
 
 //// Card init
 document.addEventListener("DOMContentLoaded", function (e) {
@@ -242,7 +250,6 @@ function handleCardForm(newCardForm)
 
 }
 
-
 function handleCardFormNewCard(newCardForm)
 {
     const btn = document.querySelector('#newCard');
@@ -255,7 +262,6 @@ function handleCardFormNewCard(newCardForm)
     }
 }
 
-
 $('body').on('click', '[data-link-action=delete-credit-card]', function () {
     const action = $(this).attr('href');
     const id = $(this).attr('data-id');
@@ -263,7 +269,6 @@ $('body').on('click', '[data-link-action=delete-credit-card]', function () {
 
     return false;
 });
-
 
 function handleCardFormRemove(action, id)
 {

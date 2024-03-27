@@ -21,6 +21,7 @@ use Configuration as Cfg;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 use Tpay\Entity\TpayCreditCard;
 use Tpay\Service\SurchargeService;
+use Tpay\Util\Helper;
 
 class Card implements GatewayType
 {
@@ -48,6 +49,7 @@ class Card implements GatewayType
         }
 
         \Context::getContext()->smarty->assign([
+            'card_type' => Helper::getMultistoreConfigurationValue('TPAY_CARD_WIDGET') ? 'widget' : 'redirect',
             'cards_moduleLink' => $moduleLink,
             'saved_cards' => $creditCardsArray,
             'assets_path' => $module->getPath(),
