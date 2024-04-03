@@ -127,6 +127,10 @@ class CustomerData
             ],
         ];
 
+        if(isset($this->address->vat_number) && !empty($this->address->vat_number)){
+            $data['payer']['taxId'] = $this->address->vat_number;
+        }
+
         foreach ($data as $key => $value) {
             if (empty($value)) {
                 unset($data[$key]);
