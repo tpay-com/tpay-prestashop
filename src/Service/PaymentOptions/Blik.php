@@ -19,7 +19,6 @@ namespace Tpay\Service\PaymentOptions;
 use Tpay\Config\Config;
 use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
-use Tpay\Entity\TpayBlik;
 use Tpay\Util\Helper;
 
 class Blik implements GatewayType

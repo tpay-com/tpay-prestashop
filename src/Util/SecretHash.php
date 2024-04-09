@@ -16,8 +16,6 @@ declare(strict_types=1);
 
 namespace Tpay\Util;
 
-use Tpay\Config\Config;
-
 class SecretHash
 {
     public static function getHash($secret)

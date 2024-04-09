@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Tpay\Hook;
 
 use Cart;
+use PrestaShop\PrestaShop\Core\Localization\Exception\LocalizationException;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 use Tools;
 use Tpay\Service\PaymentOptions\PaymentOptionsService;
@@ -30,7 +31,7 @@ class Payment extends AbstractHook
 
     /**
      * Create payment methods
-     * @throws \PrestaShopException
+     * @throws \PrestaShopException|LocalizationException
      */
     public function paymentOptions($params): ?array
     {

@@ -16,7 +16,6 @@ declare(strict_types=1);
 
 namespace Tpay\Install;
 
-use PHPUnit\Util\Exception;
 use Tpay;
 use Tpay\Exception\BaseException;
 use Tpay\Handler\InstallQueryHandler;

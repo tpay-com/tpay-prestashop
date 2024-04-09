@@ -186,8 +186,12 @@ class TransactionsRepository
             $status
         );
 
-        $this->entityManager->persist($transaction);
-        $this->entityManager->flush();
+        try {
+            $this->entityManager->persist($transaction);
+            $this->entityManager->flush();
+        } catch (\Exception $e) {
+            $t = $e;
+        }
     }
 
     /**
