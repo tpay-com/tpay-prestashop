@@ -28,9 +28,8 @@ class ConfigurationSaveForm
     private $configuration;
     private $shopGroupsList = [];
 
-    public function __construct(
-        ConfigurationAdapter $configuration
-    ) {
+    public function __construct(ConfigurationAdapter $configuration)
+    {
         $this->configuration = $configuration;
     }
 
@@ -89,6 +88,10 @@ class ConfigurationSaveForm
                         $shop_id
                     );
                 } else {
+                    if (strpos($value, '[]')) {
+                        $value = substr($value, 0, -2);
+                    }
+
                     $getValue = \Tools::getValue(
                         $value,
                         $this->configuration->get(

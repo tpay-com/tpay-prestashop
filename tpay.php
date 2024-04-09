@@ -38,6 +38,8 @@ use tpaySDK\Api\TpayApi;
 
 class Tpay extends PaymentModule
 {
+    public const AUTH_TOKEN_CACHE_KEY = 'tpay_auth_token_%s';
+
     // phpcs:ignore
     public $_errors;
 
@@ -173,7 +175,7 @@ class Tpay extends PaymentModule
         }
     }
 
-    public function api(): TpayApi
+    public function api(): ?TpayApi
     {
         if (null === $this->api) {
             $this->initAPI();
@@ -195,6 +197,12 @@ class Tpay extends PaymentModule
             try {
                 Logger::setLogger(new PsrLogger());
                 $this->api = new TpayApi($clientId, $secretKey, $isProduction, 'read');
+                $token = \Tpay\Util\Cache::get($this->getAuthTokenCacheKey());
+
+                if ($token) {
+                    $this->api->setCustomToken(unserialize($token));
+                }
+
                 $this->api->authorization()->setClientName(implode(
                     '|',
                     [
@@ -203,6 +211,10 @@ class Tpay extends PaymentModule
                         'PHP:' . phpversion(),
                     ]
                 ));
+
+                if (!$token) {
+                    \Tpay\Util\Cache::set($this->getAuthTokenCacheKey(), serialize($this->api->getToken()));
+                }
             } catch (\Exception $exception) {
                 PrestaShopLogger::addLog($exception->getMessage(), 3);
             }
@@ -210,12 +222,9 @@ class Tpay extends PaymentModule
     }
 
     /**
-     * @param string $serviceName
-     *
-     * @return false|object|null
      * @throws Exception
      */
-    public function getService(string $serviceName)
+    public function getService(string $serviceName): ?object
     {
         $container = Container::getInstance();
         if ($container !== null) {
@@ -233,7 +242,6 @@ class Tpay extends PaymentModule
     /**
      * Module installation.
      *
-     * @return boolean
      * @throws Exception
      * @throws BaseException
      */
@@ -470,5 +478,16 @@ class Tpay extends PaymentModule
         }
 
         return 'n/a';
+    }
+
+    private function getAuthTokenCacheKey(): string
+    {
+        return sprintf(
+            self::AUTH_TOKEN_CACHE_KEY,
+            md5(join(
+                '|',
+                [Cfg::get('TPAY_CLIENT_ID'), Cfg::get('TPAY_SECRET_KEY'), !Cfg::get('TPAY_SANDBOX')]
+            ))
+        );
     }
 }

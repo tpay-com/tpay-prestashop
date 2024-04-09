@@ -28,7 +28,7 @@ class TpayConfigurationController extends ModuleAdminController
     public $errors = [];
     public $configuration = [];
 
-    /** @var \Tpay */
+    /** @var Tpay */
     public $module;
 
     public function __construct()
@@ -36,7 +36,7 @@ class TpayConfigurationController extends ModuleAdminController
         parent::__construct();
 
         $this->bootstrap = true;
-        $lang = new Language((int) Cfg::get('PS_LANG_DEFAULT'));
+        $lang = new Language((int)Cfg::get('PS_LANG_DEFAULT'));
 
         if (!$this->module->active) {
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminHome'));
@@ -50,8 +50,12 @@ class TpayConfigurationController extends ModuleAdminController
         foreach (Helper::getFields() as $field) {
             $value = Tools::getValue($field, Cfg::get($field));
 
-            if ($field == "TPAY_MERCHANT_SECRET"){
+            if ($field == "TPAY_MERCHANT_SECRET") {
                 $value = html_entity_decode($value);
+            }
+
+            if ($field == 'TPAY_GENERIC_PAYMENTS[]') {
+                $value = json_decode(Cfg::get('TPAY_GENERIC_PAYMENTS'), true);
             }
 
             $fields[$field] = $value;
@@ -69,11 +73,9 @@ class TpayConfigurationController extends ModuleAdminController
                 [],
                 'Admin.Notifications.Success'
             );
-        } else {
-            if ($this->errors && count($this->errors)) {
-                foreach ($this->errors as $err) {
-                    $content .= $this->module->displayError($err);
-                }
+        } elseif ($this->errors && count($this->errors)) {
+            foreach ($this->errors as $err) {
+                $content .= $this->module->displayError($err);
             }
         }
 
@@ -84,10 +86,7 @@ class TpayConfigurationController extends ModuleAdminController
             $content .= $this->context->smarty->fetch('module:tpay/views/templates/_admin/configuration.tpl');
         }
 
-        $this->context->smarty->assign([
-            'content' => $content,
-        ]);
-
+        $this->context->smarty->assign(['content' => $content]);
         $this->module->clearCache();
 
         return $content;
@@ -95,13 +94,13 @@ class TpayConfigurationController extends ModuleAdminController
 
     public function getOrderStates(): array
     {
-        return \OrderState::getOrderStates(\Context::getContext()->language->id);
+        return OrderState::getOrderStates(Context::getContext()->language->id);
     }
 
 
     protected function getWarningMultishopHtml()
     {
-        if (\Shop::getContext() == \Shop::CONTEXT_GROUP) {
+        if (Shop::getContext() == Shop::CONTEXT_GROUP) {
             return '<p class="alert alert-warning">' .
                 $this->module->l(
                     'You cannot manage from a "Group Shop" context, select directly the shop you want to edit'
@@ -117,8 +116,8 @@ class TpayConfigurationController extends ModuleAdminController
     {
         $res = false;
 
-        if (\Shop::isFeatureActive()) {
-            if (\Shop::getContext() == \Shop::CONTEXT_GROUP) {
+        if (Shop::isFeatureActive()) {
+            if (Shop::getContext() == Shop::CONTEXT_GROUP) {
                 $res = true;
             }
         }
@@ -186,7 +185,7 @@ class TpayConfigurationController extends ModuleAdminController
                 $settings = new ConfigurationSaveForm(new ConfigurationAdapter(0));
                 $settings->execute(true);
 
-                \Tools::clearSmartyCache();
+                Tools::clearSmartyCache();
 
                 if ($this->errors) {
                     echo $output;
@@ -194,8 +193,8 @@ class TpayConfigurationController extends ModuleAdminController
                 } else {
                     return true;
                 }
-            } catch (\Exception $exception) {
-                \PrestaShopLogger::addLog($exception->getMessage(), 3);
+            } catch (Exception $exception) {
+                PrestaShopLogger::addLog($exception->getMessage(), 3);
                 $this->errors[] = $this->module->l('Settings not saved');
             }
         }
@@ -203,8 +202,8 @@ class TpayConfigurationController extends ModuleAdminController
 
     public function displayForm(): string
     {
-        $langId = (int) Cfg::get('PS_LANG_DEFAULT');
-        $helper = new \HelperForm();
+        $langId = (int)Cfg::get('PS_LANG_DEFAULT');
+        $helper = new HelperForm();
 
         $fields_form = $this->createForm();
         $helper->fields_value = $this->getValuesFormFields();
@@ -360,6 +359,9 @@ class TpayConfigurationController extends ModuleAdminController
                     'required' => false,
                 ],
                 [
+                    'type' => 'text',
+                    'name' => 'TPAY_NOTIFICATION_ADDRESS',
+                    'disabled' => 'disabled',
                     'label' => $this->module->l('Your address for notifications'),
                     'desc' => $this->context->link->getModuleLink('tpay', 'notifications'),
                 ]
@@ -634,7 +636,11 @@ class TpayConfigurationController extends ModuleAdminController
 
     private function formGenericPaymentOptions(): array
     {
-        $channels = $this->module->api()->transactions()->getChannels();
+        $result = [];
+
+        if ($this->module->api()) {
+            $result = $this->module->api()->transactions()->getChannels();
+        }
 
         return [
             'form' => [
@@ -643,12 +649,12 @@ class TpayConfigurationController extends ModuleAdminController
                     [
                         'type' => 'select',
                         'label' => 'Select payments to generic onsite mechanism to: ',
-                        'name' => 'TPAY_GENERIC_PAYMENTS',
+                        'name' => 'TPAY_GENERIC_PAYMENTS[]',
                         'multiple' => true,
-                        'size' => 20,
+                        'size' => $result ? 20 : 1,
                         'options' => [
-                            'query' => $this->module->api()->transactions()->getChannels()['channels'],
-                            'id' => 'value',
+                            'query' => $result['channels'] ?? [],
+                            'id' => 'id',
                             'name' => 'name'
                         ],
                     ]

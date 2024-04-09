@@ -19,6 +19,8 @@ namespace Tpay\Service\PaymentOptions;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 use Tpay\Factory\PaymentOptionsFactory;
 use Tpay\Config\Config;
+use Tpay\Service\ConstraintValidator;
+use Tpay\Util\Cache;
 use Tpay\Util\Helper;
 
 class PaymentOptionsService
@@ -31,29 +33,29 @@ class PaymentOptionsService
     private $channels;
     private $transfers;
 
-    /**
-     * @var PaymentOption
-     */
+    /** @var PaymentOption */
     private $paymentOption;
-    /**
-     * @var \Cart
-     */
+
+    /** @var \Cart */
     private $cart;
+
+    /** @var ConstraintValidator */
+    private $constraintValidator;
 
     /**
      * @throws \PrestaShopException
      * @throws \Exception
      */
     public function __construct(
-        \Tpay         $module,
+        \Tpay $module,
         PaymentOption $paymentOption,
-        \Cart         $cart
-    )
-    {
+        \Cart $cart
+    ) {
         $this->module = $module;
         $this->paymentOption = $paymentOption;
         $this->cart = $cart;
         $this->surchargeService = $this->module->getService('tpay.service.surcharge');
+        $this->constraintValidator = new ConstraintValidator($module);
         $this->getGroup();
     }
 
@@ -114,27 +116,26 @@ class PaymentOptionsService
      */
     public function getActivePayments(): array
     {
-        $paymentOptions = [];
-
         // Adding transfer group
         $this->createTransferPaymentChannel();
         // Adding Apple pay
         $this->createApplePayPaymentChannel();
 
-        foreach ($this->channels as $payment_data) {
-            $optionClass = PaymentOptionsFactory::getOptionById((int)$payment_data['mainChannel']);
+        $payments = array_filter(array_map(function (array $paymentData) {
+            $optionClass = PaymentOptionsFactory::getOptionById((int) $paymentData['mainChannel']);
+
             if (is_object($optionClass)) {
                 $gateway = new PaymentType($optionClass);
 
-                $paymentOptions[] = $gateway->getPaymentOption(
-                    $this->module,
-                    new PaymentOption(),
-                    $payment_data
-                );
+                return $gateway->getPaymentOption($this->module, new PaymentOption(), $paymentData);
             }
-        }
 
-        return $paymentOptions;
+            return null;
+        }, $this->channels));
+
+        $generics = $this->genericPayments();
+
+        return array_merge($payments, $generics);
     }
 
     /**
@@ -144,19 +145,19 @@ class PaymentOptionsService
     private function getSeparatePayments(): array
     {
         $paymentsMethods = [
-            Config::GATEWAY_BLIK => (bool)Helper::getMultistoreConfigurationValue('TPAY_BLIK_ACTIVE'),
-            Config::GATEWAY_GOOGLE_PAY => (bool)Helper::getMultistoreConfigurationValue('TPAY_GPAY_ACTIVE'),
-            Config::GATEWAY_APPLE_PAY => (bool)Helper::getMultistoreConfigurationValue('TPAY_APPLEPAY_ACTIVE'),
+            Config::GATEWAY_BLIK => (bool) Helper::getMultistoreConfigurationValue('TPAY_BLIK_ACTIVE'),
+            Config::GATEWAY_GOOGLE_PAY => (bool) Helper::getMultistoreConfigurationValue('TPAY_GPAY_ACTIVE'),
+            Config::GATEWAY_APPLE_PAY => (bool) Helper::getMultistoreConfigurationValue('TPAY_APPLEPAY_ACTIVE'),
         ];
 
         if ($this->aliorBetweenPriceRange()) {
-            $paymentsMethods[Config::GATEWAY_ALIOR_RATY] = (bool)Helper::getMultistoreConfigurationValue(
+            $paymentsMethods[Config::GATEWAY_ALIOR_RATY] = (bool) Helper::getMultistoreConfigurationValue(
                 'TPAY_INSTALLMENTS_ACTIVE'
             );
         }
 
         if ($this->twistoBetweenPriceRange()) {
-            $paymentsMethods[Config::GATEWAY_TWISTO] = (bool)Helper::getMultistoreConfigurationValue(
+            $paymentsMethods[Config::GATEWAY_TWISTO] = (bool) Helper::getMultistoreConfigurationValue(
                 'TPAY_TWISTO_ACTIVE'
             );
         }
@@ -284,7 +285,7 @@ class PaymentOptionsService
             $compareArray[] = Config::GATEWAYS_PEKAO_RATY_50;
         }
 
-        if(!$this->paypoBetweenPriceRange()){
+        if (!$this->paypoBetweenPriceRange()) {
             $compareArray[] = Config::GATEWAY_PAYPO;
         }
 
@@ -300,5 +301,39 @@ class PaymentOptionsService
     public function getGroupTransfers(): array
     {
         return $this->transfers ?? [];
+    }
+
+    /**
+     * @return array<PaymentOption>
+     */
+    protected function genericPayments(): array
+    {
+        $generics = json_decode(Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS'));
+        $channels = unserialize(Cache::get('channels', 'N;'));
+
+        if (null === $channels) {
+            $result = $this->module->api()->transactions()->getChannels();
+            $channels = array_filter($result['channels'] ?? [], function (array $channel) {
+                return true === $channel['available'];
+            });
+
+            foreach ($channels as $channel) {
+                $channels[$channel['id']] = $channel;
+            }
+
+            Cache::set('channels', serialize($channels));
+        }
+
+        return array_filter(array_map(function (string $generic) use ($channels) {
+            $channel = $channels[$generic];
+
+            if (!empty($channel['constraints']) && !$this->constraintValidator->validate($channel['constraints'])) {
+                return null;
+            }
+
+            $gateway = new PaymentType(new Generic());
+
+            return $gateway->getPaymentOption($this->module, new PaymentOption(), $channel);
+        }, $generics));
     }
 }
