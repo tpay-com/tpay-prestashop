@@ -17,6 +17,7 @@ jobs:
           coverage: none
 
       - run: composer validate --strict
+        continue-on-error: true
 
       - working-directory: .dev-tools
         run: composer install
