@@ -304,6 +304,25 @@ class TpayConfigurationController extends ModuleAdminController
                         ),
                 ],
                 [
+                    'type' => 'switch',
+                    'label' => $this->module->l('Redirect directly to bank'),
+                    'name' => 'TPAY_REDIRECT_TO_CHANNEL',
+                    'is_bool' => true,
+                    'class' => 't',
+                    'values' => [
+                        [
+                            'id' => 'tpay_redirect_to_channel_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Yes'),
+                        ],
+                        [
+                            'id' => 'tpay_redirect_to_channel_off',
+                            'value' => 0,
+                            'label' => $this->module->l('No'),
+                        ],
+                    ]
+                ],
+                [
                     'type' => 'text',
                     'label' => $this->module->l('Notification email'),
                     'desc' => $this->module->l(
@@ -364,7 +383,17 @@ class TpayConfigurationController extends ModuleAdminController
                     'disabled' => 'disabled',
                     'label' => $this->module->l('Your address for notifications'),
                     'desc' => $this->context->link->getModuleLink('tpay', 'notifications'),
-                ]
+                ],
+                [
+                    'type' => 'select',
+                    'label' => $this->module->l('Status of a paid transaction with virtual products only'),
+                    'name' => 'TPAY_VIRTUAL_CONFIRMED',
+                    'options' => [
+                        'query' => $this->getOrderStates(),
+                        'id' => 'id_order_state',
+                        'name' => 'name',
+                    ],
+                ],
             ],
             'submit' => [
                 'title' => $this->module->l('Save'),
