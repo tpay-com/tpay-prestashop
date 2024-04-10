@@ -17,8 +17,6 @@ declare(strict_types=1);
 namespace Tpay\States;
 
 use OrderState;
-use Tools;
-use Validate;
 
 class ConfirmedState implements StateType
 {

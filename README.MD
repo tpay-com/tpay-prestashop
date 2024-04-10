@@ -38,9 +38,9 @@
 ### Statusy płatności
 1. Użyj statusów zdefiniowanych przez tpay
 2. Dostępne statusy dla płatności
-   - opłacona płatność
-   - oczekująca płatność
-   - niepoprawna niepoprawna
+    - opłacona płatność
+    - oczekująca płatność
+    - niepoprawna niepoprawna
 
 ## DEVELOPER
 

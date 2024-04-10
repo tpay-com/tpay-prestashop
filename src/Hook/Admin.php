@@ -183,7 +183,7 @@ class Admin extends AbstractHook
      */
     private function processRefund(string $transactionId, float $refundAmount)
     {
-        return $this->module->api->Transactions->createRefundByTransactionId(
+        return $this->module->api()->transactions()->createRefundByTransactionId(
             ['amount' => $refundAmount],
             $transactionId
         );

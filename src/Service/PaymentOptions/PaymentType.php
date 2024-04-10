@@ -16,9 +16,7 @@ declare(strict_types=1);
 
 namespace Tpay\Service\PaymentOptions;
 
-use Cart;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
-use Tpay\Service\SurchargeService;
 
 class PaymentType
 {

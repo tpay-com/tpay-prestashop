@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Tpay\Service\PaymentOptions;
 
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
-use Tpay\Service\SurchargeService;
 
 interface GatewayType
 {

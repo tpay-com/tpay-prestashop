@@ -18,8 +18,6 @@ namespace Tpay\States;
 
 use Configuration as Cfg;
 use OrderState;
-use Tools;
-use Validate;
 
 class FactoryState
 {
@@ -59,15 +57,19 @@ class FactoryState
         if (Cfg::get('TPAY_PENDING')) {
             $states['pending'] = Cfg::get('TPAY_PENDING');
         }
+
         if (Cfg::get('TPAY_CONFIRMED')) {
             $states['confirmed'] = Cfg::get('TPAY_CONFIRMED');
         }
+
         if (Cfg::get('TPAY_VIRTUAL_CONFIRMED')) {
             $states['confirmed'] = Cfg::get('TPAY_VIRTUAL_CONFIRMED');
         }
+
         if (Cfg::get('TPAY_ERROR')) {
             $states['error'] = Cfg::get('TPAY_ERROR');
         }
+
         return $states ?? [];
     }
 

@@ -12,8 +12,6 @@
  * @license   LICENSE.txt
  */
 
-use PrestaShop\Decimal\DecimalNumber;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }

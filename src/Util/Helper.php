@@ -66,7 +66,9 @@ class Helper
             'TPAY_ERROR',
             'TPAY_PENDING',
             'TPAY_GLOBAL_SETTINGS',
-            'TPAY_NOTIFICATION_ADDRESS'
+            'TPAY_GENERIC_PAYMENTS[]',
+            'TPAY_GENERIC_PAYMENTS',
+            'TPAY_NOTIFICATION_ADDRESS',
         ];
     }
 
@@ -86,7 +88,8 @@ class Helper
             'TPAY_SURCHARGE_ACTIVE' => '0',
             'TPAY_SURCHARGE_TYPE' => '0',
             'TPAY_SURCHARGE_VALUE' => '0',
-            'TPAY_GLOBAL_SETTINGS' => '0'
+            'TPAY_GLOBAL_SETTINGS' => '0',
+            'TPAY_NOTIFICATION_ADDRESS' => '0',
         ];
     }
 

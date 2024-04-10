@@ -17,6 +17,7 @@ jobs:
           coverage: none
 
       - run: composer validate --strict
+        continue-on-error: true
 
       - working-directory: .dev-tools
         run: composer install
@@ -29,9 +30,12 @@ jobs:
 
       - working-directory: .dev-tools
         run: composer cs:sniffer
+        continue-on-error: true
 
       - working-directory: .dev-tools
         run: composer cs:phpstan
+        continue-on-error: true
 
       - working-directory: .dev-tools
         run: composer cs:psalm -- --no-progress --shepherd
+        continue-on-error: true

@@ -18,6 +18,7 @@ namespace Tpay\Handler;
 
 use Tpay\Exception\PaymentException;
 use Tpay\Exception\TransactionException;
+use Tpay\Service\TransactionService;
 
 class BasicPaymentHandler implements PaymentMethodHandler
 {
@@ -97,6 +98,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
     public function initTransactionProcess($transaction, $orderId, bool $redirect = true): void
     {
         if (isset($transaction['transactionId'])) {
+            /** @var TransactionService $transactionService */
             $transactionService = $this->module->getService('tpay.service.transaction');
             $transactionService->transactionProcess(
                 $transaction,

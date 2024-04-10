@@ -27,6 +27,8 @@ class TpayConfigurationController extends ModuleAdminController
     public const SEPARATE_PAYMENT_INFO = 'Show the method as a separate payment';
     public $errors = [];
     public $configuration = [];
+
+    /** @var Tpay */
     public $module;
 
     public function __construct()
@@ -48,8 +50,12 @@ class TpayConfigurationController extends ModuleAdminController
         foreach (Helper::getFields() as $field) {
             $value = Tools::getValue($field, Cfg::get($field));
 
-            if ($field == "TPAY_MERCHANT_SECRET"){
+            if ($field == "TPAY_MERCHANT_SECRET") {
                 $value = html_entity_decode($value);
+            }
+
+            if ($field == 'TPAY_GENERIC_PAYMENTS[]') {
+                $value = json_decode(Cfg::get('TPAY_GENERIC_PAYMENTS'), true);
             }
 
             $fields[$field] = $value;
@@ -67,11 +73,9 @@ class TpayConfigurationController extends ModuleAdminController
                 [],
                 'Admin.Notifications.Success'
             );
-        } else {
-            if ($this->errors && count($this->errors)) {
-                foreach ($this->errors as $err) {
-                    $content .= $this->module->displayError($err);
-                }
+        } elseif ($this->errors && count($this->errors)) {
+            foreach ($this->errors as $err) {
+                $content .= $this->module->displayError($err);
             }
         }
 
@@ -82,10 +86,7 @@ class TpayConfigurationController extends ModuleAdminController
             $content .= $this->context->smarty->fetch('module:tpay/views/templates/_admin/configuration.tpl');
         }
 
-        $this->context->smarty->assign([
-            'content' => $content,
-        ]);
-
+        $this->context->smarty->assign(['content' => $content]);
         $this->module->clearCache();
 
         return $content;
@@ -93,15 +94,17 @@ class TpayConfigurationController extends ModuleAdminController
 
     public function getOrderStates(): array
     {
-        return \OrderState::getOrderStates(\Context::getContext()->language->id);
+        return OrderState::getOrderStates(Context::getContext()->language->id);
     }
 
 
     protected function getWarningMultishopHtml()
     {
-        if (\Shop::getContext() == \Shop::CONTEXT_GROUP) {
+        if (Shop::getContext() == Shop::CONTEXT_GROUP) {
             return '<p class="alert alert-warning">' .
-                $this->module->l('You cannot manage from a "Group Shop" context, select directly the shop you want to edit') .
+                $this->module->l(
+                    'You cannot manage from a "Group Shop" context, select directly the shop you want to edit'
+                ) .
                 '</p>';
         } else {
             return '';
@@ -113,8 +116,8 @@ class TpayConfigurationController extends ModuleAdminController
     {
         $res = false;
 
-        if (\Shop::isFeatureActive()) {
-            if (\Shop::getContext() == \Shop::CONTEXT_GROUP) {
+        if (Shop::isFeatureActive()) {
+            if (Shop::getContext() == Shop::CONTEXT_GROUP) {
                 $res = true;
             }
         }
@@ -128,6 +131,7 @@ class TpayConfigurationController extends ModuleAdminController
         $form[] = $this->formPaymentOptions();
         $form[] = $this->formCardOptions();
         $form[] = $this->formStatusesOptions();
+        $form[] = $this->formGenericPaymentOptions();
 
         return $form;
     }
@@ -170,11 +174,8 @@ class TpayConfigurationController extends ModuleAdminController
 
     public function postProcess()
     {
-
         if (Tools::isSubmit('submit' . $this->module->name)) {
-
             try {
-
                 if (!$this->validatePostProcess()) {
                     return false;
                 }
@@ -184,7 +185,7 @@ class TpayConfigurationController extends ModuleAdminController
                 $settings = new ConfigurationSaveForm(new ConfigurationAdapter(0));
                 $settings->execute(true);
 
-                \Tools::clearSmartyCache();
+                Tools::clearSmartyCache();
 
                 if ($this->errors) {
                     echo $output;
@@ -192,8 +193,8 @@ class TpayConfigurationController extends ModuleAdminController
                 } else {
                     return true;
                 }
-            } catch (\Exception $exception) {
-                \PrestaShopLogger::addLog($exception->getMessage(), 3);
+            } catch (Exception $exception) {
+                PrestaShopLogger::addLog($exception->getMessage(), 3);
                 $this->errors[] = $this->module->l('Settings not saved');
             }
         }
@@ -202,7 +203,7 @@ class TpayConfigurationController extends ModuleAdminController
     public function displayForm(): string
     {
         $langId = (int)Cfg::get('PS_LANG_DEFAULT');
-        $helper = new \HelperForm();
+        $helper = new HelperForm();
 
         $fields_form = $this->createForm();
         $helper->fields_value = $this->getValuesFormFields();
@@ -268,7 +269,10 @@ class TpayConfigurationController extends ModuleAdminController
                     'options' => [
                         'query' => [
                             ['id' => 'md5_all', 'name' => 'md5($order->id . $customer->secure_key . time())'],
-                            ['id' => 'order_id_and_rest', 'name' => '$order->id . "-" . md5($customer->secure_key . time())'],
+                            [
+                                'id' => 'order_id_and_rest',
+                                'name' => '$order->id . "-" . md5($customer->secure_key . time())'
+                            ],
                             ['id' => 'order_id', 'name' => '$order->id'],
                         ],
                         'id' => 'id',
@@ -295,7 +299,9 @@ class TpayConfigurationController extends ModuleAdminController
                         ],
                     ],
                     'desc' => '<b>' . $this->module->l('WARNING') . '</b>'
-                        . $this->module->l(' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!'),
+                        . $this->module->l(
+                            ' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!'
+                        ),
                 ],
                 [
                     'type' => 'switch',
@@ -314,12 +320,14 @@ class TpayConfigurationController extends ModuleAdminController
                             'value' => 0,
                             'label' => $this->module->l('No'),
                         ],
-                    ],
+                    ]
                 ],
                 [
                     'type' => 'text',
                     'label' => $this->module->l('Notification email'),
-                    'desc' => $this->module->l('Set your own email with notifications.  Leave blank to use the email configured in the tpay panel.'),
+                    'desc' => $this->module->l(
+                        'Set your own email with notifications.  Leave blank to use the email configured in the tpay panel.'
+                    ),
                     'name' => 'TPAY_NOTIFICATION_EMAILS',
                     'size' => 50,
                     'required' => false,
@@ -370,11 +378,22 @@ class TpayConfigurationController extends ModuleAdminController
                     'required' => false,
                 ],
                 [
-                    'type' => '',
+                    'type' => 'text',
                     'name' => 'TPAY_NOTIFICATION_ADDRESS',
+                    'disabled' => 'disabled',
                     'label' => $this->module->l('Your address for notifications'),
                     'desc' => $this->context->link->getModuleLink('tpay', 'notifications'),
-                ]
+                ],
+                [
+                    'type' => 'select',
+                    'label' => $this->module->l('Status of a paid transaction with virtual products only'),
+                    'name' => 'TPAY_VIRTUAL_CONFIRMED',
+                    'options' => [
+                        'query' => $this->getOrderStates(),
+                        'id' => 'id_order_state',
+                        'name' => 'name',
+                    ],
+                ],
             ],
             'submit' => [
                 'title' => $this->module->l('Save'),
@@ -628,16 +647,6 @@ class TpayConfigurationController extends ModuleAdminController
                 ],
                 [
                     'type' => 'select',
-                    'label' => $this->module->l('Status of a paid transaction with virtual products only'),
-                    'name' => 'TPAY_VIRTUAL_CONFIRMED',
-                    'options' => [
-                        'query' => $this->getOrderStates(),
-                        'id' => 'id_order_state',
-                        'name' => 'name',
-                    ],
-                ],
-                [
-                    'type' => 'select',
                     'label' => $this->module->l('Payment error status'),
                     'name' => 'TPAY_ERROR',
                     'options' => [
@@ -652,5 +661,35 @@ class TpayConfigurationController extends ModuleAdminController
             ],
         ];
         return $form;
+    }
+
+    private function formGenericPaymentOptions(): array
+    {
+        $result = [];
+
+        if ($this->module->api()) {
+            $result = $this->module->api()->transactions()->getChannels();
+        }
+
+        return [
+            'form' => [
+                'legend' => ['title' => 'Generic payments', 'icon' => 'icon-cogs'],
+                'input' => [
+                    [
+                        'type' => 'select',
+                        'label' => 'Select payments to generic onsite mechanism to: ',
+                        'name' => 'TPAY_GENERIC_PAYMENTS[]',
+                        'multiple' => true,
+                        'size' => $result ? 20 : 1,
+                        'options' => [
+                            'query' => $result['channels'] ?? [],
+                            'id' => 'id',
+                            'name' => 'name'
+                        ],
+                    ]
+                ],
+                'submit' => ['title' => $this->module->l('Save')],
+            ]
+        ];
     }
 }

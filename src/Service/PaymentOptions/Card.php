@@ -19,7 +19,6 @@ namespace Tpay\Service\PaymentOptions;
 use Tpay\Config\Config;
 use Configuration as Cfg;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
-use Tpay\Entity\TpayCreditCard;
 use Tpay\Service\SurchargeService;
 
 class Card implements GatewayType

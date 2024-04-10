@@ -45,8 +45,12 @@ class ConfigurationAdapter
             $idShop = $this->shopId;
         }
 
-        if ($key == "TPAY_MERCHANT_SECRET"){
+        if ($key == "TPAY_MERCHANT_SECRET") {
             $value = Tools::safeOutput($value, true);
+        }
+
+        if (is_array($value)) {
+            $value = json_encode($value);
         }
 
         return Cfg::updateValue($key, $value, $html, $idShopGroup, $idShop);
