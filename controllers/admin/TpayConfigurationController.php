@@ -455,6 +455,27 @@ class TpayConfigurationController extends ModuleAdminController
 
                 [
                     'type' => 'switch',
+                    'label' => $this->module->l('Transfer widget'),
+                    'name' => 'TPAY_TRANSFER_WIDGET',
+                    'desc' => $this->module->l('Display the transfer payment method in the widget'),
+                    'is_bool' => true,
+                    'class' => 't',
+                    'values' => [
+                        [
+                            'id' => 'tpay_active_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Yes'),
+                        ],
+                        [
+                            'id' => 'tpay_active_off',
+                            'value' => 0,
+                            'label' => $this->module->l('No'),
+                        ],
+                    ],
+                ],
+
+                [
+                    'type' => 'switch',
                     'label' => $this->module->l('GooglePay'),
                     'name' => 'TPAY_GPAY_ACTIVE',
                     'desc' => $this->module->l('Show the method as a separate payment'),
@@ -583,6 +604,27 @@ class TpayConfigurationController extends ModuleAdminController
                     'label' => $this->module->l('Payment credit card'),
                     'name' => 'TPAY_CARD_ACTIVE',
                     'desc' => $this->module->l('Show the method as a separate payment'),
+                    'is_bool' => true,
+                    'class' => 't',
+                    'values' => [
+                        [
+                            'id' => 'tpay_active_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Yes'),
+                        ],
+                        [
+                            'id' => 'tpay_active_off',
+                            'value' => 0,
+                            'label' => $this->module->l('No'),
+                        ],
+                    ],
+                ],
+
+                [
+                    'type' => 'switch',
+                    'label' => $this->module->l('Card widget'),
+                    'name' => 'TPAY_CARD_WIDGET',
+                    'desc' => $this->module->l('Display the card payment method in the widget'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
