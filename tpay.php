@@ -141,7 +141,7 @@ class Tpay extends PaymentModule
     {
         $this->name = 'tpay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.8.6';
+        $this->version = '1.8.7';
         $this->author = 'Krajowy Integrator Płatności S.A.';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
@@ -222,9 +222,10 @@ class Tpay extends PaymentModule
     }
 
     /**
+     * @return false|object|null
      * @throws Exception
      */
-    public function getService(string $serviceName): ?object
+    public function getService(string $serviceName)
     {
         $container = Container::getInstance();
         if ($container !== null) {

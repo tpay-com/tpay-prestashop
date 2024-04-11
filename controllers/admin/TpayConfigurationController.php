@@ -378,21 +378,10 @@ class TpayConfigurationController extends ModuleAdminController
                     'required' => false,
                 ],
                 [
-                    'type' => 'text',
+                    'type' => '',
                     'name' => 'TPAY_NOTIFICATION_ADDRESS',
-                    'disabled' => 'disabled',
                     'label' => $this->module->l('Your address for notifications'),
                     'desc' => $this->context->link->getModuleLink('tpay', 'notifications'),
-                ],
-                [
-                    'type' => 'select',
-                    'label' => $this->module->l('Status of a paid transaction with virtual products only'),
-                    'name' => 'TPAY_VIRTUAL_CONFIRMED',
-                    'options' => [
-                        'query' => $this->getOrderStates(),
-                        'id' => 'id_order_state',
-                        'name' => 'name',
-                    ],
                 ],
             ],
             'submit' => [
@@ -697,6 +686,16 @@ class TpayConfigurationController extends ModuleAdminController
                         'name' => 'name',
                     ],
                 ],
+                [
+                    'type' => 'select',
+                    'label' => $this->module->l('Status of a paid transaction with virtual products only'),
+                    'name' => 'TPAY_VIRTUAL_CONFIRMED',
+                    'options' => [
+                        'query' => $this->getOrderStates(),
+                        'id' => 'id_order_state',
+                        'name' => 'name',
+                    ],
+                ],
             ],
             'submit' => [
                 'title' => $this->module->l('Save'),
@@ -710,7 +709,11 @@ class TpayConfigurationController extends ModuleAdminController
         $result = [];
 
         if ($this->module->api()) {
-            $result = $this->module->api()->transactions()->getChannels();
+            try {
+                $result = $this->module->api()->transactions()->getChannels();
+            } catch (Exception $exception) {
+                PrestaShopLogger::addLog($exception->getMessage(), 3);
+            }
         }
 
         return [
