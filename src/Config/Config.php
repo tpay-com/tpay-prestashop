@@ -23,6 +23,7 @@ class Config
     public const TPAY_PAYMENT_BLIK = 'blik';
     public const TPAY_PAYMENT_GPAY = 'gpay';
     public const TPAY_PAYMENT_INSTALLMENTS = 'installments';
+    public const TPAY_PAYMENT_GENERIC = 'generic';
 
     public const TPAY_GATEWAY_ALIOR_RATY = 109;
     public const TPAY_GATEWAY_PEKAO_RATY = 169;

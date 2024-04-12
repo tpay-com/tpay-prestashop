@@ -325,7 +325,11 @@ class PaymentOptionsService
         }
 
         return array_filter(array_map(function (string $generic) use ($channels) {
-            $channel = $channels[$generic];
+            $channel = $channels[$generic] ?? null;
+
+            if ($channel === null) {
+                return null;
+            }
 
             if (!empty($channel['constraints']) && !$this->constraintValidator->validate($channel['constraints'])) {
                 return null;

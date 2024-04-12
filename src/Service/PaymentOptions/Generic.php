@@ -27,6 +27,7 @@ class Generic implements GatewayType
             'tpay' => 'true',
             'channelId' => $channelId,
             'tpay_channel_id' => 0,
+            'type' => 'generic',
         ]);
 
         return Context::getContext()->smarty->fetch('module:tpay/views/templates/hook/generic.tpl');

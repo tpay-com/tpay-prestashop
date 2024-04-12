@@ -24,24 +24,12 @@ use Tpay\Util\Helper;
 class BasicPaymentHandler implements PaymentMethodHandler
 {
     public const TYPE = 'transfer';
-    private $clientData;
 
-    /**
-     * @var \Tpay
-     */
-    private $module;
-    /**
-     * @var \Order
-     */
-    private $order;
-    /**
-     * @var \Customer
-     */
-    private $customer;
-    /**
-     * @var \Context
-     */
-    private $context;
+    /** @var array */
+    protected $clientData;
+
+    /** @var \Tpay */
+    protected $module;
 
     public function getName(): string
     {
@@ -53,18 +41,14 @@ class BasicPaymentHandler implements PaymentMethodHandler
      * @throws \Exception
      */
     public function createPayment(
-        \Tpay     $module,
-        \Order    $order,
+        \Tpay $module,
+        \Order $order,
         \Customer $customer,
-        \Context  $context,
-        array     $clientData,
-        array     $data
-    )
-    {
+        \Context $context,
+        array $clientData,
+        array $data
+    ): void {
         $this->module = $module;
-        $this->order = $order;
-        $this->customer = $customer;
-        $this->context = $context;
         $this->clientData = $clientData;
 
         $this->updatePayData($data);
@@ -80,43 +64,34 @@ class BasicPaymentHandler implements PaymentMethodHandler
     }
 
     /**
-     * Process of saving the transaction
-     *
-     * @param $transaction
-     * @param $orderId
-     * @param bool $redirect
-     *
+     * @param array|string $transaction
      * @throws \Exception
      */
-    public function initTransactionProcess($transaction, $orderId, bool $redirect = true): void
+    public function initTransactionProcess($transaction, int $orderId, bool $redirect = true): void
     {
-        if (isset($transaction['transactionId'])) {
-            /** @var TransactionService $transactionService */
-            $transactionService = $this->module->getService('tpay.service.transaction');
-            $transactionService->transactionProcess(
-                $transaction,
-                self::TYPE,
-                (int)$orderId,
-                $redirect
-            );
+        if (!isset($transaction['transactionId'])) {
+            return;
         }
+
+        /** @var TransactionService $transactionService */
+        $transactionService = $this->module->getService('tpay.service.transaction');
+        $transactionService->transactionProcess(
+            $transaction,
+            self::TYPE,
+            $orderId,
+            $redirect
+        );
     }
 
     /**
-     * Create api transaction
-     *
      * @throws TransactionException
      */
-    private function createTransaction()
+    protected function createTransaction(): array
     {
-        $result = $this->module->api->Transactions->createTransaction(
-            $this->clientData
-        );
+        $result = $this->module->api()->transactions()->createTransaction($this->clientData);
 
         if (!isset($result['transactionId'])) {
-            throw new TransactionException(
-                'Unable to create transaction. Response: ' . json_encode($result)
-            );
+            throw TransactionException::unableToCreateTransaction($result);
         }
 
         if (isset($this->clientData['pay']['channelId']) && $this->clientData['pay']['channelId']) {
@@ -126,7 +101,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
         return $result;
     }
 
-    private function updatePayData(array $data)
+    protected function updatePayData(array $data): void
     {
         if ($data['type'] == 'transfer' && !Helper::getMultistoreConfigurationValue('TPAY_TRANSFER_WIDGET')) {
             unset($this->clientData['pay']);
@@ -135,7 +110,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
         }
     }
 
-    private function checkPayType(array $data)
+    protected function checkPayType(array $data): void
     {
         $gatewayId = $data['tpay_transfer_id'] ?? 0;
         $channelId = $data['tpay_channel_id'] ?? 0;

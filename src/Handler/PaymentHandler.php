@@ -25,7 +25,7 @@ use Tpay\CustomerData;
 class PaymentHandler
 {
     /**
-     * @var Tpay
+     * @var \Tpay
      */
     private $module;
     /**
@@ -61,7 +61,6 @@ class PaymentHandler
         AddressCore $address,
         array $data = []
     ) {
-
         $this->module = $module;
         $this->paymentMethodHandler = $paymentMethodHandler;
         $this->order = $order;
@@ -73,11 +72,16 @@ class PaymentHandler
 
     /**
      * @throws \Exception
-     * @return array
      */
     public function getCustomerDetails(): array
     {
-        $customer = new CustomerData($this->address, $this->customer, $this->context, $this->context->cart, $this->order);
+        $customer = new CustomerData(
+            $this->address,
+            $this->customer,
+            $this->context,
+            $this->context->cart,
+            $this->order
+        );
         $customer->createCallbacks($this->order, $this->paymentMethodHandler->getName());
         $customer->createDescription($this->order);
 
@@ -87,20 +91,9 @@ class PaymentHandler
     /**
      * @throws \Exception
      */
-    public function get()
+    public function get(): void
     {
-        $this->getPayment($this->paymentMethodHandler);
-    }
-
-    /**
-     * @param PaymentMethodHandler $method
-     *
-     * @throws \Exception
-     * @return mixed
-     */
-    public function getPayment(PaymentMethodHandler $method)
-    {
-        return $method->createPayment(
+        $this->paymentMethodHandler->createPayment(
             $this->module,
             $this->order,
             $this->customer,
