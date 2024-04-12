@@ -42,6 +42,9 @@ class PaymentOptionsService
     /** @var ConstraintValidator */
     private $constraintValidator;
 
+    /** @var array */
+    private $installmentChannels = [];
+
     /**
      * @throws \PrestaShopException
      * @throws \Exception
@@ -66,6 +69,7 @@ class PaymentOptionsService
     {
         try {
             $this->getPaymentGroups();
+            $this->getInstallmentChannels();
         } catch (\PrestaShopException $e) {
             \PrestaShopLogger::addLog('Error getGroup ' . $e->getMessage(), 4);
             throw new \PrestaShopException($e->getMessage());
@@ -187,32 +191,43 @@ class PaymentOptionsService
         return $result;
     }
 
-
     /**
      * @throws \Exception
      */
     private function aliorBetweenPriceRange(): bool
     {
         $total = $this->surchargeService->getTotalOrderAndSurchargeCost();
-        return $total >= Config::ALIOR_RATY_MIN && $total <= Config::ALIOR_RATY_MAX;
+        $min = $this->installmentChannels[Config::GATEWAY_ALIOR_RATY][0]['value'] ?? Config::ALIOR_RATY_MIN;
+        $max = $this->installmentChannels[Config::GATEWAY_ALIOR_RATY][1]['value'] ?? Config::ALIOR_RATY_MAX;
+
+        return $total >= $min && $total <= $max;
     }
 
     private function twistoBetweenPriceRange(): bool
     {
         $total = $this->surchargeService->getTotalOrderAndSurchargeCost();
-        return $total >= Config::TWISTO_MIN && $total <= Config::TWISTO_MAX;
+        $min = $this->installmentChannels[Config::GATEWAY_TWISTO][0]['value'] ?? Config::TWISTO_MIN;
+        $max = $this->installmentChannels[Config::GATEWAY_TWISTO][1]['value'] ?? Config::TWISTO_MAX;
+
+        return $total >= $min && $total <= $max;
     }
 
     private function pekaoBetweenPriceRange(): bool
     {
         $total = $this->surchargeService->getTotalOrderAndSurchargeCost();
-        return $total >= Config::PEKAO_RATY_MIN && $total <= Config::PEKAO_RATY_MAX;
+        $min = $this->installmentChannels[Config::GATEWAYS_PEKAO_RATY][0]['value'] ?? Config::PEKAO_RATY_MIN;
+        $max = $this->installmentChannels[Config::GATEWAYS_PEKAO_RATY][1]['value'] ?? Config::PEKAO_RATY_MAX;
+
+        return $total >= $min && $total <= $max;
     }
 
     private function paypoBetweenPriceRange(): bool
     {
         $total = $this->surchargeService->getTotalOrderAndSurchargeCost();
-        return $total >= Config::PAYPO_MIN && $total <= Config::PAYPO_MAX;
+        $min = $this->installmentChannels[Config::GATEWAY_PAYPO][0]['value'] ?? Config::PAYPO_MIN;
+        $max = $this->installmentChannels[Config::GATEWAY_PAYPO][1]['value'] ?? Config::PAYPO_MAX;
+
+        return $total >= $min && $total <= $max;
     }
 
     private function hasActiveCard(): bool
@@ -234,6 +249,17 @@ class PaymentOptionsService
             $separatePayments = $this->getSeparatePayments();
             $this->channels = $this->groupChannel($bankGroups['groups'], $separatePayments);
             $this->transfers = $this->groupTransfer($bankGroups['groups'], $separatePayments);
+        }
+    }
+
+    private function getInstallmentChannels(): void
+    {
+        $installmentIds = [Config::GATEWAY_ALIOR_RATY, Config::GATEWAY_PAYPO, Config::GATEWAY_TWISTO, Config::GATEWAYS_PEKAO_RATY];
+
+        foreach ($this->module->api->Transactions->getChannels()['channels'] as $channel) {
+            if (in_array($channel['id'], $installmentIds) && !empty($channel['constraints'])) {
+                $this->installmentChannels[$channel['id']] = $channel;
+            }
         }
     }
 

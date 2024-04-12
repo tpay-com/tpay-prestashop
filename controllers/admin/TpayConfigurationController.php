@@ -486,7 +486,7 @@ class TpayConfigurationController extends ModuleAdminController
 
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('Alior Installment (from 300 PLN to 9 259,25 PLN)'),
+                    'label' => $this->module->l('Alior Installment (from 300 PLN to 13 888,00 PLN)'),
                     'name' => 'TPAY_INSTALLMENTS_ACTIVE',
                     'desc' => $this->module->l('Show the method as a separate payment'),
                     'is_bool' => true,
@@ -722,7 +722,7 @@ class TpayConfigurationController extends ModuleAdminController
                 'input' => [
                     [
                         'type' => 'select',
-                        'label' => 'Select payments to generic onsite mechanism to: ',
+                        'label' => $this->module->l('Select payments to generic onsite mechanism to'),
                         'name' => 'TPAY_GENERIC_PAYMENTS[]',
                         'multiple' => true,
                         'size' => $result ? 20 : 1,
