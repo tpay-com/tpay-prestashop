@@ -223,9 +223,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         );
 
         if (!isset($result['transactionId'])) {
-            throw new TransactionException(
-                'Unable to create transaction. Response: ' . json_encode($result)
-            );
+            throw TransactionException::unableToCreateTransaction($result);
         }
 
         return $result;

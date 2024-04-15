@@ -18,4 +18,8 @@ namespace Tpay\Exception;
 
 class TransactionException extends \Exception
 {
+    public static function unableToCreateTransaction(array $data): self
+    {
+        return new self(sprintf('Unable to create transaction. Response: %s', json_encode($data)));
+    }
 }

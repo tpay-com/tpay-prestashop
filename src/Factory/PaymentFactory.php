@@ -20,6 +20,7 @@ use Tpay\Config\Config;
 use Tpay\Exception\PaymentException;
 use Tpay\Handler\BasicPaymentHandler;
 use Tpay\Handler\CreditCardPaymentHandler;
+use Tpay\Handler\InstantPaymentHandler;
 use Tpay\Handler\PaymentMethodHandler;
 
 class PaymentFactory
@@ -40,6 +41,8 @@ class PaymentFactory
             case Config::TPAY_PAYMENT_GPAY:
             case Config::TPAY_PAYMENT_BLIK:
                 return new BasicPaymentHandler();
+            case Config::TPAY_PAYMENT_GENERIC:
+                return new InstantPaymenthandler();
             case Config::TPAY_PAYMENT_CARDS:
                 return new CreditCardPaymentHandler();
             default:
