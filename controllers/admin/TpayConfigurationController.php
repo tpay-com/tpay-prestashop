@@ -378,21 +378,10 @@ class TpayConfigurationController extends ModuleAdminController
                     'required' => false,
                 ],
                 [
-                    'type' => 'text',
+                    'type' => '',
                     'name' => 'TPAY_NOTIFICATION_ADDRESS',
-                    'disabled' => 'disabled',
                     'label' => $this->module->l('Your address for notifications'),
                     'desc' => $this->context->link->getModuleLink('tpay', 'notifications'),
-                ],
-                [
-                    'type' => 'select',
-                    'label' => $this->module->l('Status of a paid transaction with virtual products only'),
-                    'name' => 'TPAY_VIRTUAL_CONFIRMED',
-                    'options' => [
-                        'query' => $this->getOrderStates(),
-                        'id' => 'id_order_state',
-                        'name' => 'name',
-                    ],
                 ],
             ],
             'submit' => [
@@ -497,7 +486,7 @@ class TpayConfigurationController extends ModuleAdminController
 
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('Alior Installment (from 300 PLN to 9 259,25 PLN)'),
+                    'label' => $this->module->l('Alior Installment (from 300 PLN to 13 888,00 PLN)'),
                     'name' => 'TPAY_INSTALLMENTS_ACTIVE',
                     'desc' => $this->module->l('Show the method as a separate payment'),
                     'is_bool' => true,
@@ -697,6 +686,16 @@ class TpayConfigurationController extends ModuleAdminController
                         'name' => 'name',
                     ],
                 ],
+                [
+                    'type' => 'select',
+                    'label' => $this->module->l('Status of a paid transaction with virtual products only'),
+                    'name' => 'TPAY_VIRTUAL_CONFIRMED',
+                    'options' => [
+                        'query' => $this->getOrderStates(),
+                        'id' => 'id_order_state',
+                        'name' => 'name',
+                    ],
+                ],
             ],
             'submit' => [
                 'title' => $this->module->l('Save'),
@@ -710,7 +709,11 @@ class TpayConfigurationController extends ModuleAdminController
         $result = [];
 
         if ($this->module->api()) {
-            $result = $this->module->api()->transactions()->getChannels();
+            try {
+                $result = $this->module->api()->transactions()->getChannels();
+            } catch (Exception $exception) {
+                PrestaShopLogger::addLog($exception->getMessage(), 3);
+            }
         }
 
         return [
@@ -719,7 +722,7 @@ class TpayConfigurationController extends ModuleAdminController
                 'input' => [
                     [
                         'type' => 'select',
-                        'label' => 'Select payments to generic onsite mechanism to: ',
+                        'label' => $this->module->l('Select payments to generic onsite mechanism to'),
                         'name' => 'TPAY_GENERIC_PAYMENTS[]',
                         'multiple' => true,
                         'size' => $result ? 20 : 1,

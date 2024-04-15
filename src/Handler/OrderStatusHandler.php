@@ -68,7 +68,7 @@ class OrderStatusHandler
      */
     private function changeOrderStatus(Order $order, string $tpayPaymentId, bool $error = false): void
     {
-        $orderStateId = !$error ? Cfg::get('TPAY_CONFIRMED') : Cfg::get('TPAY_ERROR');
+        $orderStateId = $this->getOrderStatus($order, $error);
         $orderStatusesHistory = $this->transactionsRepository->getOrderStatusHistory($order->id);
         if (!in_array($orderStateId, $orderStatusesHistory)) {
             if (!$error) {
@@ -82,5 +82,18 @@ class OrderStatusHandler
             );
             $this->orderHistory->addWithemail(true);
         }
+    }
+
+    private function getOrderStatus(Order $order, bool $error = false): string
+    {
+        $isVirtual = true;
+        foreach ($order->getProducts() as $product) {
+            if (!$product['is_virtual']) {
+                $isVirtual = false;
+                break;
+            }
+        }
+
+        return !$error ? Cfg::get($isVirtual ? 'TPAY_VIRTUAL_CONFIRMED' : 'TPAY_CONFIRMED') : Cfg::get('TPAY_ERROR');
     }
 }

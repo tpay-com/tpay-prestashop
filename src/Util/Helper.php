@@ -44,6 +44,8 @@ class Helper
             'TPAY_SECRET_KEY',
             'TPAY_BLIK_ACTIVE',
             'TPAY_BLIK_WIDGET',
+            'TPAY_TRANSFER_WIDGET',
+            'TPAY_CARD_WIDGET',
             'TPAY_INSTALLMENTS_ACTIVE',
             'TPAY_PEKAO_INSTALLMENTS_ACTIVE',
             'TPAY_TWISTO_ACTIVE',
@@ -77,6 +79,8 @@ class Helper
         return [
             'TPAY_BLIK_ACTIVE' => '1',
             'TPAY_BLIK_WIDGET' => '1',
+            'TPAY_TRANSFER_WIDGET' => '1',
+            'TPAY_CARD_WIDGET' => '1',
             'TPAY_INSTALLMENTS_ACTIVE' => '0',
             'TPAY_PEKAO_INSTALLMENTS_ACTIVE' => '0',
             'TPAY_TWISTO_ACTIVE' => '0',

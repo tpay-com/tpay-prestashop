@@ -60,7 +60,7 @@ class Config
     public const TWISTO_MIN = 1.00;
     public const TWISTO_MAX = 1500;
     public const ALIOR_RATY_MIN = 300;
-    public const ALIOR_RATY_MAX = 9259.25;
+    public const ALIOR_RATY_MAX = 13888.00;
 
     public const PEKAO_RATY_MIN = 100;
     public const PEKAO_RATY_MAX = 20000;
