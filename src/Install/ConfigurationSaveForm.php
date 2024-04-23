@@ -90,17 +90,18 @@ class ConfigurationSaveForm
                 } else {
                     if (strpos($value, '[]')) {
                         $value = substr($value, 0, -2);
-                    }
-
-                    $getValue = \Tools::getValue(
-                        $value,
-                        $this->configuration->get(
+                        $getValue = \Tools::getValue($value, '[]');
+                    } else {
+                        $getValue = \Tools::getValue(
                             $value,
-                            null,
-                            $shop_group_id,
-                            $shop_id
-                        )
-                    );
+                            $this->configuration->get(
+                                $value,
+                                null,
+                                $shop_group_id,
+                                $shop_id
+                            )
+                        );
+                    }
 
                     $res &= $this->configuration->updateValue(
                         $value,
