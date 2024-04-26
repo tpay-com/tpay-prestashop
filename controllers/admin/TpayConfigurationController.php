@@ -722,7 +722,7 @@ class TpayConfigurationController extends ModuleAdminController
                 'input' => [
                     [
                         'type' => 'select',
-                        'label' => $this->module->l('Select payments to generic onsite mechanism to'),
+                        'label' => $this->module->l('Select payments to Easy on-site mechanism to'),
                         'name' => 'TPAY_GENERIC_PAYMENTS[]',
                         'multiple' => true,
                         'size' => $result ? 20 : 1,
