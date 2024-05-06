@@ -182,6 +182,7 @@ $_MODULE['<{tpay}prestashop>tpay_0bca037451ac432ae9fae53a78387a6e'] = 'Status tr
 $_MODULE['<{tpay}prestashop>tpay_f69d7a9f87546d78e76e0ee400dabeac'] = 'Status opłaconej transakcji, wyłącznie z produktami wirtualnymi';
 $_MODULE['<{tpay}prestashop>tpay_0af709feff4fe0f53053a235f7678645'] = 'Status transakcji zakończonej błędem';
 $_MODULE['<{tpay}prestashop>tpay_f01cd1b2fc01de83f97ebfec55d0a986'] = 'Wybierz płatności do mechanizmu Easy on-site';
+$_MODULE['<{tpay}prestashop>tpay_2ddfca98ad03eb144c17e30df230fdf2'] = 'Wyświetl metodę płatności w widgecie. W przypadku posiadania innych wtyczek, które modyfikują konfigurację koszyka zakupowego, należy wyłączyć tę opcję.';
 $_MODULE['<{tpay}prestashop>invoicesurcharge_bb8278c756e2855300ee104481ad7d27'] = 'Opłata za płatność online';
 $_MODULE['<{tpay}prestashop>renewpayment_26e79570e8d6e15ee7168fc8bfdbf805'] = 'Błąd podczas zlecenia';
 $_MODULE['<{tpay}prestashop>renewpayment_782c8b38bce4f2f6975ca7f33ac8189b'] = 'Historia zamówienia';
