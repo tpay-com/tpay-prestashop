@@ -31,7 +31,7 @@ export function validateSelectedTransfer(gateways_wrapper: HTMLDivElement) {
   let checked = false;
   const req = document.querySelector <HTMLInputElement>('input[name="conditions_to_approve[terms-and-conditions]"]');
   const btn = document.querySelector<HTMLButtonElement>('#payment-confirmation button');
-  const paymentMethodSelected = Array.from(document.querySelectorAll('[name=payment-option]')).find((radio) => radio.checked).id
+  const paymentMethodSelected = Array.from(document.querySelectorAll('[id^=payment-option]')).find((radio) => radio.checked).id
   const paymentWrapper = document.querySelector('#pay-with-' + paymentMethodSelected + '-form')
   const tpayInputsCount = paymentWrapper?.querySelectorAll('.tpay-payment-gateways__item input').length
 

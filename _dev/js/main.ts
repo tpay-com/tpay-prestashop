@@ -18,12 +18,14 @@ elementReady("#tpay-blik-form").then(() => {
     blikWidget()
 })
 
-basicTransferPayments();
+elementReady(".tpay-payment-gateways").then(() => {
+    basicTransferPayments();
+})
 
 
 function radioPayments() {
     const AllPaymentOptions = Array.from(
-        document.querySelectorAll<HTMLInputElement>('input[name=payment-option]')
+        document.querySelectorAll<HTMLInputElement>('input[id^=payment-option]')
     );
 
     Array.from(AllPaymentOptions).forEach(function (payment) {
