@@ -1,5 +1,3 @@
-import {isInSupercheckout,disableSupercheckoutConfirmButton,enableSupercheckoutConfirmButton} from './supercheckout'
-
 export default function basicTransferPayments() {
   const gateways_wrappers = document.querySelectorAll<HTMLDivElement>('.tpay-payment-gateways');
 
