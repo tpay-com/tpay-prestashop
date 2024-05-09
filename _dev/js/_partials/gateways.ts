@@ -1,4 +1,4 @@
-import {isVisible} from "./helpers";
+import {isInSupercheckout,disableSupercheckoutConfirmButton,enableSupercheckoutConfirmButton} from './supercheckout'
 
 export default function basicTransferPayments() {
   const gateways_wrappers = document.querySelectorAll<HTMLDivElement>('.tpay-payment-gateways');
@@ -61,5 +61,67 @@ function switchButton(checked: boolean, btn: HTMLButtonElement, req: HTMLInputEl
     errorMsg.style.display = 'none'
     btn.disabled = false
     btn.classList.remove('disabled')
+  }
+}
+
+export function addTpaySupercheckoutValidator() {
+  function validator() {
+    const tpayTransferRadio = document
+      .querySelector(".tpay-payment-gateways")
+      .closest("li")
+      .querySelector("input[type=radio]") as HTMLInputElement;
+
+    if (!tpayTransferRadio.checked) {
+      return true;
+    }
+
+    const tpayPaymentMethodsRadios = document.querySelectorAll(
+      ".tpay-payment-gateways input[type=radio]"
+    );
+
+    const methodChecked = Array.from(tpayPaymentMethodsRadios).some(
+      (method: HTMLInputElement) => method.checked
+    );
+
+    if (methodChecked) {
+      return true;
+    }
+
+    window.scrollTo({top: 0, behavior: 'smooth'});
+    throw new Error("Wybierz metodę płatności");
+  }
+
+  window.addSupercheckoutOrderValidator(validator);
+}
+
+export function handleSupercheckoutConfirmDisable() {
+  const gatewaysWrappers = document.querySelectorAll<HTMLDivElement>(
+    ".tpay-payment-gateways"
+  );
+
+  if (gatewaysWrappers.length > 0) {
+    gatewaysWrappers.forEach(function (gatewaysList) {
+      const gateways = Array.from(
+        gatewaysList.querySelectorAll<HTMLDivElement>(
+          ".tpay-payment-gateways__item"
+        )
+      );
+      if (gateways) {
+        for (const gateway of gateways) {
+          gateway.addEventListener(
+            "click",
+            () => {
+              const result = gateways.some(function (gateway) {
+                return gateway.querySelector("input[type=radio]").checked
+              })
+
+              if (result) {
+                enableSupercheckoutConfirmButton
+              }
+            }
+          );
+        }
+      }
+    });
   }
 }

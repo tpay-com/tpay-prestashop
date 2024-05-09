@@ -5,22 +5,27 @@ import {
 } from './_partials/helpers';
 
 import blikWidget from "./_partials/blik";
-import basicTransferPayments, { validateSelectedTransfer } from "./_partials/gateways";
+import basicTransferPayments, { addTpaySupercheckoutValidator, validateSelectedTransfer } from "./_partials/gateways";
 
 import * as clause from "./_partials/clause";
 
 import {checkSurcharge} from "./_partials/surcharge";
 import {removeBlikAddept} from "./_partials/blikAddepts";
 import { elementReady } from './utils/elementReady';
+import { isInSupercheckout } from './_partials/supercheckout';
 
 /// init blik
 elementReady("#tpay-blik-form").then(() => {
-    blikWidget()
-})
+  blikWidget();
+});
 
 elementReady(".tpay-payment-gateways").then(() => {
-    basicTransferPayments();
-})
+  basicTransferPayments();
+
+  if (isInSupercheckout) {
+    addTpaySupercheckoutValidator();
+  }
+});
 
 
 function radioPayments() {
