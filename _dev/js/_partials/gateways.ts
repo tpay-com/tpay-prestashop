@@ -91,35 +91,3 @@ export function addTpaySupercheckoutValidator() {
 
   window.addSupercheckoutOrderValidator(validator);
 }
-
-export function handleSupercheckoutConfirmDisable() {
-  const gatewaysWrappers = document.querySelectorAll<HTMLDivElement>(
-    ".tpay-payment-gateways"
-  );
-
-  if (gatewaysWrappers.length > 0) {
-    gatewaysWrappers.forEach(function (gatewaysList) {
-      const gateways = Array.from(
-        gatewaysList.querySelectorAll<HTMLDivElement>(
-          ".tpay-payment-gateways__item"
-        )
-      );
-      if (gateways) {
-        for (const gateway of gateways) {
-          gateway.addEventListener(
-            "click",
-            () => {
-              const result = gateways.some(function (gateway) {
-                return gateway.querySelector("input[type=radio]").checked
-              })
-
-              if (result) {
-                enableSupercheckoutConfirmButton
-              }
-            }
-          );
-        }
-      }
-    });
-  }
-}
