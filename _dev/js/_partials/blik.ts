@@ -17,6 +17,7 @@ blikResetMessage()
 export default function blikWidget() {
     const form = <HTMLFormElement>document.querySelector('#tpay-blik-form');
     const cartId = <HTMLInputElement>document.querySelector('input[name=cart_id]');
+    const btn = document.querySelector<HTMLButtonElement>('#payment-confirmation button');
 
     if (form) {
         const url = form.action;
@@ -26,7 +27,7 @@ export default function blikWidget() {
             cartId: parseInt(cartId.value)
         };
 
-        form.addEventListener('submit', (e) => {
+        btn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
 

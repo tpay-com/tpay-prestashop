@@ -11,8 +11,7 @@
 *  @copyright 2010-2020 tpay.com
 *  @license   LICENSE.txt
 *}
-<div class="tpay-wrapper tpay-blik-wrapper"
-     data-payment-type="{if $blik_type === 'redirect'}blik-redirect{else}blik{/if}">
+<div class="tpay-wrapper tpay-blik-wrapper" data-payment-type="blik">
     {if $blik_type === 'redirect'}
         {l s='You will be redirected to the payment gateway.' mod='tpay'}
         {include file="module:tpay/views/templates/hook/regulations.tpl"}
@@ -100,9 +99,6 @@
 
                   <div class="tpay-buttons-holder">
                       {include file="module:tpay/views/templates/_partials/preloader.tpl"}
-                    <button type="submit" id="tpay-blik-submit" class="btn btn-primary">
-                        {l s='Pay with Tpay' mod='tpay'}
-                    </button>
                   </div>
 
                 </div>

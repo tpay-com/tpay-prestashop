@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require("terser-webpack-plugin");
 
 let config = {
+	// devtool: "source-map",
 	target: ["web", "es5"],
 	entry: {
 		main: [
@@ -124,6 +125,7 @@ if (process.env.NODE_ENV === 'production') {
 					{
 						// minify: TerserPlugin.uglifyJsMinify,
 						terserOptions: {
+							// sourceMap: true,
 							format: {
 								comments: false,
 							},
