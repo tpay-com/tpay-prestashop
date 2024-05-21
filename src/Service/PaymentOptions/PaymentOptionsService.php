@@ -25,39 +25,21 @@ use Tpay\Util\Helper;
 
 class PaymentOptionsService
 {
-    /**
-     * @var false|object
-     */
-    private $surchargeService;
     private $module;
     private $channels;
     private $transfers;
-
-    /** @var PaymentOption */
-    private $paymentOption;
-
-    /** @var \Cart */
-    private $cart;
+    private $bankChannels;
 
     /** @var ConstraintValidator */
     private $constraintValidator;
-
-    /** @var array */
-    private $installmentChannels = [];
 
     /**
      * @throws \PrestaShopException
      * @throws \Exception
      */
-    public function __construct(
-        \Tpay $module,
-        PaymentOption $paymentOption,
-        \Cart $cart
-    ) {
+    public function __construct(\Tpay $module)
+    {
         $this->module = $module;
-        $this->paymentOption = $paymentOption;
-        $this->cart = $cart;
-        $this->surchargeService = $this->module->getService('tpay.service.surcharge');
         $this->constraintValidator = new ConstraintValidator($module);
         $this->getGroup();
     }
@@ -107,15 +89,6 @@ class PaymentOptionsService
     }
 
     /**
-     * @param array $array
-     * @return void
-     */
-    private function createGateway(array $array = []): void
-    {
-        $this->channels[] = $array;
-    }
-
-    /**
      * @return array
      */
     public function getActivePayments(): array
@@ -126,7 +99,7 @@ class PaymentOptionsService
         $this->createApplePayPaymentChannel();
 
         $payments = array_filter(array_map(function (array $paymentData) {
-            $optionClass = PaymentOptionsFactory::getOptionById((int) $paymentData['mainChannel']);
+            $optionClass = PaymentOptionsFactory::getOptionById((int)$paymentData['mainChannel']);
 
             if (is_object($optionClass)) {
                 $gateway = new PaymentType($optionClass);
@@ -143,30 +116,48 @@ class PaymentOptionsService
     }
 
     /**
+     * Grouping of payments delivered from api
+     * @return array
+     */
+    public function getGroupTransfers(): array
+    {
+        return $this->transfers ?? [];
+    }
+
+    /**
+     * @param array $array
+     * @return void
+     */
+    private function createGateway(array $array = []): void
+    {
+        $this->channels[] = $array;
+    }
+
+    /**
      * @return array
      * @throws \Exception
      */
-    private function getSeparatePayments(): array
+    private function getSeparatePayments(array $channels): array
     {
         $paymentsMethods = [
-            Config::GATEWAY_BLIK => (bool) Helper::getMultistoreConfigurationValue('TPAY_BLIK_ACTIVE'),
-            Config::GATEWAY_GOOGLE_PAY => (bool) Helper::getMultistoreConfigurationValue('TPAY_GPAY_ACTIVE'),
-            Config::GATEWAY_APPLE_PAY => (bool) Helper::getMultistoreConfigurationValue('TPAY_APPLEPAY_ACTIVE'),
+            Config::GATEWAY_BLIK => (bool)Helper::getMultistoreConfigurationValue('TPAY_BLIK_ACTIVE'),
+            Config::GATEWAY_GOOGLE_PAY => (bool)Helper::getMultistoreConfigurationValue('TPAY_GPAY_ACTIVE'),
+            Config::GATEWAY_APPLE_PAY => (bool)Helper::getMultistoreConfigurationValue('TPAY_APPLEPAY_ACTIVE'),
         ];
 
-        if ($this->aliorBetweenPriceRange()) {
-            $paymentsMethods[Config::GATEWAY_ALIOR_RATY] = (bool) Helper::getMultistoreConfigurationValue(
+        if (isset($channels[Config::GATEWAY_ALIOR_RATY])) {
+            $paymentsMethods[Config::GATEWAY_ALIOR_RATY] = (bool)Helper::getMultistoreConfigurationValue(
                 'TPAY_INSTALLMENTS_ACTIVE'
             );
         }
 
-        if ($this->twistoBetweenPriceRange()) {
-            $paymentsMethods[Config::GATEWAY_TWISTO] = (bool) Helper::getMultistoreConfigurationValue(
+        if (isset($channels[Config::GATEWAY_TWISTO])) {
+            $paymentsMethods[Config::GATEWAY_TWISTO] = (bool)Helper::getMultistoreConfigurationValue(
                 'TPAY_TWISTO_ACTIVE'
             );
         }
 
-        if ($this->pekaoBetweenPriceRange()) {
+        if (isset($channels[Config::GATEWAYS_PEKAO_RATY])) {
             $paymentsMethods[Config::GATEWAYS_PEKAO_RATY] =
             $paymentsMethods[Config::GATEWAYS_PEKAO_RATY_3x0] =
             $paymentsMethods[Config::GATEWAYS_PEKAO_RATY_50] =
@@ -191,45 +182,6 @@ class PaymentOptionsService
         return $result;
     }
 
-    /**
-     * @throws \Exception
-     */
-    private function aliorBetweenPriceRange(): bool
-    {
-        $total = $this->surchargeService->getTotalOrderAndSurchargeCost();
-        $min = $this->installmentChannels[Config::GATEWAY_ALIOR_RATY][0]['value'] ?? Config::ALIOR_RATY_MIN;
-        $max = $this->installmentChannels[Config::GATEWAY_ALIOR_RATY][1]['value'] ?? Config::ALIOR_RATY_MAX;
-
-        return $total >= $min && $total <= $max;
-    }
-
-    private function twistoBetweenPriceRange(): bool
-    {
-        $total = $this->surchargeService->getTotalOrderAndSurchargeCost();
-        $min = $this->installmentChannels[Config::GATEWAY_TWISTO][0]['value'] ?? Config::TWISTO_MIN;
-        $max = $this->installmentChannels[Config::GATEWAY_TWISTO][1]['value'] ?? Config::TWISTO_MAX;
-
-        return $total >= $min && $total <= $max;
-    }
-
-    private function pekaoBetweenPriceRange(): bool
-    {
-        $total = $this->surchargeService->getTotalOrderAndSurchargeCost();
-        $min = $this->installmentChannels[Config::GATEWAYS_PEKAO_RATY][0]['value'] ?? Config::PEKAO_RATY_MIN;
-        $max = $this->installmentChannels[Config::GATEWAYS_PEKAO_RATY][1]['value'] ?? Config::PEKAO_RATY_MAX;
-
-        return $total >= $min && $total <= $max;
-    }
-
-    private function paypoBetweenPriceRange(): bool
-    {
-        $total = $this->surchargeService->getTotalOrderAndSurchargeCost();
-        $min = $this->installmentChannels[Config::GATEWAY_PAYPO][0]['value'] ?? Config::PAYPO_MIN;
-        $max = $this->installmentChannels[Config::GATEWAY_PAYPO][1]['value'] ?? Config::PAYPO_MAX;
-
-        return $total >= $min && $total <= $max;
-    }
-
     private function hasActiveCard(): bool
     {
         return \Configuration::get('TPAY_CARD_ACTIVE') || !empty(\Configuration::get('TPAY_CARD_RSA'));
@@ -243,21 +195,60 @@ class PaymentOptionsService
      */
     private function getPaymentGroups(): void
     {
+        $channels = $this->module->api->Transactions->getChannels()['channels'] ?? [];
+        $this->bankChannels = $channels;
 
-        $bankGroups = $this->module->api->Transactions->getBankGroups();
-        if ($bankGroups) {
-            $separatePayments = $this->getSeparatePayments();
-            $this->channels = $this->groupChannel($bankGroups['groups'], $separatePayments);
-            $this->transfers = $this->groupTransfer($bankGroups['groups'], $separatePayments);
+        if (!empty($channels)) {
+            $channels = $this->buildChannelsData($channels);
+            $separatePayments = $this->getSeparatePayments($channels);
+            $this->channels = $this->groupChannel($channels, $separatePayments);
+            $this->updateTransfers($this->groupTransfer($channels, $separatePayments));
         }
+    }
+
+    private function updateTransfers(array $transfers): void
+    {
+        if (!Helper::getMultistoreConfigurationValue('TPAY_REDIRECT_TO_CHANNEL')) {
+            $seenNames = [];
+            $transfers = array_filter($transfers, function ($channel) use (&$seenNames) {
+                if (in_array($channel['id'], $seenNames)) {
+                    return false;
+                } else {
+                    $seenNames[] = $channel['id'];
+                    return true;
+                }
+            });
+        }
+
+        $this->transfers = $transfers;
+    }
+
+    private function buildChannelsData(array $channels): array
+    {
+        $bankChannels = [];
+
+        foreach ($channels as $channel) {
+            if (count($channel['constraints']) >= 2 && !$this->constraintValidator->validate($channel['constraints'])) {
+                continue;
+            }
+            $bankChannels[$channel['id']] = [
+                'id' => $channel['groups'][0]['id'],
+                'name' => $channel['fullName'],
+                'img' => $channel['image']['url'],
+                'availablePaymentChannels' => [$channel['id']],
+                'mainChannel' => $channel['id'],
+            ];
+        }
+
+        return $bankChannels;
     }
 
     private function getInstallmentChannels(): void
     {
         $installmentIds = [Config::GATEWAY_ALIOR_RATY, Config::GATEWAY_PAYPO, Config::GATEWAY_TWISTO, Config::GATEWAYS_PEKAO_RATY];
 
-        foreach ($this->module->api->Transactions->getChannels()['channels'] as $channel) {
-            if (in_array($channel['id'], $installmentIds) && !empty($channel['constraints'])) {
+        foreach ($this->bankChannels as $channel) {
+            if (in_array($channel['id'], $installmentIds)) {
                 $this->installmentChannels[$channel['id']] = $channel;
             }
         }
@@ -265,45 +256,43 @@ class PaymentOptionsService
 
     /**
      * Grouping of payments delivered from api
-     * * @param array $group
+     * @param array $channels
      * @param array $compareArray
      * @return array
      */
-    private function groupChannel(array $group, array $compareArray): array
+    private function groupChannel(array $channels, array $compareArray): array
     {
-        if (isset($group[Config::TPAY_GATEWAY_PEKAO_RATY])) {
-            $availableChannels = array_filter($group[Config::TPAY_GATEWAY_PEKAO_RATY]['availablePaymentChannels'], function ($val) use ($compareArray) {
-                return in_array($val, $compareArray);
-            });
-            $availableChannels = array_values($availableChannels);
-            $group[Config::TPAY_GATEWAY_PEKAO_RATY]['availablePaymentChannels'] = $availableChannels;
-            $group[Config::TPAY_GATEWAY_PEKAO_RATY]['mainChannel'] = reset($availableChannels);
+        if (isset($this->bankChannels[Config::GATEWAYS_PEKAO_RATY])) {
+            $availableChannels = [(string)Config::GATEWAYS_PEKAO_RATY, (string)Config::GATEWAYS_PEKAO_RATY_3x0, (string)Config::GATEWAYS_PEKAO_RATY_10x0];
+            $channels[Config::GATEWAYS_PEKAO_RATY]['availablePaymentChannels'] = $availableChannels;
+            $channels[Config::GATEWAYS_PEKAO_RATY]['mainChannel'] = reset($availableChannels);
         }
-        return array_filter($group, function ($val) use ($compareArray) {
-            return in_array($val['mainChannel'], $compareArray);
+
+        return array_filter($channels, function ($val) use ($compareArray) {
+            return in_array($val['mainChannel'], $compareArray) && !in_array($val['mainChannel'], [(string)Config::GATEWAYS_PEKAO_RATY_3x0, (string)Config::GATEWAYS_PEKAO_RATY_10x0]);
         });
     }
 
     /**
      * Downloading payment gateways to the online money transfer group
      *
-     * @param array $group
+     * @param array $channels
      * @param array $compareArray
      *
      * @return array
      * @throws \Exception
      */
-    private function groupTransfer(array $group, array $compareArray): array
+    private function groupTransfer(array $channels, array $compareArray): array
     {
-        if (Helper::getMultistoreConfigurationValue('TPAY_INSTALLMENTS_ACTIVE') || !$this->aliorBetweenPriceRange()) {
+        if (Helper::getMultistoreConfigurationValue('TPAY_INSTALLMENTS_ACTIVE') || !isset($channels[Config::GATEWAY_ALIOR_RATY])) {
             $compareArray[] = Config::GATEWAY_ALIOR_RATY;
         }
 
-        if (Helper::getMultistoreConfigurationValue('TPAY_TWISTO_ACTIVE') || !$this->twistoBetweenPriceRange()) {
+        if (Helper::getMultistoreConfigurationValue('TPAY_TWISTO_ACTIVE') || !isset($channels[Config::GATEWAY_TWISTO])) {
             $compareArray[] = Config::GATEWAY_TWISTO;
         }
 
-        if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') || !$this->pekaoBetweenPriceRange()) {
+        if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') || !isset($channels[Config::GATEWAYS_PEKAO_RATY])) {
             $compareArray[] = Config::TPAY_GATEWAY_PEKAO_RATY;
             $compareArray[] = Config::GATEWAYS_PEKAO_RATY_3x0;
             $compareArray[] = Config::GATEWAYS_PEKAO_RATY;
@@ -311,35 +300,25 @@ class PaymentOptionsService
             $compareArray[] = Config::GATEWAYS_PEKAO_RATY_50;
         }
 
-        if (!$this->paypoBetweenPriceRange()) {
+        if (!isset($channels[Config::GATEWAY_PAYPO])) {
             $compareArray[] = Config::GATEWAY_PAYPO;
         }
 
-        return array_filter($group, function ($val) use ($compareArray) {
+        return array_filter($channels, function ($val) use ($compareArray) {
             return !in_array($val['mainChannel'], $compareArray);
         });
     }
 
     /**
-     * Grouping of payments delivered from api
-     * @return array
-     */
-    public function getGroupTransfers(): array
-    {
-        return $this->transfers ?? [];
-    }
-
-    /**
      * @return array<PaymentOption>
      */
-    protected function genericPayments(): array
+    private function genericPayments(): array
     {
         $generics = Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS') ? json_decode(Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS')) : [];
         $channels = unserialize(Cache::get('channels', 'N;'));
 
         if (null === $channels) {
-            $result = $this->module->api()->transactions()->getChannels();
-            $channels = array_filter($result['channels'] ?? [], function (array $channel) {
+            $channels = array_filter($this->bankChannels, function (array $channel) {
                 return true === $channel['available'];
             });
 

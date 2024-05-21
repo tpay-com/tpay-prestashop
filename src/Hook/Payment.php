@@ -50,11 +50,7 @@ class Payment extends AbstractHook
             'surcharge' => $surcharge > 0 ? Tools::displayPrice($this->getSurchargeCost()) : false
         ]);
 
-        $paymentService = new PaymentOptionsService(
-            $this->module,
-            new PaymentOption(),
-            new Cart($this->context->cart->id)
-        );
+        $paymentService = new PaymentOptionsService($this->module);
 
         $payments = $paymentService->getActivePayments();
         if ($surcharge > 0) {
@@ -65,6 +61,7 @@ class Payment extends AbstractHook
                 $payment->setAdditionalInformation($info);
             }
         }
+
         return $payments;
     }
 

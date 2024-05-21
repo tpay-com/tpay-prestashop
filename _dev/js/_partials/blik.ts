@@ -28,6 +28,13 @@ export default function blikWidget() {
         };
 
         btn.addEventListener('click', (e) => {
+            var cardContainer = form.parentElement.parentElement;
+            const style = window.getComputedStyle(cardContainer);
+
+            if (style.display === 'none'){
+                return;
+            }
+
             e.preventDefault();
             e.stopPropagation();
 

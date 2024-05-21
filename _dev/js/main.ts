@@ -35,7 +35,6 @@ function radioPayments() {
 
     Array.from(AllPaymentOptions).forEach(function (payment) {
         payment.addEventListener('click', () => {
-
             const parent = payment.closest('.payment-option');
             const isRegulation = parent.querySelector<HTMLDivElement>('.tpay-regulations') ?? false;
 

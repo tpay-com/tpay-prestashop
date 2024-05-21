@@ -171,6 +171,12 @@ function CardPayment(url, pubkey)
 
     function checkForm()
     {
+        var cardContainer = $('#card_payment_form').parents('div').eq(1);
+
+        if (cardContainer.css('display') === 'none'){
+            return false;
+        }
+
         const savedCards = document.querySelector('input[name=savedId]');
         let cardRedirectType = document.querySelector('input[name=redirect_type]');
         if (cardRedirectType.value === 'redirect'){
