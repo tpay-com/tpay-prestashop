@@ -41,9 +41,6 @@
                       <div class="tpay-blik-response"></div>
                       <div class="tpay-buttons-holder">
                           {include file="module:tpay/views/templates/_partials/preloader.tpl"}
-                        <button type="submit" id="tpay-blik-submit" class="btn btn-primary">
-                            {l s='Pay with Tpay' mod='tpay'}
-                        </button>
                       </div>
                     </div>
                   </div>

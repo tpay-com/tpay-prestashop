@@ -303,9 +303,11 @@ class PaymentOptionsService
         if (!isset($channels[Config::GATEWAY_PAYPO])) {
             $compareArray[] = Config::GATEWAY_PAYPO;
         }
+        $generics = Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS') ? json_decode(Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS')) : [];
+        $compareChannels = array_merge($compareArray, $generics);
 
-        return array_filter($channels, function ($val) use ($compareArray) {
-            return !in_array($val['mainChannel'], $compareArray);
+        return array_filter($channels, function ($val) use ($compareChannels) {
+            return !in_array($val['mainChannel'], array_merge($compareChannels));
         });
     }
 

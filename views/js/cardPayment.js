@@ -20,7 +20,6 @@ function CardPayment(url, pubkey)
     function SubmitPayment()
     {
         let cardRedirectType = document.querySelector('input[name=redirect_type]');
-
         if (cardRedirectType.value === 'redirect'){
             return;
         }
@@ -171,12 +170,6 @@ function CardPayment(url, pubkey)
 
     function checkForm()
     {
-        var cardContainer = $('#card_payment_form').parents('div').eq(1);
-
-        if (cardContainer.css('display') === 'none'){
-            return false;
-        }
-
         const savedCards = document.querySelector('input[name=savedId]');
         let cardRedirectType = document.querySelector('input[name=redirect_type]');
         if (cardRedirectType.value === 'redirect'){
@@ -202,11 +195,23 @@ function CardPayment(url, pubkey)
         return isValidForm;
     }
 
+    function isCardContainerChosen(e)
+    {
+        var cardContainer = $('#card_payment_form').parents('div').eq(1);
+
+        if (cardContainer.css('display') === 'none'){
+            return false;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        return true;
+    }
+
     $('#payment-confirmation button').click(function (e) {
-		if(checkForm()) {
-			SubmitPayment();
-		} else {
-			e.preventDefault();
+        if(isCardContainerChosen(e) && checkForm()) {
+            SubmitPayment();
 		}
     });
 

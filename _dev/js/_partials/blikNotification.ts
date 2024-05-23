@@ -18,7 +18,7 @@ export function blikCheckNotification(
     const acceptNotifyMsg = blik_accept_msg ?? '';
     const errorMessages = blik_msg ?? '';
 
-    const submitBtn = document.querySelector<HTMLButtonElement>('#tpay-blik-submit');
+    // const submitBtn = document.querySelector<HTMLButtonElement>('#tpay-blik-submit');
 
     const params = {
         action: 'assignTransactionId',
@@ -66,7 +66,7 @@ export function blikCheckNotification(
                 if (attemptLimit > 40) {
                     blikResponse.innerHTML = attemptErrorMsg;
                     blikResponse.classList.add('tpay-blik-response--open');
-                    submitBtn.classList.remove('disabled')
+                    // submitBtn.classList.remove('disabled')
 
                     state = stopFetchingProccess(interval, blikData);
                     redirectAfterFetch(fetchResponse, -1);

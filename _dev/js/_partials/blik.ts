@@ -1,8 +1,8 @@
-import { validateClause } from "./clause";
-import { getBlikAddept, removeBlikAddept, setBlikAddept } from "./blikAddepts";
-import {blikCheckNotification, blikFetch } from "./blikNotification";
-import {handleErrors, headers } from "./helpers";
-import {blikContainerResponse, BlikData, blikPreload, blikResetMessage, BlikResponseData } from "./blikHelpers";
+import {validateClause} from "./clause";
+import {getBlikAddept, removeBlikAddept, setBlikAddept} from "./blikAddepts";
+import {blikCheckNotification, blikFetch} from "./blikNotification";
+import {handleErrors, headers} from "./helpers";
+import {blikContainerResponse, BlikData, blikPreload, blikResetMessage, BlikResponseData} from "./blikHelpers";
 
 interface blikDataForm {
     blikOption: string;
@@ -27,11 +27,17 @@ export default function blikWidget() {
             cartId: parseInt(cartId.value)
         };
 
-        btn.addEventListener('click', (e) => {
-            var cardContainer = form.parentElement.parentElement;
-            const style = window.getComputedStyle(cardContainer);
+        form.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
 
-            if (style.display === 'none'){
+        btn.addEventListener('click', (e) => {
+            var blikContainer = form.parentElement.parentElement;
+            const style = window.getComputedStyle(blikContainer);
+
+            if (style.display === 'none') {
                 return;
             }
 
@@ -44,18 +50,27 @@ export default function blikWidget() {
                 document.querySelector('.tpay-radio-payments__radio--active input[name=blikOption]');
 
             let blikAddept = getBlikAddept();
-
             if (blikAddept && blikAddept.attempt === 4) {
                 removeBlikAddept()
             }
 
-            let action = blikAddept && blikAddept.attempt !== 4 ? 'createTransactionById' : 'createTransaction';
+            let action ='createTransaction';
+
+            if ((blikAddept && blikAddept.attempt !== 4) && (blikParams.cartId == blikAddept.cart_id)){
+                action ='createTransactionById';
+            }
+            console.log(action);
+            console.log('cart id:');
+            console.log(blikParams.cartId);
+            if (blikAddept){
+            console.log(blikAddept.cart_id);
+            }
 
             blikParams.action = action;
             blikParams.blikOption = blikOption.value;
 
             // ADD TRANSACTION ID
-            if(blikAddept != null && blikAddept.transaction_id != null) {
+            if (blikAddept != null && blikAddept.transaction_id != null) {
                 blikParams.transactionId = blikAddept.transaction_id;
             }
 
@@ -103,8 +118,6 @@ export default function blikWidget() {
 }
 
 
-
-
 async function blikCreateTransaction(
     url: string,
     transactionId: string,
@@ -133,7 +146,6 @@ async function blikCreateTransaction(
     stat = true;
 
 
-
     if (status === 'failed') {
         console.log(errors)
 
@@ -150,7 +162,6 @@ async function blikCreateTransaction(
         if (errors > 0) {
 
             let errorMessage;
-
             const blikState = {
                 transaction_id: transactionId,
                 cart_id: blikData.cartId,
@@ -241,8 +252,7 @@ function blikValidateForm(input: HTMLInputElement, blikCode: string) {
     const blikUseCodeRadio = document.querySelector<HTMLInputElement>('#blikUse');
 
 
-
-    if(validateClause(clause) === false) {
+    if (validateClause(clause) === false) {
         blikCouse.style.display = 'block';
         input.classList.remove('wrong')
         response.classList.remove('tpay-blik-response--open')
@@ -261,8 +271,6 @@ function blikValidateForm(input: HTMLInputElement, blikCode: string) {
 
     return state
 }
-
-
 
 
 function transactionFetch(url: string, config: {}) {
