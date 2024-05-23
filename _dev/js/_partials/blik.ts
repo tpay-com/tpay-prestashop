@@ -54,16 +54,10 @@ export default function blikWidget() {
                 removeBlikAddept()
             }
 
-            let action ='createTransaction';
+            let action = 'createTransaction';
 
-            if ((blikAddept && blikAddept.attempt !== 4) && (blikParams.cartId == blikAddept.cart_id)){
-                action ='createTransactionById';
-            }
-            console.log(action);
-            console.log('cart id:');
-            console.log(blikParams.cartId);
-            if (blikAddept){
-            console.log(blikAddept.cart_id);
+            if ((blikAddept && blikAddept.attempt !== 4) && (blikParams.cartId == blikAddept.cart_id)) {
+                action = 'createTransactionById';
             }
 
             blikParams.action = action;
@@ -94,21 +88,29 @@ export default function blikWidget() {
                 blikPreload(blikParams.blikOption, true);
 
                 // Start transaction
-                transactionFetch(url, blikParams).then(response => {
-                    if (response.transaction.result === 'success') {
+                if (action === 'createTransaction') {
+                    transactionFetch(url, blikParams).then(response => {
+                        if (response.transaction.result === 'success') {
 
-                        let transactionId = blikAddept && blikAddept.attempt !== 4 ?
-                            blikAddept.transaction_id :
-                            response.transaction.transactionId;
+                            let transactionId = response.transaction.transactionId;
 
-                        blikCreateTransaction(
-                            url,
-                            transactionId,
-                            response,
-                            blikParams
-                        );
-                    }
-                })
+                            blikCreateTransaction(
+                                url,
+                                transactionId,
+                                blikParams
+                            );
+                        }
+                    })
+                } else {
+                    let transactionId = blikAddept.transaction_id;
+
+                    blikCreateTransaction(
+                        url,
+                        transactionId,
+                        blikParams
+                    );
+                }
+
             }
 
         }, false);
@@ -121,7 +123,6 @@ export default function blikWidget() {
 async function blikCreateTransaction(
     url: string,
     transactionId: string,
-    response: BlikResponseData,
     blikData: BlikData
 ) {
 
@@ -145,7 +146,6 @@ async function blikCreateTransaction(
 
     stat = true;
 
-
     if (status === 'failed') {
         console.log(errors)
 
@@ -160,7 +160,6 @@ async function blikCreateTransaction(
 
     if (status === 'pending') {
         if (errors > 0) {
-
             let errorMessage;
             const blikState = {
                 transaction_id: transactionId,
@@ -202,7 +201,6 @@ async function blikCreateTransaction(
         blikCheckNotification(
             url,
             transactionId,
-            response,
             blikData,
             1
         );

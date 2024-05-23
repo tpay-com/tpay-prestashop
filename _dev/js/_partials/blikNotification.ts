@@ -6,7 +6,6 @@ import {removeBlikAddept} from "./blikAddepts";
 export function blikCheckNotification(
     url: string,
     transactionId: string,
-    response: BlikResponseData,
     blikData: BlikData,
     attempt: number
 ) {
@@ -90,7 +89,6 @@ export function blikCheckNotification(
                 blikCheckNotification(
                     url,
                     transactionId,
-                    response,
                     blikData,
                     attemptLimit + 1
                 );
