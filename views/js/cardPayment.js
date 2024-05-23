@@ -21,7 +21,7 @@ function CardPayment(url, pubkey)
     {
         let cardRedirectType = document.querySelector('input[name=redirect_type]');
         if (cardRedirectType.value === 'redirect'){
-            return;
+            $('#card_payment_form').submit();
         }
 
         var cardNumber = numberInput.val().replace(/\s/g, ''),
