@@ -99,6 +99,7 @@ class CustomerData
     private function setBasicClient(): void
     {
         $orderTotal = $this->getOrderTotalAmount();
+        $phoneNumber = (isset($this->address->phone_mobile) && strlen($this->address->phone_mobile) > 3) ? $this->address->phone_mobile : ($this->address->phone ?: '000');
 
         $data = [
             'amount' => number_format(
@@ -119,7 +120,7 @@ class CustomerData
                     $this->context->cookie->customer_firstname,
                     $this->context->cookie->customer_lastname
                 ),
-                'phone' => $this->address->phone ?: '000',
+                'phone' => $phoneNumber,
                 'address' => $this->address->address1 . ' ' . $this->address->address2,
                 'code' => $this->address->postcode,
                 'city' => $this->address->city,
@@ -127,7 +128,7 @@ class CustomerData
             ],
         ];
 
-        if(isset($this->address->vat_number) && !empty($this->address->vat_number)){
+        if(isset($this->address->vat_number) && strlen($this->address->vat_number) > 1){
             $data['payer']['taxId'] = $this->address->vat_number;
         }
 
