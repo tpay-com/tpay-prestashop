@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.0]
+### Added
+- Added generic payment method
+- Added a widget view switch
+---
+### Fixed
+- Fixed button view for card and blik 
+- Fixed blik code validation
+
 ## [1.8.5]
 ### Added
 - Added information about the notification address
