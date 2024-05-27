@@ -117,8 +117,10 @@ class BasicPaymentHandler implements PaymentMethodHandler
 
         if ($channelId) {
             $this->clientData['pay']['channelId'] = (int)$channelId;
-        } else {
+        } elseif ($gatewayId) {
             $this->clientData['pay']['groupId'] = (int)$gatewayId;
+        } else {
+            unset($this->clientData['pay']);
         }
     }
 }

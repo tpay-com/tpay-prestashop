@@ -41,7 +41,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
         $context = $this->context;
         $customer = new \Customer($cart->id_customer);
-        $address = new \AddressCore($cart->id_customer);
+        $address = new \AddressCore($cart->id_address_invoice);
         $action   = Tools::getValue('action');
         $status   = true;
 

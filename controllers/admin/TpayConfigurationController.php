@@ -425,7 +425,7 @@ class TpayConfigurationController extends ModuleAdminController
                     'type' => 'switch',
                     'label' => $this->module->l('BLIK widget'),
                     'name' => 'TPAY_BLIK_WIDGET',
-                    'desc' => $this->module->l('Display the payment method in the widget'),
+                    'desc' => $this->module->l('Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
@@ -446,7 +446,7 @@ class TpayConfigurationController extends ModuleAdminController
                     'type' => 'switch',
                     'label' => $this->module->l('Transfer widget'),
                     'name' => 'TPAY_TRANSFER_WIDGET',
-                    'desc' => $this->module->l('Display the transfer payment method in the widget'),
+                    'desc' => $this->module->l('Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
@@ -613,7 +613,7 @@ class TpayConfigurationController extends ModuleAdminController
                     'type' => 'switch',
                     'label' => $this->module->l('Card widget'),
                     'name' => 'TPAY_CARD_WIDGET',
-                    'desc' => $this->module->l('Display the card payment method in the widget'),
+                    'desc' => $this->module->l('Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
@@ -722,7 +722,7 @@ class TpayConfigurationController extends ModuleAdminController
                 'input' => [
                     [
                         'type' => 'select',
-                        'label' => $this->module->l('Select payments to generic onsite mechanism to'),
+                        'label' => $this->module->l('Select payments to Easy on-site mechanism to'),
                         'name' => 'TPAY_GENERIC_PAYMENTS[]',
                         'multiple' => true,
                         'size' => $result ? 20 : 1,

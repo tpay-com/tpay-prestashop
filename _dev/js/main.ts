@@ -5,58 +5,46 @@ import {
 } from './_partials/helpers';
 
 import blikWidget from "./_partials/blik";
-import basicTransferPayments, { validateSelectedTransfer } from "./_partials/gateways";
+import basicTransferPayments, { addTpaySupercheckoutValidator, validateSelectedTransfer } from "./_partials/gateways";
 
 import * as clause from "./_partials/clause";
 
 import {checkSurcharge} from "./_partials/surcharge";
 import {removeBlikAddept} from "./_partials/blikAddepts";
 import { elementReady } from './utils/elementReady';
+import { isInSupercheckout } from './_partials/supercheckout';
 
 /// init blik
 elementReady("#tpay-blik-form").then(() => {
-    blikWidget()
-})
+  blikWidget();
+});
 
-basicTransferPayments();
+elementReady(".tpay-payment-gateways").then(() => {
+  basicTransferPayments();
+
+  if (isInSupercheckout) {
+    addTpaySupercheckoutValidator();
+  }
+});
 
 
 function radioPayments() {
     const AllPaymentOptions = Array.from(
-        document.querySelectorAll<HTMLInputElement>('input[name=payment-option]')
+        document.querySelectorAll<HTMLInputElement>('input[id^=payment-option]')
     );
 
     Array.from(AllPaymentOptions).forEach(function (payment) {
         payment.addEventListener('click', () => {
-
             const parent = payment.closest('.payment-option');
             const isRegulation = parent.querySelector<HTMLDivElement>('.tpay-regulations') ?? false;
 
             resetValidationInfo();
 
             const paymentId = getPaymentId(parent);
-            const paymentAdditionalInformation = getPaymentContent(paymentId);
 
 
-
-            let paymentName = '';
-
-            if(paymentAdditionalInformation) {
-                const paymentElm = paymentAdditionalInformation.querySelector('.tpay-wrapper');
-                paymentName = paymentElm?.getAttribute('data-payment-type') ?? null;
-            }
-
-
-
-            if (paymentName === 'blik' || paymentName === 'card') {
-                document.querySelector('body').classList.add('tpay-hide-process-btn');
-                removeBlikAddept()
-                changingButtonBehavior(paymentId, 'hide');
-
-            } else {
                 document.querySelector('body').classList.remove('tpay-hide-process-btn');
                 changingButtonBehavior(paymentId, 'show');
-            }
 
 
             const fee = getPaymentForm(paymentId).querySelector('input[name=tpay]');

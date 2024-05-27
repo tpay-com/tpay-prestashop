@@ -20,9 +20,8 @@ function CardPayment(url, pubkey)
     function SubmitPayment()
     {
         let cardRedirectType = document.querySelector('input[name=redirect_type]');
-
         if (cardRedirectType.value === 'redirect'){
-            return;
+            $('#card_payment_form').submit();
         }
 
         var cardNumber = numberInput.val().replace(/\s/g, ''),
@@ -31,7 +30,7 @@ function CardPayment(url, pubkey)
             encrypt = new JSEncrypt(),
             decoded = Base64.decode(pubkey),
             encrypted;
-        $("#card_continue_btn").fadeOut();
+        $("#payment-confirmation button").fadeOut();
         $(".tpay-card-wrapper .tpay-preload").fadeIn();
         encrypt.setPublicKey(decoded);
         encrypted = encrypt.encrypt(cd);
@@ -152,7 +151,7 @@ function CardPayment(url, pubkey)
 		let isValid;
 
 		const notValidCause = $('#info_msg_cause');
-		const button = document.querySelector('#card_continue_btn');
+		const button = document.querySelector('#payment-confirmation button');
 
 		isValid = element.is(':checked');
 
@@ -196,11 +195,23 @@ function CardPayment(url, pubkey)
         return isValidForm;
     }
 
-    $('#card_continue_btn').click(function (e) {
-		if(checkForm()) {
-			SubmitPayment();
-		} else {
-			e.preventDefault();
+    function isCardContainerChosen(e)
+    {
+        var cardContainer = $('#card_payment_form').parents('div').eq(1);
+
+        if (cardContainer.css('display') === 'none'){
+            return false;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        return true;
+    }
+
+    $('#payment-confirmation button').click(function (e) {
+        if(isCardContainerChosen(e) && checkForm()) {
+            SubmitPayment();
 		}
     });
 

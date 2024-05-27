@@ -11,7 +11,7 @@
 *  @copyright 2010-2022 tpay.com
 *  @license   LICENSE.txt
 *}
-<div class="tpay-wrapper tpay-card-wrapper" data-payment-type="{if $card_type === 'widget'}card{else}card-redirect{/if}">
+<div class="tpay-wrapper tpay-card-wrapper" data-payment-type="card">
 	<form method="post" id="card_payment_form" name="card_payment_form">
 		{if $card_type === 'widget'}
 			{if isset($saved_cards) && !empty($saved_cards)}
@@ -147,16 +147,6 @@
 		</div>
 
 		{include file="module:tpay/views/templates/hook/regulations.tpl"}
-
-		{if $card_type === 'widget'}
-			<div class="tpay-buttons-holder">
-				{include file="module:tpay/views/templates/_partials/preloader.tpl"}
-				<button type="submit" id="card_continue_btn" class="btn btn-primary">
-					{l s='Pay with Tpay' mod='tpay'}
-				</button>
-			</div>
-		{/if}
-
 	</form>
 
 	<script type="text/javascript">

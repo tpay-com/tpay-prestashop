@@ -1,5 +1,3 @@
-import {isVisible} from "./helpers";
-
 export default function basicTransferPayments() {
   const gateways_wrappers = document.querySelectorAll<HTMLDivElement>('.tpay-payment-gateways');
 
@@ -31,7 +29,7 @@ export function validateSelectedTransfer(gateways_wrapper: HTMLDivElement) {
   let checked = false;
   const req = document.querySelector <HTMLInputElement>('input[name="conditions_to_approve[terms-and-conditions]"]');
   const btn = document.querySelector<HTMLButtonElement>('#payment-confirmation button');
-  const paymentMethodSelected = Array.from(document.querySelectorAll('[name=payment-option]')).find((radio) => radio.checked).id
+  const paymentMethodSelected = Array.from(document.querySelectorAll('[id^=payment-option]')).find((radio) => radio.checked).id
   const paymentWrapper = document.querySelector('#pay-with-' + paymentMethodSelected + '-form')
   const tpayInputsCount = paymentWrapper?.querySelectorAll('.tpay-payment-gateways__item input').length
 
@@ -62,4 +60,34 @@ function switchButton(checked: boolean, btn: HTMLButtonElement, req: HTMLInputEl
     btn.disabled = false
     btn.classList.remove('disabled')
   }
+}
+
+export function addTpaySupercheckoutValidator() {
+  function validator() {
+    const tpayTransferRadio = document
+      .querySelector(".tpay-payment-gateways")
+      .closest("li")
+      .querySelector("input[type=radio]") as HTMLInputElement;
+
+    if (!tpayTransferRadio.checked) {
+      return true;
+    }
+
+    const tpayPaymentMethodsRadios = document.querySelectorAll(
+      ".tpay-payment-gateways input[type=radio]"
+    );
+
+    const methodChecked = Array.from(tpayPaymentMethodsRadios).some(
+      (method: HTMLInputElement) => method.checked
+    );
+
+    if (methodChecked) {
+      return true;
+    }
+
+    window.scrollTo({top: 0, behavior: 'smooth'});
+    throw new Error("Wybierz metodę płatności");
+  }
+
+  window.addSupercheckoutOrderValidator(validator);
 }
