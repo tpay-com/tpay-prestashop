@@ -44,11 +44,22 @@ class Payment extends AbstractHook
         }
         $surcharge = $this->getSurchargeCost();
 
-        $this->context->smarty->assign([
+        $langData = [
+            'regulation_url' => 'https://tpay.com/user/assets/files_for_download/payment-terms-and-conditions.pdf',
+            'clause_url' => 'https://tpay.com/user/assets/files_for_download/information-clause-payer.pdf'
+        ];
+
+        if ($this->context->language->getIsoCode() == 'pl') {
+            $langData = [
+                'regulation_url' => 'https://secure.tpay.com/regulamin.pdf',
+                'clause_url' => 'https://tpay.com/user/assets/files_for_download/klauzula-informacyjna-platnik.pdf'
+            ];
+        }
+
+        $this->context->smarty->assign(array_merge($langData, [
             'tpay_path' => Tools::getHttpHost(true) . __PS_BASE_URI__ . 'modules/tpay/views/',
-            'regulation_url' => 'https://secure.tpay.com/regulamin.pdf',
             'surcharge' => $surcharge > 0 ? Tools::displayPrice($this->getSurchargeCost()) : false
-        ]);
+        ]));
 
         $paymentService = new PaymentOptionsService($this->module);
 
