@@ -184,6 +184,17 @@ class Tpay extends PaymentModule
         return $this->api;
     }
 
+    public function buildInfo(): string
+    {
+        return sprintf(
+            "prestashop:%s|tpay-prestashop:%s|tpay-openapi-php:%s|PHP:%s",
+            $this->getPrestaVersion(),
+            $this->version,
+            \Composer\InstalledVersions::getPrettyVersion('tpay-com/tpay-openapi-php'),
+            phpversion()
+        );
+    }
+
     /**
      * Module call API.
      */
@@ -196,21 +207,12 @@ class Tpay extends PaymentModule
         if ($clientId && $secretKey) {
             try {
                 Logger::setLogger(new PsrLogger());
-                $this->api = new TpayApi($clientId, $secretKey, $isProduction, 'read');
+                $this->api = new TpayApi($clientId, $secretKey, $isProduction, 'read', null, $this->buildInfo());
                 $token = \Tpay\Util\Cache::get($this->getAuthTokenCacheKey());
 
                 if ($token) {
                     $this->api->setCustomToken(unserialize($token));
                 }
-
-                $this->api->authorization()->setClientName(implode(
-                    '|',
-                    [
-                        'presta:' . $this->getPrestaVersion(),
-                        'tpay-com/tpay-openapi-php:' . $this->getPackageVersion(),
-                        'PHP:' . phpversion(),
-                    ]
-                ));
 
                 if (!$token) {
                     \Tpay\Util\Cache::set($this->getAuthTokenCacheKey(), serialize($this->api->getToken()));
@@ -464,18 +466,6 @@ class Tpay extends PaymentModule
             if (defined('_PS_VERSION_')) {
                 return _PS_VERSION_;
             }
-        }
-
-        return 'n/a';
-    }
-
-    private function getPackageVersion(): string
-    {
-        $dir = __DIR__ . '/composer.json';
-        if (file_exists($dir)) {
-            $composerJson = json_decode(file_get_contents($dir), true)['require'] ?? [];
-
-            return $composerJson['tpay-com/tpay-openapi-php'];
         }
 
         return 'n/a';
