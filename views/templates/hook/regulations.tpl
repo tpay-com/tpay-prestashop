@@ -20,7 +20,7 @@
 	</p>
 	<p class="tpay-regulations__content">
 		{l s='The administrator of the personal data is Krajowy Integrator Płatności spółka akcyjna, based in Poznań.' mod='tpay'}
-		<a href="https://tpay.com/user/assets/files_for_download/klauzula-informacyjna-platnik.pdf" target="_blank">
+		<a href="{$clause_url|escape:'htmlall':'UTF-8'}" target="_blank">
 			{l s='Read the full content.' mod='tpay'}
 		</a>
 	</p>
