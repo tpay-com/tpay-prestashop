@@ -33,7 +33,7 @@ class Payment extends AbstractHook
      * Create payment methods
      * @throws \PrestaShopException|LocalizationException
      */
-    public function paymentOptions($params): ?array
+    public function paymentOptions($params)
     {
         if (!$this->module->active || !$this->module->api) {
             return [];

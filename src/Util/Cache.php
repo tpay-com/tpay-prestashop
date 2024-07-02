@@ -13,7 +13,7 @@ final class Cache
         file_put_contents($file, $data);
     }
 
-    public static function get(string $key, $default = null): ?string
+    public static function get(string $key, $default = null)
     {
         $file = self::getCacheDir() . md5($key);
 
