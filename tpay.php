@@ -31,15 +31,13 @@ use Tpay\HookDispatcher;
 use Tpay\Install\Install;
 use Tpay\Install\Uninstall;
 use Tpay\OpenApi\Utilities\Logger;
-use Tpay\Util\Container;
 use Tpay\States\FactoryState;
+use Tpay\Util\Container;
 use Tpay\Util\PsrLogger;
 use tpaySDK\Api\TpayApi;
 
 class Tpay extends PaymentModule
 {
-    public const AUTH_TOKEN_CACHE_KEY = 'tpay_auth_token_%s';
-
     // phpcs:ignore
     public $_errors;
 
@@ -141,7 +139,7 @@ class Tpay extends PaymentModule
     {
         $this->name = 'tpay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.9.1';
+        $this->version = '1.9.2';
         $this->author = 'Krajowy Integrator Płatności S.A.';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
@@ -175,7 +173,7 @@ class Tpay extends PaymentModule
         }
     }
 
-    public function api(): ?TpayApi
+    public function api()
     {
         if (null === $this->api) {
             $this->initAPI();
@@ -471,10 +469,10 @@ class Tpay extends PaymentModule
         return 'n/a';
     }
 
-    private function getAuthTokenCacheKey(): string
+    private function getAuthTokenCacheKey()
     {
         return sprintf(
-            self::AUTH_TOKEN_CACHE_KEY,
+            'tpay_auth_token_%s',
             md5(join(
                 '|',
                 [Cfg::get('TPAY_CLIENT_ID'), Cfg::get('TPAY_SECRET_KEY'), !Cfg::get('TPAY_SANDBOX')]
