@@ -38,6 +38,8 @@ use tpaySDK\Api\TpayApi;
 
 class Tpay extends PaymentModule
 {
+    const AUTH_TOKEN_CACHE_KEY = 'tpay_auth_token_%s';
+
     // phpcs:ignore
     public $_errors;
 
@@ -472,7 +474,7 @@ class Tpay extends PaymentModule
     private function getAuthTokenCacheKey()
     {
         return sprintf(
-            'tpay_auth_token_%s',
+            self::AUTH_TOKEN_CACHE_KEY,
             md5(join(
                 '|',
                 [Cfg::get('TPAY_CLIENT_ID'), Cfg::get('TPAY_SECRET_KEY'), !Cfg::get('TPAY_SANDBOX')]
