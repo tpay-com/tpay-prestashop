@@ -27,11 +27,7 @@ class ConstraintValidator
                         return false;
                     }
                 case 'supported':
-                    if (!$this->validateBrowser($constraint['field'], $browser)) {
-                        return false;
-                    }
-
-                    break;
+                    return $this->isApplePayPossible($constraint['field'], $browser);
                 default:
                     break;
             }
@@ -55,8 +51,12 @@ class ConstraintValidator
         return $this->surchargeService->getTotalOrderAndSurchargeCost() <= $maximal;
     }
 
-    private function validateBrowser(string $browserSupport, string $browser): bool
+    private function isApplePayPossible(string $browserSupport, string $browser): bool
     {
-        return !('ApplePaySession' == $browserSupport && 'Safari' != $browser);
+        if ('ApplePaySession' == $browserSupport && 'Safari' == $browser) {
+            return true;
+        }
+
+        return false;
     }
 }
