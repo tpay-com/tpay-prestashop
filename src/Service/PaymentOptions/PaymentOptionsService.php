@@ -228,7 +228,7 @@ class PaymentOptionsService
         $bankChannels = [];
 
         foreach ($channels as $channel) {
-            if (count($channel['constraints']) >= 2 && !$this->constraintValidator->validate($channel['constraints'])) {
+            if (count($channel['constraints']) >= 2 && !$this->constraintValidator->validate($channel['constraints'], $this->getBrowser())) {
                 continue;
             }
             $bankChannels[$channel['id']] = [
@@ -338,7 +338,7 @@ class PaymentOptionsService
                 return null;
             }
 
-            if (!empty($channel['constraints']) && !$this->constraintValidator->validate($channel['constraints'])) {
+            if (!empty($channel['constraints']) && !$this->constraintValidator->validate($channel['constraints'], $this->getBrowser())) {
                 return null;
             }
 
@@ -346,5 +346,19 @@ class PaymentOptionsService
 
             return $gateway->getPaymentOption($this->module, new PaymentOption(), $channel);
         }, $generics));
+    }
+
+    private function getBrowser(): string
+    {
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+
+        if (strpos($userAgent, 'Chrome')) {
+            return 'Chrome';
+        }
+        if (strpos($userAgent, 'Safari')) {
+            return 'Safari';
+        }
+
+        return 'Other';
     }
 }
