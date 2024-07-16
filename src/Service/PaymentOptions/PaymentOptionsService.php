@@ -228,7 +228,7 @@ class PaymentOptionsService
         $bankChannels = [];
 
         foreach ($channels as $channel) {
-            if (count($channel['constraints']) >= 2 && !$this->constraintValidator->validate($channel['constraints'], $this->getBrowser())) {
+            if (!empty($channel['constraints']) && !$this->constraintValidator->validate($channel['constraints'], $this->getBrowser())) {
                 continue;
             }
             $bankChannels[$channel['id']] = [
