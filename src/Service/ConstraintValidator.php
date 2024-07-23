@@ -12,7 +12,7 @@ class ConstraintValidator
         $this->surchargeService = $module->getService('tpay.service.surcharge');
     }
 
-    public function validate(array $constraints): bool
+    public function validate(array $constraints, string $browser): bool
     {
         foreach ($constraints as $constraint) {
             switch ($constraint['type']) {
@@ -26,8 +26,8 @@ class ConstraintValidator
                     if (!$this->validateMaximalTotal((float) $constraint['value'])) {
                         return false;
                     }
-
-                    break;
+                case 'supported':
+                    return $this->isApplePayPossible($constraint['field'], $browser);
                 default:
                     break;
             }
@@ -49,5 +49,14 @@ class ConstraintValidator
     private function validateMaximalTotal(float $maximal): bool
     {
         return $this->surchargeService->getTotalOrderAndSurchargeCost() <= $maximal;
+    }
+
+    private function isApplePayPossible(string $browserSupport, string $browser): bool
+    {
+        if ('ApplePaySession' == $browserSupport && 'Safari' == $browser) {
+            return true;
+        }
+
+        return false;
     }
 }
