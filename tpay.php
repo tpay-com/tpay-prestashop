@@ -141,7 +141,7 @@ class Tpay extends PaymentModule
     {
         $this->name = 'tpay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.9.3';
+        $this->version = '1.9.4';
         $this->author = 'Krajowy Integrator Płatności S.A.';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
@@ -190,7 +190,7 @@ class Tpay extends PaymentModule
             "prestashop:%s|tpay-prestashop:%s|tpay-openapi-php:%s|PHP:%s",
             $this->getPrestaVersion(),
             $this->version,
-            \Composer\InstalledVersions::getPrettyVersion('tpay-com/tpay-openapi-php'),
+            $this->getPackageVersion(),
             phpversion()
         );
     }
@@ -480,5 +480,17 @@ class Tpay extends PaymentModule
                 [Cfg::get('TPAY_CLIENT_ID'), Cfg::get('TPAY_SECRET_KEY'), !Cfg::get('TPAY_SANDBOX')]
             ))
         );
+    }
+
+    private function getPackageVersion(): string
+    {
+        $dir = __DIR__ . '/composer.json';
+        if (file_exists($dir)) {
+            $composerJson = json_decode(file_get_contents($dir), true)['require'] ?? [];
+
+            return $composerJson['tpay-com/tpay-openapi-php'];
+        }
+
+        return 'n/a';
     }
 }
