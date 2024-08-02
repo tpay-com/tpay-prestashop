@@ -45,6 +45,8 @@ class Helper
             'TPAY_BLIK_ACTIVE',
             'TPAY_BLIK_WIDGET',
             'TPAY_TRANSFER_WIDGET',
+            'TPAY_CUSTOM_ORDER[]',
+            'TPAY_CUSTOM_ORDER',
             'TPAY_CARD_WIDGET',
             'TPAY_INSTALLMENTS_ACTIVE',
             'TPAY_PEKAO_INSTALLMENTS_ACTIVE',
