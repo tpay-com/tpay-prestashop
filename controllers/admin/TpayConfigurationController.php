@@ -765,7 +765,7 @@ class TpayConfigurationController extends ModuleAdminController
     private function sortPayment(string $field): array
     {
         $channels = $this->channels;
-        $chosenPayments = json_decode(Cfg::get($field), true);
+        $chosenPayments = json_decode(Cfg::get($field), true) ?? [];
 
         if (count($chosenPayments) > 0) {
             $orderedList = [];
