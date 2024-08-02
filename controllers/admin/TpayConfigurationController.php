@@ -27,6 +27,7 @@ class TpayConfigurationController extends ModuleAdminController
     public const SEPARATE_PAYMENT_INFO = 'Show the method as a separate payment';
     public $errors = [];
     public $configuration = [];
+    public $channels = [];
 
     /** @var Tpay */
     public $module;
@@ -56,6 +57,10 @@ class TpayConfigurationController extends ModuleAdminController
 
             if ($field == 'TPAY_GENERIC_PAYMENTS[]') {
                 $value = json_decode(Cfg::get('TPAY_GENERIC_PAYMENTS'), true);
+            }
+
+            if ($field == 'TPAY_CUSTOM_ORDER[]') {
+                $value = json_decode(Cfg::get('TPAY_CUSTOM_ORDER'), true);
             }
 
             $fields[$field] = $value;
@@ -97,7 +102,6 @@ class TpayConfigurationController extends ModuleAdminController
         return OrderState::getOrderStates(Context::getContext()->language->id);
     }
 
-
     protected function getWarningMultishopHtml()
     {
         if (Shop::getContext() == Shop::CONTEXT_GROUP) {
@@ -127,6 +131,7 @@ class TpayConfigurationController extends ModuleAdminController
 
     public function createForm(): array
     {
+        $this->getChannels();
         $form[] = $this->formBasicOptions();
         $form[] = $this->formPaymentOptions();
         $form[] = $this->formCardOptions();
@@ -464,6 +469,21 @@ class TpayConfigurationController extends ModuleAdminController
                 ],
 
                 [
+                    'type' => 'select',
+                    'label' => $this->module->l('Custom order'),
+                    'name' => 'TPAY_CUSTOM_ORDER[]',
+                    'multiple' => true,
+                    'class' => 'child',
+                    'desc' => $this->module->l('Custom order of displayed banks. Drag to change order'),
+                    'size' => 20,
+                    'options' => [
+                        'query' => $this->sortPayment('TPAY_CUSTOM_ORDER'),
+                        'id' => 'id',
+                        'name' => 'name'
+                    ],
+                ],
+
+                [
                     'type' => 'switch',
                     'label' => $this->module->l('GooglePay'),
                     'name' => 'TPAY_GPAY_ACTIVE',
@@ -706,15 +726,7 @@ class TpayConfigurationController extends ModuleAdminController
 
     private function formGenericPaymentOptions(): array
     {
-        $result = [];
-
-        if ($this->module->api()) {
-            try {
-                $result = $this->module->api()->transactions()->getChannels();
-            } catch (Exception $exception) {
-                PrestaShopLogger::addLog($exception->getMessage(), 3);
-            }
-        }
+        $result = $this->sortPayment('TPAY_GENERIC_PAYMENTS');
 
         return [
             'form' => [
@@ -724,10 +736,11 @@ class TpayConfigurationController extends ModuleAdminController
                         'type' => 'select',
                         'label' => $this->module->l('Select payments to Easy on-site mechanism to'),
                         'name' => 'TPAY_GENERIC_PAYMENTS[]',
+                        'desc' => $this->module->l('Custom order of displayed payment methods. Drag to change order'),
                         'multiple' => true,
                         'size' => $result ? 20 : 1,
                         'options' => [
-                            'query' => $result['channels'] ?? [],
+                            'query' => $result,
                             'id' => 'id',
                             'name' => 'name'
                         ],
@@ -736,5 +749,39 @@ class TpayConfigurationController extends ModuleAdminController
                 'submit' => ['title' => $this->module->l('Save')],
             ]
         ];
+    }
+
+    private function getChannels()
+    {
+        if ($this->module->api()) {
+            try {
+                $this->channels = $this->module->api()->transactions()->getChannels()['channels'] ?? [];
+            } catch (Exception $exception) {
+                PrestaShopLogger::addLog($exception->getMessage(), 3);
+            }
+        }
+    }
+
+    private function sortPayment(string $field): array
+    {
+        $channels = $this->channels;
+        $chosenPayments = json_decode(Cfg::get($field), true);
+
+        if (count($chosenPayments) > 0) {
+            $orderedList = [];
+
+            foreach ($chosenPayments as $chosenPayment) {
+                foreach ($channels as $key => $channel) {
+                    if ($channel['id'] == $chosenPayment) {
+                        $orderedList[$key] = $channel;
+                        unset($channels[$key]);
+                    }
+                }
+            }
+
+            return array_merge($orderedList, $channels);
+        }
+
+        return $channels;
     }
 }
