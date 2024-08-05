@@ -474,7 +474,7 @@ class TpayConfigurationController extends ModuleAdminController
                     'name' => 'TPAY_CUSTOM_ORDER[]',
                     'multiple' => true,
                     'class' => 'child',
-                    'desc' => $this->module->l('Custom order of displayed banks. Drag to change order'),
+                    'desc' => $this->module->l('Custom order of displayed banks. Drag to change order. The ability to change the order of payment methods is possible when the "Direct bank redirect" option is enabled.'),
                     'size' => 20,
                     'options' => [
                         'query' => $this->sortPayment('TPAY_CUSTOM_ORDER'),

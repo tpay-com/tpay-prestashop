@@ -147,8 +147,9 @@ $_MODULE['<{tpay}prestashop>tpay_a2436f156896e30797fae5cb4625ff06'] = 'Kod bezpi
 $_MODULE['<{tpay}prestashop>tpay_321d4f2bb69eb9edd173cfd0c02500f2'] = 'Forma pola CRC';
 $_MODULE['<{tpay}prestashop>tpay_542b1d933b6142f66e3cfb215ffa2f70'] = 'Widget przelewów';
 $_MODULE['<{tpay}prestashop>tpay_9291570afa178cc68f9fa711153822bd'] = 'Własna kolejność';
-$_MODULE['<{tpay}prestashop>tpay_550cbbbc14019038a72c2b4aacd23061'] = 'Własna kolejność wyświetlanych banków. Przeciągnij, żeby zmienić kolejność';
-$_MODULE['<{tpay}prestashop>tpay_0e4929b5127c6468265b817bad986f8b'] = 'Własna kolejność wyświetlanych metod płatności. Przeciągnij, żeby zmienić kolejność';$_MODULE['<{tpay}prestashop>tpay_483fd2351d43804a57ac0f4406c2112a'] = 'Widget kart';
+$_MODULE['<{tpay}prestashop>tpay_520132326c61928684fbd55983f0ac64'] = 'Własna kolejność wyświetlanych banków. Przeciągnij, żeby zmienić kolejność.  Możliwość zmiany kolejności metod płatności jest możliwa przy uruchomionej opcji "Bezpośrednie przekierowanie do banku".';
+$_MODULE['<{tpay}prestashop>tpay_0e4929b5127c6468265b817bad986f8b'] = 'Własna kolejność wyświetlanych metod płatności. Przeciągnij, żeby zmienić kolejność';
+$_MODULE['<{tpay}prestashop>tpay_483fd2351d43804a57ac0f4406c2112a'] = 'Widget kart';
 $_MODULE['<{tpay}prestashop>tpay_5add32cd1f3d800e55157999a7470db3'] = 'Wyświetl metodę płatności w widgecie';
 $_MODULE['<{tpay}prestashop>tpay_30b95da4d0c97cd63150d7115f161d5c'] = 'Wyświetl metodę płatności w widgecie';
 $_MODULE['<{tpay}prestashop>tpay_18059342ab22f4ce9dcb766714593cf1'] = 'Używaj konta Sandbox';

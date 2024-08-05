@@ -15,7 +15,7 @@
 <script type="text/javascript">
 	$(document).ready(function () {
 		let tpaySurcharge = $('input[name=TPAY_SURCHARGE_ACTIVE]');
-		let tpayTransfer = $('input[name=TPAY_TRANSFER_WIDGET]');
+		let tpayTransfer = $('input[name=TPAY_REDIRECT_TO_CHANNEL]');
 		var selectElementOrder = $('#TPAY_CUSTOM_ORDER\\[\\]');
 		var selectElement = $('#TPAY_GENERIC_PAYMENTS\\[\\]');
 
@@ -39,7 +39,7 @@
 			var listElementOrder = $('<ul id="sortable-order-list" class="sortable-list"></ul>').insertAfter(selectElementOrder);
 
 			selectElementOrder.find('option').each(function () {
-				var listItem = $('<li class="ui-state-default" id="option-' + $(this).val() + '" title="Przesuń, żeby zmienić kolejność">' +
+				var listItem = $('<li class="ui-state-default" id="option-' + $(this).val() + '" title="Drag to reorder">' +
 						$(this).text() + '</li>');
 				listElementOrder.append(listItem);
 			});
@@ -58,11 +58,11 @@
 				}
 			}).disableSelection();
 
-			listElementOrder.find('li').attr('title', 'Przesuń, żeby zmienić kolejność');
+			listElementOrder.find('li').attr('title', 'Drag to reorder');
 		}
 
 		function checkTpayTransfer(state) {
-			const tpayCustomOrder = selectElementOrder.parents('.form-group');
+			const tpayCustomOrder = $('#sortable-order-list');
 
 			if (state === '1') {
 				tpayCustomOrder.show();
@@ -78,7 +78,7 @@
 
 			selectElement.find('option').each(function () {
 				var isChecked = $(this).is(':selected');
-				var listItem = $('<li class="ui-state-default" id="option-' + $(this).val() + '" title="Przesuń, żeby zmienić kolejność">' +
+				var listItem = $('<li class="ui-state-default" id="option-' + $(this).val() + '" title="Drag to reorder">' +
 						'<input type="checkbox" class="select-checkbox" value="' + $(this).val() + '"' + (isChecked ? ' checked' : '') + '>' +
 						$(this).text() + '</li>');
 				listElement.append(listItem);
@@ -110,8 +110,8 @@
 		}
 
 		checkTpaySurcharge($('input[name=TPAY_SURCHARGE_ACTIVE]:checked').val());
-		checkTpayTransfer($('input[name=TPAY_TRANSFER_WIDGET]:checked').val());
 		initializeSortableOrder();
+		checkTpayTransfer($('input[name=TPAY_REDIRECT_TO_CHANNEL]:checked').val());
 		initializeSortableGenericPayments();
 
 		tpaySurcharge.change(function () {
