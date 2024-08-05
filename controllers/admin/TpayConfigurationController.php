@@ -479,91 +479,7 @@ class TpayConfigurationController extends ModuleAdminController
                     'options' => [
                         'query' => $this->sortPayment('TPAY_CUSTOM_ORDER'),
                         'id' => 'id',
-                        'name' => 'name'
-                    ],
-                ],
-
-                [
-                    'type' => 'switch',
-                    'label' => $this->module->l('GooglePay'),
-                    'name' => 'TPAY_GPAY_ACTIVE',
-                    'desc' => $this->module->l('Show the method as a separate payment'),
-                    'is_bool' => true,
-                    'class' => 't',
-                    'values' => [
-                        [
-                            'id' => 'tpay_active_on',
-                            'value' => 1,
-                            'label' => $this->module->l('Yes'),
-                        ],
-                        [
-                            'id' => 'tpay_active_off',
-                            'value' => 0,
-                            'label' => $this->module->l('No'),
-                        ],
-                    ],
-                ],
-
-                [
-                    'type' => 'switch',
-                    'label' => $this->module->l('Alior Installment (from 300 PLN to 13 888,00 PLN)'),
-                    'name' => 'TPAY_INSTALLMENTS_ACTIVE',
-                    'desc' => $this->module->l('Show the method as a separate payment'),
-                    'is_bool' => true,
-                    'class' => 't',
-                    'values' => [
-                        [
-                            'id' => 'tpay_installments_on',
-                            'value' => 1,
-                            'label' => $this->module->l('Yes'),
-                        ],
-                        [
-                            'id' => 'tpay_installments_off',
-                            'value' => 0,
-                            'label' => $this->module->l('No'),
-                        ],
-                    ],
-                ],
-
-                [
-                    'type' => 'switch',
-                    'label' => $this->module->l('Pekao Installment (from 100 PLN to 20 000 PLN)'),
-                    'name' => 'TPAY_PEKAO_INSTALLMENTS_ACTIVE',
-                    'desc' => $this->module->l('Show the method as a separate payment'),
-                    'is_bool' => true,
-                    'class' => 't',
-                    'values' => [
-                        [
-                            'id' => 'tpay_pekao_installments_on',
-                            'value' => 1,
-                            'label' => $this->module->l('Yes'),
-                        ],
-                        [
-                            'id' => 'tpay_pekao_installments_off',
-                            'value' => 0,
-                            'label' => $this->module->l('No'),
-                        ],
-                    ],
-                ],
-
-                [
-                    'type' => 'switch',
-                    'label' => sprintf($this->module->l('Twisto - Buy now, pay later (from 1 PLN to 1 500 PLN)')),
-                    'name' => 'TPAY_TWISTO_ACTIVE',
-                    'desc' => $this->module->l('Show the method as a separate payment'),
-                    'is_bool' => true,
-                    'class' => 't',
-                    'values' => [
-                        [
-                            'id' => 'tpay_installments_on',
-                            'value' => 1,
-                            'label' => $this->module->l('Yes'),
-                        ],
-                        [
-                            'id' => 'tpay_installments_off',
-                            'value' => 0,
-                            'label' => $this->module->l('No'),
-                        ],
+                        'name' => 'fullName'
                     ],
                 ],
             ],
@@ -742,7 +658,7 @@ class TpayConfigurationController extends ModuleAdminController
                         'options' => [
                             'query' => $result,
                             'id' => 'id',
-                            'name' => 'name'
+                            'name' => 'fullName'
                         ],
                     ]
                 ],
