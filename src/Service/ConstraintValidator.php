@@ -26,6 +26,8 @@ class ConstraintValidator
                     if (!$this->validateMaximalTotal((float) $constraint['value'])) {
                         return false;
                     }
+
+                    break;
                 case 'supported':
                     return $this->isApplePayPossible($constraint['field'], $browser);
                 default:
