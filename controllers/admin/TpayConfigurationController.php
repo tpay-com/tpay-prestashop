@@ -134,9 +134,9 @@ class TpayConfigurationController extends ModuleAdminController
         $this->getChannels();
         $form[] = $this->formBasicOptions();
         $form[] = $this->formPaymentOptions();
+        $form[] = $this->formGenericPaymentOptions();
         $form[] = $this->formCardOptions();
         $form[] = $this->formStatusesOptions();
-        $form[] = $this->formGenericPaymentOptions();
 
         return $form;
     }
@@ -646,7 +646,10 @@ class TpayConfigurationController extends ModuleAdminController
 
         return [
             'form' => [
-                'legend' => ['title' => 'Generic payments', 'icon' => 'icon-cogs'],
+                'legend' => [
+                    'title' => $this->module->l('Generic payments'),
+                    'icon' => 'icon-cogs'
+                ],
                 'input' => [
                     [
                         'type' => 'select',

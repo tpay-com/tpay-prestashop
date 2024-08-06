@@ -122,7 +122,9 @@ class PaymentOptionsService
      */
     private function getSeparatePayments(array $channels): array
     {
-        $paymentsMethods = [];
+        $paymentsMethods = [
+            Config::GATEWAY_BLIK => (bool)Helper::getMultistoreConfigurationValue('TPAY_BLIK_ACTIVE'),
+        ];
 
         if ($this->hasActiveCard()) {
             $paymentsMethods[Config::GATEWAY_CARD] = (bool)Helper::getMultistoreConfigurationValue(
