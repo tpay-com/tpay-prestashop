@@ -23,7 +23,6 @@ class TpayConfirmationModuleFrontController extends ModuleFrontController
         $type = Tools::getValue('type');
 
         switch ($type) {
-            case Config::TPAY_PAYMENT_INSTALLMENTS:
             case Config::TPAY_PAYMENT_BASIC:
             case Config::TPAY_PAYMENT_BLIK:
             case Config::TPAY_PAYMENT_CARDS:
