@@ -71,6 +71,11 @@ class Helper
             'TPAY_GENERIC_PAYMENTS[]',
             'TPAY_GENERIC_PAYMENTS',
             'TPAY_NOTIFICATION_ADDRESS',
+            'TPAY_MERCHANT_ID',
+            'TPAY_PEKAO_INSTALLMENTS_ACTIVE',
+            'TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE',
+            'TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART',
+            'TPAY_PEKAO_INSTALLMENTS_CHECKOUT'
         ];
     }
 

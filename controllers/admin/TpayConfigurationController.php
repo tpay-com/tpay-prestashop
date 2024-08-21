@@ -128,6 +128,7 @@ class TpayConfigurationController extends ModuleAdminController
     public function createForm(): array
     {
         $form[] = $this->formBasicOptions();
+        $form[] = $this->formPeKaoInstallments();
         $form[] = $this->formPaymentOptions();
         $form[] = $this->formCardOptions();
         $form[] = $this->formStatusesOptions();
@@ -228,6 +229,104 @@ class TpayConfigurationController extends ModuleAdminController
         $helper->submit_action = 'submit' . $this->module->name;
 
         return $helper->generateForm($fields_form);
+    }
+
+    public function formPeKaoInstallments(): array
+    {
+        $form['form'] = [
+            'legend' => [
+                'title' => $this->module->l('Pekao installments simulator settings'),
+                'icon' => 'icon-cogs'
+            ],
+            'input' => [
+                [
+                    'type' => 'switch',
+                    'label' => $this->module->l('Installment simulator active'),
+                    'name' => 'TPAY_PEKAO_INSTALLMENTS_ACTIVE',
+                    'is_bool' => true,
+                    'class' => 't',
+                    'values' => [
+                        [
+                            'id' => 'tpay_active_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Yes'),
+                        ],
+                        [
+                            'id' => 'tpay_active_off',
+                            'value' => 0,
+                            'label' => $this->module->l('No'),
+                        ],
+                    ],
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->module->l('Merchant ID'),
+                    'name' => 'TPAY_MERCHANT_ID',
+                ],
+                [
+                    'type' => 'switch',
+                    'label' => $this->module->l('The installment simulator is available on the product page'),
+                    'name' => 'TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE',
+                    'is_bool' => true,
+                    'class' => 't',
+                    'values' => [
+                        [
+                            'id' => 'tpay_active_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Yes'),
+                        ],
+                        [
+                            'id' => 'tpay_active_off',
+                            'value' => 0,
+                            'label' => $this->module->l('No'),
+                        ],
+                    ],
+                ],
+                [
+                    'type' => 'switch',
+                    'label' => $this->module->l('The installment simulator is available in the shopping cart'),
+                    'name' => 'TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART',
+                    'is_bool' => true,
+                    'class' => 't',
+                    'values' => [
+                        [
+                            'id' => 'tpay_active_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Yes'),
+                        ],
+                        [
+                            'id' => 'tpay_active_off',
+                            'value' => 0,
+                            'label' => $this->module->l('No'),
+                        ],
+                    ],
+                ],
+                [
+                    'type' => 'switch',
+                    'label' => $this->module->l('The installment simulator is available in the checkout'),
+                    'name' => 'TPAY_PEKAO_INSTALLMENTS_CHECKOUT',
+                    'is_bool' => true,
+                    'class' => 't',
+                    'values' => [
+                        [
+                            'id' => 'tpay_active_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Yes'),
+                        ],
+                        [
+                            'id' => 'tpay_active_off',
+                            'value' => 0,
+                            'label' => $this->module->l('No'),
+                        ],
+                    ],
+                ],
+            ],
+            'submit' => [
+                'title' => $this->module->l('Save'),
+            ],
+        ];
+
+        return $form;
     }
 
     public function formBasicOptions(): array

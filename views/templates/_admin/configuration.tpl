@@ -12,35 +12,55 @@
 *  @license   LICENSE.txt
 *}
 <script type="text/javascript">
+    $(document).ready(function () {
+        let tpaySurcharge = $('input[name=TPAY_SURCHARGE_ACTIVE]');
+        let tpayPeKaoSimulator = $('input[name=TPAY_PEKAO_INSTALLMENTS_ACTIVE]');
 
-	$(document).ready(function () {
+        function checkTpaySurcharge(state) {
+            const tpaySurchargeType = $('input[name=TPAY_SURCHARGE_TYPE]').parents('.form-group');
+            const tpaySurchargeValue = $('input[name=TPAY_SURCHARGE_VALUE]').parents('.form-group');
 
-		let tpaySurcharge = $('input[name=TPAY_SURCHARGE_ACTIVE]');
+            if (state === '1') {
+                tpaySurchargeType.show();
+                tpaySurchargeValue.show();
+            } else {
+                tpaySurchargeType.hide();
+                tpaySurchargeValue.hide();
+            }
+        }
 
-		function checkTpaySurcharge(state) {
-			const tpaySurchargeType = $('input[name=TPAY_SURCHARGE_TYPE]').parents('.form-group');
-			const tpaySurchargeValue = $('input[name=TPAY_SURCHARGE_VALUE]').parents('.form-group');
+        function checkTpayPeKaoSimulator(state) {
+            const tpayMerchantId = $('input[name=TPAY_MERCHANT_ID]').parents('.form-group');
+            const tpayProductPageSimulator = $('input[name=TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE]').parents('.form-group');
+            const tpayCheckoutSimulator = $('input[name=TPAY_PEKAO_INSTALLMENTS_CHECKOUT]').parents('.form-group');
+            const tpayShoppingCartSimulator = $('input[name=TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART]').parents('.form-group');
 
-			if (state === '1') {
-				tpaySurchargeType.show();
-				tpaySurchargeValue.show();
-			} else {
-				tpaySurchargeType.hide();
-				tpaySurchargeValue.hide();
-			}
-		}
+            if (state === '1') {
+                tpayMerchantId.show();
+                tpayProductPageSimulator.show();
+                tpayCheckoutSimulator.show();
+                tpayShoppingCartSimulator.show();
+            } else {
+                tpayMerchantId.hide();
+                tpayProductPageSimulator.hide();
+                tpayCheckoutSimulator.hide();
+                tpayShoppingCartSimulator.hide();
+            }
+        }
 
-		checkTpaySurcharge($('input[name=TPAY_SURCHARGE_ACTIVE]:checked').val());
+        checkTpaySurcharge($('input[name=TPAY_SURCHARGE_ACTIVE]:checked').val());
 
-		tpaySurcharge.change(function () {
-			checkTpaySurcharge($(this).val());
-		})
+        tpaySurcharge.change(function () {
+            checkTpaySurcharge($(this).val());
+        })
 
-	});
-
+        tpayPeKaoSimulator.change(function () {
+            checkTpayPeKaoSimulator($(this).val());
+        });
+    });
 </script>
 <style>
     #content > .bootstrap > .alert {
-	    display: none
+        display: none
     }
 </style>
