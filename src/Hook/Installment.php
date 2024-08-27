@@ -22,26 +22,11 @@ use Tpay\Util\Helper;
 class Installment extends AbstractHook
 {
     public const AVAILABLE_HOOKS = [
-        'displayProductAdditionalInfo',
         'displayShoppingCart',
         'displayPaymentTop'
     ];
 
-    public function hookDisplayProductAdditionalInfo($params): string
-    {
-        if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')) {
-            $this->context->smarty->assign(array(
-                'installmentText' => $this->module->l('Calculate installment!'),
-                'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID')
-            ));
-
-            return $this->module->display(__FILE__, 'views/templates/hook/product_installment.tpl');
-        }
-
-        return '';
-    }
-
-    public function hookDisplayShoppingCart($params)
+    public function displayShoppingCart($params)
     {
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART')) {
             $this->context->smarty->assign(array(
@@ -50,13 +35,13 @@ class Installment extends AbstractHook
                 'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID')
             ));
 
-            return $this->module->display(__FILE__, 'views/templates/hook/cart_installment.tpl');
+            return $this->module->fetch('module:tpay/views/templates/hook/cart_installment.tpl');
         }
 
         return '';
     }
 
-    public function hookDisplayPaymentTop($params)
+    public function displayPaymentTop($params)
     {
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_CHECKOUT')) {
             $cart = $params['cart'];
@@ -68,7 +53,7 @@ class Installment extends AbstractHook
                 'amount' => $totalAmount
             ));
 
-            return $this->module->display(__FILE__, 'views/templates/hook/checkout_installments.tpl');
+            return $this->module->fetch('module:tpay/views/templates/hook/checkout_installments.tpl');
         }
 
         return '';

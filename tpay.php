@@ -18,7 +18,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-
 $autoloadPath = __DIR__ . '/vendor/autoload.php';
 if (file_exists($autoloadPath)) {
     include_once $autoloadPath;
@@ -33,6 +32,7 @@ use Tpay\Install\Uninstall;
 use Tpay\OpenApi\Utilities\Logger;
 use Tpay\States\FactoryState;
 use Tpay\Util\Container;
+use Tpay\Util\Helper;
 use Tpay\Util\PsrLogger;
 use tpaySDK\Api\TpayApi;
 
@@ -141,7 +141,7 @@ class Tpay extends PaymentModule
     {
         $this->name = 'tpay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.9.5';
+        $this->version = '1.9.1';
         $this->author = 'Krajowy Integrator Płatności S.A.';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
@@ -193,34 +193,6 @@ class Tpay extends PaymentModule
             $this->getPackageVersion(),
             phpversion()
         );
-    }
-
-    /**
-     * Module call API.
-     */
-    private function initAPI()
-    {
-        $clientId = Cfg::get('TPAY_CLIENT_ID');
-        $secretKey = Cfg::get('TPAY_SECRET_KEY');
-        $isProduction = (true !== (bool)Cfg::get('TPAY_SANDBOX'));
-
-        if ($clientId && $secretKey) {
-            try {
-                Logger::setLogger(new PsrLogger());
-                $this->api = new TpayApi($clientId, $secretKey, $isProduction, 'read', null, $this->buildInfo());
-                $token = \Tpay\Util\Cache::get($this->getAuthTokenCacheKey());
-
-                if ($token) {
-                    $this->api->setCustomToken(unserialize($token));
-                }
-
-                if (!$token) {
-                    \Tpay\Util\Cache::set($this->getAuthTokenCacheKey(), serialize($this->api->getToken()));
-                }
-            } catch (\Exception $exception) {
-                PrestaShopLogger::addLog($exception->getMessage(), 3);
-            }
-        }
     }
 
     /**
@@ -286,6 +258,9 @@ class Tpay extends PaymentModule
         $this->registerHook('displayPDFInvoice');
         $this->registerHook('displayAdminOrderMainBottom');
         $this->registerHook('displayOrderDetail');
+        $this->registerHook('displayProductAdditionalInfo');
+        $this->registerHook('displayShoppingCart');
+        $this->registerHook('displayPaymentTop');
 
         $this->registerHook(
             $this->getHookDispatcher()->getAvailableHooks()
@@ -319,7 +294,6 @@ class Tpay extends PaymentModule
         return true;
     }
 
-
     /**
      * Module hooks
      *
@@ -330,7 +304,6 @@ class Tpay extends PaymentModule
         return $this->hookDispatcher;
     }
 
-
     /**
      * Return current context
      *
@@ -340,7 +313,6 @@ class Tpay extends PaymentModule
     {
         return $this->context;
     }
-
 
     /**
      * Dispatch hooks
@@ -357,21 +329,6 @@ class Tpay extends PaymentModule
             !empty($arguments[0]) ? $arguments[0] : []
         );
     }
-
-    /**
-     * @throws Exception
-     */
-    private function addOrderStates(): bool
-    {
-        $createState = new FactoryState(
-            $this,
-            new OrderState()
-        );
-        $createState->execute();
-
-        return true;
-    }
-
 
     public function initLanguages(): void
     {
@@ -411,7 +368,6 @@ class Tpay extends PaymentModule
         $this->l('BLIK user or system timeout');
     }
 
-
     /**
      * Admin config settings check an render form.
      */
@@ -421,7 +377,6 @@ class Tpay extends PaymentModule
             $this->context->link->getAdminLink('TpayConfiguration')
         );
     }
-
 
     public function checkCurrency($cart): bool
     {
@@ -454,7 +409,64 @@ class Tpay extends PaymentModule
             }
         }
         $smarty->assign('tpay_is_old_presta', $isOldPresta);
+
         return parent::fetch($templatePath, $cache_id, $compile_id);
+    }
+
+    public function hookDisplayProductAdditionalInfo($params): string
+    {
+        if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')) {
+            $this->context->smarty->assign(array(
+                'installmentText' => $this->l('Calculate installment!'),
+                'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID')
+            ));
+
+            return $this->fetch('module:tpay/views/templates/hook/product_installment.tpl');
+        }
+
+        return '';
+    }
+
+    /**
+     * Module call API.
+     */
+    private function initAPI()
+    {
+        $clientId = Cfg::get('TPAY_CLIENT_ID');
+        $secretKey = Cfg::get('TPAY_SECRET_KEY');
+        $isProduction = (true !== (bool)Cfg::get('TPAY_SANDBOX'));
+
+        if ($clientId && $secretKey) {
+            try {
+                Logger::setLogger(new PsrLogger());
+                $this->api = new TpayApi($clientId, $secretKey, $isProduction, 'read', null, $this->buildInfo());
+                $token = \Tpay\Util\Cache::get($this->getAuthTokenCacheKey());
+
+                if ($token) {
+                    $this->api->setCustomToken(unserialize($token));
+                }
+
+                if (!$token) {
+                    \Tpay\Util\Cache::set($this->getAuthTokenCacheKey(), serialize($this->api->getToken()));
+                }
+            } catch (\Exception $exception) {
+                PrestaShopLogger::addLog($exception->getMessage(), 3);
+            }
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function addOrderStates(): bool
+    {
+        $createState = new FactoryState(
+            $this,
+            new OrderState()
+        );
+        $createState->execute();
+
+        return true;
     }
 
     private function getPrestaVersion(): string
