@@ -13,48 +13,45 @@
 *}
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        let tpaySurcharge = $('input[name=TPAY_SURCHARGE_ACTIVE]');
-        let tpayPeKaoSimulator = $('input[name=TPAY_PEKAO_INSTALLMENTS_ACTIVE]');
 	$(document).ready(function () {
 		let tpaySurcharge = $('input[name=TPAY_SURCHARGE_ACTIVE]');
+		let tpayPeKaoSimulator = $('input[name=TPAY_PEKAO_INSTALLMENTS_ACTIVE]');
 		let tpayTransfer = $('input[name=TPAY_REDIRECT_TO_CHANNEL]');
 		var selectElementOrder = $('#TPAY_CUSTOM_ORDER\\[\\]');
 		var selectElement = $('#TPAY_GENERIC_PAYMENTS\\[\\]');
 
-        function checkTpaySurcharge(state) {
-            const tpaySurchargeType = $('input[name=TPAY_SURCHARGE_TYPE]').parents('.form-group');
-            const tpaySurchargeValue = $('input[name=TPAY_SURCHARGE_VALUE]').parents('.form-group');
+		function checkTpaySurcharge(state) {
+			const tpaySurchargeType = $('input[name=TPAY_SURCHARGE_TYPE]').parents('.form-group');
+			const tpaySurchargeValue = $('input[name=TPAY_SURCHARGE_VALUE]').parents('.form-group');
 
-            if (state === '1') {
-                tpaySurchargeType.show();
-                tpaySurchargeValue.show();
-            } else {
-                tpaySurchargeType.hide();
-                tpaySurchargeValue.hide();
-            }
-        }
+			if (state === '1') {
+				tpaySurchargeType.show();
+				tpaySurchargeValue.show();
+			} else {
+				tpaySurchargeType.hide();
+				tpaySurchargeValue.hide();
+			}
+		}
 
-        function checkTpayPeKaoSimulator(state) {
-            const tpayMerchantId = $('input[name=TPAY_MERCHANT_ID]').parents('.form-group');
-            const tpayProductPageSimulator = $('input[name=TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE]').parents('.form-group');
-            const tpayCheckoutSimulator = $('input[name=TPAY_PEKAO_INSTALLMENTS_CHECKOUT]').parents('.form-group');
-            const tpayShoppingCartSimulator = $('input[name=TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART]').parents('.form-group');
+		function checkTpayPeKaoSimulator(state) {
+			const tpayMerchantId = $('input[name=TPAY_MERCHANT_ID]').parents('.form-group');
+			const tpayProductPageSimulator = $('input[name=TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE]').parents('.form-group');
+			const tpayCheckoutSimulator = $('input[name=TPAY_PEKAO_INSTALLMENTS_CHECKOUT]').parents('.form-group');
+			const tpayShoppingCartSimulator = $('input[name=TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART]').parents('.form-group');
 
-            if (state === '1') {
-                tpayMerchantId.show();
-                tpayProductPageSimulator.show();
-                tpayCheckoutSimulator.show();
-                tpayShoppingCartSimulator.show();
-            } else {
-                tpayMerchantId.hide();
-                tpayProductPageSimulator.hide();
-                tpayCheckoutSimulator.hide();
-                tpayShoppingCartSimulator.hide();
-            }
-        }
+			if (state === '1') {
+				tpayMerchantId.show();
+				tpayProductPageSimulator.show();
+				tpayCheckoutSimulator.show();
+				tpayShoppingCartSimulator.show();
+			} else {
+				tpayMerchantId.hide();
+				tpayProductPageSimulator.hide();
+				tpayCheckoutSimulator.hide();
+				tpayShoppingCartSimulator.hide();
+			}
+		}
 
-        checkTpaySurcharge($('input[name=TPAY_SURCHARGE_ACTIVE]:checked').val());
 		function initializeSortableOrder() {
 			selectElementOrder.find('option').prop('selected', true);
 			selectElementOrder.hide();
@@ -133,30 +130,25 @@
 		}
 
 		checkTpaySurcharge($('input[name=TPAY_SURCHARGE_ACTIVE]:checked').val());
+		checkTpayPeKaoSimulator($('input[name=TPAY_PEKAO_INSTALLMENTS_ACTIVE]:checked').val());
 		initializeSortableOrder();
 		checkTpayTransfer($('input[name=TPAY_REDIRECT_TO_CHANNEL]:checked').val());
 		initializeSortableGenericPayments();
 
-        tpaySurcharge.change(function () {
-            checkTpaySurcharge($(this).val());
-        })
 		tpaySurcharge.change(function () {
 			checkTpaySurcharge($(this).val());
 		});
 
-        tpayPeKaoSimulator.change(function () {
-            checkTpayPeKaoSimulator($(this).val());
-        });
-    });
+		tpayPeKaoSimulator.change(function () {
+			checkTpayPeKaoSimulator($(this).val());
+		});
+
 		tpayTransfer.change(function () {
 			checkTpayTransfer($(this).val());
 		});
 	});
 </script>
 <style>
-    #content > .bootstrap > .alert {
-        display: none
-    }
 	#content > .bootstrap > .alert {
 		display: none
 	}
