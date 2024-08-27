@@ -51,7 +51,6 @@ class PaymentOptionsService
     {
         try {
             $this->getPaymentGroups();
-            $this->getInstallmentChannels();
         } catch (\PrestaShopException $e) {
             \PrestaShopLogger::addLog('Error getGroup ' . $e->getMessage(), 4);
             throw new \PrestaShopException($e->getMessage());
@@ -75,28 +74,12 @@ class PaymentOptionsService
     }
 
     /**
-     * Create Apple Pay channel
-     * @return void
-     */
-    public function createApplePayPaymentChannel(): void
-    {
-        $payment = [
-            'img' => \Context::getContext()->shop->getBaseURL(true) . 'modules/tpay/views/img/tpay.svg',
-            'id' => Config::GATEWAY_APPLE_PAY,
-            'mainChannel' => Config::GATEWAY_APPLE_PAY,
-        ];
-        $this->createGateway($payment);
-    }
-
-    /**
      * @return array
      */
     public function getActivePayments(): array
     {
         // Adding transfer group
         $this->createTransferPaymentChannel();
-        // Adding Apple pay
-        $this->createApplePayPaymentChannel();
 
         $payments = array_filter(array_map(function (array $paymentData) {
             $optionClass = PaymentOptionsFactory::getOptionById((int)$paymentData['mainChannel']);
@@ -141,30 +124,7 @@ class PaymentOptionsService
     {
         $paymentsMethods = [
             Config::GATEWAY_BLIK => (bool)Helper::getMultistoreConfigurationValue('TPAY_BLIK_ACTIVE'),
-            Config::GATEWAY_GOOGLE_PAY => (bool)Helper::getMultistoreConfigurationValue('TPAY_GPAY_ACTIVE'),
-            Config::GATEWAY_APPLE_PAY => (bool)Helper::getMultistoreConfigurationValue('TPAY_APPLEPAY_ACTIVE'),
         ];
-
-        if (isset($channels[Config::GATEWAY_ALIOR_RATY])) {
-            $paymentsMethods[Config::GATEWAY_ALIOR_RATY] = (bool)Helper::getMultistoreConfigurationValue(
-                'TPAY_INSTALLMENTS_ACTIVE'
-            );
-        }
-
-        if (isset($channels[Config::GATEWAY_TWISTO])) {
-            $paymentsMethods[Config::GATEWAY_TWISTO] = (bool)Helper::getMultistoreConfigurationValue(
-                'TPAY_TWISTO_ACTIVE'
-            );
-        }
-
-        if (isset($channels[Config::GATEWAYS_PEKAO_RATY])) {
-            $paymentsMethods[Config::GATEWAYS_PEKAO_RATY] =
-            $paymentsMethods[Config::GATEWAYS_PEKAO_RATY_3x0] =
-            $paymentsMethods[Config::GATEWAYS_PEKAO_RATY_50] =
-            $paymentsMethods[Config::GATEWAYS_PEKAO_RATY_10x0] = (bool)Helper::getMultistoreConfigurationValue(
-                'TPAY_PEKAO_INSTALLMENTS_ACTIVE'
-            );
-        }
 
         if ($this->hasActiveCard()) {
             $paymentsMethods[Config::GATEWAY_CARD] = (bool)Helper::getMultistoreConfigurationValue(
@@ -226,11 +186,11 @@ class PaymentOptionsService
     private function buildChannelsData(array $channels): array
     {
         $bankChannels = [];
-
         foreach ($channels as $channel) {
             if (!empty($channel['constraints']) && !$this->constraintValidator->validate($channel['constraints'], $this->getBrowser())) {
                 continue;
             }
+
             $bankChannels[$channel['id']] = [
                 'id' => $channel['groups'][0]['id'],
                 'name' => $channel['fullName'],
@@ -243,17 +203,6 @@ class PaymentOptionsService
         return $bankChannels;
     }
 
-    private function getInstallmentChannels(): void
-    {
-        $installmentIds = [Config::GATEWAY_ALIOR_RATY, Config::GATEWAY_PAYPO, Config::GATEWAY_TWISTO, Config::GATEWAYS_PEKAO_RATY];
-
-        foreach ($this->bankChannels as $channel) {
-            if (in_array($channel['id'], $installmentIds)) {
-                $this->installmentChannels[$channel['id']] = $channel;
-            }
-        }
-    }
-
     /**
      * Grouping of payments delivered from api
      * @param array $channels
@@ -262,14 +211,8 @@ class PaymentOptionsService
      */
     private function groupChannel(array $channels, array $compareArray): array
     {
-        if (isset($this->bankChannels[Config::GATEWAYS_PEKAO_RATY])) {
-            $availableChannels = [(string)Config::GATEWAYS_PEKAO_RATY, (string)Config::GATEWAYS_PEKAO_RATY_3x0, (string)Config::GATEWAYS_PEKAO_RATY_10x0];
-            $channels[Config::GATEWAYS_PEKAO_RATY]['availablePaymentChannels'] = $availableChannels;
-            $channels[Config::GATEWAYS_PEKAO_RATY]['mainChannel'] = reset($availableChannels);
-        }
-
         return array_filter($channels, function ($val) use ($compareArray) {
-            return in_array($val['mainChannel'], $compareArray) && !in_array($val['mainChannel'], [(string)Config::GATEWAYS_PEKAO_RATY_3x0, (string)Config::GATEWAYS_PEKAO_RATY_10x0]);
+            return in_array($val['mainChannel'], $compareArray);
         });
     }
 
@@ -284,25 +227,6 @@ class PaymentOptionsService
      */
     private function groupTransfer(array $channels, array $compareArray): array
     {
-        if (Helper::getMultistoreConfigurationValue('TPAY_INSTALLMENTS_ACTIVE') || !isset($channels[Config::GATEWAY_ALIOR_RATY])) {
-            $compareArray[] = Config::GATEWAY_ALIOR_RATY;
-        }
-
-        if (Helper::getMultistoreConfigurationValue('TPAY_TWISTO_ACTIVE') || !isset($channels[Config::GATEWAY_TWISTO])) {
-            $compareArray[] = Config::GATEWAY_TWISTO;
-        }
-
-        if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') || !isset($channels[Config::GATEWAYS_PEKAO_RATY])) {
-            $compareArray[] = Config::TPAY_GATEWAY_PEKAO_RATY;
-            $compareArray[] = Config::GATEWAYS_PEKAO_RATY_3x0;
-            $compareArray[] = Config::GATEWAYS_PEKAO_RATY;
-            $compareArray[] = Config::GATEWAYS_PEKAO_RATY_10x0;
-            $compareArray[] = Config::GATEWAYS_PEKAO_RATY_50;
-        }
-
-        if (!isset($channels[Config::GATEWAY_PAYPO])) {
-            $compareArray[] = Config::GATEWAY_PAYPO;
-        }
         $generics = Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS') ? json_decode(Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS')) : [];
         $compareChannels = array_merge($compareArray, $generics);
 
@@ -337,7 +261,6 @@ class PaymentOptionsService
             if ($channel === null) {
                 return null;
             }
-
             if (!empty($channel['constraints']) && !$this->constraintValidator->validate($channel['constraints'], $this->getBrowser())) {
                 return null;
             }

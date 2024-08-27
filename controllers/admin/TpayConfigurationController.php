@@ -27,6 +27,7 @@ class TpayConfigurationController extends ModuleAdminController
     public const SEPARATE_PAYMENT_INFO = 'Show the method as a separate payment';
     public $errors = [];
     public $configuration = [];
+    public $channels = [];
 
     /** @var Tpay */
     public $module;
@@ -56,6 +57,10 @@ class TpayConfigurationController extends ModuleAdminController
 
             if ($field == 'TPAY_GENERIC_PAYMENTS[]') {
                 $value = json_decode(Cfg::get('TPAY_GENERIC_PAYMENTS'), true);
+            }
+
+            if ($field == 'TPAY_CUSTOM_ORDER[]') {
+                $value = json_decode(Cfg::get('TPAY_CUSTOM_ORDER'), true);
             }
 
             $fields[$field] = $value;
@@ -97,7 +102,6 @@ class TpayConfigurationController extends ModuleAdminController
         return OrderState::getOrderStates(Context::getContext()->language->id);
     }
 
-
     protected function getWarningMultishopHtml()
     {
         if (Shop::getContext() == Shop::CONTEXT_GROUP) {
@@ -127,12 +131,13 @@ class TpayConfigurationController extends ModuleAdminController
 
     public function createForm(): array
     {
+        $this->getChannels();
         $form[] = $this->formBasicOptions();
         $form[] = $this->formPeKaoInstallments();
         $form[] = $this->formPaymentOptions();
+        $form[] = $this->formGenericPaymentOptions();
         $form[] = $this->formCardOptions();
         $form[] = $this->formStatusesOptions();
-        $form[] = $this->formGenericPaymentOptions();
 
         return $form;
     }
@@ -563,86 +568,17 @@ class TpayConfigurationController extends ModuleAdminController
                 ],
 
                 [
-                    'type' => 'switch',
-                    'label' => $this->module->l('GooglePay'),
-                    'name' => 'TPAY_GPAY_ACTIVE',
-                    'desc' => $this->module->l('Show the method as a separate payment'),
-                    'is_bool' => true,
-                    'class' => 't',
-                    'values' => [
-                        [
-                            'id' => 'tpay_active_on',
-                            'value' => 1,
-                            'label' => $this->module->l('Yes'),
-                        ],
-                        [
-                            'id' => 'tpay_active_off',
-                            'value' => 0,
-                            'label' => $this->module->l('No'),
-                        ],
-                    ],
-                ],
-
-                [
-                    'type' => 'switch',
-                    'label' => $this->module->l('Alior Installment (from 300 PLN to 13 888,00 PLN)'),
-                    'name' => 'TPAY_INSTALLMENTS_ACTIVE',
-                    'desc' => $this->module->l('Show the method as a separate payment'),
-                    'is_bool' => true,
-                    'class' => 't',
-                    'values' => [
-                        [
-                            'id' => 'tpay_installments_on',
-                            'value' => 1,
-                            'label' => $this->module->l('Yes'),
-                        ],
-                        [
-                            'id' => 'tpay_installments_off',
-                            'value' => 0,
-                            'label' => $this->module->l('No'),
-                        ],
-                    ],
-                ],
-
-                [
-                    'type' => 'switch',
-                    'label' => $this->module->l('Pekao Installment (from 100 PLN to 20 000 PLN)'),
-                    'name' => 'TPAY_PEKAO_INSTALLMENTS_ACTIVE',
-                    'desc' => $this->module->l('Show the method as a separate payment'),
-                    'is_bool' => true,
-                    'class' => 't',
-                    'values' => [
-                        [
-                            'id' => 'tpay_pekao_installments_on',
-                            'value' => 1,
-                            'label' => $this->module->l('Yes'),
-                        ],
-                        [
-                            'id' => 'tpay_pekao_installments_off',
-                            'value' => 0,
-                            'label' => $this->module->l('No'),
-                        ],
-                    ],
-                ],
-
-                [
-                    'type' => 'switch',
-                    'label' => sprintf($this->module->l('Twisto - Buy now, pay later (from 1 PLN to 1 500 PLN)')),
-                    'name' => 'TPAY_TWISTO_ACTIVE',
-                    'desc' => $this->module->l('Show the method as a separate payment'),
-                    'is_bool' => true,
-                    'class' => 't',
-                    'values' => [
-                        [
-                            'id' => 'tpay_installments_on',
-                            'value' => 1,
-                            'label' => $this->module->l('Yes'),
-                        ],
-                        [
-                            'id' => 'tpay_installments_off',
-                            'value' => 0,
-                            'label' => $this->module->l('No'),
-                        ],
+                    'type' => 'select',
+                    'label' => $this->module->l('Custom order'),
+                    'name' => 'TPAY_CUSTOM_ORDER[]',
+                    'multiple' => true,
+                    'class' => 'child',
+                    'desc' => $this->module->l('Custom order of displayed banks. Drag to change order. The ability to change the order of payment methods is possible when the "Direct bank redirect" option is enabled.'),
+                    'size' => 20,
+                    'options' => [
+                        'query' => $this->sortPayment('TPAY_CUSTOM_ORDER'),
+                        'id' => 'id',
+                        'name' => 'fullName'
                     ],
                 ],
             ],
@@ -805,35 +741,65 @@ class TpayConfigurationController extends ModuleAdminController
 
     private function formGenericPaymentOptions(): array
     {
-        $result = [];
-
-        if ($this->module->api()) {
-            try {
-                $result = $this->module->api()->transactions()->getChannels();
-            } catch (Exception $exception) {
-                PrestaShopLogger::addLog($exception->getMessage(), 3);
-            }
-        }
+        $result = $this->sortPayment('TPAY_GENERIC_PAYMENTS');
 
         return [
             'form' => [
-                'legend' => ['title' => 'Generic payments', 'icon' => 'icon-cogs'],
+                'legend' => [
+                    'title' => $this->module->l('Generic payments'),
+                    'icon' => 'icon-cogs'
+                ],
                 'input' => [
                     [
                         'type' => 'select',
                         'label' => $this->module->l('Select payments to Easy on-site mechanism to'),
                         'name' => 'TPAY_GENERIC_PAYMENTS[]',
+                        'desc' => $this->module->l('Custom order of displayed payment methods. Drag to change order'),
                         'multiple' => true,
                         'size' => $result ? 20 : 1,
                         'options' => [
-                            'query' => $result['channels'] ?? [],
+                            'query' => $result,
                             'id' => 'id',
-                            'name' => 'name'
+                            'name' => 'fullName'
                         ],
                     ]
                 ],
                 'submit' => ['title' => $this->module->l('Save')],
             ]
         ];
+    }
+
+    private function getChannels()
+    {
+        if ($this->module->api()) {
+            try {
+                $this->channels = $this->module->api()->transactions()->getChannels()['channels'] ?? [];
+            } catch (Exception $exception) {
+                PrestaShopLogger::addLog($exception->getMessage(), 3);
+            }
+        }
+    }
+
+    private function sortPayment(string $field): array
+    {
+        $channels = $this->channels;
+        $chosenPayments = json_decode(Cfg::get($field), true) ?? [];
+
+        if (count($chosenPayments) > 0) {
+            $orderedList = [];
+
+            foreach ($chosenPayments as $chosenPayment) {
+                foreach ($channels as $key => $channel) {
+                    if ($channel['id'] == $chosenPayment) {
+                        $orderedList[$key] = $channel;
+                        unset($channels[$key]);
+                    }
+                }
+            }
+
+            return array_merge($orderedList, $channels);
+        }
+
+        return $channels;
     }
 }
