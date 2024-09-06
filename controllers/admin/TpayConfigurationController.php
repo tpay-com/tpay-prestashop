@@ -94,6 +94,12 @@ class TpayConfigurationController extends ModuleAdminController
         $this->context->smarty->assign(['content' => $content]);
         $this->module->clearCache();
 
+        if ($this->module->authorization()) {
+            $this->confirmations[] = $this->module->l('Credentials are correct.');
+        } else {
+            $this->warnings[] = $this->module->l('Credentials are incorrect!');
+        }
+
         return $content;
     }
 

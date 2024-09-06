@@ -184,6 +184,21 @@ class Tpay extends PaymentModule
         return $this->api;
     }
 
+    public function authorization(): bool
+    {
+        if (null === $this->api) {
+            return false;
+        }
+
+        try {
+            $this->api->authorization();
+
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
     public function buildInfo(): string
     {
         return sprintf(
