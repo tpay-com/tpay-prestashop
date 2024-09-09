@@ -25,7 +25,6 @@ use Tpay\Util\Helper;
 class TpayConfigurationController extends ModuleAdminController
 {
     public const SEPARATE_PAYMENT_INFO = 'Show the method as a separate payment';
-    public $errors = [];
     public $configuration = [];
     public $channels = [];
 
@@ -73,15 +72,7 @@ class TpayConfigurationController extends ModuleAdminController
     {
         $content = '';
         if ($this->postProcess()) {
-            $content .= $this->module->displayConfirmation(
-                $this->module->l('Settings saved'),
-                [],
-                'Admin.Notifications.Success'
-            );
-        } elseif ($this->errors && count($this->errors)) {
-            foreach ($this->errors as $err) {
-                $content .= $this->module->displayError($err);
-            }
+            $this->confirmations[] = $this->module->l('Settings saved');
         }
 
         if ($this->contextIsGroup()) {
@@ -94,7 +85,7 @@ class TpayConfigurationController extends ModuleAdminController
         $this->context->smarty->assign(['content' => $content]);
         $this->module->clearCache();
 
-        if ($this->module->authorization()) {
+        if ($this->module->authorization() && empty($this->errors)) {
             $this->confirmations[] = $this->module->l('Credentials are correct.');
         } else {
             $this->warnings[] = $this->module->l('Credentials are incorrect!');

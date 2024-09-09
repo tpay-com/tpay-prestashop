@@ -165,17 +165,9 @@
                 var value = this.value;
                 this.value = value.replace(/\D/g, '');
             });
-
-            if ($('.alert-warning ul li').length > 0) {
-                $('.alert-warning').css('display', 'block');
-            }
         });
     </script>
     <style>
-        #content > .bootstrap > .alert {
-            display: none
-        }
-
         .sortable-list {
             list-style-type: none;
             margin: 0;
