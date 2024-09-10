@@ -44,86 +44,55 @@ class Tpay extends PaymentModule
     // phpcs:ignore
     public $_errors;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $tab;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $version;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $author;
 
-    /**
-     * @var integer
-     */
+    /** @var integer */
     public $need_instance;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $ps_versions_compliancy;
 
-    /**
-     * @var boolean
-     */
+    /** @var boolean */
     public $bootstrap;
 
-    /**
-     * @var boolean
-     */
+    /** @var boolean */
     public $currencies;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $currencies_mode;
 
-    /**
-     * @var integer
-     */
+    /** @var integer */
     public $is_eu_compatible;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $module_key;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $displayName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $description;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $confirmUninstall;
 
     // phpcs:ignore
     public $_path;
 
-    /**
-     * @var HookDispatcher
-     */
+    /** @var HookDispatcher */
     private $hookDispatcher;
 
     private $api;
-
 
     public $tabs = [
         [
@@ -135,7 +104,6 @@ class Tpay extends PaymentModule
 
     /**
      * Basic module info.
-     *
      * @throws Exception
      */
     public function __construct()
@@ -163,9 +131,7 @@ class Tpay extends PaymentModule
         $this->hookDispatcher = new HookDispatcher($this);
     }
 
-    /*
-     * Boot API when it's needed
-     */
+    /** Boot API when it's needed */
     public function __get($name)
     {
         if ('api' === $name) {
@@ -228,7 +194,6 @@ class Tpay extends PaymentModule
 
     /**
      * Module installation.
-     *
      * @throws Exception
      * @throws BaseException
      */
@@ -274,16 +239,13 @@ class Tpay extends PaymentModule
         $this->registerHook('displayShoppingCart');
         $this->registerHook('displayPaymentTop');
 
-        $this->registerHook(
-            $this->getHookDispatcher()->getAvailableHooks()
-        );
+        $this->registerHook($this->getHookDispatcher()->getAvailableHooks());
 
         return true;
     }
 
     /**
      * Module uninstall.
-     *
      * @return boolean
      * @throws PrestaShopException
      * @throws BaseException
@@ -308,7 +270,6 @@ class Tpay extends PaymentModule
 
     /**
      * Module hooks
-     *
      * @return HookDispatcher
      */
     public function getHookDispatcher(): HookDispatcher
@@ -318,7 +279,6 @@ class Tpay extends PaymentModule
 
     /**
      * Return current context
-     *
      * @return Context
      */
     public function getContext(): Context
@@ -328,10 +288,8 @@ class Tpay extends PaymentModule
 
     /**
      * Dispatch hooks
-     *
      * @param string $methodName
      * @param array $arguments
-     *
      * @return mixed
      */
     public function __call(string $methodName, array $arguments = [])
@@ -380,14 +338,10 @@ class Tpay extends PaymentModule
         $this->l('BLIK user or system timeout');
     }
 
-    /**
-     * Admin config settings check an render form.
-     */
+    /** Admin config settings check an render form. */
     public function getContent(): void
     {
-        Tools::redirectAdmin(
-            $this->context->link->getAdminLink('TpayConfiguration')
-        );
+        Tools::redirectAdmin($this->context->link->getAdminLink('TpayConfiguration'));
     }
 
     public function checkCurrency($cart): bool
@@ -404,13 +358,16 @@ class Tpay extends PaymentModule
     {
         global $smarty;
         $isOldPresta = false;
+
         if (version_compare(_PS_VERSION_, '1.7.6.0', '<')) {
             $isOldPresta = true;
             if (false === ($smarty->registered_resources['module'] instanceof \Tpay\Util\LegacySmartyResourceModule)) {
                 $module_resources = array('theme' => _PS_THEME_DIR_ . 'modules/');
+
                 if (_PS_PARENT_THEME_DIR_) {
                     $module_resources['parent'] = _PS_PARENT_THEME_DIR_ . 'modules/';
                 }
+
                 $module_resources['modules'] = _PS_MODULE_DIR_;
                 $smarty->registerResource(
                     'module',
@@ -420,6 +377,7 @@ class Tpay extends PaymentModule
                     ));
             }
         }
+
         $smarty->assign('tpay_is_old_presta', $isOldPresta);
 
         return parent::fetch($templatePath, $cache_id, $compile_id);
@@ -441,9 +399,7 @@ class Tpay extends PaymentModule
         return '';
     }
 
-    /**
-     * Module call API.
-     */
+    /** Module call API. */
     private function initAPI()
     {
         $clientId = Cfg::get('TPAY_CLIENT_ID');
@@ -469,9 +425,7 @@ class Tpay extends PaymentModule
         }
     }
 
-    /**
-     * @throws Exception
-     */
+    /** @throws Exception */
     private function addOrderStates(): bool
     {
         $createState = new FactoryState(
