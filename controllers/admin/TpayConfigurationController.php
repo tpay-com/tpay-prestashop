@@ -85,12 +85,6 @@ class TpayConfigurationController extends ModuleAdminController
         $this->context->smarty->assign(['content' => $content]);
         $this->module->clearCache();
 
-        if ($this->module->authorization() && empty($this->errors)) {
-            $this->confirmations[] = $this->module->l('Credentials are correct.');
-        } else {
-            $this->warnings[] = $this->module->l('Credentials are incorrect!');
-        }
-
         return $content;
     }
 
@@ -111,7 +105,6 @@ class TpayConfigurationController extends ModuleAdminController
             return '';
         }
     }
-
 
     protected function contextIsGroup(): bool
     {
@@ -172,6 +165,13 @@ class TpayConfigurationController extends ModuleAdminController
             }
         }
 
+        if (Tools::getValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE')) {
+            if (empty(Tools::getValue('TPAY_MERCHANT_ID'))) {
+                $this->errors['merchant_id'] = $this->module->l('When the installment simulator is enabled, the merchant ID field must be filled in');
+                $res = false;
+            }
+        }
+
         return $res;
     }
 
@@ -187,6 +187,13 @@ class TpayConfigurationController extends ModuleAdminController
 
                 $settings = new ConfigurationSaveForm(new ConfigurationAdapter(0));
                 $settings->execute(true);
+                $authorization = $this->module->authorization();
+
+                if ($authorization && empty($this->errors)) {
+                    $this->confirmations[] = $this->module->l('Credentials are correct.');
+                } elseif (!$authorization) {
+                    $this->warnings[] = $this->module->l('Credentials are incorrect!');
+                }
 
                 Tools::clearSmartyCache();
 
@@ -264,6 +271,7 @@ class TpayConfigurationController extends ModuleAdminController
                     'type' => 'text',
                     'label' => $this->module->l('Merchant ID'),
                     'name' => 'TPAY_MERCHANT_ID',
+                    'required' => true,
                 ],
                 [
                     'type' => 'switch',

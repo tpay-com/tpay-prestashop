@@ -6,8 +6,10 @@
             valueText = valueText.replace(/[^0-9,\.]/g, '');
             valueText = valueText.replace(',', '.');
             let cartValue = parseFloat(valueText);
+            let minAmount = {$minAmount};
+            let maxAmount = {$maxAmount};
 
-            if (cartValue >= 100) {
+            if (cartValue >= minAmount && cartValue <= maxAmount) {
                 createInstallmentContainer(cartValue);
             }
         }

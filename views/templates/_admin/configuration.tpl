@@ -148,6 +148,7 @@
             removeSpaces($('input[name=TPAY_SECRET_KEY]'));
             removeSpaces($('input[name=TPAY_MERCHANT_SECRET]'));
             removeSpaces($('input[name=TPAY_CARD_RSA]'));
+            removeSpaces(tpayPeKaoMerchant);
 
             tpaySurcharge.change(function () {
                 checkTpaySurcharge($(this).val());

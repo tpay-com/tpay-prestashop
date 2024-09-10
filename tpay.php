@@ -24,6 +24,7 @@ if (file_exists($autoloadPath)) {
 }
 
 use Configuration as Cfg;
+use Tpay\Config\Config;
 use Tpay\Exception\BaseException;
 use Tpay\Handler\InstallQueryHandler;
 use Tpay\HookDispatcher;
@@ -186,12 +187,8 @@ class Tpay extends PaymentModule
 
     public function authorization(): bool
     {
-        if (null === $this->api) {
-            return false;
-        }
-
         try {
-            $this->api->authorization();
+            $this->api()->authorization();
 
             return true;
         } catch (Exception $e) {
@@ -433,7 +430,9 @@ class Tpay extends PaymentModule
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')) {
             $this->context->smarty->assign(array(
                 'installmentText' => $this->l('Calculate installment!'),
-                'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID')
+                'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
+                'minAmount' => Config::PEKAO_INSTALLMENT_MIN,
+                'maxAmount' => Config::PEKAO_INSTALLMENT_MAX,
             ));
 
             return $this->fetch('module:tpay/views/templates/hook/product_installment.tpl');

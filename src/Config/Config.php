@@ -36,4 +36,7 @@ class Config
     public const TPAY_SURCHARGE_AMOUNT = 0;
     public const TPAY_SURCHARGE_PERCENT = 1;
     public const TPAY_PATH = 'module:tpay/views/templates/front';
+
+    public const PEKAO_INSTALLMENT_MIN = 100;
+    public const PEKAO_INSTALLMENT_MAX = 20000;
 }

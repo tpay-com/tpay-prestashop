@@ -2,8 +2,10 @@
     document.addEventListener('DOMContentLoaded', function () {
         function createInstallmentsButton() {
             let amount = {$amount};
+            let minAmount = {$minAmount};
+            let maxAmount = {$maxAmount};
 
-            if (amount >= 100) {
+            if (amount >= minAmount && amount <= maxAmount) {
                 createInstallmentContainer(amount);
             }
         }

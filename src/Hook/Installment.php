@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Tpay\Hook;
 
 use Cart;
+use Tpay\Config\Config;
 use Tpay\Util\Helper;
 
 class Installment extends AbstractHook
@@ -32,7 +33,9 @@ class Installment extends AbstractHook
             $this->context->smarty->assign(array(
                 'installmentText' => $this->module->l('Calculate installment!'),
                 'checkout_url' => $this->context->link->getPageLink('order'),
-                'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID')
+                'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
+                'minAmount' => Config::PEKAO_INSTALLMENT_MIN,
+                'maxAmount' => Config::PEKAO_INSTALLMENT_MAX,
             ));
 
             return $this->module->fetch('module:tpay/views/templates/hook/cart_installment.tpl');
@@ -50,7 +53,9 @@ class Installment extends AbstractHook
             $this->context->smarty->assign(array(
                 'installmentText' => $this->module->l('Calculate installment!'),
                 'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
-                'amount' => $totalAmount
+                'amount' => $totalAmount,
+                'minAmount' => Config::PEKAO_INSTALLMENT_MIN,
+                'maxAmount' => Config::PEKAO_INSTALLMENT_MAX,
             ));
 
             return $this->module->fetch('module:tpay/views/templates/hook/checkout_installments.tpl');
