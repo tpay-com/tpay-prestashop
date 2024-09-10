@@ -582,6 +582,11 @@ class AdminFormBuilder
     private function sortPayment(string $field): array
     {
         $channels = $this->channels;
+
+        if (!Cfg::get($field)) {
+            return $channels;
+        }
+
         $chosenPayments = json_decode(Cfg::get($field), true) ?? [];
 
         if (count($chosenPayments) > 0) {
