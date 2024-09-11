@@ -24,10 +24,10 @@ class Installment extends AbstractHook
 {
     public const AVAILABLE_HOOKS = [
         'displayShoppingCart',
-        'displayPaymentTop',
+        'displayPaymentTop'
     ];
 
-    public function hookDisplayShoppingCart($params)
+    public function displayShoppingCart($params)
     {
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART')) {
             $this->context->smarty->assign(array(
@@ -44,7 +44,7 @@ class Installment extends AbstractHook
         return '';
     }
 
-    public function hookDisplayPaymentTop($params)
+    public function displayPaymentTop($params)
     {
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_CHECKOUT')) {
             $cart = $params['cart'];

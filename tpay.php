@@ -399,26 +399,6 @@ class Tpay extends PaymentModule
         return '';
     }
 
-    public function hookDisplayCheckoutSummaryTop($params)
-    {
-        if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_CHECKOUT')) {
-            $cart = $params['cart'];
-            $totalAmount = $cart->getOrderTotal(true, Cart::BOTH);
-
-            $this->context->smarty->assign(array(
-                'installmentText' => $this->l('Calculate installment!'),
-                'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
-                'amount' => $totalAmount,
-                'minAmount' => Config::PEKAO_INSTALLMENT_MIN,
-                'maxAmount' => Config::PEKAO_INSTALLMENT_MAX,
-            ));
-
-            return $this->fetch('module:tpay/views/templates/hook/checkout_installments.tpl');
-        }
-
-        return '';
-    }
-
     /** Module call API. */
     private function initAPI()
     {
