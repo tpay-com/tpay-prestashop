@@ -238,7 +238,6 @@ class Tpay extends PaymentModule
         $this->registerHook('displayProductAdditionalInfo');
         $this->registerHook('displayShoppingCart');
         $this->registerHook('displayPaymentTop');
-        $this->registerHook('displayProductPriceBlock');
 
         $this->registerHook($this->getHookDispatcher()->getAvailableHooks());
 
@@ -382,6 +381,22 @@ class Tpay extends PaymentModule
         $smarty->assign('tpay_is_old_presta', $isOldPresta);
 
         return parent::fetch($templatePath, $cache_id, $compile_id);
+    }
+
+    public function hookDisplayProductAdditionalInfo($params): string
+    {
+        if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')) {
+            $this->context->smarty->assign(array(
+                'installmentText' => $this->l('Calculate installment!'),
+                'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
+                'minAmount' => Config::PEKAO_INSTALLMENT_MIN,
+                'maxAmount' => Config::PEKAO_INSTALLMENT_MAX,
+            ));
+
+            return $this->fetch('module:tpay/views/templates/hook/product_installment.tpl');
+        }
+
+        return '';
     }
 
     public function hookDisplayCheckoutSummaryTop($params)
