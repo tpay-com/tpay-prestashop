@@ -24,7 +24,7 @@ class Installment extends AbstractHook
 {
     public const AVAILABLE_HOOKS = [
         'displayShoppingCart',
-        'displayCheckoutSummaryTop',
+        'displayPaymentTop',
         'displayProductPriceBlock'
     ];
 
