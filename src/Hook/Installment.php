@@ -24,7 +24,7 @@ class Installment extends AbstractHook
 {
     public const AVAILABLE_HOOKS = [
         'displayShoppingCart',
-        'displayPaymentTop'
+        'displayCheckoutSummaryTop'
     ];
 
     public function displayShoppingCart($params)
@@ -44,7 +44,7 @@ class Installment extends AbstractHook
         return '';
     }
 
-    public function displayPaymentTop($params)
+    public function displayCheckoutSummaryTop($params)
     {
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_CHECKOUT')) {
             $cart = $params['cart'];

@@ -7,6 +7,8 @@
 
             if (amount >= minAmount && amount <= maxAmount) {
                 createInstallmentContainer(amount);
+            } else if (document.querySelector('.installments-button')) {
+                document.querySelector('.installments-button').remove();
             }
         }
 
