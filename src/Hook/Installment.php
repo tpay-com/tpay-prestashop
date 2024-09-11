@@ -24,10 +24,27 @@ class Installment extends AbstractHook
 {
     public const AVAILABLE_HOOKS = [
         'displayShoppingCart',
-        'displayCheckoutSummaryTop'
+        'displayCheckoutSummaryTop',
+        'displayProductPriceBlock'
     ];
 
-    public function displayShoppingCart($params)
+    public function hookDisplayProductPriceBlock($params): string
+    {
+        if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')) {
+            $this->context->smarty->assign(array(
+                'installmentText' => $this->module->l('Calculate installment!'),
+                'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
+                'minAmount' => Config::PEKAO_INSTALLMENT_MIN,
+                'maxAmount' => Config::PEKAO_INSTALLMENT_MAX,
+            ));
+
+            return $this->module->fetch('module:tpay/views/templates/hook/product_installment.tpl');
+        }
+
+        return '';
+    }
+
+    public function hookDisplayShoppingCart($params)
     {
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART')) {
             $this->context->smarty->assign(array(
@@ -44,7 +61,7 @@ class Installment extends AbstractHook
         return '';
     }
 
-    public function displayCheckoutSummaryTop($params)
+    public function hookDisplayPaymentTop($params)
     {
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_CHECKOUT')) {
             $cart = $params['cart'];

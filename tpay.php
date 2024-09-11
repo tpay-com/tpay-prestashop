@@ -238,6 +238,7 @@ class Tpay extends PaymentModule
         $this->registerHook('displayProductAdditionalInfo');
         $this->registerHook('displayShoppingCart');
         $this->registerHook('displayCheckoutSummaryTop');
+        $this->registerHook('displayProductPriceBlock');
 
         $this->registerHook($this->getHookDispatcher()->getAvailableHooks());
 
