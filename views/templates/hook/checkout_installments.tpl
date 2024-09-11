@@ -5,7 +5,12 @@
             let minAmount = {$minAmount};
             let maxAmount = {$maxAmount};
 
+            console.log(minAmount)
+            console.log(amount)
+            console.log()
             if (amount >= minAmount && amount <= maxAmount) {
+                console.log('działa')
+
                 createInstallmentContainer(amount);
             }
         }
@@ -15,6 +20,7 @@
             url = url.replace('__merchantId__', {$merchantId}).replace('__amount__', amount);
 
             let summaryTotalElement = document.querySelector('.cart-summary-products');
+            console.log(summaryTotalElement)
 
             if (summaryTotalElement) {
                 let installmentsButton = document.createElement('button');
