@@ -1,6 +1,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        function createInstallmentContainer(amount) {
+        function createInstallmentContainer() {
             let url = 'https://secure.tpay.com/Installment/Pekao/page?merchantId=__merchantId__&amount=__amount__';
             url = url.replace('__merchantId__', {$merchantId}).replace('__amount__', {$amount});
 
