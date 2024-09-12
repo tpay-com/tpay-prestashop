@@ -32,7 +32,7 @@
                 installmentsButton.appendChild(text);
 
                 installmentsButton.addEventListener('click', function () {
-                    let currentAmount = $('#quantity_wanted').val() * $('.current-price-value').attr('content');
+                    let currentAmount = $('#quantity_wanted').val() * $('.current-price span').attr('content');
                     let url = 'https://secure.tpay.com/Installment/Pekao/page?merchantId=__merchantId__&amount=__amount__';
                     url = url.replace('__merchantId__', {$merchantId}).replace('__amount__', currentAmount);
 

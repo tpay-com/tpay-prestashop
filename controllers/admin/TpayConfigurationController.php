@@ -133,7 +133,7 @@ class TpayConfigurationController extends ModuleAdminController
     {
         $res = true;
 
-        if (Tools::getValue('TPAY_CARD_ACTIVE')) {
+        if (Tools::getValue('TPAY_CARD_ACTIVE') && Tools::getValue('TPAY_CARD_WIDGET')) {
             if (empty(Tools::getValue('TPAY_CARD_RSA'))) {
                 $this->errors['rsa'] = $this->module->l('Invalid RSA key');
                 $res = false;
