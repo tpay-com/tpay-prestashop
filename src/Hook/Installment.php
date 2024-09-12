@@ -67,15 +67,15 @@ class Installment extends AbstractHook
             $cart = $params['cart'];
             $totalAmount = $cart->getOrderTotal(true, Cart::BOTH);
 
-            $this->context->smarty->assign(array(
-                'installmentText' => $this->module->l('Calculate installment!'),
-                'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
-                'amount' => $totalAmount,
-                'minAmount' => Config::PEKAO_INSTALLMENT_MIN,
-                'maxAmount' => Config::PEKAO_INSTALLMENT_MAX,
-            ));
+            if ($totalAmount >= Config::PEKAO_INSTALLMENT_MIN && $totalAmount <= Config::PEKAO_INSTALLMENT_MAX) {
+                $this->context->smarty->assign(array(
+                    'installmentText' => $this->module->l('Calculate installment!'),
+                    'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
+                    'amount' => $totalAmount,
+                ));
 
-            return $this->module->fetch('module:tpay/views/templates/hook/checkout_installments.tpl');
+                return $this->module->fetch('module:tpay/views/templates/hook/checkout_installments.tpl');
+            }
         }
 
         return '';
