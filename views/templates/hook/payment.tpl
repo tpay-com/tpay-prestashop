@@ -50,7 +50,9 @@
 			{l s='Please choose payment gateway' mod='tpay'}
 		</span>
         </div>
-        {include file="module:tpay/views/templates/hook/regulations.tpl"}
+        {if $transfer_type === 'widget'}
+            {include file="module:tpay/views/templates/hook/regulations.tpl"}
+        {/if}
     {else}
         {l s='No active payment gateways' mod='tpay'}
     {/if}
