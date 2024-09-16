@@ -49,7 +49,7 @@ class Payment extends AbstractHook
             'clause_url' => 'https://tpay.com/user/assets/files_for_download/information-clause-payer.pdf'
         ];
 
-        if ($this->context->language->getIsoCode() == 'pl') {
+        if ($this->context->language->iso_code == 'pl') {
             $langData = [
                 'regulation_url' => 'https://secure.tpay.com/regulamin.pdf',
                 'clause_url' => 'https://tpay.com/user/assets/files_for_download/klauzula-informacyjna-platnik.pdf'

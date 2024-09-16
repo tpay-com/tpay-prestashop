@@ -36,7 +36,7 @@ class Transfer implements GatewayType
             'transfer_type' => Helper::getMultistoreConfigurationValue('TPAY_TRANSFER_WIDGET') ? 'widget' : 'redirect',
             'transfer_gateway' => $data['id'],
             'transfer_moduleLink' => $moduleLink,
-            'gateways' => $data['gateways'],
+            'gateways' => $this->sortGateways($data['gateways']),
             'isDirect' => (bool) Configuration::get('TPAY_REDIRECT_TO_CHANNEL'),
         ]);
 
@@ -59,5 +59,26 @@ class Transfer implements GatewayType
         ]);
 
         return Context::getContext()->smarty->fetch('module:tpay/views/templates/hook/payment.tpl');
+    }
+
+    private function sortGateways(array $gateways)
+    {
+        if ((bool)Configuration::get('TPAY_REDIRECT_TO_CHANNEL') && !empty(Configuration::get('TPAY_CUSTOM_ORDER'))) {
+            $orderedList = [];
+            $customOrder = json_decode(Configuration::get('TPAY_CUSTOM_ORDER'), true);
+
+            foreach ($customOrder as $orderNumber) {
+                foreach ($gateways as $gateway) {
+                    if ($gateway['mainChannel'] == $orderNumber) {
+                        $orderedList[$gateway['mainChannel']] = $gateway;
+                        unset($gateways[$gateway['mainChannel']]);
+                    }
+                }
+            }
+
+            return array_merge($orderedList, $gateways);
+        }
+
+        return $gateways;
     }
 }

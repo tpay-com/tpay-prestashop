@@ -26,6 +26,7 @@ class HookDispatcher
         Hook\Payment::class,
         Hook\EmailOrder::class,
         Hook\Order::class,
+        Hook\Installment::class,
     ];
 
     /**

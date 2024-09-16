@@ -37,7 +37,6 @@ class PaymentFactory
     {
         switch ($type) {
             case Config::TPAY_PAYMENT_BASIC:
-            case Config::TPAY_PAYMENT_INSTALLMENTS:
             case Config::TPAY_PAYMENT_GPAY:
             case Config::TPAY_PAYMENT_BLIK:
                 return new BasicPaymentHandler();
