@@ -271,7 +271,7 @@ class Tpay extends PaymentModule
 
     public function reset()
     {
-        if (false === (new Reset($this, new InstallQueryHandler()))->resetDb()) {
+        if (false === (new Reset())->resetDb()) {
             $this->_errors[] = $this->l('Reset module error');
 
             return false;
