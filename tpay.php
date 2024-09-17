@@ -271,8 +271,6 @@ class Tpay extends PaymentModule
 
     public function reset()
     {
-        \PrestaShopLogger::addLog('wszedł w reset', 3);
-
         if (false === (new Reset($this, new InstallQueryHandler()))->resetDb()) {
             $this->_errors[] = $this->l('Reset module error');
 

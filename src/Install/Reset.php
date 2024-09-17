@@ -49,7 +49,7 @@ class Reset
     public function resetDb(): bool
     {
         return $this->installQueryHandler->execute(
-            $this->module->getLocalPath() . 'src/Install/reset.sql'
+            $this->module->getLocalPath() . 'src/Install/reset.sql', false
         );
     }
 }

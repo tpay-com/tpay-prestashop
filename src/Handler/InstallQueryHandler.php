@@ -27,11 +27,15 @@ class InstallQueryHandler
      * @throws BaseException
      * @return bool
      */
-    public function execute(string $path): bool
+    public function execute(string $path, bool $prefixReplace = true): bool
     {
         $db = \Db::getInstance();
         $sql = \Tools::file_get_contents($path);
-        $sql = str_replace(['_DB_PREFIX_', '_MYSQL_ENGINE_'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sql);
+        \PrestaShopLogger::addLog('exec', 3);
+
+        if ($prefixReplace) {
+            $sql = str_replace(['_DB_PREFIX_', '_MYSQL_ENGINE_'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sql);
+        }
 
         try {
             $db->execute($sql);
