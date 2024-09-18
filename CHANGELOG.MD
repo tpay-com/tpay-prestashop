@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added custom order for banks and generic payments
-- Added installment simulator
 
 ### Fixed
 
