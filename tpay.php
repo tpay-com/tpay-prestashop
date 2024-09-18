@@ -282,8 +282,7 @@ class Tpay extends PaymentModule
 
     public function disable($force_all = false)
     {
-        if (isset($_SERVER['PATH_INFO']) && str_contains($_SERVER['PATH_INFO'], 'reset/tpay')) {
-
+        if (isset($_SERVER['PATH_INFO']) && false !== strpos($_SERVER['PATH_INFO'], 'reset/tpay')) {
             return $this->reset();
         }
 
