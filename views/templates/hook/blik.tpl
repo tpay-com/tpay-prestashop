@@ -14,7 +14,6 @@
 <div class="tpay-wrapper tpay-blik-wrapper" data-payment-type="blik">
     {if $blik_type === 'redirect'}
         {l s='You will be redirected to the payment gateway.' mod='tpay'}
-        {include file="module:tpay/views/templates/hook/regulations.tpl"}
     {else}
       <form action="{$blik_moduleLink}" method="POST" id="tpay-blik-form">
         <input type="hidden" name="cart_id" class="blikId" value="{$blik_order_id}"/>

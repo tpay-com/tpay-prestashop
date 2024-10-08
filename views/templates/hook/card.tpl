@@ -146,7 +146,9 @@
 			<input type="hidden" name="redirect_type" id="redirect_type" value="{$card_type}"/>
 		</div>
 
-		{include file="module:tpay/views/templates/hook/regulations.tpl"}
+		{if $card_type === 'widget'}
+			{include file="module:tpay/views/templates/hook/regulations.tpl"}
+		{/if}
 	</form>
 
 	<script type="text/javascript">
