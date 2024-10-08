@@ -95,4 +95,5 @@ npm run build # środowisko produkcyjne, minifikacja plików)
     npm run build
     ```
 
-## [Changelog](./CHANGELOG.md)
+## Lista zmian
+### [Changelog](CHANGELOG.MD)
