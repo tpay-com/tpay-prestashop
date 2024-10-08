@@ -29,6 +29,7 @@ use Tpay\Exception\BaseException;
 use Tpay\Handler\InstallQueryHandler;
 use Tpay\HookDispatcher;
 use Tpay\Install\Install;
+use Tpay\Install\Reset;
 use Tpay\Install\Uninstall;
 use Tpay\OpenApi\Utilities\Logger;
 use Tpay\States\FactoryState;
@@ -266,6 +267,26 @@ class Tpay extends PaymentModule
         }
 
         return true;
+    }
+
+    public function reset()
+    {
+        if (false === (new Reset())->resetDb()) {
+            $this->_errors[] = $this->l('Reset module error');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public function disable($force_all = false)
+    {
+        if (isset($_SERVER['PATH_INFO']) && false !== strpos($_SERVER['PATH_INFO'], 'reset/tpay')) {
+            return $this->reset();
+        }
+
+        return parent::disable($force_all);
     }
 
     /**

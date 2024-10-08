@@ -48,8 +48,6 @@ class Uninstall
      */
     public function uninstallDb(): bool
     {
-        return $this->installQueryHandler->execute(
-            $this->module->getLocalPath() . 'src/Install/uninstall.sql'
-        );
+        return $this->installQueryHandler->execute($this->module->getLocalPath() . 'src/Install/uninstall.sql') && (new Reset())->resetDb();
     }
 }
