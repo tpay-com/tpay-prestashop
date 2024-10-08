@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.9.6]
 
+### Added
+
+- Added installment simulator
+- Added reset function
+
 ### Fixed
 
 - Fixed payment terms info
