@@ -73,6 +73,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         $savedId = $data['savedId'] ?? null;
         $this->cardRepository = $module->getService('tpay.repository.credit_card');
         $this->cardService = $module->getService('tpay.service.card_service');
+        $this->updateLang($data);
 
         if ($savedId) {
             $this->processSavedCardPayment($savedId);
@@ -280,5 +281,10 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
             $request,
             $transaction['transactionId']
         );
+    }
+
+    protected function updateLang(array $data): void
+    {
+        $this->clientData['lang'] = in_array($data['isolang'], ['pl', 'en']) ? $data['isolang'] : 'en';
     }
 }

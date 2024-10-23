@@ -21,6 +21,7 @@ class InstantPaymentHandler extends BasicPaymentHandler
         $this->clientData = $clientData;
 
         $this->updatePayData($data);
+        $this->updateLang($data);
 
         $transaction = $this->createTransaction();
 
