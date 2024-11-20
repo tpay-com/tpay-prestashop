@@ -89,5 +89,7 @@ export function addTpaySupercheckoutValidator() {
     throw new Error("Wybierz metodę płatności");
   }
 
-  window.addSupercheckoutOrderValidator(validator);
+  if (typeof window.addSupercheckoutOrderValidator === "function") {
+    window.addSupercheckoutOrderValidator(validator);
+  }
 }

@@ -35,24 +35,25 @@ function radioPayments() {
 
     Array.from(AllPaymentOptions).forEach(function (payment) {
         payment.addEventListener('click', () => {
-            const parent = payment.closest('.payment-option');
-            const isRegulation = parent.querySelector<HTMLDivElement>('.tpay-regulations') ?? false;
-
-            resetValidationInfo();
-
-            const paymentId = getPaymentId(parent);
-
-
-                document.querySelector('body').classList.remove('tpay-hide-process-btn');
-                changingButtonBehavior(paymentId, 'show');
-
-
-            const fee = getPaymentForm(paymentId).querySelector('input[name=tpay]');
-            if(fee) {
-                checkSurcharge(true);
-            } else {
-                checkSurcharge(false);
-            }
+            // Commented out since only causing problems and not rly doing anything
+            // const parent = payment.closest('.payment-option');
+            // const isRegulation = parent.querySelector<HTMLDivElement>('.tpay-regulations') ?? false;
+            //
+            // resetValidationInfo();
+            //
+            // const paymentId = getPaymentId(parent);
+            //
+            //
+            //     document.querySelector('body').classList.remove('tpay-hide-process-btn');
+            //     changingButtonBehavior(paymentId, 'show');
+            //
+            //
+            // const fee = getPaymentForm(paymentId).querySelector('input[name=tpay]');
+            // if(fee) {
+            //     checkSurcharge(true);
+            // } else {
+            //     checkSurcharge(false);
+            // }
 
 
         })
