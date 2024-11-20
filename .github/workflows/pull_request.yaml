@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   pull_request:
@@ -12,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -35,13 +36,7 @@ jobs:
           name: 'tpay-prestashop'
           path: 'plugin/'
 
-      - uses: actions/github-script@v6
+      - uses: mshick/add-pr-comment@v2
         with:
-          github-token: ${{ secrets.TOKEN }}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Tpay Prestashop plugin - ${{ steps.plugin-upload.outputs.artifact-url }}'
-            })
+          message: |
+            Tpay Prestashop plugin - ${{ steps.plugin-upload.outputs.artifact-url }}

@@ -52,6 +52,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
         $this->clientData = $clientData;
 
         $this->updatePayData($data);
+        $this->updateLang($data);
 
         $transaction = $this->createTransaction();
 
@@ -122,5 +123,10 @@ class BasicPaymentHandler implements PaymentMethodHandler
         } else {
             unset($this->clientData['pay']);
         }
+    }
+
+    protected function updateLang(array $data): void
+    {
+        $this->clientData['lang'] = in_array($data['isolang'], ['pl', 'en']) ? $data['isolang'] : 'en';
     }
 }

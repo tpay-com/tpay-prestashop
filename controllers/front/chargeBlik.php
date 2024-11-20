@@ -115,6 +115,9 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $transactionParams = $this->getCustomerData($address, $customer, $context, $cart, $order);
         $transactionParams['pay'] = ['groupId' => Config::GATEWAY_BLIK_0,];
 
+        $isoCode = Language::getLanguage($cart->id_lang)['iso_code'];
+        $transactionParams['lang'] = in_array($isoCode, ['pl', 'en']) ? $isoCode : 'en';
+
         $transaction = $this->module->api->Transactions->createTransaction($transactionParams);
 
         $this->ajaxDie(
