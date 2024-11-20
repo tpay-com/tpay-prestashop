@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Commented out unnecessary JS that caused problems on various themes
+- Provide lang parameter to transaction
 
 ## [1.9.6]
 
