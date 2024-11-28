@@ -51,15 +51,20 @@ export function validateSelectedTransfer(gateways_wrapper: HTMLDivElement) {
 }
 
 function switchButton(checked: boolean, btn: HTMLButtonElement, req: HTMLInputElement, errorMsg) {
-  if (!checked || !req.checked) {
-    errorMsg.style.display = 'block'
-    btn.disabled = true
-    btn.classList.add('disabled')
-  } else {
-    errorMsg.style.display = 'none'
-    btn.disabled = false
-    btn.classList.remove('disabled')
-  }
+    if (!checked || !req.checked) {
+        if (!checked) {
+            errorMsg.style.display = 'block'
+        } else {
+            errorMsg.style.display = 'none'
+        }
+
+        btn.disabled = true
+        btn.classList.add('disabled')
+    } else {
+        errorMsg.style.display = 'none'
+        btn.disabled = false
+        btn.classList.remove('disabled')
+    }
 }
 
 export function addTpaySupercheckoutValidator() {
