@@ -47,7 +47,7 @@
         </form>
         <div class="transfer-error" style="display: none">
 		<span class="tpay-error">
-			{l s='Please choose payment gateway' mod='tpay'}
+			{l s='Please choose payment method' mod='tpay'}
 		</span>
         </div>
         {if $transfer_type === 'widget'}
