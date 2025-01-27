@@ -34,6 +34,7 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
 
         $cart = $this->module->getContext()->cart;
         $this->data = Tools::getAllValues();
+        $this->updateLang($cart);
 
         if (empty($cart->id)) {
             Tools::redirect('index.php?controller=order&step=1');
@@ -41,7 +42,7 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
 
         if (true === $cart->orderExists()) {
             exit(
-                $this->l('Cart cannot be loaded or an order has already been placed using this cart')
+            $this->l('Cart cannot be loaded or an order has already been placed using this cart')
             );
         }
 
@@ -114,6 +115,13 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
         $surcharge = new SurchargeService();
         $orderTotal = $cart->getOrderTotal();
         $surchargeTotal = $surcharge->getSurchargeValue($orderTotal);
-        return (float) $orderTotal + $surchargeTotal;
+        return (float)$orderTotal + $surchargeTotal;
+    }
+
+    private function updateLang(Cart $cart): void
+    {
+        if (!isset($this->data['isolang'])) {
+            $this->data['isolang'] = $cart->getAssociatedLanguage()->getIsoCode();
+        }
     }
 }

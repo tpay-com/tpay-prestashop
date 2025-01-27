@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed translations
 
+## [1.9.9]
+
+### Fixed
+
+- Fixed bank widget lang
+
 ## [1.9.8]
 
 ### Fixed
