@@ -199,7 +199,7 @@ function CardPayment(url, pubkey)
     {
         var cardContainer = $('#card_payment_form').parents('div').eq(1);
 
-        if (cardContainer.css('display') === 'none'){
+        if (!cardContainer.is(':visible')){
             return false;
         }
 
