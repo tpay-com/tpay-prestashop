@@ -103,6 +103,7 @@ class Design extends AbstractHook
             $this->context->controller->addJS($this->module->getPath() . 'views/js/string_routines.js');
             $this->context->controller->addJS($this->module->getPath() . 'views/js/jquery.payment.js');
             $this->context->controller->addJS($this->module->getPath() . 'views/js/cardPayment.js');
+            $this->context->controller->addJS($this->module->getPath() . 'views/js/blikPayment.js');
         }
     }
 
