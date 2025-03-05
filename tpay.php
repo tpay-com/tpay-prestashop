@@ -111,7 +111,7 @@ class Tpay extends PaymentModule
     {
         $this->name = 'tpay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.9.11';
+        $this->version = '1.9.10';
         $this->author = 'Krajowy Integrator Płatności S.A.';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
@@ -415,33 +415,6 @@ class Tpay extends PaymentModule
             ));
 
             return $this->fetch('module:tpay/views/templates/hook/product_installment.tpl');
-        }
-
-        return '';
-    }
-
-    public function hookDisplayOrderConfirmation($params): string
-    {
-        if (!$this->active) {
-            return '';
-        }
-
-        $transactionRepository = $this->getService('tpay.repository.transaction');
-        $transaction = $transactionRepository->getTransactionByOrderId($params['order']->id);
-
-        if ($transaction && $transaction['status'] == 'pending' && $transaction['payment_type'] === 'blik') {
-            $moduleLink = Context::getContext()->link->getModuleLink('tpay', 'blikPayment', [], true);
-            $blikData = [
-                'orderId' => $params['order']->id,
-                'cartId' => $params['order']->id_cart,
-                'blikUrl' => $moduleLink,
-                'transactionId' => $transaction['transaction_id'],
-                'tpayStatus' => $transaction['status'],
-                'assets_path' => $this->getPath(),
-            ];
-            $this->context->smarty->assign($blikData);
-
-            return $this->fetch('module:tpay/views/templates/hook/thank_you_page.tpl');
         }
 
         return '';

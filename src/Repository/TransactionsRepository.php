@@ -82,42 +82,6 @@ class TransactionsRepository
         return $this->repositoryQueryHandler->execute($qb, 'Error get transaction by order id', 'fetchColumn');
     }
 
-    /**
-     * @throws RepositoryException|BaseException
-     */
-    public function getTransactionByOrderId($orderId)
-    {
-        $qb = $this->connection->createQueryBuilder();
-        $qb
-            ->addSelect('*')
-            ->from($this->dbPrefix . self::TABLE, 't')
-            ->andWhere('t.order_id = :orderId')
-            ->setParameter('orderId', (int) $orderId);
-
-        return $this->repositoryQueryHandler->execute($qb, 'Error get transaction by transaction id', 'fetch');
-    }
-
-    /**
-     * @throws RepositoryException|BaseException
-     */
-    public function updateTransaction($orderId, $oldTransactionId, $crc, $transactionId, $paymentType)
-    {
-        $qb = $this->connection->createQueryBuilder();
-        $qb
-            ->update($this->dbPrefix . self::TABLE)
-            ->set('crc', ':crc')
-            ->set('transaction_id', ':transactionId')
-            ->set('payment_type', ':paymentType')
-            ->andWhere('order_id = :orderId')
-            ->andWhere('transaction_id = :oldTransactionId')
-            ->setParameter('crc', $crc)
-            ->setParameter('transactionId', $transactionId)
-            ->setParameter('paymentType', $paymentType)
-            ->setParameter('orderId', $orderId)
-            ->setParameter('oldTransactionId', $oldTransactionId);
-
-        $this->repositoryQueryHandler->execute($qb, 'Update transaction status error');
-    }
 
     /**
      * @throws RepositoryException|BaseException
