@@ -117,6 +117,9 @@
   <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function (event) {
       $(document).ready(function () {
+
+        new BlikPayment();
+
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
         })
