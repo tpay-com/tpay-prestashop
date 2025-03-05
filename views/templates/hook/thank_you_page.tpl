@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="{$assets_path|escape:'htmlall':'UTF-8'}views/css/payment.css">
     <div class="payment-section">
         <div class="title-wrapper">
-            <h3 class="page-title">Płatność z Tpay:</h3>
+            <h3 class="page-title">{l s='Payment with Tpay' mod='tpay'}:</h3>
             <div class="page-title-line"></div>
         </div>
         <div class="payments-container">
@@ -32,7 +32,7 @@
                         />
                     </label>
                     <div class="blik-code-section" style="display: none">
-                        <label for="blik-code" class="blik-code-label">Wpisz kod BLIK</label>
+                        <label for="blik-code" class="blik-code-label">{l s='Enter BLIK code' mod='tpay'}</label>
                         <input type="hidden" id="transaction_counter" value="1">
                         <input
                                 type="text"
@@ -43,19 +43,19 @@
                                 pattern="\d*"
                         />
                         <p class="error-message">
-                            Błąd płatności, spróbuj ponownie.
+                            {l s='Payment error, please try again.' mod='tpay'}
                         </p>
                     </div>
                     <div class="blik-waiting">
                         <img src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/device-mobile-check.svg"
                              alt="Ikona"/>
-                        Potwierdź płatność w aplikacji mobilnej swojego banku.
+                        {l s="Confirm the payment in your bank's mobile app." mod='tpay'}
                     </div>
                 </div>
             </div>
 
             <p class="blik-master-error">
-                Błąd płatności blik, spróbuj zapłacić online.
+                {l s='BLIK payment error, try paying online.' mod='tpay'}
             </p>
 
             {*            Bank transfer*}
@@ -87,7 +87,7 @@
         </div>
         <button class="btn blue pay-button" id="payment-button" disabled>
             <span class="spinner"></span>
-            <span class="label">Zapłać za zakupy z Tpay!</span>
+            <span class="label">{l s='Pay for your purchase with Tpay!' mod='tpay'}</span>
         </button>
         <div class="section-divider"></div>
     </div>
@@ -96,8 +96,8 @@
             <img src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/success.svg" alt="Icon"/>
         </div>
         <div class="message">
-            <p class="title">Płatność zakończona sukcesem!</p>
-            <p class="subtitle">Dziękujemy za skorzystanie z usługi Tpay.</p>
+            <p class="title">{l s='Payment completed successfully!' mod='tpay'}</p>
+            <p class="subtitle">{l s='Thank you for using Tpay.' mod='tpay'}</p>
         </div>
         <div class="underline"></div>
     </div>
