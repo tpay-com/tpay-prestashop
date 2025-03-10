@@ -24,6 +24,7 @@
                         <img
                                 src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg"
                                 alt="Logo Blik"
+                                style="width: 80px; height: auto;"
                         />
                         <img
                                 src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/check.svg"
@@ -71,10 +72,11 @@
                 <div class="payment-option">
                     <label class="payment-label" for="bank-transfer-radio">
                         <span class="radio-mark"></span>
-                        <span class="payment-title">Transfer</span>
+                        <span class="payment-title">{l s='Online payment' mod='tpay'}</span>
                         <img
                                 src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg"
                                 alt="Logo Tpay"
+                                style="width: 80px; height: auto;"
                         />
                         <img
                                 src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/check.svg"
@@ -299,7 +301,7 @@
                 })
                     .then(response => {
                         return response.json().then(data => {
-                            if (data.result === 'correct') {
+                            if (data.status === 'correct') {
                                 window.top.location.href = data.payment_url;
                             } else {
                                 setFormState(false, true);

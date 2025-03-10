@@ -14,7 +14,9 @@
 
 use Configuration as Cfg;
 use Tpay\CustomerData;
+use Tpay\Handler\BasicPaymentHandler;
 use Tpay\Service\SurchargeService;
+use Tpay\Service\TransactionService;
 use Tpay\Util\Helper;
 
 if (!defined('_PS_VERSION_')) {
@@ -163,7 +165,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
      */
     public function payBlikTransaction($transactionId)
     {
-        $blikCode =  $this->validateBlikCode(Tools::getValue('blikCode'));
+        $blikCode = $this->validateBlikCode(Tools::getValue('blikCode'));
         $transactionCounter = Tools::getValue('transactionCounter');
         $transaction = $this->blik($transactionId, $blikCode, null);
 
@@ -347,7 +349,19 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $isoCode = Language::getLanguage($cart->id_lang)['iso_code'];
         $transactionParams['lang'] = in_array($isoCode, ['pl', 'en']) ? $isoCode : 'en';
 
-        $transaction = $this->module->api->Transactions->createTransaction($transactionParams);
+        if (empty($transactionParams['payer']['name']) || $transactionParams['payer']['name'] == " ") {
+            $transactionParams['payer']['name'] = sprintf(
+                '%s %s',
+                $customer->firstname,
+                $customer->lastname
+            );
+        }
+
+        if (empty($transactionParams['payer']['email']) || !$transactionParams['payer']['email']) {
+            $transactionParams['payer']['email'] = $customer->email;
+        }
+
+        $transaction = $this->module->api->transactions()->createTransaction($transactionParams);
 
         if (!isset($transaction['transactionPaymentUrl'])) {
             $this->ajaxDie(

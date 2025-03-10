@@ -420,6 +420,33 @@ class Tpay extends PaymentModule
         return '';
     }
 
+    public function hookDisplayOrderConfirmation($params): string
+    {
+        if (!$this->active) {
+            return '';
+        }
+
+        $transactionRepository = $this->getService('tpay.repository.transaction');
+        $transaction = $transactionRepository->getTransactionByOrderId($params['order']->id);
+
+        if ($transaction && $transaction['status'] == 'pending' && $transaction['payment_type'] === 'blik') {
+            $moduleLink = Context::getContext()->link->getModuleLink('tpay', 'chargeBlik', [], true);
+            $blikData = [
+                'orderId' => $params['order']->id,
+                'cartId' => $params['order']->id_cart,
+                'blikUrl' => $moduleLink,
+                'transactionId' => $transaction['transaction_id'],
+                'tpayStatus' => $transaction['status'],
+                'assets_path' => $this->getPath(),
+            ];
+            $this->context->smarty->assign($blikData);
+
+            return $this->fetch('module:tpay/views/templates/hook/thank_you_page.tpl');
+        }
+
+        return '';
+    }
+
     /** Module call API. */
     private function initAPI()
     {

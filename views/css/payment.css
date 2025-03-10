@@ -2,6 +2,10 @@ body {
     overflow: auto;
 }
 
+.card-title + p {
+    display: none !important;
+}
+
 .title-wrapper {
     overflow: hidden;
     margin-bottom: 16px;
@@ -15,7 +19,7 @@ body {
 }
 
 .page-title {
-    font-size: 20px;
+    font-size: 18px;
     color: #333;
     margin: 0;
     padding-bottom: 12px;
@@ -108,7 +112,7 @@ input:checked + .payment-option .radio-mark:before {
     text-align: left;
     margin-bottom: 10px;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
     color: #072653;
     width: 100%;
@@ -196,7 +200,7 @@ input:checked + .payment-option-blik.loading .blik-code-section {
 
 .payment-option .payment-title {
     margin-right: 12px;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 18px;
 }
 
@@ -273,7 +277,7 @@ input:checked + .payment-option .check-ico {
 
 .message a,
 .message p {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 30px;
     margin: 0;
 }
@@ -283,7 +287,7 @@ input:checked + .payment-option .check-ico {
 }
 
 .message .title {
-    font-weight: 700;
+    font-weight: 500;
     margin-bottom: 4px;
 }
 
@@ -305,7 +309,7 @@ input:checked + .payment-option .check-ico {
 .btn {
     border: none;
     border-radius: 8px;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 16px;
     cursor: pointer;
 }

@@ -294,3 +294,4 @@ $_MODULE['<{tpay}prestashop>thank_you_page_dd1e100b2be58624a42e86c787b4bf68'] = 
 $_MODULE['<{tpay}prestashop>thank_you_page_357667ee8bb30c807abbe6ec58e2a696'] = 'Zapłać za zakupy z Tpay!';
 $_MODULE['<{tpay}prestashop>thank_you_page_6fa3e13c6f7496d4414295980ad11c07'] = 'Płatność zakończona sukcesem!';
 $_MODULE['<{tpay}prestashop>thank_you_page_0fa8ab9a88dcc8cb28fb5bdbfb6d2e38'] = 'Dziękujemy za skorzystanie z usługi Tpay.';
+$_MODULE['<{tpay}prestashop>thank_you_page_4ce87fa1c8a1fa1751f95186feb6e589'] = 'Płatność online';
