@@ -27,7 +27,6 @@ class HookDispatcher
         Hook\EmailOrder::class,
         Hook\Order::class,
         Hook\Installment::class,
-        Hook\BlikPayment::class,
     ];
 
     /**
