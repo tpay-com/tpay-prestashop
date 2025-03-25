@@ -24,7 +24,7 @@
                         <img
                                 src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg"
                                 alt="Logo Blik"
-                                style="width: 80px; height: auto;"
+                                style="width: 50px; height: auto;"
                         />
                         <img
                                 src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/check.svg"
@@ -76,7 +76,7 @@
                         <img
                                 src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg"
                                 alt="Logo Tpay"
-                                style="width: 80px; height: auto;"
+                                style="width: 50px; height: auto;"
                         />
                         <img
                                 src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/check.svg"

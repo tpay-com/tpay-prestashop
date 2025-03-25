@@ -48,8 +48,14 @@ function BlikPayment() {
 
         e.preventDefault();
         e.stopPropagation();
+        showLoading();
 
         return true;
+    }
+
+    function showLoading() {
+        const section = document.querySelector("#checkout-payment-step");
+        section.classList.add("loading");
     }
 
     document.addEventListener("DOMContentLoaded", function (e) {

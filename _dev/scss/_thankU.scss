@@ -71,6 +71,32 @@
 	flex-grow: 0;
 }
 
+#checkout-payment-step.loading {
+	position: relative;
+	opacity: 0.5;
+	pointer-events: none;
+	filter: blur(2px);
+}
+
+#checkout-payment-step.loading::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 100px;
+	height: 100px;
+	border: 8px solid rgba(0, 123, 255, 0.3);
+	border-top-color: #007bff;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+	0% { transform: translate(-50%, -50%) rotate(0deg); }
+	100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
 #tpay_error i {
 	color: #E74E29;
 	font-size: 20px;
