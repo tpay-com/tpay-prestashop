@@ -96,7 +96,7 @@
 								<img src="{$tpay_path|escape:'htmlall':'UTF-8'}/img/info.svg"
 									 alt="{l s='Preload' mod='tpay'}"
 									 data-toggle="tooltip" data-placement="bottom"
-									 title="{l s='For MasterCard, Visa or Discover, it\'s the last three digits in the signature area on the back of your card.' mod='tpay'}"/>
+									 title="{l s='The security number located on the back of the payment card.' mod='tpay'}"/>
 							</label>
 							<input id="cvc" maxlength="3" type="tel" autocomplete="off" autocompletetype="cc-cvc"
 								   placeholder="000" tabindex="3" value=""

@@ -88,13 +88,13 @@ class Design extends AbstractHook
         if (Cfg::get('TPAY_CARD_ACTIVE') && Cfg::get('TPAY_CARD_RSA')) {
             Media::addJsDef(
                 [
-                    'redirect_path'        => $this->context->link->getModuleLink(
+                    'redirect_path' => $this->context->link->getModuleLink(
                         'tpay',
                         'payment',
                         ['type' => Config::TPAY_PAYMENT_CARDS]
                     ),
                     'surcharge_controller' => $ajax,
-                    'rsa_key'              => Cfg::get('TPAY_CARD_RSA'),
+                    'rsa_key' => Cfg::get('TPAY_CARD_RSA'),
                 ]
             );
 
@@ -103,6 +103,10 @@ class Design extends AbstractHook
             $this->context->controller->addJS($this->module->getPath() . 'views/js/string_routines.js');
             $this->context->controller->addJS($this->module->getPath() . 'views/js/jquery.payment.js');
             $this->context->controller->addJS($this->module->getPath() . 'views/js/cardPayment.js');
+        }
+
+        if (Cfg::get('TPAY_BLIK_ACTIVE') && Cfg::get('TPAY_BLIK_WIDGET')) {
+            $this->context->controller->addJS($this->module->getPath() . 'views/js/blikPayment.js');
         }
     }
 

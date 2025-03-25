@@ -84,4 +84,16 @@ class TransactionService
             Tools::redirect($transaction['transactionPaymentUrl']);
         }
     }
+
+    /** @throws \Exception */
+    public function updateTransaction($transaction, $oldTransactionId, $type, $orderId): void
+    {
+        $this->repository->updateTransaction(
+            $orderId,
+            $oldTransactionId,
+            $transaction['hiddenDescription'],
+            $transaction['transactionId'],
+            $type
+        );
+    }
 }

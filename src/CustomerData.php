@@ -141,7 +141,6 @@ class CustomerData
         $this->customerDetails = $data;
     }
 
-
     public function createDescription($order = null)
     {
         $context = $this->context;
