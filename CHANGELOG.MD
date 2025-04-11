@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Change blik0 flow
 
-## [1.9.11]
+## [1.10.0]
 
 ### Added
 
