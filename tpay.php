@@ -465,9 +465,9 @@ class Tpay extends PaymentModule
 
             if (isset($result['status']) && in_array($result['status'], ['correct', 'success'])) {
                 return $this->fetch('module:tpay/views/templates/hook/thank_you_page_success.tpl');
-            } else {
-                return $this->fetch('module:tpay/views/templates/hook/thank_you_page_error.tpl');
             }
+
+            return $this->fetch('module:tpay/views/templates/hook/thank_you_page_error.tpl');
         }
 
         return '';
