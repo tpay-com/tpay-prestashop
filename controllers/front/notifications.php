@@ -14,7 +14,6 @@
 
 use Configuration as Cfg;
 use Tpay\Exception\NotificationHandlingException;
-use Tpay\Service\NotificationService;
 use tpaySDK\Utilities\TpayException;
 use tpaySDK\Webhook\JWSVerifiedPaymentNotification;
 
@@ -78,7 +77,11 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
             $crc = $transaction['crc'] ?? '';
 
             if ($crc !== $trCrc) {
-                throw new NotificationHandlingException('CRC mismatch expected from database: ' . $crc . '. given: ' . $trCrc);
+                if ($trStatus === 'TRUE' && in_array(\Configuration::get('TPAY_CRC_FORM'), ['order_id', 'order_id_and_rest'])) {
+                    $transaction = $this->forceSaveTransaction($transactionRepository, $notificationData);
+                } else {
+                    throw new NotificationHandlingException('CRC mismatch expected from database: ' . $crc . '. given: ' . $trCrc);
+                }
             }
 
             $this->transactionStatusUpdate(
@@ -158,5 +161,22 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
             new \Order($orderId),
             $transactionId
         );
+    }
+
+    private function forceSaveTransaction($transactionRepository, $notificationData): array
+    {
+        $orderId = \Configuration::get('TPAY_CRC_FORM') === 'order_id' ? $notificationData['tr_crc'] : strstr($notificationData['tr_crc'], '-', true);
+
+        $transactionRepository->processCreateTransaction(
+            (int)$orderId,
+            $notificationData['tr_crc'],
+            $notificationData['tr_id'],
+            'transfer',
+            0,
+            0,
+            'pending'
+        );
+
+        return $transactionRepository->getTransactionByCrc($notificationData['tr_crc']);
     }
 }
