@@ -431,6 +431,15 @@ class Tpay extends PaymentModule
 
         if ($transaction && $transaction['status'] == 'pending' && $transaction['payment_type'] === 'blik') {
             $moduleLink = Context::getContext()->link->getModuleLink('tpay', 'chargeBlik', [], true);
+
+            $regulationUrl = "https://tpay.com/user/assets/files_for_download/payment-terms-and-conditions.pdf";
+            $clauseUrl = "https://tpay.com/user/assets/files_for_download/information-clause-payer.pdf";
+
+            if ($this->context->language->iso_code == 'pl') {
+                $regulationUrl = "https://tpay.com/user/assets/files_for_download/regulamin.pdf";
+                $clauseUrl = "https://tpay.com/user/assets/files_for_download/klauzula-informacyjna-platnik.pdf";
+            }
+
             $blikData = [
                 'orderId' => $params['order']->id,
                 'cartId' => $params['order']->id_cart,
@@ -438,10 +447,27 @@ class Tpay extends PaymentModule
                 'transactionId' => $transaction['transaction_id'],
                 'tpayStatus' => $transaction['status'],
                 'assets_path' => $this->getPath(),
+                'regulationUrl' => $regulationUrl,
+                'clauseUrl' => $clauseUrl,
             ];
             $this->context->smarty->assign($blikData);
 
             return $this->fetch('module:tpay/views/templates/hook/thank_you_page.tpl');
+        } elseif ($transaction && $transaction['payment_type'] == 'transfer' && $transaction['transaction_id']) {
+            $this->initAPI();
+            $result = $this->api->Transactions->getTransactionById($transaction['transaction_id']);
+
+            $thankYouData = [
+                'assets_path' => $this->getPath(),
+            ];
+
+            $this->context->smarty->assign($thankYouData);
+
+            if (isset($result['status']) && in_array($result['status'], ['correct', 'success'])) {
+                return $this->fetch('module:tpay/views/templates/hook/thank_you_page_success.tpl');
+            } else {
+                return $this->fetch('module:tpay/views/templates/hook/thank_you_page_error.tpl');
+            }
         }
 
         return '';

@@ -295,3 +295,11 @@ $_MODULE['<{tpay}prestashop>thank_you_page_357667ee8bb30c807abbe6ec58e2a696'] = 
 $_MODULE['<{tpay}prestashop>thank_you_page_6fa3e13c6f7496d4414295980ad11c07'] = 'Płatność zakończona sukcesem!';
 $_MODULE['<{tpay}prestashop>thank_you_page_0fa8ab9a88dcc8cb28fb5bdbfb6d2e38'] = 'Dziękujemy za skorzystanie z usługi Tpay.';
 $_MODULE['<{tpay}prestashop>thank_you_page_4ce87fa1c8a1fa1751f95186feb6e589'] = 'Płatność online';
+$_MODULE['<{tpay}prestashop>thank_you_page_77a11c5427c7f55f898fbb263377f9fd'] = 'Płacąc, akceptujesz ';
+$_MODULE['<{tpay}prestashop>thank_you_page_3f6b73e1e263858f57738600f9bd6e7b'] = 'regulamin.';
+$_MODULE['<{tpay}prestashop>thank_you_page_bf5a8c00d8d29b20e0488933df997fff'] = 'Administratorem danych osobowych jest Krajowy Integrator Płatności spółka akcyjna z siedzibą w Poznaniu.';
+$_MODULE['<{tpay}prestashop>thank_you_page_fbd876361f4ffb764358fb520420e475'] = 'Czytaj więcej.';
+$_MODULE['<{tpay}prestashop>thank_you_page_success_6fa3e13c6f7496d4414295980ad11c07'] = 'Płatność zakończona sukcesem!';
+$_MODULE['<{tpay}prestashop>thank_you_page_success_0fa8ab9a88dcc8cb28fb5bdbfb6d2e38'] = 'Dziękujemy za skorzystanie z usługi Tpay.';
+$_MODULE['<{tpay}prestashop>thank_you_page_error_1e97d97a923eaddd810e056c828e99ea'] = 'Błąd płatności';
+

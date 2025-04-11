@@ -46,6 +46,14 @@
                         <p class="error-message">
                             {l s='Payment error, please try again.' mod='tpay'}
                         </p>
+                        <p class="info-text">
+                            {l s="Paying, you accept the" mod='tpay'} <a
+                                    href="{$regulationUrl}"
+                                    target="_blank">{l s="terms and conditions." mod='tpay'}</a>. {l s="The administrator of the personal data is Krajowy Integrator Płatności spółka akcyjna, based in Poznań." mod='tpay'}
+                            <a
+                                    href="{$clauseUrl}"
+                                    target="_blank">{l s="Read the full content." mod='tpay'}</a>
+                        </p>
                     </div>
                     <div class="blik-waiting">
                         <img src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/device-mobile-check.svg"

@@ -6,6 +6,10 @@ body {
     display: none !important;
 }
 
+.card-title {
+    display: none !important;
+}
+
 .title-wrapper {
     overflow: hidden;
     margin-bottom: 16px;

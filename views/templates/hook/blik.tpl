@@ -74,12 +74,12 @@
                         <input id="blik_code"
                                name="blik_code"
                                 {literal}
-                                  pattern="[0-9]{6}"
+                                  pattern="[0-9]{7}"
                                 {/literal}
                                type="text"
                                autocomplete="off"
-                               maxlength="6"
-                               minlength="6"
+                               maxlength="7"
+                               minlength="7"
                                placeholder="000000"
                                tabindex="1"
                                value=""
