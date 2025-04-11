@@ -55,6 +55,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                     echo 'TRUE';
                 } catch (\Exception $exception) {
                     \PrestaShopLogger::addLog($exception->getMessage(), 3);
+                    echo sprintf('%s - %s', 'FALSE', $exception->getMessage());
                 }
             }
         }

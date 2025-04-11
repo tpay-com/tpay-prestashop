@@ -15,7 +15,7 @@
     {if $blik_type === 'redirect'}
         {l s='You will be redirected to the payment gateway.' mod='tpay'}
     {else}
-      <form action="{$blik_moduleLink}" method="POST" id="tpay-blik-form">
+      <form action="{$blik_moduleLink}" method="POST" id="tpay-blik-form" name="tpay-blik-form">
         <input type="hidden" name="cart_id" class="blikId" value="{$blik_order_id}"/>
 
         <div class="tpay-radio-payments tpay-radio-payments--blik">
@@ -74,12 +74,12 @@
                         <input id="blik_code"
                                name="blik_code"
                                 {literal}
-                                  pattern="[0-9]{6}"
+                                  pattern="[0-9]{7}"
                                 {/literal}
                                type="text"
                                autocomplete="off"
-                               maxlength="6"
-                               minlength="6"
+                               maxlength="7"
+                               minlength="7"
                                placeholder="000000"
                                tabindex="1"
                                value=""
@@ -113,4 +113,18 @@
         </div>
       </form>
     {/if}
+
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+      $(document).ready(function () {
+
+        new BlikPayment();
+
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+      });
+    });
+  </script>
+
 </div>
