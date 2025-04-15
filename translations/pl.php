@@ -254,6 +254,7 @@ $_MODULE['<{tpay}prestashop>blik_4f34cbd7980e95195baada9bfe027370'] = 'Dlaczego 
 $_MODULE['<{tpay}prestashop>blik_75724c9b9c5eb907262fa3012729de5d'] = 'Zapłać z Tpay';
 $_MODULE['<{tpay}prestashop>blik_29d5f8337283bab380731dc35d562c28'] = 'Wpisz kod BLIK';
 $_MODULE['<{tpay}prestashop>blik_65d052f05f2992a05ac4eb65f2dbcb62'] = 'Podaj prawidłowy kod blik';
+$_MODULE['<{tpay}prestashop>blik_85ba3c31c68d02ccead3e04ba46f9c52'] = 'Niepoprawny kod BLIK';
 $_MODULE['<{tpay}prestashop>blik_a6ac98340af2b888792994823f5974fd'] = 'Proszę zaakceptować regulamin sklepu';
 $_MODULE['<{tpay}prestashop>installments_a926feddcf50ed630d48f609c2e25716'] = 'Zostaniesz przekierowany do bramki płatności.';
 $_MODULE['<{tpay}prestashop>gpay_a926feddcf50ed630d48f609c2e25716'] = 'Zostaniesz przekierowany do bramki płatności.';
