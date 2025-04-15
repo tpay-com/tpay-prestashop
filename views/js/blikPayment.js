@@ -23,10 +23,20 @@ function BlikPayment() {
 
     function SubmitPayment() {
         const cartId = document.querySelector('input[name=cart_id]');
-
         const blikCode = document.querySelector('#blik_code');
         const form = document.querySelector('#tpay-blik-form');
         const url = form.action;
+        let cleanCode = getCleanBlikCode(blikCode.value);
+
+        if (cleanCode.length !== 6 || !/^\d{6}$/.test(cleanCode)) {
+            const errorEl = document.getElementById('blik-error');
+            blikCode.classList.add('is-invalid');
+            blikCode.style.border = "1px solid red";
+            errorEl.style.display = 'block';
+            blikCode.focus();
+
+            return;
+        }
 
         let blikData = {
             blikOption: 'new',
@@ -48,6 +58,7 @@ function BlikPayment() {
         })
             .then(response => {
                 return response.json().then(data => {
+                    localStorage.setItem('tpay_transaction_counter', 1);
                     window.location.href = data.backUrl
                 });
             })

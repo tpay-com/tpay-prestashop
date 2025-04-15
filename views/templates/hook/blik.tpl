@@ -87,6 +87,7 @@
                                oninvalid="setCustomValidity('{l s='Enter a valid blik code' mod='tpay'}');"
                                onchange="setCustomValidity('')"
                         />
+                        <label id="blik-error" class="text-danger" style="display: none; font-size: 11px; text-align: center; width: 100%;">{l s='Incorrect BLIK code' mod='tpay'}</label>
                       </div>
                     </div>
                   </div>

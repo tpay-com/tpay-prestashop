@@ -108,6 +108,9 @@ input:checked + .payment-option .radio-mark:before {
     line-height: 14px;
     margin-bottom: 4px;
 }
+.blik-code-label {
+    float: left;
+}
 
 .blik-code-section .blik-input {
     padding: 12px 16px;
