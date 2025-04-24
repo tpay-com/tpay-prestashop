@@ -36,7 +36,7 @@
                         {l s='Use saved blik code' mod='tpay'}
                     </label>
                     <div class="tpay-radio-payments__description">
-                      <p>{l s='Why don\'t I have to enter the code?' mod='tpay'}</p>
+                      <a href="#" class="show-blik-info">{l s='Why don\'t I have to enter the code?' mod='tpay'}</a>
                       <div class="tpay-blik-response"></div>
                       <div class="tpay-buttons-holder">
                           {include file="module:tpay/views/templates/_partials/preloader.tpl"}
@@ -114,6 +114,13 @@
       </form>
     {/if}
 
+  <div class="modal-tpay-blik-container">
+    <div class="modal-tpay-blik">
+      <p>{l s='You do not need to enter the BLIK code, because you linked your account to this device during one of the previous payments. The payment still requires confirmation in the app.' mod='tpay'}</p>
+      <a class="close" href="#">{l s='I understand' mod='tpay'}</a>
+    </div>
+  </div>
+
   <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function (event) {
       $(document).ready(function () {
@@ -126,5 +133,4 @@
       });
     });
   </script>
-
 </div>

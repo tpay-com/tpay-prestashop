@@ -352,7 +352,6 @@ input:checked + .payment-option .check-ico {
     width: 20px;
     height: 20px;
     border-radius: 100%;
-    background-image: url("../img/spinner.svg");
     background-repeat: no-repeat;
     background-position: center;
     animation: spinner 0.75s linear infinite;

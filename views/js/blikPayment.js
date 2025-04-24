@@ -5,6 +5,16 @@ function BlikPayment() {
         }
     });
 
+    $('.show-blik-info').click(function (e) {
+        e.preventDefault();
+        $('.modal-tpay-blik-container').css('display', 'flex');
+    });
+
+    $('.modal-tpay-blik .close').click(function (e) {
+        e.preventDefault();
+        $('.modal-tpay-blik-container').hide();
+    });
+
     var blik0CodeInput = document.getElementById('blik_code');
     blik0CodeInput.addEventListener('keyup', onBlikCodeKeyUp);
     blik0CodeInput.addEventListener('change', onBlikCodeKeyUp);

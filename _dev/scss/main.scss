@@ -226,3 +226,50 @@ body.tpay-hide-process-btn #payment-confirmation {
 .installments-button img {
   max-width: 114px;
 }
+
+
+.modal-tpay-blik-container {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+  display: none;
+}
+
+.modal-tpay-blik-container .modal-tpay-blik {
+  width: 90%;
+  height: 90%;
+  padding: 20px;
+  background: #fff;
+  font-size: 16px;
+}
+
+@media (min-width: 768px) {
+  .modal-tpay-blik-container .modal-tpay-blik {
+    width: 500px;
+    height: auto;
+  }
+}
+
+.modal-tpay-blik-container .modal-tpay-blik .title {
+  font-size: 24px;
+}
+
+.modal-tpay-blik-container .modal-tpay-blik p {
+  margin-bottom: 15px;
+}
+
+.modal-tpay-blik-container .modal-tpay-blik a {
+  background: red;
+  font-size: 16px;
+  border-radius: 10px;
+  color: #fff !important;
+  text-decoration: none;
+  padding: 5px;
+  float: left;
+}
