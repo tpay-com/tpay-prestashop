@@ -6,4 +6,4 @@ if(clause) {
     });
 }
 
-export const validateClause = (elm:HTMLInputElement) => elm.checked;
+export const validateClause = (elm:HTMLInputElement) => null === elm || elm.checked;

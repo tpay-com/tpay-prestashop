@@ -153,7 +153,11 @@ function CardPayment(url, pubkey)
 		const notValidCause = $('#info_msg_cause');
 		const button = document.querySelector('#payment-confirmation button');
 
-		isValid = element.is(':checked');
+        if (null === element) {
+            isValid = true;
+        } else {
+            isValid = element.is(':checked');
+        }
 
 		if(!isValid) {
 			showElem(notValidCause);
@@ -227,10 +231,12 @@ function CardPayment(url, pubkey)
         validateCvc($(this));
     });
 
-	document.querySelector('input[name="conditions_to_approve[terms-and-conditions]"]')
-		.addEventListener('click', (e) => {
-			validateClause(termsOfServiceInput);
-		})
+    let input = document.querySelector('input[name="conditions_to_approve[terms-and-conditions]"]');
+    if (null !== input) {
+        input.addEventListener('click', (e) => {
+            validateClause(termsOfServiceInput);
+        })
+    }
 }
 
 //// Card init
