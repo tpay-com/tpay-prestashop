@@ -151,9 +151,8 @@ function CardPayment(url, pubkey)
 		let isValid;
 
 		const notValidCause = $('#info_msg_cause');
-		const button = document.querySelector('#payment-confirmation button');
 
-        if (null === element) {
+        if (0 === element.length) {
             isValid = true;
         } else {
             isValid = element.is(':checked');
