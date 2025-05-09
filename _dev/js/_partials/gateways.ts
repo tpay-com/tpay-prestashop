@@ -51,7 +51,7 @@ export function validateSelectedTransfer(gateways_wrapper: HTMLDivElement) {
 }
 
 function switchButton(checked: boolean, btn: HTMLButtonElement, req: HTMLInputElement, errorMsg) {
-    if (!checked || !req.checked) {
+    if (!checked || (null !== req && !req.checked)) {
         if (!checked) {
             errorMsg.style.display = 'block'
         } else {
