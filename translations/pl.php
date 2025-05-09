@@ -263,6 +263,8 @@ $_MODULE['<{tpay}prestashop>pekao_installments_82ae098c57a55f3ba05b42bb424475fe'
 $_MODULE['<{tpay}prestashop>payment_4861f8448070583a52a474c1b4e5962d'] = 'Proszę wybrać bramkę płatniczą';
 $_MODULE['<{tpay}prestashop>payment_5d174bcf51a1125e4daae98169c10560'] = 'Brak aktywnych płatności';
 $_MODULE['<{tpay}prestashop>payment_a926feddcf50ed630d48f609c2e25716'] = 'Zostaniesz przekierowany do bramki płatności.';
+$_MODULE['<{tpay}prestashop>blik_ac94115bf405ef70a9319b142fea5b14'] = 'Nie musisz wpisywać kodu BLIK, ponieważ powiązałeś swoje konto z tym urządzeniem podczas jednej z poprzednich płatności. Płatność nadal wymaga potwierdzenia w aplikacji.';
+$_MODULE['<{tpay}prestashop>blik_c3eb5c3b9018d75cb7032deb99fe43e9'] = 'Rozumiem.';
 $_MODULE['<{tpay}prestashop>refundslegacy_b4d9365fdbb507d023c4775afbb9373c'] = 'Zwroty Tpay';
 $_MODULE['<{tpay}prestashop>refundslegacy_9a49152f05f1c38bc892d4c3530c0d18'] = 'Data zwrotu';
 $_MODULE['<{tpay}prestashop>refundslegacy_7946392d6342cd056d3bec115298a4f3'] = 'Transakcja, której dotyczy zwrot';

@@ -226,3 +226,45 @@ body.tpay-hide-process-btn #payment-confirmation {
 .installments-button img {
   max-width: 114px;
 }
+
+.show-blik-info {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  width: 500px;
+  background-color: #203759;
+  color: #fff;
+  text-align: center;
+  padding: 12px 14px;
+  border-radius: 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 135%;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 0.3s;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: #203759 transparent transparent transparent;
+}
+
+.show-blik-info:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}

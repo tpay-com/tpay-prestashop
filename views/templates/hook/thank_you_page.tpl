@@ -96,7 +96,7 @@
             </div>
         </div>
         <button class="btn blue pay-button" id="payment-button" disabled>
-            <span class="spinner"></span>
+            <span class="spinner"><img src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/spinner.svg"/></span>
             <span class="label">{l s='Pay for your purchase with Tpay!' mod='tpay'}</span>
         </button>
         <div class="section-divider"></div>
