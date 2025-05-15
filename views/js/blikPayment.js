@@ -25,10 +25,12 @@ function BlikPayment() {
         const cartId = document.querySelector('input[name=cart_id]');
         const blikCode = document.querySelector('#blik_code');
         const form = document.querySelector('#tpay-blik-form');
+        const optionSelected = document.querySelector('input[name=blikOption]:checked');
+        let option = optionSelected ? optionSelected.value : 'new';
         const url = form.action;
         let cleanCode = getCleanBlikCode(blikCode.value);
 
-        if (cleanCode.length !== 6 || !/^\d{6}$/.test(cleanCode)) {
+        if ('new' === option && (cleanCode.length !== 6 || !/^\d{6}$/.test(cleanCode))) {
             const errorEl = document.getElementById('blik-error');
             blikCode.classList.add('is-invalid');
             blikCode.style.border = "1px solid red";
@@ -39,7 +41,7 @@ function BlikPayment() {
         }
 
         let blikData = {
-            blikOption: 'new',
+            blikOption: option,
             ajax: true,
             cartId: parseInt(cartId.value),
             blikCode: getCleanBlikCode(blikCode.value),
