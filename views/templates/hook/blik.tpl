@@ -29,10 +29,10 @@
                             </div>
 
                             <div class="tpay-radio-payments__content">
+                                <img width="40"
+                                     src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg" alt="TPAY">
                                 <label for="blikUse">
                                     {l s='Use saved blik code' mod='tpay'}
-                                    <img width="40"
-                                         src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg" alt="TPAY">
                                 </label>
                                 <p class="show-blik-info">
                                     {l s='Why don\'t I have to enter the code?' mod='tpay'}
@@ -48,23 +48,27 @@
                     </div>
                 {/if}
 
-                {if !empty($blik_saved_aliases)}
                 <div class="tpay-radio-payments__item tpay-blik--new">
                     <div class="tpay-radio-payments__radio
 					{if empty($blik_saved_aliases)} tpay-radio-payments__radio--active{/if}">
 
+                        {if isset($blik_saved_aliases) && !empty($blik_saved_aliases)}
                         <div class="custom-radio">
                             <input type="radio" name="blikOption" id="blikNew" value="new"
                                     {if empty($blik_saved_aliases)} checked="checked"{/if}/>
                             <span></span>
                         </div>
+                        {/if}
 
                         <div class="tpay-radio-payments__content">
+                            {if empty($blik_saved_aliases)}
+                                <img width="40"
+                                     src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg" alt="TPAY">
+                            {/if}
                             <label for="blikNew">
                                 {l s='Use BLIK code' mod='tpay'}
                             </label>
 
-                {/if}
 
                             <div class="tpay-radio-payments__description">
                                 <p>
@@ -102,14 +106,12 @@
                                 </div>
 
                             </div>
-                            {if !empty($blik_saved_aliases)}
                         </div>
 
                         <div id="responseMessages"></div>
 
                     </div>
                 </div>
-                {/if}
 
                 <div id="blik-rr" style="display: none">
 					<span class="tpay-error">
