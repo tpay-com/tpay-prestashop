@@ -83,8 +83,12 @@ body#checkout .additional-information {
 
 .tpay-radio-payments {
 
+  label {
+    color: #072653;
+  }
+
   &--blik {
-    max-width: 350px;
+    max-width: 500px;
   }
 
   &__radio {
@@ -92,9 +96,9 @@ body#checkout .additional-information {
     align-content: center;
     margin: 0;
     position: relative;
-    padding: 12px 15px;
+    padding: 15px 20px;
     height: 100%;
-    border: 1px solid #DDDDDD;
+    border: 1px solid #D8D8D8;
     border-radius: 6px;
     cursor: pointer;
     transition: all .3s cubic-bezier(0.335, 0.010, 0.030, 1.360);
@@ -104,7 +108,7 @@ body#checkout .additional-information {
     }
 
     &:hover {
-      border-color: #267DBE;
+      border-color: #2953C6;
       transition: all .3s cubic-bezier(0.335, 0.010, 0.030, 1.360);
     }
 
@@ -114,22 +118,24 @@ body#checkout .additional-information {
         display: block;
       }
 
-      .tpay-radio-payments__description {
-        display: block;
-        transition: all .4s cubic-bezier(0.335, 0.010, 0.030, 1.360);
-        height: auto;
-      }
-
-      border-color: #267DBE;
+      border-color: #2953C6;
     }
   }
 
   &__description {
     display: none;
-    height: 0;
     margin-top: 12px;
     transition: all .4s cubic-bezier(0.335, 0.010, 0.030, 1.360);
     margin-bottom: 20px;
+
+    p {
+      color: #072653;
+      font-size: 0.70rem;
+      padding: 0;
+      margin: 0;
+      line-height: 1;
+      font-weight: 400;
+    }
   }
 
   &__item {
@@ -139,7 +145,6 @@ body#checkout .additional-information {
       font-weight: 700;
       text-align: left;
       margin: 0;
-      width: 100%;
       display: flex;
       flex-direction: column;
       cursor: pointer;
@@ -152,6 +157,35 @@ body#checkout .additional-information {
       line-height: 1;
     }
 
+  }
+
+  &__content {
+    width: 100%;
+    label {
+      margin-bottom: 8px;
+    }
+    img {
+      float: right;
+    }
+  }
+}
+
+#tpay-blik-form .tpay-radio-payments__radio--active .tpay-radio-payments__description {
+  display: block;
+}
+
+#tpay-blik-form .tpay-radio-payments > .tpay-radio-payments__description {
+  display: block;
+}
+
+
+#tpay-blik-form {
+  .tpay-radio-payments__item.tpay-blik--use {
+    .tpay-radio-payments__content {
+      label {
+        display: block;
+      }
+    }
   }
 }
 
@@ -225,4 +259,49 @@ body.tpay-hide-process-btn #payment-confirmation {
 
 .installments-button img {
   max-width: 114px;
+}
+
+.show-blik-info {
+  position: relative;
+  cursor: default;
+  display: inline-block;
+  color: #072653;
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  width: 380px;
+  background-color: #203759;
+  color: #fff;
+  text-align: center;
+  padding: 12px 14px;
+  border-radius: 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 135%;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 0.3s;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: #203759 transparent transparent transparent;
+}
+
+.show-blik-info:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
 }

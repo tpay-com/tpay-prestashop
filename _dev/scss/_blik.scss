@@ -28,14 +28,18 @@
 	padding: 0 10px;
 	letter-spacing: 5px;
 	width: 100%;
-	color: #2c2c2c;
+	color: #072653;
 	text-align: center;
 	font-size: 17px;
-	font-weight: 500;
+	font-weight: 600;
 	box-sizing: border-box;
 	border-radius: 6px;
 	font-family: lato, 'helvetica-light', 'sans-serif';
 	border: 1px solid #e7e7e7;
+
+    &:focus {
+	  border-color: #2953C6;
+    }
 
 	&.success {
 	  border: 1px solid #00c062;

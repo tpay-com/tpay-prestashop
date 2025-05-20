@@ -34,7 +34,6 @@
                     </label>
                     <div class="blik-code-section" style="display: none">
                         <label for="blik-code" class="blik-code-label">{l s='Enter BLIK code' mod='tpay'}</label>
-                        <input type="hidden" id="transaction_counter" value="1">
                         <input
                                 type="text"
                                 id="blik-code"
@@ -49,7 +48,7 @@
                         <p class="info-text">
                             {l s="Paying, you accept the" mod='tpay'} <a
                                     href="{$regulationUrl}"
-                                    target="_blank">{l s="terms and conditions." mod='tpay'}</a>. {l s="The administrator of the personal data is Krajowy Integrator Płatności spółka akcyjna, based in Poznań." mod='tpay'}
+                                    target="_blank">{l s="terms and conditions." mod='tpay'}</a> {l s="The administrator of the personal data is Krajowy Integrator Płatności spółka akcyjna, based in Poznań." mod='tpay'}
                             <a
                                     href="{$clauseUrl}"
                                     target="_blank">{l s="Read the full content." mod='tpay'}</a>
@@ -96,7 +95,7 @@
             </div>
         </div>
         <button class="btn blue pay-button" id="payment-button" disabled>
-            <span class="spinner"></span>
+            <span class="spinner"><img src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/spinner.svg"/></span>
             <span class="label">{l s='Pay for your purchase with Tpay!' mod='tpay'}</span>
         </button>
         <div class="section-divider"></div>
@@ -119,11 +118,17 @@
             const paymentButton = document.getElementById('payment-button');
             const blikCodeInput = document.getElementById('blik-code');
             const paymentsInputs = document.getElementsByName('payment');
-            const transactionCounter = document.getElementById('transaction_counter');
 
-            setFormState(false);
-
-            checkOrder()
+            if (parseInt(parseInt(localStorage.getItem('tpay_transaction_counter'))) === 3) {
+                document.querySelector('.payment-section').style.display = 'block';
+                document.querySelector('.transfer_payment').style.display = 'block';
+                document.querySelector('.pay-button').style.display = 'block';
+                document.querySelector('.blik_payment').style.display = 'none';
+                setFormState(false, true);
+            } else {
+                checkOrder()
+                setFormState(false);
+            }
 
             function checkOrder() {
                 let paymentData = {
@@ -240,11 +245,11 @@
                 setFormState(true);
 
                 paymentData.blikCode = getCleanBlikCode();
-                paymentData.transactionCounter = parseInt(transactionCounter.value);
+                paymentData.transactionCounter = parseInt(localStorage.getItem('tpay_transaction_counter'));
                 paymentData.action = 'payBlikTransaction';
 
                 const data = (new URLSearchParams(paymentData)).toString();
-                transactionCounter.value = parseInt(transactionCounter.value) + 1;
+                localStorage.setItem('tpay_transaction_counter', parseInt(localStorage.getItem('tpay_transaction_counter')) + 1);
 
                 fetch("{$blikUrl}", {
                     method: 'POST',
@@ -262,7 +267,7 @@
                                 document.querySelector('.transfer_payment').style.display = 'block';
                                 document.querySelector('.pay-button').style.display = 'block';
 
-                                if (parseInt(transactionCounter.value) === 3) {
+                                if (parseInt(parseInt(localStorage.getItem('tpay_transaction_counter'))) === 3) {
                                     document.querySelector('.blik_payment').style.display = 'none';
                                     document.querySelector('.blik-master-error').style.display = 'block';
                                     setFormState(false, true);
@@ -280,7 +285,7 @@
                         document.querySelector('.transfer_payment').style.display = 'block';
                         document.querySelector('.pay-button').style.display = 'block';
 
-                        if (parseInt(transactionCounter.value) === 3) {
+                        if (parseInt(parseInt(localStorage.getItem('tpay_transaction_counter'))) === 3) {
                             document.querySelector('.blik_payment').style.display = 'none';
                             document.querySelector('.blik-master-error').style.display = 'block';
                         } else {
