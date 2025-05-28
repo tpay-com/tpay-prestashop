@@ -1,5 +1,5 @@
 <div class="tpay-wrapper" style="width: 100%;" data-payment-type="transfer">
-    <form action="{$action}" id="payment-form" class="transferForm">
+    <form action="{$action}" id="payment-form" class="transferForm" method="post">
         <input type="hidden" name="tpay" value="{$tpay}">
         <input type="hidden" name="type" value="{$type}">
         <input
