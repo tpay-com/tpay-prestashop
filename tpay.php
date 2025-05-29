@@ -429,7 +429,7 @@ class Tpay extends PaymentModule
         $transactionRepository = $this->getService('tpay.repository.transaction');
         $transaction = $transactionRepository->getTransactionByOrderId($params['order']->id);
 
-        if ($transaction && $transaction['status'] == 'pending' && $transaction['payment_type'] === 'blik') {
+        if ($transaction && $transaction['status'] == 'pending' && ($transaction['payment_type'] === 'blik' || Tools::getValue('action') == 'renew-payment')) {
             $moduleLink = Context::getContext()->link->getModuleLink('tpay', 'chargeBlik', [], true);
 
             $regulationUrl = "https://tpay.com/user/assets/files_for_download/payment-terms-and-conditions.pdf";
@@ -449,6 +449,7 @@ class Tpay extends PaymentModule
                 'assets_path' => $this->getPath(),
                 'regulationUrl' => $regulationUrl,
                 'clauseUrl' => $clauseUrl,
+                'action' => Tools::getValue('action','')
             ];
             $this->context->smarty->assign($blikData);
 

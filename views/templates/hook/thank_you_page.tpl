@@ -6,7 +6,9 @@
             <div class="page-title-line"></div>
         </div>
         <div class="payments-container">
-
+          <p class="error-message-global">
+            {l s='Payment error, please try again.' mod='tpay'}
+          </p>
             {*            BLIK*}
             <div class="blik_payment">
                 <input
@@ -118,6 +120,7 @@
             const paymentButton = document.getElementById('payment-button');
             const blikCodeInput = document.getElementById('blik-code');
             const paymentsInputs = document.getElementsByName('payment');
+            const action = '{$action}';
 
             if (parseInt(parseInt(localStorage.getItem('tpay_transaction_counter'))) === 3) {
                 document.querySelector('.payment-section').style.display = 'block';
@@ -126,8 +129,22 @@
                 document.querySelector('.blik_payment').style.display = 'none';
                 setFormState(false, true);
             } else {
-                checkOrder()
-                setFormState(false);
+                if(action == 'renew-payment'){
+                  document.querySelector('.blik-waiting').style.display = 'none';
+                  document.querySelector('.payment-section').style.display = 'block';
+                  document.querySelector('.transfer_payment').style.display = 'block';
+                  document.querySelector('.pay-button').style.display = 'block';
+                  document.querySelector('.blik-code-section').style.display = 'block';
+                  document.querySelector('.error-message-global').style.display = 'block';
+                  window.setTimeout(function(){
+                    document.querySelector('.error-message-global').style.display = 'none';
+                  }, 3000);
+                  blikSection.classList.remove('loading');
+                  setFormState(false, true);
+                }else {
+                  checkOrder();
+                  setFormState(false);
+                }
             }
 
             function checkOrder() {
