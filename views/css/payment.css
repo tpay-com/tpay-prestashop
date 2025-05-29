@@ -163,7 +163,7 @@ input:checked + .payment-option .radio-mark:before {
     opacity: 1;
 }
 
-.payment-option-blik.with-error .blik-code-section .error-message {
+.payment-option-blik.with-error .blik-code-section .error-message, .error-message-global {
     display: block;
 }
 
@@ -174,7 +174,7 @@ input:checked + .payment-option .radio-mark:before {
     margin: 0 24px 16px 24px;
 }
 
-.error-message, .blik-master-error {
+.error-message, .error-message-global, .blik-master-error {
     color: #E82B2B;
     font-weight: 600;
     font-size: 18px;

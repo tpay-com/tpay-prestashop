@@ -21,55 +21,14 @@ class TpayOrderErrorModuleFrontController extends ModuleFrontController
 {
     public function initContent()
     {
-        $this->removeProductInCart();
-        $this->context->cookie->__unset('last_order');
-        $this->context->cookie->last_order = false;
-        $this->cartId = 0;
-        $this->context->controller->addCss(_MODULE_DIR_ . 'tpay/views/css/style.css');
-        $this->display_column_left = false;
+        $orderId = (int)Tools::getValue('order_id');
+        $order = new Order($orderId);
+        $cart = new Cart($order->id_cart);
+        $customer = new Customer($order->id_customer);
 
-        parent::initContent();
-
-        $errorMsg = '';
-
-        $attempts = Tools::getValue('attempts');
-
-        if (!empty($attempts)) {
-            end($attempts);
-            $key = key($attempts);
-
-            if (isset($attempts[$key]['paymentErrorCode'])) {
-                $errorCode = $attempts[$key]['paymentErrorCode'];
-
-                if ($errorCode === '104') {
-                    $errorMsg = $this->module->l('Transaction was not accepted in the bank\'s application');
-                } elseif ($errorCode === '101') {
-                    $errorMsg = $this->module->l('Transaction rejected by payer');
-                }
-            }
-        }
-
-
-        $renewPaymentController = Tools::getValue('renewPaymentController');
-
-        $this->context->smarty->assign(
-            [
-                'error' => $errorMsg,
-                'renewPaymentController' => $renewPaymentController,
-            ]
+        Tools::redirect(
+            'index.php?controller=order-confirmation&action=renew-payment&id_cart=' . (int)$cart->id . '&id_module=' .
+            (int)$this->module->id . '&id_order=' . $order->id . '&key=' . $customer->secure_key
         );
-
-        $this->setTemplate(Config::TPAY_PATH . '/orderError.tpl');
-    }
-
-    /**
-     * Remove all products in cart
-     */
-    private function removeProductInCart(): void
-    {
-        $products = $this->context->cart->getProducts();
-        foreach ($products as $product) {
-            $this->context->cart->deleteProduct($product['id_product']);
-        }
     }
 }
