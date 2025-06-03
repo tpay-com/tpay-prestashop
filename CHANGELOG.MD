@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Presta version recognition
+- Payment error page fallback to recover payment
 
 ## [1.10.3]
 
