@@ -111,7 +111,7 @@ class Tpay extends PaymentModule
     {
         $this->name = 'tpay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.10.3';
+        $this->version = '1.10.4';
         $this->author = 'Krajowy Integrator Płatności S.A.';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
@@ -515,12 +515,12 @@ class Tpay extends PaymentModule
     private function getPrestaVersion(): string
     {
         $dir = realpath(__DIR__ . '/../../config/settings.inc.php');
-        if (file_exists($dir)) {
+        if ($dir && file_exists($dir)) {
             include($dir);
+        }
 
-            if (defined('_PS_VERSION_')) {
-                return _PS_VERSION_;
-            }
+        if (defined('_PS_VERSION_')) {
+            return _PS_VERSION_;
         }
 
         return 'n/a';
