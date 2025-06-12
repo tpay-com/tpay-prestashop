@@ -22,7 +22,7 @@ use Order as PrestaOrder;
 use Currency;
 use Exception;
 use PrestaShopException;
-use tpaySDK\Utilities\Util;
+use Tpay\OpenApi\Utilities\Util;
 
 class Order extends AbstractHook
 {

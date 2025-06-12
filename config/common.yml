@@ -58,6 +58,13 @@ services:
       - "@tpay.service.surcharge"
       - "@tpay.context"
 
+  tpay.services.auto_cancel:
+    class: Tpay\Service\AutoCancelService
+    arguments:
+      - "@tpay.repository.transaction"
+      - "@prestashop.core.command_bus"
+      - "@tpay"
+
   tpay.service.card_service:
     class: Tpay\Service\CardService
     public: true

@@ -35,8 +35,9 @@ use Tpay\OpenApi\Utilities\Logger;
 use Tpay\States\FactoryState;
 use Tpay\Util\Container;
 use Tpay\Util\Helper;
+use Tpay\Util\PsrCache;
 use Tpay\Util\PsrLogger;
-use tpaySDK\Api\TpayApi;
+use Tpay\OpenApi\Api\TpayApi;
 
 class Tpay extends PaymentModule
 {
@@ -139,6 +140,7 @@ class Tpay extends PaymentModule
             if (null === $this->api) {
                 $this->initAPI();
             }
+
             return $this->api;
         }
     }
@@ -336,8 +338,10 @@ class Tpay extends PaymentModule
         $this->l('Unable to process refund - amount is greater than allowed %s');
         $this->l('Unable to process refund - invalid amount');
         $this->l('Refund successful. Return option is being processed please wait');
-        $this->l('Refund error.
-                                    Check that the refund amount is correct and does not exceed the value of the order');
+        $this->l(
+            'Refund error.
+                                    Check that the refund amount is correct and does not exceed the value of the order'
+        );
         $this->l('Accept blik code on mobile app');
         $this->l('Transaction was not accepted in the bank\'s application');
         $this->l('Transaction rejected by payer');
@@ -395,7 +399,8 @@ class Tpay extends PaymentModule
                     new \Tpay\Util\LegacySmartyResourceModule(
                         $module_resources,
                         $smarty->registered_resources['module']->isAdmin
-                    ));
+                    )
+                );
             }
         }
 
@@ -406,7 +411,9 @@ class Tpay extends PaymentModule
 
     public function hookDisplayProductAdditionalInfo($params): string
     {
-        if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')) {
+        if (Helper::getMultistoreConfigurationValue(
+                'TPAY_PEKAO_INSTALLMENTS_ACTIVE'
+            ) && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')) {
             $this->context->smarty->assign(array(
                 'installmentText' => $this->l('Calculate installment!'),
                 'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
@@ -429,7 +436,9 @@ class Tpay extends PaymentModule
         $transactionRepository = $this->getService('tpay.repository.transaction');
         $transaction = $transactionRepository->getTransactionByOrderId($params['order']->id);
 
-        if ($transaction && $transaction['status'] == 'pending' && ($transaction['payment_type'] === 'blik' || Tools::getValue('action') == 'renew-payment')) {
+        if ($transaction && $transaction['status'] == 'pending' && ($transaction['payment_type'] === 'blik' || Tools::getValue(
+                    'action'
+                ) == 'renew-payment')) {
             $moduleLink = Context::getContext()->link->getModuleLink('tpay', 'chargeBlik', [], true);
 
             $regulationUrl = "https://tpay.com/user/assets/files_for_download/payment-terms-and-conditions.pdf";
@@ -449,14 +458,14 @@ class Tpay extends PaymentModule
                 'assets_path' => $this->getPath(),
                 'regulationUrl' => $regulationUrl,
                 'clauseUrl' => $clauseUrl,
-                'action' => Tools::getValue('action','')
+                'action' => Tools::getValue('action', '')
             ];
             $this->context->smarty->assign($blikData);
 
             return $this->fetch('module:tpay/views/templates/hook/thank_you_page.tpl');
         } elseif ($transaction && $transaction['payment_type'] == 'transfer' && $transaction['transaction_id']) {
             $this->initAPI();
-            $result = $this->api->Transactions->getTransactionById($transaction['transaction_id']);
+            $result = $this->api->transactions()->getTransactionById($transaction['transaction_id']);
 
             $thankYouData = [
                 'assets_path' => $this->getPath(),
@@ -484,16 +493,14 @@ class Tpay extends PaymentModule
         if ($clientId && $secretKey) {
             try {
                 Logger::setLogger(new PsrLogger());
-                $this->api = new TpayApi($clientId, $secretKey, $isProduction, 'read', null, $this->buildInfo());
-                $token = \Tpay\Util\Cache::get($this->getAuthTokenCacheKey());
-
-                if ($token) {
-                    $this->api->setCustomToken(unserialize($token));
-                }
-
-                if (!$token) {
-                    \Tpay\Util\Cache::set($this->getAuthTokenCacheKey(), serialize($this->api->getToken()));
-                }
+                $this->api = new TpayApi(
+                    new Tpay\OpenApi\Utilities\Cache(null, new PsrCache()),
+                    $clientId,
+                    $secretKey,
+                    $isProduction,
+                    null,
+                    $this->buildInfo()
+                );
             } catch (\Exception $exception) {
                 PrestaShopLogger::addLog($exception->getMessage(), 3);
             }
@@ -530,10 +537,12 @@ class Tpay extends PaymentModule
     {
         return sprintf(
             self::AUTH_TOKEN_CACHE_KEY,
-            md5(join(
-                '|',
-                [Cfg::get('TPAY_CLIENT_ID'), Cfg::get('TPAY_SECRET_KEY'), !Cfg::get('TPAY_SANDBOX')]
-            ))
+            md5(
+                join(
+                    '|',
+                    [Cfg::get('TPAY_CLIENT_ID'), Cfg::get('TPAY_SECRET_KEY'), !Cfg::get('TPAY_SANDBOX')]
+                )
+            )
         );
     }
 

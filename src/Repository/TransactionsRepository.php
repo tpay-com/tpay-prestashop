@@ -100,6 +100,22 @@ class TransactionsRepository
     /**
      * @throws RepositoryException|BaseException
      */
+    public function getTransactionsQualifiedToCancel($orderId)
+    {
+        $qb = $this->connection->createQueryBuilder();
+        $qb
+            ->addSelect('t.id, t.order_id, t.transaction_id')
+            ->from($this->dbPrefix . self::TABLE, 't')
+            ->join('t', 't_order', 't_order', 't.id = t.order_id')
+            ->andWhere('t.order_id = :orderId')
+            ->setParameter('orderId', (int) $orderId);
+
+        return $this->repositoryQueryHandler->execute($qb, 'Error get transaction by transaction id', 'fetch');
+    }
+
+    /**
+     * @throws RepositoryException|BaseException
+     */
     public function updateTransaction($orderId, $oldTransactionId, $crc, $transactionId, $paymentType)
     {
         $qb = $this->connection->createQueryBuilder();

@@ -180,7 +180,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
             'method' => 'sale',
         ];
 
-        $result = $this->module->api->Transactions->createPaymentByTransactionId(
+        $result = $this->module->api->transactions()->createPaymentByTransactionId(
             $request,
             $transaction['transactionId']
         );
@@ -219,7 +219,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         $this->clientData['pay']['groupId'] = Config::CARD_GROUP_ID;
         $this->clientData['pay']['method'] = 'sale';
 
-        $result = $this->module->api->Transactions->createTransaction(
+        $result = $this->module->api->transactions()->createTransaction(
             $this->clientData
         );
 
@@ -277,7 +277,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
             'method' => 'sale',
         ];
 
-        return $this->module->api->Transactions->createPaymentByTransactionId(
+        return $this->module->api->transactions()->createPaymentByTransactionId(
             $request,
             $transaction['transactionId']
         );
