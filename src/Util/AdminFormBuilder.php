@@ -301,6 +301,68 @@ class AdminFormBuilder
         return $form;
     }
 
+    public function formCancelOrder(): array
+    {
+        $form['form'] = [
+            'legend' => [
+                'title' => $this->module->l('Auto cancel order settings'),
+                'icon' => 'icon-cogs'
+            ],
+            'input' => [
+                [
+                    'type' => 'switch',
+                    'label' => $this->module->l('Auto cancel active'),
+                    'name' => 'TPAY_AUTO_CANCEL_ACTIVE',
+                    'is_bool' => true,
+                    'class' => 't',
+                    'values' => [
+                        [
+                            'id' => 'tpay_active_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Yes'),
+                        ],
+                        [
+                            'id' => 'tpay_active_off',
+                            'value' => 0,
+                            'label' => $this->module->l('No'),
+                        ],
+                    ],
+                ],
+                [
+                    'type' => 'switch',
+                    'label' => $this->module->l('Use frontend to run CRON jobs'),
+                    'name' => 'TPAY_AUTO_CANCEL_FRONTEND_RUN',
+                    'is_bool' => true,
+                    'class' => 't',
+                    'values' => [
+                        [
+                            'id' => 'tpay_active_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Yes'),
+                        ],
+                        [
+                            'id' => 'tpay_active_off',
+                            'value' => 0,
+                            'label' => $this->module->l('No'),
+                        ],
+                    ],
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->module->l('Cancel orders and transactions after days'),
+                    'name' => 'TPAY_AUTO_CANCEL_DAYS',
+                    'required' => true,
+                ],
+            ],
+            'submit' => [
+                'title' => $this->module->l('Save'),
+            ],
+        ];
+
+        return $form;
+    }
+
+
     public function formPaymentOptions(): array
     {
         $form['form'] = [

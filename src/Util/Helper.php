@@ -70,6 +70,9 @@ class Helper
             'TPAY_GENERIC_PAYMENTS',
             'TPAY_NOTIFICATION_ADDRESS',
             'TPAY_MERCHANT_ID',
+            'TPAY_AUTO_CANCEL_ACTIVE',
+            'TPAY_AUTO_CANCEL_DAYS',
+            'TPAY_AUTO_CANCEL_FRONTEND_RUN',
             'TPAY_PEKAO_INSTALLMENTS_ACTIVE',
             'TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE',
             'TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART',
@@ -93,6 +96,9 @@ class Helper
             'TPAY_SURCHARGE_VALUE' => '0',
             'TPAY_GLOBAL_SETTINGS' => '0',
             'TPAY_NOTIFICATION_ADDRESS' => '0',
+            'TPAY_AUTO_CANCEL_ACTIVE' => 0,
+            'TPAY_AUTO_CANCEL_FRONTEND_RUN' => 0,
+            'TPAY_AUTO_CANCEL_DAYS' => 7,
         ];
     }
 

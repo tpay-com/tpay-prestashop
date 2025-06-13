@@ -30,6 +30,14 @@ final class Cache
         return $default ?: null;
     }
 
+    public static function delete(string $key): void
+    {
+        $file = self::getCacheDir() . md5($key);
+        if (file_exists($file)) {
+            unlink($file);
+        }
+    }
+
     public static function erase()
     {
         foreach (glob(self::getCacheDir() . '*') as $file) {

@@ -121,6 +121,7 @@ class TpayConfigurationController extends ModuleAdminController
 
         $form[] = $formBuilder->formBasicOptions();
         $form[] = $formBuilder->formPeKaoInstallments();
+        $form[] = $formBuilder->formCancelOrder();
         $form[] = $formBuilder->formPaymentOptions();
         $form[] = $formBuilder->formGenericPaymentOptions();
         $form[] = $formBuilder->formCardOptions();
