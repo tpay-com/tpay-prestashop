@@ -15,7 +15,7 @@ class TpayCronModuleFrontController extends ModuleFrontController
     {
         if (!Cfg::get('TPAY_AUTO_CANCEL_ACTIVE') || (!Cfg::get('TPAY_AUTO_CANCEL_FRONTEND_RUN') && !Tools::isPHPCLI(
                 ))) {
-            $this->ajaxRender('Forbidden call.');
+            $this->ajaxRender(json_encode(['error' => 'Forbidden call.']));
             die;
         }
 
@@ -35,6 +35,6 @@ class TpayCronModuleFrontController extends ModuleFrontController
         $autoCancel->cancelTransactions();
 
 
-        $this->ajaxRender("\n");
+        $this->ajaxRender('[]');
     }
 }
