@@ -100,17 +100,23 @@ class TransactionsRepository
     /**
      * @throws RepositoryException|BaseException
      */
-    public function getTransactionsQualifiedToCancel($orderId)
+    public function getTransactionsQualifiedToCancel($timegapInDays)
     {
+        $date = new \DateTime('now -'.((int)$timegapInDays).' days');
+
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->addSelect('t.id, t.order_id, t.transaction_id')
+            ->addSelect('distinct o.id_order, o.valid, t.transaction_id')
             ->from($this->dbPrefix . self::TABLE, 't')
-            ->join('t', 't_order', 't_order', 't.id = t.order_id')
-            ->andWhere('t.order_id = :orderId')
-            ->setParameter('orderId', (int) $orderId);
+            ->join('t', $this->dbPrefix . 'orders', 'o', 't.order_id = o.id_order')
+            ->join('t', $this->dbPrefix . 'order_state', 'os', 't.order_id = o.id_order')
+            ->andWhere('o.date_add >= :dateMin')
+            ->andWhere('o.date_add <= :dateMax')
+            ->andWhere('t.status = "pending"')
+            ->setParameter('dateMin', $date->format('Y-m-d 00:00:00'))
+            ->setParameter('dateMax', $date->format('Y-m-d 23:59:59'));
 
-        return $this->repositoryQueryHandler->execute($qb, 'Error get transaction by transaction id', 'fetch');
+        return $this->repositoryQueryHandler->execute($qb, 'Error get transaction qualified to cancel', 'fetchAll');
     }
 
     /**
@@ -261,6 +267,28 @@ class TransactionsRepository
             ->andWhere('crc = :crc')
             ->setParameter('status', $status)
             ->setParameter('crc', $crc);
+        $this->repositoryQueryHandler->execute($qb, 'Update transaction status error');
+    }
+
+    /**
+     * Update transaction status
+     *
+     * @param string $transactionId
+     * @param string $status
+     *
+     * @throws RepositoryException
+     * @throws BaseException
+     * @return void
+     */
+    public function updateTransactionStatusByTransactionId(string $transactionId, string $status): void
+    {
+        $qb = $this->connection->createQueryBuilder();
+        $qb
+            ->update($this->dbPrefix . self::TABLE)
+            ->set('status', ':status')
+            ->andWhere('transaction_id = :transaction_id')
+            ->setParameter('status', $status)
+            ->setParameter('transaction_id', $transactionId);
         $this->repositoryQueryHandler->execute($qb, 'Update transaction status error');
     }
 

@@ -18,7 +18,6 @@ namespace Tpay\Service;
 
 use Configuration as Cfg;
 use PrestaShop\PrestaShop\Core\CommandBus\CommandBusInterface;
-use PrestaShop\PrestaShop\Core\Domain\Order\Command\BulkChangeOrderStatusCommand;
 use Tpay\Repository\TransactionsRepository;
 
 class AutoCancelService
@@ -30,14 +29,6 @@ class AutoCancelService
     private $repository;
 
     /**
-     * @var \OrderHistory
-     */
-    private $orderHistory;
-    /**
-     * @var CommandBusInterface
-     */
-    private $commandBus;
-    /**
      * @var \Tpay
      */
     private $tpay;
@@ -45,11 +36,9 @@ class AutoCancelService
 
     public function __construct(
         TransactionsRepository $repository,
-        CommandBusInterface $commandBus,
         \Tpay $tpay
     ) {
         $this->repository = $repository;
-        $this->commandBus = $commandBus;
         $this->tpay = $tpay;
     }
 
@@ -58,12 +47,46 @@ class AutoCancelService
         //canceled
 
         $orderIds = [];
+        $transactionIds = [];
 
+        $timespan = (int)Cfg::get('TPAY_AUTO_CANCEL_DAYS');
+        if($timespan <= 0){
+            $timespan = 7;
+        }
+        $transactions = $this->repository->getTransactionsQualifiedToCancel($timespan);
+
+        foreach($transactions as $transaction){
+            if(!$transaction['valid']){
+                $orderIds[] = $transaction['id_order'];
+            }
+            $transactionIds[] = $transaction['transaction_id'];
+        }
+
+        foreach($transactionIds as $transactionId){
+            $this->tpay->api()->transactions()->cancelTransaction($transactionId);
+            $this->repository->updateTransactionStatusByTransactionId($transactionId, 'canceled');
+        }
 
         if ($orderIds) {
-            $this->commandBus->handle(
-                new BulkChangeOrderStatusCommand($orderIds, (int)Cfg::get('PS_OS_CANCELED'))
-            );
+            $commandName = null;
+            $handler = null;
+            if (class_exists('PrestaShop\PrestaShop\Core\Domain\Order\Command\BulkChangeOrderStatusCommand')) {
+                $commandName = 'PrestaShop\PrestaShop\Core\Domain\Order\Command\BulkChangeOrderStatusCommand';
+                $handler = 'PrestaShop\PrestaShop\Adapter\Order\CommandHandler\BulkChangeOrderStatusHandler';
+            }
+            if (!$commandName && class_exists('PrestaShop\PrestaShop\Core\Domain\Order\Command\ChangeOrdersStatusCommand')) {
+                $commandName = 'PrestaShop\PrestaShop\Core\Domain\Order\Command\ChangeOrdersStatusCommand';
+                $handler = 'PrestaShop\PrestaShop\Adapter\Order\CommandHandler\ChangeOrdersStatusHandler';
+            }
+
+            if ($commandName) {
+                $handler = new $handler();
+                $handler->handle(
+                    new $commandName($orderIds, (int)Cfg::get('PS_OS_CANCELED'))
+                );
+            } else {
+                \PrestaShopLogger::addLog('Class for handling order cancellation not found', 3);
+            }
         }
     }
 

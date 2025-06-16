@@ -108,7 +108,7 @@ class AdminFormBuilder
                             'label' => $this->module->l('No'),
                         ],
                     ],
-                    'desc' => '<b>' . $this->module->l('WARNING') . '</b>'
+                    'desc' => '<b>' . $this->module->l('WARNING') . '</b> '
                         . $this->module->l(
                             ' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!'
                         ),
@@ -305,7 +305,7 @@ class AdminFormBuilder
     {
         $form['form'] = [
             'legend' => [
-                'title' => $this->module->l('Auto cancel order settings'),
+                'title' => $this->module->l('Auto cancel orders and transactions settings'),
                 'icon' => 'icon-cogs'
             ],
             'input' => [
@@ -331,6 +331,7 @@ class AdminFormBuilder
                 [
                     'type' => 'switch',
                     'label' => $this->module->l('Use frontend to run CRON jobs'),
+                    'desc' => '<b>' . $this->module->l('WARNING') . '</b> '.$this->module->l('May cause some performance issues. Use this method if you cannot set cronjob to run CLI task once a day: `php modules/tpay/cron.php`'),
                     'name' => 'TPAY_AUTO_CANCEL_FRONTEND_RUN',
                     'is_bool' => true,
                     'class' => 't',
