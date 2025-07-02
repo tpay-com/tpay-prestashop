@@ -132,6 +132,8 @@ $_MODULE['<{tpay}prestashop>tpayconfigurationcontroller_b1b2bdeab48fdfb1e53da7d7
 $_MODULE['<{tpay}prestashop>tpayconfigurationcontroller_267e2ea73e5af21b7f89d2643d58ce78'] = 'Status transakcji oczekującej na płatność';
 $_MODULE['<{tpay}prestashop>tpayconfigurationcontroller_0bca037451ac432ae9fae53a78387a6e'] = 'Status transakcji opłaconej';
 $_MODULE['<{tpay}prestashop>tpayconfigurationcontroller_0af709feff4fe0f53053a235f7678645'] = 'Status transakcji zakończonej błędem';
+$_MODULE['<{tpay}prestashop>tpayconfigurationcontroller_1940a18b62fec09c51c4330a4d46fc54'] = 'Zakres dni określających anulowanie transakcji powinien być w zakresie 1 - 30';
+$_MODULE['<{tpay}prestashop>tpay_1940a18b62fec09c51c4330a4d46fc54'] = 'Zakres dni określających anulowanie transakcji powinien być w zakresie 1 - 30';
 $_MODULE['<{tpay}prestashop>tpay_a41b276b797bf440f5417466020356cd'] = 'Adres do notyfikacji';
 $_MODULE['<{tpay}prestashop>tpay_96d4dadd096605d5813d2c6bdf82e82c'] = 'Ustawienia zapisane';
 $_MODULE['<{tpay}prestashop>tpay_603e78c0802f533e58f0a5f4b809e413'] = 'Niepoprawny klucz RSA';
