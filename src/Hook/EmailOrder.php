@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Tpay\Hook;
 
+use Context;
 use Exception;
 use PrestaShop\PrestaShop\Core\Localization\Exception\LocalizationException;
 use Tools;
@@ -59,7 +60,10 @@ class EmailOrder extends AbstractHook
         if ($emailHeader) {
             $total = $cart->getOrderTotal();
             $total += $this->getSurchargeCost();
-            $total = Tools::displayPrice($total, $this->context->currency);
+            $total = Context::getContext()->getCurrentLocale()->formatPrice(
+                $total,
+                $this->context->currency->iso_code
+            );
 
             $emailFooter = str_replace("{total_paid}", $total, (string)$emailFooter);
             $params['template_html'] = $emailHeader . $this->renderExtraChargeDataInMail(
@@ -77,7 +81,10 @@ class EmailOrder extends AbstractHook
         }
 
         $this->context->smarty->assign([
-            'surchargeCost' => Tools::displayPrice($surchargeCost, $this->context->currency)
+            'surchargeCost' => Context::getContext()->getCurrentLocale()->formatPrice(
+                $surchargeCost,
+                $this->context->currency->iso_code
+            )
         ]);
 
         return $this->module->fetch('module:tpay/views/templates/hook/emailSurcharge.tpl');
@@ -119,9 +126,9 @@ class EmailOrder extends AbstractHook
 
         if ($surchargeValue > 0.00) {
             $this->context->smarty->assign([
-                'surchargeCost' => Tools::displayPrice(
+                'surchargeCost' => Context::getContext()->getCurrentLocale()->formatPrice(
                     $surchargeValue,
-                    $this->context->currency
+                    $this->context->currency->iso_code
                 )
             ]);
 

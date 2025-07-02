@@ -237,7 +237,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     {
         $cardDataInput = filter_input(INPUT_POST, 'carddata', FILTER_SANITIZE_STRING);
         $cardHashInput = filter_input(INPUT_POST, 'card_hash', FILTER_SANITIZE_STRING);
-        $cartHash = $this->module->getService('tpay.util.secret_hash');
+        $cartHash = $this->module->getService('tpay.util.secret_hash')->getValue();
 
         $cardHash = SHA1($cardHashInput . $cartHash);
         $saveCard = false;

@@ -12,12 +12,14 @@ if (!class_exists('\AppKernel')) {
 
 class LegacyAppKernel extends \AppKernel
 {
+    protected $name = 'tpay';
+
     public function getRootDir()
     {
         return _PS_ROOT_DIR_ . '/app';
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         if (_PS_CACHE_DIR_) {
             return _PS_CACHE_DIR_;
@@ -26,7 +28,7 @@ class LegacyAppKernel extends \AppKernel
         return _PS_ROOT_DIR_ . '/app/cache/' . $this->getEnvironment();
     }
 
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return _PS_ROOT_DIR_ . '/app/logs';
     }
@@ -38,9 +40,13 @@ class LegacyAppKernel extends \AppKernel
         $loader->load(__DIR__ . '/../../config/config.yml');
     }
 
-    protected function getContainerClass()
+    protected function getContainerClass(): string
     {
         return 'legacy' . ucfirst($this->name) . ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
     }
 
+    public function getAppId(): string
+    {
+        return 'front';
+    }
 }
