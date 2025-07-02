@@ -103,7 +103,8 @@ class TransactionsRepository
     public function getTransactionsQualifiedToCancel($timegapInDays)
     {
         $date = new \DateTime('now -'.((int)$timegapInDays).' days');
-
+        $dateMin = clone $date;
+        $dateMin->modify('-1 day');
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('distinct o.id_order, o.valid, t.transaction_id')
@@ -113,8 +114,8 @@ class TransactionsRepository
             ->andWhere('o.date_add >= :dateMin')
             ->andWhere('o.date_add <= :dateMax')
             ->andWhere('t.status = "pending"')
-            ->setParameter('dateMin', $date->format('Y-m-d 00:00:00'))
-            ->setParameter('dateMax', $date->format('Y-m-d 23:59:59'));
+            ->setParameter('dateMin', $dateMin->format('Y-m-d 00:00:00'))
+            ->setParameter('dateMax', $date->format('Y-m-d H:i:s'));
 
         return $this->repositoryQueryHandler->execute($qb, 'Error get transaction qualified to cancel', 'fetchAll');
     }

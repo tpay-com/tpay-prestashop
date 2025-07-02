@@ -20,12 +20,12 @@ class TpayCronModuleFrontController extends ModuleFrontController
         }
 
         if (!Tools::isPHPCLI()) {
-            $tokenPart = (new \DateTime())->format('Y-m-d');
+            $tokenPart = (new \DateTime())->format('Y-m-d-H');
             //set some protection to run it only once a day
             if (\Tpay\Util\Cache::get('auto-cancel-' . $tokenPart)) {
                 return;
             }
-            \Tpay\Util\Cache::set('auto-cancel-' . $tokenPart, 1, 3600 * 24);
+            \Tpay\Util\Cache::set('auto-cancel-' . $tokenPart, 1, 1800);
         }
 
         /**
