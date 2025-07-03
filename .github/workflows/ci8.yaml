@@ -10,10 +10,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - php-version: '7.1'
-          - php-version: '7.2'
-          - php-version: '7.3'
-          - php-version: '7.4'
+          - php-version: '8.0'
+          - php-version: '8.1'
+          - php-version: '8.2'
+          - php-version: '8.3'
     runs-on: ubuntu-latest
 
     steps:
@@ -40,4 +40,4 @@ jobs:
         run: composer require php-parallel-lint/php-parallel-lint
 
       - working-directory: dev-tools
-        run: ./vendor/bin/parallel-lint --exclude src/Util/Logger/PsrLoggerV3.php ..
+        run: ./vendor/bin/parallel-lint ..
