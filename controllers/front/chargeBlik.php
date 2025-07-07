@@ -309,7 +309,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
     private function createBlikZero(array $data, string $blikCode = '', $cart = null): array
     {
-        $transaction = $this->module->api->Transactions->createTransactionWithInstantRedirection($data);
+        $transaction = $this->module->api->transactions()->createTransactionWithInstantRedirection($data);
         $transactionId = $transaction['transactionId'];
 
         return $this->blik($transactionId, $blikCode, $cart);
@@ -339,7 +339,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             $additional_payment_data['blikPaymentData']['blikToken'] = $blikCode;
         }
 
-        return $this->module->api->Transactions->createInstantPaymentByTransactionId($additional_payment_data, $transactionId);
+        return $this->module->api->transactions()->createInstantPaymentByTransactionId($additional_payment_data, $transactionId);
     }
 
     private function payByTransfer($address, $customer, $context, $cart, $order, string $oldTransactionId)
@@ -393,7 +393,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $i = 0;
         do {
             $correct = false;
-            $result = $this->module->api->Transactions->getTransactionById($transactionId);
+            $result = $this->module->api->transactions()->getTransactionById($transactionId);
             $errors = 0;
 
             foreach ($result['payments']['attempts'] as $error) {
@@ -424,6 +424,6 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
     private function cancelTransaction($transactionId)
     {
-        $this->module->api->Transactions->run('POST', sprintf('/transactions/%s/cancel', $transactionId));
+        $this->module->api->transactions()->run('POST', sprintf('/transactions/%s/cancel', $transactionId));
     }
 }

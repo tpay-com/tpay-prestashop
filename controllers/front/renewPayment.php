@@ -31,11 +31,11 @@ class TpayRenewPaymentModuleFrontController extends ModuleFrontController
         ];
 
         if ($transactionId) {
-            $response = $this->module->api->Transactions->createPaymentByTransactionId(
+            $response = $this->module->api->transactions()->createPaymentByTransactionId(
                 $request,
                 $transactionId
             );
-            
+
             if (isset($response['transactionPaymentUrl'])) {
                 Tools::redirect($response['transactionPaymentUrl']);
             }
