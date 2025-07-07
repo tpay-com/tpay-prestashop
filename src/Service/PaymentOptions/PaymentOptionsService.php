@@ -155,7 +155,7 @@ class PaymentOptionsService
      */
     private function getPaymentGroups(): void
     {
-        $channels = $this->module->api->Transactions->getChannels()['channels'] ?? [];
+        $channels = $this->module->api->transactions()->getChannels()['channels'] ?? [];
         $this->bankChannels = $channels;
 
         if (!empty($channels)) {

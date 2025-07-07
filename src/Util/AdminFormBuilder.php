@@ -108,7 +108,7 @@ class AdminFormBuilder
                             'label' => $this->module->l('No'),
                         ],
                     ],
-                    'desc' => '<b>' . $this->module->l('WARNING') . '</b>'
+                    'desc' => '<b>' . $this->module->l('WARNING') . '</b> '
                         . $this->module->l(
                             ' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!'
                         ),
@@ -300,6 +300,69 @@ class AdminFormBuilder
 
         return $form;
     }
+
+    public function formCancelOrder(): array
+    {
+        $form['form'] = [
+            'legend' => [
+                'title' => $this->module->l('Auto cancel orders and transactions settings'),
+                'icon' => 'icon-cogs'
+            ],
+            'input' => [
+                [
+                    'type' => 'switch',
+                    'label' => $this->module->l('Auto cancel active'),
+                    'name' => 'TPAY_AUTO_CANCEL_ACTIVE',
+                    'is_bool' => true,
+                    'class' => 't',
+                    'values' => [
+                        [
+                            'id' => 'tpay_active_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Yes'),
+                        ],
+                        [
+                            'id' => 'tpay_active_off',
+                            'value' => 0,
+                            'label' => $this->module->l('No'),
+                        ],
+                    ],
+                ],
+                [
+                    'type' => 'switch',
+                    'label' => $this->module->l('Use frontend to run CRON jobs'),
+                    'desc' => '<b>' . $this->module->l('WARNING') . '</b> '.$this->module->l('May cause some performance issues. Use this method if you cannot set cronjob to run CLI task once a day: `php modules/tpay/cron.php`'),
+                    'name' => 'TPAY_AUTO_CANCEL_FRONTEND_RUN',
+                    'is_bool' => true,
+                    'class' => 't',
+                    'values' => [
+                        [
+                            'id' => 'tpay_active_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Yes'),
+                        ],
+                        [
+                            'id' => 'tpay_active_off',
+                            'value' => 0,
+                            'label' => $this->module->l('No'),
+                        ],
+                    ],
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->module->l('Cancel orders and transactions after days'),
+                    'name' => 'TPAY_AUTO_CANCEL_DAYS',
+                    'required' => true,
+                ],
+            ],
+            'submit' => [
+                'title' => $this->module->l('Save'),
+            ],
+        ];
+
+        return $form;
+    }
+
 
     public function formPaymentOptions(): array
     {

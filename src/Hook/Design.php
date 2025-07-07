@@ -20,6 +20,7 @@ use Configuration as Cfg;
 use Media;
 use Tpay\Config\Config;
 
+
 class Design extends AbstractHook
 {
     public const AVAILABLE_HOOKS = [
@@ -37,6 +38,9 @@ class Design extends AbstractHook
     {
         $this->context->controller->addCSS($this->module->getPath() . 'views/css/main.css');
         $this->context->controller->addJS($this->module->getPath() . 'views/js/main.min.js');
+        if (Cfg::get('TPAY_AUTO_CANCEL_ACTIVE') && Cfg::get('TPAY_AUTO_CANCEL_FRONTEND_RUN')) {
+            $this->context->controller->addJS($this->module->getPath() . 'cron.php', false);
+        }
 
         $ajax = $this->context->link->getModuleLink('tpay', 'ajax', [], true);
         $paymentErrorController = $this->context->link->getModuleLink('tpay', 'error', [], true);

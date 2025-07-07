@@ -14,8 +14,10 @@
 
 use Configuration as Cfg;
 use Tpay\Exception\NotificationHandlingException;
-use tpaySDK\Utilities\TpayException;
-use tpaySDK\Webhook\JWSVerifiedPaymentNotification;
+use Tpay\OpenApi\Utilities\CacheCertificateProvider;
+use Tpay\OpenApi\Utilities\TpayException;
+use Tpay\OpenApi\Webhook\JWSVerifiedPaymentNotification;
+use Tpay\Util\PsrCache;
 
 class TpayNotificationsModuleFrontController extends ModuleFrontController
 {
@@ -43,6 +45,9 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                 try {
                     $isProduction = (true !== (bool)Cfg::get('TPAY_SANDBOX'));
                     $NotificationWebhook = new JWSVerifiedPaymentNotification(
+                        new CacheCertificateProvider(
+                            new Tpay\OpenApi\Utilities\Cache(null, new PsrCache())
+                        ),
                         html_entity_decode(Cfg::get('TPAY_MERCHANT_SECRET')),
                         $isProduction
                     );

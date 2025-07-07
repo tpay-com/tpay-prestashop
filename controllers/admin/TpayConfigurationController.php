@@ -121,6 +121,7 @@ class TpayConfigurationController extends ModuleAdminController
 
         $form[] = $formBuilder->formBasicOptions();
         $form[] = $formBuilder->formPeKaoInstallments();
+        $form[] = $formBuilder->formCancelOrder();
         $form[] = $formBuilder->formPaymentOptions();
         $form[] = $formBuilder->formGenericPaymentOptions();
         $form[] = $formBuilder->formCardOptions();
@@ -164,7 +165,19 @@ class TpayConfigurationController extends ModuleAdminController
 
         if (Tools::getValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE')) {
             if (empty(Tools::getValue('TPAY_MERCHANT_ID'))) {
-                $this->errors['merchant_id'] = $this->module->l('When the installment simulator is enabled, the merchant ID field must be filled in');
+                $this->errors['merchant_id'] = $this->module->l(
+                    'When the installment simulator is enabled, the merchant ID field must be filled in'
+                );
+                $res = false;
+            }
+        }
+
+        if (Tools::getValue('TPAY_AUTO_CANCEL_ACTIVE')) {
+            $val = Tools::getValue('TPAY_AUTO_CANCEL_DAYS');
+            if ($val > 30 || $val < 1) {
+                $this->errors['auto_cancel'] = $this->module->l(
+                    'Auto cancel should be in range 1 - 30'
+                );
                 $res = false;
             }
         }
@@ -196,6 +209,7 @@ class TpayConfigurationController extends ModuleAdminController
 
                 if ($this->errors) {
                     echo $output;
+
                     return false;
                 } else {
                     return true;
