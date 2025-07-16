@@ -28,34 +28,52 @@ class RepositoryQueryHandler
      * @param string $errorPrefix
      * @param string $type
      *
-     * @throws RepositoryException
-     * @throws BaseException
      * @return Statement|int
+     * @throws BaseException
+     * @throws RepositoryException
      */
     public function execute(QueryBuilder $qb, string $errorPrefix = 'SQL error', string $type = '')
     {
         try {
-            switch ($type) {
-                case 'fetchColumn':
-                    $statement = $qb->execute()->fetchColumn();
-                    break;
-                case 'fetchAll':
-                    $statement = $qb->execute()->fetchAll();
-                    break;
-                case 'fetch':
-                    $statement = $qb->execute()->fetch();
-                    break;
-                default:
-                    $statement = $qb->execute();
+            if (method_exists($qb, 'executeQuery')) {
+                switch ($type) {
+                    case 'fetchColumn':
+                        $statement = $qb->executeQuery()->fetchOne();
+                        break;
+                    case 'fetchAll':
+                        $statement = $qb->executeQuery()->fetchAllAssociative();
+                        break;
+                    case 'fetch':
+                        $statement = $qb->executeQuery()->fetchAssociative();
+                        break;
+                    default:
+                        $statement = $qb->executeStatement();
+                }
+            } else {
+                switch ($type) {
+                    case 'fetchColumn':
+                        $statement = $qb->execute()->fetchColumn();
+                        break;
+                    case 'fetchAll':
+                        $statement = $qb->execute()->fetchAll();
+                        break;
+                    case 'fetch':
+                        $statement = $qb->execute()->fetch();
+                        break;
+                    default:
+                        $statement = $qb->execute();
+                }
             }
         } catch (\Exception $exception) {
             \PrestaShopLogger::addLog($exception->getMessage(), 3);
             throw new BaseException($exception->getMessage());
         }
 
-        if ($statement instanceof Statement && !empty($statement->errorInfo())) {
-            \PrestaShopLogger::addLog($errorPrefix, 3);
-            throw new RepositoryException($errorPrefix . ': ' . var_export($statement->errorInfo(), true));
+        if (method_exists(Statement::class, 'errorInfo')) {
+            if ($statement instanceof Statement && !empty($statement->errorInfo())) {
+                \PrestaShopLogger::addLog($errorPrefix, 3);
+                throw new RepositoryException($errorPrefix . ': ' . var_export($statement->errorInfo(), true));
+            }
         }
 
         return $statement;

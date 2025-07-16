@@ -129,7 +129,7 @@ class TpayAjaxModuleFrontController extends ModuleFrontController
     {
         ob_end_clean();
         header('Content-Type: application/json');
-        $this->ajaxDie(
+        $this->ajaxRender(
             json_encode(
                 [
                     'cart_summary_subtotals_container' => $this->render('checkout/_partials/cart-summary-subtotals'),

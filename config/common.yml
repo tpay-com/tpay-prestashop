@@ -61,7 +61,6 @@ services:
   tpay.services.auto_cancel:
     class: Tpay\Service\AutoCancelService
     public: true
-    lazy: true
     arguments:
       - "@tpay.repository.transaction"
       - "@tpay"

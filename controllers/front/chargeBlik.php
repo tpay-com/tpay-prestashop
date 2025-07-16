@@ -97,7 +97,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
     {
         $result = $this->waitForBlikAccept($transactionId, 0);
 
-        $this->ajaxDie(
+        $this->ajaxRender(
             json_encode([
                 'status' => $result['status'],
                 'result' => $result
@@ -141,7 +141,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             $this->createTransactionInDb($transaction, $order->id, false);
         }
 
-        $this->ajaxDie(
+        $this->ajaxRender(
             json_encode([
                 'status' => $transaction['status'],
                 'backUrl' => $this->module->getContext()->link->getModuleLink(
@@ -175,7 +175,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             $result['status'] = 'error';
         }
 
-        $this->ajaxDie(
+        $this->ajaxRender(
             json_encode([
                 'result' => $result['status'],
             ])
@@ -364,7 +364,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $transaction = $this->module->api->transactions()->createTransaction($transactionParams);
 
         if (!isset($transaction['transactionPaymentUrl'])) {
-            $this->ajaxDie(
+            $this->ajaxRender(
                 json_encode([
                     'status' => 'error'
                 ])
@@ -379,7 +379,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             $this->updateTransactionInDb($transaction, $order->id, $oldTransactionId, 'transfer');
         }
 
-        $this->ajaxDie(
+        $this->ajaxRender(
             json_encode([
                 'status' => 'correct',
                 'payment_url' => $transaction['transactionPaymentUrl']

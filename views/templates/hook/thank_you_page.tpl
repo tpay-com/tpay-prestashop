@@ -155,7 +155,7 @@
                 };
                 const data = (new URLSearchParams(paymentData)).toString();
 
-                fetch("{$blikUrl}", {
+                fetch("{$blikUrl nofilter}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -268,7 +268,7 @@
                 const data = (new URLSearchParams(paymentData)).toString();
                 localStorage.setItem('tpay_transaction_counter', parseInt(localStorage.getItem('tpay_transaction_counter')) + 1);
 
-                fetch("{$blikUrl}", {
+                fetch("{$blikUrl nofilter}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -322,7 +322,7 @@
 
                 const data = (new URLSearchParams(paymentData)).toString();
 
-                fetch("{$blikUrl}", {
+                fetch("{$blikUrl nofilter}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',

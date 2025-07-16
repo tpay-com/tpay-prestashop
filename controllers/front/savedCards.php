@@ -65,6 +65,6 @@ class TpaySavedCardsModuleFrontController extends ModuleFrontController
             (int) $this->context->customer->id
         );
 
-        $this->ajaxDie(json_encode(['results' => $delete ? 'error' : 'success']));
+        $this->ajaxRender(json_encode(['results' => $delete ? 'error' : 'success']));
     }
 }
