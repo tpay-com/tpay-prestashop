@@ -54,7 +54,7 @@ class Card implements GatewayType
             'assets_path' => $module->getPath(),
         ]);
 
-        $paymentOption->setCallToActionText($module->l('Payment card'))
+        $paymentOption->setCallToActionText($module->l('Payment card', 'Card'))
             ->setAction($moduleLink)
             ->setLogo($data['img'])
             ->setInputs([
