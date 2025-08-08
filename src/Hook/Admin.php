@@ -216,12 +216,13 @@ class Admin extends AbstractHook
 
     public function displayAdminOrder($params): string
     {
-        if ($this->module->name != 'tpay') {
+        $orderId = $params['id_order'];
+        $order = new Order($orderId);
+
+        if ($order->module !== 'tpay') {
             return '';
         }
 
-        $orderId = $params['id_order'];
-        $order = new Order($orderId);
         $currency = new Currency($order->id_currency);
         $surchargeService = $this->module->getService('tpay.service.surcharge');
         $transactionService = $this->module->getService('tpay.repository.transaction');
