@@ -350,7 +350,7 @@ input:checked + .payment-option .check-ico {
     box-shadow: none;
 }
 
-.spinner {
+.spinner img {
     display: inline-block;
     width: 20px;
     height: 20px;
