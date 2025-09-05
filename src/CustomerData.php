@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Tpay;
 
 use Configuration as Cfg;
+use Tools;
 use Tpay\Service\SurchargeService;
 
 class CustomerData
@@ -100,6 +101,9 @@ class CustomerData
     {
         $orderTotal = $this->getOrderTotalAmount();
         $phoneNumber = (isset($this->address->phone_mobile) && strlen($this->address->phone_mobile) > 3) ? $this->address->phone_mobile : ($this->address->phone ?: '000');
+        $email = $this->context->cookie->email ?? $this->customer->email;
+        $customerFirstName = !empty($this->context->cookie->customer_firstname) ? $this->context->cookie->customer_firstname : $this->customer->firstname;
+        $customerLastName = !empty($this->context->cookie->customer_firstname) ? $this->context->cookie->customer_firstname : $this->customer->lastname;
 
         $data = [
             'amount' => number_format(
@@ -114,11 +118,11 @@ class CustomerData
             ),
             'hiddenDescription' => $this->createCrc(),
             'payer' => [
-                'email' => $this->context->cookie->email,
+                'email' => $email,
                 'name' => sprintf(
                     '%s %s',
-                    $this->context->cookie->customer_firstname,
-                    $this->context->cookie->customer_lastname
+                    $customerFirstName,
+                    $customerLastName
                 ),
                 'phone' => $phoneNumber,
                 'address' => $this->address->address1 . ' ' . $this->address->address2,
@@ -130,7 +134,7 @@ class CustomerData
             ],
         ];
 
-        if(isset($this->address->vat_number) && strlen($this->address->vat_number) > 1){
+        if (isset($this->address->vat_number) && strlen($this->address->vat_number) > 1) {
             $data['payer']['taxId'] = $this->address->vat_number;
         }
 
