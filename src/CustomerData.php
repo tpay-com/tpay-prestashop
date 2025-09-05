@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Tpay;
 
 use Configuration as Cfg;
-use Tools;
 use Tpay\Service\SurchargeService;
 
 class CustomerData
