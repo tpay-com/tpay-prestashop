@@ -128,7 +128,7 @@ class CustomerData
                 'code' => $this->address->postcode,
                 'city' => $this->address->city,
                 'country' => 'PL',
-                'ip' => Tools::getRemoteAddr(),
+                'ip' => \Tools::getRemoteAddr(),
                 'userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
             ],
         ];
