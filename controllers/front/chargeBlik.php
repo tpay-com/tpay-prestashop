@@ -66,20 +66,14 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         switch ($action) {
             case 'createTransaction':
                 // firstly - create order
-                $order = new \Order(\Order::getIdByCartId($cart->id));
-                if (!$order->id) {
-                    if (Validate::isLoadedObject($cart) && !$cart->OrderExists()) {
-                        $this->blikValidateOrder($cart->id, $this->getOrderTotal($cart), $customer);
-                        $order = new \Order($this->module->currentOrder);
-                    }
-                }
-
+                $order = $this->createOrder($cart, $customer);
                 // I create an order if it does not exist with such a transaction id
                 $this->createTransaction($address, $customer, $context, $cart, $order);
                 break;
-
             case 'payBlikTransaction':
-                $this->payBlikTransaction(Tools::getValue('transactionId'));
+                $order = new \Order(\Order::getIdByCartId($cart->id));
+
+                $this->payBlikTransaction($address, $customer, $context, $cart, $order, Tools::getValue('transactionId'));
                 break;
             case 'payByTransfer':
                 $order = new \Order(Tools::getValue('orderIdForTransfer'));
@@ -163,14 +157,26 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
      * @throws PrestaShopException
      * @throws Exception
      */
-    public function payBlikTransaction($transactionId)
+    public function payBlikTransaction($address, $customer, $context, $cart, $order, $oldTransactionId)
     {
+        $transactionParams = $this->getCustomerData($address, $customer, $context, $cart, $order, self::TYPE);
+
+        $isoCode = Language::getLanguage($cart->id_lang)['iso_code'];
+        $transactionParams['lang'] = in_array($isoCode, ['pl', 'en']) ? $isoCode : 'en';
+
         $blikCode = $this->validateBlikCode(Tools::getValue('blikCode'));
-        $transactionCounter = Tools::getValue('transactionCounter');
-        $transaction = $this->blik($transactionId, $blikCode, null);
+        $transaction = $this->createBlikZero($transactionParams, $blikCode, $customer->isGuest() ? null : $cart);
+
+        $this->cancelTransaction($oldTransactionId);
+        $transactionRepository = $this->module->getService('tpay.repository.transaction');
+        $transactionExists = $transactionRepository->getTransactionByTransactionId($oldTransactionId);
+
+        if ($transactionExists) {
+            $this->updateTransactionInDb($transaction, $order->id, $oldTransactionId, self::TYPE);
+        }
 
         if ('success' == $transaction['result']) {
-            $result = $this->waitForBlikAccept($transaction['transactionId'], $transactionCounter);
+            $result = $this->waitForBlikAccept($transaction['transactionId'], Tools::getValue('transactionCounter'));
         } else {
             $result['status'] = 'error';
         }
@@ -287,6 +293,19 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         }
 
         return (string)$blikCode;
+    }
+
+    private function createOrder($cart, $customer)
+    {
+        $order = new \Order(\Order::getIdByCartId($cart->id));
+        if (!$order->id) {
+            if (Validate::isLoadedObject($cart) && !$cart->OrderExists()) {
+                $this->blikValidateOrder($cart->id, $this->getOrderTotal($cart), $customer);
+                $order = new \Order($this->module->currentOrder);
+            }
+        }
+
+        return $order;
     }
 
     /**
