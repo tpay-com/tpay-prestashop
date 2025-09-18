@@ -342,6 +342,17 @@ class Tpay extends PaymentModule
             'Refund error.
                                     Check that the refund amount is correct and does not exceed the value of the order'
         );
+        $this->l(
+            'Refund error. Provided transaction id does not exist, is not available or the transaction has been paid'
+        );
+        $this->l('Refund error. Refund period for this transaction has expired');
+        $this->l('Refund error. You cannot refund marketplace transaction');
+        $this->l('Refund error. You cannot refund collect transaction');
+        $this->l(
+            'Refund error. You can not make a refund for a transaction that has already had a refund request within the last 60 seconds'
+        );
+        $this->l('Refund error. You cannot refund transaction with status refunded');
+        $this->l('Refund error. Amount Value is outside of declared precision');
         $this->l('Accept blik code on mobile app');
         $this->l('Transaction was not accepted in the bank\'s application');
         $this->l('Transaction rejected by payer');

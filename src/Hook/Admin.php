@@ -92,12 +92,13 @@ class Admin extends AbstractHook
                         }
 
                         if (isset($result['result']) && $result['result'] === 'failed') {
-                            $this->context->smarty->assign([
-                                'tpay_refund_status' => $this->module->displayError(
-                                    $this->module->l('Refund error.
-                                    Check that the refund amount is correct and does not exceed the value of the order')
-                                ),
-                            ]);
+                            $errorMessage = $this->getRefundErrorMessage($result['errors'] ?? []);
+
+                            if ($errorMessage !== null) {
+                                $this->context->smarty->assign([
+                                    'tpay_refund_status' => $this->module->displayError($errorMessage),
+                                ]);
+                            }
                         }
                     } catch (\Exception $TException) {
                         $this->context->smarty->assign([
@@ -113,13 +114,59 @@ class Admin extends AbstractHook
                 ]);
             }
             $view = 'module:tpay/views/templates/hook/refunds.tpl';
-            if($legacyTheme){
+            if ($legacyTheme) {
                 $view = 'module:tpay/views/templates/hook/refundsLegacy.tpl';
             }
             return $this->module->fetch($view);
         }
     }
 
+    private function getRefundErrorMessage(array $errors)
+    {
+        $errorMessages = $this->getRefundErrorCodeMessages();
+
+        foreach ($errors as $error) {
+            if (!isset($error['errorCode'])) {
+                continue;
+            }
+
+            $code = $error['errorCode'];
+
+            if (isset($errorMessages[$code])) {
+                return $errorMessages[$code];
+            }
+        }
+
+        return $this->module->l('Refund error.
+                                   Check that the refund amount is correct and does not exceed the value of the order');
+    }
+
+    private function getRefundErrorCodeMessages()
+    {
+        return [
+            'transaction_does_not_exist' => $this->module->l(
+                'Refund error. Provided transaction id does not exist, is not available or the transaction has been paid'
+            ),
+            'refund_period_expired' => $this->module->l(
+                'Refund error. Refund period for this transaction has expired'
+            ),
+            'cannot_refund_marketplace_transaction' => $this->module->l(
+                'Refund error. You cannot refund marketplace transaction'
+            ),
+            'cannot_refund_collect_transaction' => $this->module->l(
+                'Refund error. You cannot refund collect transaction'
+            ),
+            'cannot_create_refund' => $this->module->l(
+                'Refund error. You can not make a refund for a transaction that has already had a refund request within the last 60 seconds'
+            ),
+            'already_refunded' => $this->module->l(
+                'Refund error. You cannot refund transaction with status refunded'
+            ),
+            'incorrect_precision' => $this->module->l(
+                'Refund error. Amount Value is outside of declared precision'
+            ),
+        ];
+    }
 
     private function createHistory($order, \OrderHistory $orderHistory)
     {
