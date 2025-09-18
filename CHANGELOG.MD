@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - New translations to refunds errors
+- New fields in payer
 
 ### Changed
 
@@ -18,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Blik lvl0 payment after declined payment by card on site
+- Wrong condition in Admin.php
+- Loading animation
+- Typo in settings title
 
 ## [1.10.6]
 
