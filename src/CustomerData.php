@@ -102,7 +102,7 @@ class CustomerData
         $phoneNumber = (isset($this->address->phone_mobile) && strlen($this->address->phone_mobile) > 3) ? $this->address->phone_mobile : ($this->address->phone ?: '000');
         $email = $this->context->cookie->email ?? $this->customer->email;
         $customerFirstName = !empty($this->context->cookie->customer_firstname) ? $this->context->cookie->customer_firstname : $this->customer->firstname;
-        $customerLastName = !empty($this->context->cookie->customer_firstname) ? $this->context->cookie->customer_firstname : $this->customer->lastname;
+        $customerLastName = !empty($this->context->cookie->customer_lastname) ? $this->context->cookie->customer_lastname : $this->customer->lastname;
 
         $data = [
             'amount' => number_format(
