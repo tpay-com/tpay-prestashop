@@ -5,8 +5,8 @@
         <img src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/success.svg" alt="Icon"/>
     </div>
     <div class="message">
-        <p class="title">{l s='Payment completed successfully!' mod='tpay'}</p>
-        <p class="subtitle">{l s='Thank you for using Tpay.' mod='tpay'}</p>
+        <p class="title">{l s='Payment completed successfully!' d='Modules.Tpay.Shop'}</p>
+        <p class="subtitle">{l s='Thank you for using Tpay.' d='Modules.Tpay.Shop'}</p>
     </div>
     <div class="underline"></div>
 </div>

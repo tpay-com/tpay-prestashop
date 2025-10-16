@@ -18,7 +18,7 @@
 				<div class="row tpay-cards">
 					<div class="col-xs-12">
 						<h6 style="margin-bottom: 26px; font-size: .8375rem;">
-							{l s='List of saved credit cards.' mod='tpay'}
+							{l s='List of saved credit cards.' d='Modules.Tpay.Shop'}
 						</h6>
 					</div>
 
@@ -56,7 +56,7 @@
 							</div>
 
 							<label for="newCard">
-								{l s='Add new card' mod='tpay'}
+								{l s='Add new card' d='Modules.Tpay.Shop'}
 							</label>
 						</div>
 					</div>
@@ -74,7 +74,7 @@
 					<input type="hidden" name="card_short_code" id="card_short_code" value=""/>
 
 					<div class="tpay-input-credit-card-number">
-						<label for="card-number" class="tpay-label-info">{l s='Card number' mod='tpay'}</label>
+						<label for="card-number" class="tpay-label-info">{l s='Card number' d='Modules.Tpay.Shop'}</label>
 						<input id="card_number" pattern="[0-9\s]*" autocompletetype="cc-number" size="30"
 							   type="tel" autocomplete="off" maxlength="23"
 							   placeholder="0000 0000 0000 0000" tabindex="1"
@@ -84,7 +84,7 @@
 
 					<div class="tpay-card__wrap">
 						<div id="exp-container">
-							<label for="card-exp" class="tpay-label-info">{l s='Expiration date' mod='tpay'}</label>
+							<label for="card-exp" class="tpay-label-info">{l s='Expiration date' d='Modules.Tpay.Shop'}</label>
 							<input id="expiry_date" maxlength="9" type="tel" placeholder="00 / 0000"
 								   autocomplete="off" autocompletetype="cc-exp" tabindex="2" value=""
 								   class="tpay-input-value tpay-card__input-small"/>
@@ -92,11 +92,11 @@
 
 						<div id="exp-container">
 							<label for="card-cvc" class="tpay-label-info">
-								{l s='CVC' mod='tpay'}
+								{l s='CVC' d='Modules.Tpay.Shop'}
 								<img src="{$tpay_path|escape:'htmlall':'UTF-8'}/img/info.svg"
-									 alt="{l s='Preload' mod='tpay'}"
+									 alt="{l s='Preload' d='Modules.Tpay.Shop'}"
 									 data-toggle="tooltip" data-placement="bottom"
-									 title="{l s='The security number located on the back of the payment card.' mod='tpay'}"/>
+									 title="{l s='The security number located on the back of the payment card.' d='Modules.Tpay.Shop'}"/>
 							</label>
 							<input id="cvc" maxlength="3" type="tel" autocomplete="off" autocompletetype="cc-cvc"
 								   placeholder="000" tabindex="3" value=""
@@ -113,8 +113,8 @@
 								<span><i class="material-icons rtl-no-flip checkbox-checked"></i></span>
 							</div>
 							<div class="condition-label" style="margin-top: 1.325rem;">
-								<label for="card_save" class="tpay-info-label" title="{l s='Save my card' mod='tpay'}">
-									{l s='Save my card' mod='tpay'}
+								<label for="card_save" class="tpay-info-label" title="{l s='Save my card' d='Modules.Tpay.Shop'}">
+									{l s='Save my card' d='Modules.Tpay.Shop'}
 								</label>
 							</div>
 						</div>
@@ -124,23 +124,23 @@
 
 			</div>
 		{else}
-			{l s='You will be redirected to the payment gateway.' mod='tpay'}
+			{l s='You will be redirected to the payment gateway.' d='Modules.Tpay.Shop'}
 		{/if}
 
 		<div style="max-width:390px;">
 			<div id="info_msg_not_supported" style="display: none;">
 					<span class="tpay-error">
-	                    {l s='No support for cards' mod='tpay'}
+	                    {l s='No support for cards' d='Modules.Tpay.Shop'}
 					</span>
 			</div>
 			<div id="info_msg_not_valid" style="display: none">
 					<span class="tpay-error">
-						{l s='Incorrect card data' mod='tpay'}
+						{l s='Incorrect card data' d='Modules.Tpay.Shop'}
 					</span>
 			</div>
 			<div id="info_msg_cause" style="display: none">
 					<span class="tpay-error">
-						{l s='Please accept the store rules' mod='tpay'}
+						{l s='Please accept the store rules' d='Modules.Tpay.Shop'}
 					</span>
 			</div>
 			<input type="hidden" name="redirect_type" id="redirect_type" value="{$card_type}"/>

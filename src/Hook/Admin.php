@@ -20,6 +20,8 @@ use Order;
 use Currency;
 use Tools;
 use Configuration as Cfg;
+use Tpay;
+use PrestaShopBundle\Translation\TranslatorComponent;
 
 class Admin extends AbstractHook
 {
@@ -29,6 +31,14 @@ class Admin extends AbstractHook
     ];
     private static $refundsRendered = false;
 
+    /** @var TranslatorComponent|null  */
+    private $translator;
+
+    public function __construct(Tpay $module)
+    {
+        $this->translator = $module->getTranslator();
+        parent::__construct($module);
+    }
 
     /**
      * Returns on the order page in the administration
@@ -59,12 +69,12 @@ class Admin extends AbstractHook
             if ($refundSubmit) {
                 if ($this->validRefundAllowedAmount($refundAmount, $maxRefundAmount)) {
                     $errors = sprintf(
-                        $this->module->l('Unable to process refund - amount is greater than allowed %s'),
+                        $this->translator->trans('Unable to process refund - amount is greater than allowed %s', [], 'Modules.Tpay.Admin'),
                         $maxRefundAmount
                     );
                 }
                 if ($this->validRefundMinAmount($refundAmount)) {
-                    $errors = $this->module->l('Unable to process refund - invalid amount');
+                    $errors = $this->translator->trans('Unable to process refund - invalid amount', [], 'Modules.Tpay.Admin');
                 }
 
                 if (empty($errors)) {
@@ -86,7 +96,7 @@ class Admin extends AbstractHook
 
                             $this->context->smarty->assign([
                                 'tpay_refund_status' => $this->module->displayConfirmation(
-                                    $this->module->l('Refund successful. Return option is being processed please wait.')
+                                    $this->translator->trans('Refund successful. Return option is being processed please wait.', [], 'Modules.Tpay.Admin')
                                 ),
                             ]);
                         }
@@ -137,33 +147,37 @@ class Admin extends AbstractHook
             }
         }
 
-        return $this->module->l('Refund error.
-                                   Check that the refund amount is correct and does not exceed the value of the order');
+        return $this->translator->trans('Refund error.
+                                   Check that the refund amount is correct and does not exceed the value of the order', [], 'Modules.Tpay.Admin');
     }
 
     private function getRefundErrorCodeMessages()
     {
         return [
-            'transaction_does_not_exist' => $this->module->l(
-                'Refund error. Provided transaction id does not exist, is not available or the transaction has been paid'
+            'transaction_does_not_exist' => $this->translator->trans(
+                'Refund error. Provided transaction id does not exist, is not available or the transaction has been paid',
+                [],
+                'Modules.Tpay.Admin'
             ),
-            'refund_period_expired' => $this->module->l(
-                'Refund error. Refund period for this transaction has expired'
+            'refund_period_expired' => $this->translator->trans(
+                'Refund error. Refund period for this transaction has expired', [], 'Modules.Tpay.Admin'
             ),
-            'cannot_refund_marketplace_transaction' => $this->module->l(
-                'Refund error. You cannot refund marketplace transaction'
+            'cannot_refund_marketplace_transaction' => $this->translator->trans(
+                'Refund error. You cannot refund marketplace transaction', [], 'Modules.Tpay.Admin'
             ),
-            'cannot_refund_collect_transaction' => $this->module->l(
-                'Refund error. You cannot refund collect transaction'
+            'cannot_refund_collect_transaction' => $this->translator->trans(
+                'Refund error. You cannot refund collect transaction', [], 'Modules.Tpay.Admin'
             ),
-            'cannot_create_refund' => $this->module->l(
-                'Refund error. You can not make a refund for a transaction that has already had a refund request within the last 60 seconds'
+            'cannot_create_refund' => $this->translator->trans(
+                'Refund error. You can not make a refund for a transaction that has already had a refund request within the last 60 seconds',
+                [],
+                'Modules.Tpay.Admin'
             ),
-            'already_refunded' => $this->module->l(
-                'Refund error. You cannot refund transaction with status refunded'
+            'already_refunded' => $this->translator->trans(
+                'Refund error. You cannot refund transaction with status refunded', [], 'Modules.Tpay.Admin'
             ),
-            'incorrect_precision' => $this->module->l(
-                'Refund error. Amount Value is outside of declared precision'
+            'incorrect_precision' => $this->translator->trans(
+                'Refund error. Amount Value is outside of declared precision', [], 'Modules.Tpay.Admin'
             ),
         ];
     }
@@ -199,10 +213,10 @@ class Admin extends AbstractHook
         $error = '';
 
         if ($this->validRefundAllowedAmount($refundAmount, $maxRefundAmount)) {
-            $error = sprintf($this->module->l('amount is greater than allowed %s'), $maxRefundAmount);
+            $error = sprintf($this->translator->trans('amount is greater than allowed %s', [], 'Modules.Tpay.Admin'), $maxRefundAmount);
         }
         if ($this->validRefundMinAmount($refundAmount)) {
-            $error = $this->module->l('invalid amount');
+            $error = $this->translator->trans('invalid amount', [], 'Modules.Tpay.Admin');
         }
 
         return $error;
@@ -279,7 +293,7 @@ class Admin extends AbstractHook
             if ($surchargeValue > 0.00) {
                 $this->context->smarty->assign(
                     [
-                        'surcharge_title' => $this->module->l('Online payment fee'),
+                        'surcharge_title' => $this->translator->trans('Online payment fee', [], 'Modules.Tpay.Admin'),
                         'surcharge_cost' => $surchargeValue,
                         'currency' => $currency,
                         'order'=>$order

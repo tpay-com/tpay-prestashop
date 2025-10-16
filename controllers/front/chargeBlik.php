@@ -57,7 +57,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             echo json_encode(
                 [
                     'status' => 'FAILURE',
-                    'message' => $this->module->l('Client identificator not provided.', 'tpay'),
+                    'message' => $this->trans('Client identificator not provided.', [], 'Modules.Tpay.Shop'),
                 ]
             );
             exit;

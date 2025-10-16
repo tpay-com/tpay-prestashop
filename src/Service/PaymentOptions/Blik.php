@@ -48,7 +48,7 @@ class Blik implements GatewayType
             'assets_path' => $module->getPath(),
         ]);
 
-        $paymentOption->setCallToActionText($module->l('BLIK'))
+        $paymentOption->setCallToActionText($module->getTranslator()->trans('BLIK', [], 'Modules.Tpay.Shop'))
             ->setAction($moduleLink)
             ->setLogo($data['img'])
             ->setInputs([

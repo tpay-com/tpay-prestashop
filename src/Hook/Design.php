@@ -20,7 +20,6 @@ use Configuration as Cfg;
 use Media;
 use Tpay\Config\Config;
 
-
 class Design extends AbstractHook
 {
     public const AVAILABLE_HOOKS = [
@@ -53,38 +52,62 @@ class Design extends AbstractHook
                 'action' => 'refresh',
             ]
         );
-
+        $translator = $this->module->getTranslator();
         Media::addJsDef(
             [
                 'messages' => [
-                    'payment_error' => $this->module->l('Payment error'),
-                    'blik_error' => $this->module->l('The code you entered is invalid or has expired.'),
+                    'payment_error' => $translator->trans('Payment error', [], 'Modules.Tpay.Shop'),
+                    'blik_error' => $translator->trans(
+                        'The code you entered is invalid or has expired.',
+                        [],
+                        'Modules.Tpay.Shop'
+                    ),
                 ],
                 'surcharge_controller' => $ajax,
                 'payment_error_controller' => $paymentErrorController,
                 'cart_url' => $cartController,
-                'blik_limit_attempt_msg' => $this->module->l('The blik code has expired'),
-                'blik_accept_msg' => $this->module->l('Accept blik code on mobile app'),
-                'blik_not_accepted' => $this->module->l('Transaction was not accepted in the bank\'s application'),
-                'blik_rejected_msg' => $this->module->l('Transaction rejected by payer'),
-                'blik_insufficient_funds_msg' => $this->module->l('Insufficient Funds'),
+                'blik_limit_attempt_msg' => $translator->trans('The blik code has expired', [], 'Modules.Tpay.Shop'),
+                'blik_accept_msg' => $translator->trans('Accept blik code on mobile app', [], 'Modules.Tpay.Shop'),
+                'blik_not_accepted' => $translator->trans(
+                    'Transaction was not accepted in the bank\'s application',
+                    [],
+                    'Modules.Tpay.Shop'
+                ),
+                'blik_rejected_msg' => $translator->trans('Transaction rejected by payer', [], 'Modules.Tpay.Shop'),
+                'blik_insufficient_funds_msg' => $translator->trans('Insufficient Funds', [], 'Modules.Tpay.Shop'),
 
 
                 'blik_msg' => [
-                    61 => $this->module->l('invalid BLIK code or alias data format'),
-                    62 => $this->module->l('error connecting BLIK system'),
-                    63 => $this->module->l('invalid BLIK six-digit code'),
-                    64 => $this->module->l('can not pay with BLIK code or alias for non BLIK transaction'),
-                    65 => $this->module->l('incorrect transaction status - should be pending'),
-                    66 => $this->module->l('BLIK POS is not available'),
-                    82 => $this->module->l('given alias is non-unique'),
-                    84 => $this->module->l('given alias has not been registered or has been deregistered'),
-                    85 => $this->module->l('given alias section is incorrect'),
-                    100 => $this->module->l('BLIK other error'),
-                    101 => $this->module->l('BLIK payment declined by user'),
-                    102 => $this->module->l('BLIK system general error'),
-                    103 => $this->module->l('BLIK insufficient funds / user authorization error'),
-                    104 => $this->module->l('BLIK user or system timeout'),
+                    61 => $translator->trans('invalid BLIK code or alias data format', [], 'Modules.Tpay.Shop'),
+                    62 => $translator->trans('error connecting BLIK system', [], 'Modules.Tpay.Shop'),
+                    63 => $translator->trans('invalid BLIK six-digit code', [], 'Modules.Tpay.Shop'),
+                    64 => $translator->trans(
+                        'can not pay with BLIK code or alias for non BLIK transaction',
+                        [],
+                        'Modules.Tpay.Shop'
+                    ),
+                    65 => $translator->trans(
+                        'incorrect transaction status - should be pending',
+                        [],
+                        'Modules.Tpay.Shop'
+                    ),
+                    66 => $translator->trans('BLIK POS is not available', [], 'Modules.Tpay.Shop'),
+                    82 => $translator->trans('given alias is non-unique', [], 'Modules.Tpay.Shop'),
+                    84 => $translator->trans(
+                        'given alias has not been registered or has been deregistered',
+                        [],
+                        'Modules.Tpay.Shop'
+                    ),
+                    85 => $translator->trans('given alias section is incorrect', [], 'Modules.Tpay.Shop'),
+                    100 => $translator->trans('BLIK other error', [], 'Modules.Tpay.Shop'),
+                    101 => $translator->trans('BLIK payment declined by user', [], 'Modules.Tpay.Shop'),
+                    102 => $translator->trans('BLIK system general error', [], 'Modules.Tpay.Shop'),
+                    103 => $translator->trans(
+                        'BLIK insufficient funds / user authorization error',
+                        [],
+                        'Modules.Tpay.Shop'
+                    ),
+                    104 => $translator->trans('BLIK user or system timeout', [], 'Modules.Tpay.Shop'),
                 ]
             ]
         );

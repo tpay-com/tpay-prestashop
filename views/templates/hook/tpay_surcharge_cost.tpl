@@ -15,7 +15,7 @@
 
     {if $surcharge }
       <p>
-          {l s=' Fee charged for this payment method: ' mod='tpay'}
+          {l s=' Fee charged for this payment method: ' d='Modules.Tpay.Admin'}
           {l s=$surcharge}
       </p>
     {/if}

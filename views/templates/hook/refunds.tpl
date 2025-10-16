@@ -15,7 +15,7 @@
 	<div class="card mt-2">
 		<div class="card-header">
 			<h3 class="card-header-title">
-                {l s='Tpay refunds' mod='tpay'}
+                {l s='Tpay refunds' d='Modules.Tpay.Admin'}
 			</h3>
 		</div>
 
@@ -31,9 +31,9 @@
 					<table class="table">
 						<thead>
 						<tr>
-							<th><span class="title_box ">{l s='Refund date' mod='tpay'}</span></th>
-							<th><span class="title_box ">{l s='Refunded transaction title' mod='tpay'}</span></th>
-							<th><span class="title_box ">{l s='Refund amount ' mod='tpay'}</span></th>
+							<th><span class="title_box ">{l s='Refund date' d='Modules.Tpay.Admin'}</span></th>
+							<th><span class="title_box ">{l s='Refunded transaction title' d='Modules.Tpay.Admin'}</span></th>
+							<th><span class="title_box ">{l s='Refund amount ' d='Modules.Tpay.Admin'}</span></th>
 							<th></th>
 						</tr>
 						</thead>
@@ -54,7 +54,7 @@
 							</td>
 							<td>
 								<input type="submit" class="tpay-refund btn btn-primary"
-								       value="{l s='Process refund' mod='tpay'}">
+								       value="{l s='Process refund' d='Modules.Tpay.Admin'}">
 							</td>
 						</tr>
 						</tbody>

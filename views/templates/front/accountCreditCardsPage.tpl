@@ -1,7 +1,7 @@
 {extends file='customer/page.tpl'}
 
 {block name='page_title'}
-    {l s='My credit cards' mod='tpay'}
+    {l s='My credit cards' d='Modules.Tpay.Shop'}
 {/block}
 
 {block name='page_content'}
@@ -10,7 +10,7 @@
 
             {if $customer_credit_cards}
 				<div class="col-xs-12">
-					<p>{l s='List of saved credit cards.' mod='tpay'}</p>
+					<p>{l s='List of saved credit cards.' d='Modules.Tpay.Shop'}</p>
 				</div>
                 {foreach from=$customer_credit_cards item=card}
 					<div class="col-lg-4 col-md-6 col-sm-6" data-card-id="{$card['id']}">
@@ -25,7 +25,7 @@
 								<a href="{url entity='module' name='tpay' controller='savedCards' params=['action' => 'deleteCard','ajax' => true]}"
 								   data-link-action="delete-credit-card" data-id="{$card['id']}" data-token="{Tools::getToken()}">
 									<i class="material-icons"></i>
-									<span>{l s='Delete' mod='tpay'}</span>
+									<span>{l s='Delete' d='Modules.Tpay.Shop'}</span>
 								</a>
 							</div>
 
@@ -36,7 +36,7 @@
             {else}
 				<div class="col-xs-12">
 					<h3>
-                        {l s='No stored credit cards' mod='tpay'}
+                        {l s='No stored credit cards' d='Modules.Tpay.Shop'}
 					</h3>
 				</div>
             {/if}

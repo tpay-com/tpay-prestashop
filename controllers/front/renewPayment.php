@@ -43,7 +43,7 @@ class TpayRenewPaymentModuleFrontController extends ModuleFrontController
 
         $this->context->smarty->assign(
             [
-                'error' => $this->module->l('Incorrect transaction id'),
+                'error' => $this->trans('Incorrect transaction id', [], 'Modules.Tpay.Shop'),
             ]
         );
 

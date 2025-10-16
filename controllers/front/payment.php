@@ -42,7 +42,7 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
 
         if (true === $cart->orderExists()) {
             exit(
-            $this->l('Cart cannot be loaded or an order has already been placed using this cart')
+            $this->trans('Cart cannot be loaded or an order has already been placed using this cart', [], 'Modules.Tpay.Shop')
             );
         }
 

@@ -14,6 +14,6 @@
 <a href="{$accountCreditCards}" class="col-lg-4 col-md-6 col-sm-6 col-xs-12" id="credit-cards">
     <span class="link-item">
       <i class="material-icons"></i>
-      {l s='My credit cards' mod='tpay'}
+      {l s='My credit cards' d='Modules.Tpay.Shop'}
     </span>
 </a>

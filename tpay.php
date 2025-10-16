@@ -112,7 +112,7 @@ class Tpay extends PaymentModule
     {
         $this->name = 'tpay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.11.2';
+        $this->version = '1.10.6';
         $this->author = 'Krajowy Integrator Płatności S.A.';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
@@ -127,9 +127,9 @@ class Tpay extends PaymentModule
 
         parent::__construct();
 
-        $this->displayName = $this->l('Tpay');
-        $this->description = $this->l('Accepting online payments');
-        $this->confirmUninstall = $this->l('Delete this module?');
+        $this->displayName = $this->trans('Tpay', [], 'Modules.Tpay.Admin');
+        $this->description = $this->trans('Accepting online payments', [], 'Modules.Tpay.Admin');
+        $this->confirmUninstall = $this->trans('Delete this module?', [], 'Modules.Tpay.Admin');
         $this->hookDispatcher = new HookDispatcher($this);
     }
 
@@ -203,13 +203,15 @@ class Tpay extends PaymentModule
     public function install(): bool
     {
         if (version_compare(phpversion(), '7.1', '<')) {
-            $this->_errors[] = $this->l(
+            $this->_errors[] = $this->trans(
                 sprintf(
                     'Your PHP version is too old, please upgrade to a newer version. Your version is %s,'
                     . ' library requires %s',
                     phpversion(),
                     '7.1'
-                )
+                ),
+                [],
+                'Modules.Tpay.Admin'
             );
         }
 
@@ -219,11 +221,11 @@ class Tpay extends PaymentModule
                 new InstallQueryHandler()
             ))->install()
         ) {
-            $this->_errors[] = $this->l('Installation error');
+            $this->_errors[] = $this->trans('Installation error', [], 'Modules.Tpay.Admin');
         }
 
         if (!$this->addOrderStates()) {
-            $this->_errors[] = $this->l('Error adding order statuses');
+            $this->_errors[] = $this->trans('Error adding order statuses', [], 'Modules.Tpay.Admin');
         }
 
         if (!empty($this->_errors)) {
@@ -261,7 +263,7 @@ class Tpay extends PaymentModule
                 new InstallQueryHandler()
             ))->uninstallDb()
         ) {
-            $this->_errors[] = $this->l('Installation error');
+            $this->_errors[] = $this->trans('Installation error', [], 'Modules.Tpay.Admin');
         }
 
         if (!empty($this->_errors)) {
@@ -274,7 +276,7 @@ class Tpay extends PaymentModule
     public function reset()
     {
         if (false === (new Reset())->resetDb()) {
-            $this->_errors[] = $this->l('Reset module error');
+            $this->_errors[] = $this->trans('Reset module error', [], 'Modules.Tpay.Admin');
 
             return false;
         }
@@ -321,57 +323,6 @@ class Tpay extends PaymentModule
             $methodName,
             !empty($arguments[0]) ? $arguments[0] : []
         );
-    }
-
-    public function initLanguages(): void
-    {
-        $this->l('Payment card');
-        $this->l('Buy now, pay later');
-        $this->l('Google Pay');
-        $this->l('Apple Pay');
-        $this->l('Pay by online transfer with Tpay');
-        $this->l('Payment error');
-        $this->l('The code you entered is invalid or has expired.');
-        $this->l('Online payment fee');
-        $this->l('The blik code has expired');
-        $this->l('Online payment fee: ');
-        $this->l('Unable to process refund - amount is greater than allowed %s');
-        $this->l('Unable to process refund - invalid amount');
-        $this->l('Refund successful. Return option is being processed please wait');
-        $this->l(
-            'Refund error.
-                                    Check that the refund amount is correct and does not exceed the value of the order'
-        );
-        $this->l(
-            'Refund error. Provided transaction id does not exist, is not available or the transaction has been paid'
-        );
-        $this->l('Refund error. Refund period for this transaction has expired');
-        $this->l('Refund error. You cannot refund marketplace transaction');
-        $this->l('Refund error. You cannot refund collect transaction');
-        $this->l(
-            'Refund error. You can not make a refund for a transaction that has already had a refund request within the last 60 seconds'
-        );
-        $this->l('Refund error. You cannot refund transaction with status refunded');
-        $this->l('Refund error. Amount Value is outside of declared precision');
-        $this->l('Accept blik code on mobile app');
-        $this->l('Transaction was not accepted in the bank\'s application');
-        $this->l('Transaction rejected by payer');
-        $this->l('Blik was not accepted in the application');
-
-        $this->l('invalid BLIK code or alias data format');
-        $this->l('error connecting BLIK system');
-        $this->l('invalid BLIK six-digit code');
-        $this->l('can not pay with BLIK code or alias for non BLIK transaction');
-        $this->l('incorrect transaction status - should be pending');
-        $this->l('BLIK POS is not available');
-        $this->l('given alias is non-unique');
-        $this->l('given alias has not been registered or has been deregistered');
-        $this->l('given alias section is incorrect');
-        $this->l('BLIK other error');
-        $this->l('BLIK payment declined by user');
-        $this->l('BLIK system general error');
-        $this->l('BLIK insufficient funds / user authorization error');
-        $this->l('BLIK user or system timeout');
     }
 
     /** Admin config settings check an render form. */
@@ -426,7 +377,7 @@ class Tpay extends PaymentModule
                 'TPAY_PEKAO_INSTALLMENTS_ACTIVE'
             ) && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')) {
             $this->context->smarty->assign(array(
-                'installmentText' => $this->l('Calculate installment!'),
+                'installmentText' => $this->trans('Calculate installment!', [], 'Modules.Tpay.Admin'),
                 'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
                 'minAmount' => Config::PEKAO_INSTALLMENT_MIN,
                 'maxAmount' => Config::PEKAO_INSTALLMENT_MAX,
@@ -447,7 +398,9 @@ class Tpay extends PaymentModule
         $transactionRepository = $this->getService('tpay.repository.transaction');
         $transaction = $transactionRepository->getTransactionByOrderId($params['order']->id);
 
-        if ($transaction && $transaction['status'] == 'pending' && $this->isBlikPayment($transaction)) {
+        if ($transaction && $transaction['status'] == 'pending' && ($transaction['payment_type'] === 'blik' || Tools::getValue(
+                    'action'
+                ) == 'renew-payment')) {
             $moduleLink = Context::getContext()->link->getModuleLink('tpay', 'chargeBlik', [], true);
 
             $regulationUrl = "https://tpay.com/user/assets/files_for_download/payment-terms-and-conditions.pdf";
@@ -472,7 +425,7 @@ class Tpay extends PaymentModule
             $this->context->smarty->assign($blikData);
 
             return $this->fetch('module:tpay/views/templates/hook/thank_you_page.tpl');
-        } elseif ($transaction && $transaction['transaction_id'] && $this->isTransferOrCardPayment($transaction)) {
+        } elseif ($transaction && $transaction['payment_type'] == 'transfer' && $transaction['transaction_id']) {
             $this->initAPI();
             $result = $this->api->transactions()->getTransactionById($transaction['transaction_id']);
 
@@ -490,16 +443,6 @@ class Tpay extends PaymentModule
         }
 
         return '';
-    }
-
-    private function isBlikPayment($transaction): bool
-    {
-        return $transaction['payment_type'] === 'blik' || Tools::getValue('action') == 'renew-payment';
-    }
-
-    private function isTransferOrCardPayment($transaction): bool
-    {
-        return $transaction['payment_type'] === 'transfer' || $transaction['payment_type'] === 'cards';
     }
 
     /** Module call API. */

@@ -72,7 +72,7 @@ class TpayConfigurationController extends ModuleAdminController
     {
         $content = '';
         if ($this->postProcess()) {
-            $this->confirmations[] = $this->module->l('Settings saved');
+            $this->confirmations[] = $this->trans('Settings saved', [], 'Modules.Tpay.Admin');
         }
 
         if ($this->contextIsGroup()) {
@@ -92,8 +92,8 @@ class TpayConfigurationController extends ModuleAdminController
     {
         if (Shop::getContext() == Shop::CONTEXT_GROUP) {
             return '<p class="alert alert-warning">' .
-                $this->module->l(
-                    'You cannot manage from a "Group Shop" context, select directly the shop you want to edit'
+                $this->trans(
+                    'You cannot manage from a "Group Shop" context, select directly the shop you want to edit', [], 'Modules.Tpay.Admin'
                 ) .
                 '</p>';
         } else {
@@ -136,37 +136,37 @@ class TpayConfigurationController extends ModuleAdminController
 
         if (Tools::getValue('TPAY_CARD_ACTIVE') && Tools::getValue('TPAY_CARD_WIDGET')) {
             if (empty(Tools::getValue('TPAY_CARD_RSA'))) {
-                $this->errors['rsa'] = $this->module->l('Invalid RSA key');
+                $this->errors['rsa'] = $this->trans('Invalid RSA key', [], 'Modules.Tpay.Admin');
                 $res = false;
             }
         }
 
         if (empty(Tools::getValue('TPAY_CLIENT_ID'))) {
-            $this->errors['client_id'] = $this->module->l('Please fill in the client id');
+            $this->errors['client_id'] = $this->trans('Please fill in the client id', [], 'Modules.Tpay.Admin');
             $res = false;
         }
 
         if (empty(Tools::getValue('TPAY_SECRET_KEY'))) {
-            $this->errors['secret_key'] = $this->module->l('Please complete the secret key');
+            $this->errors['secret_key'] = $this->trans('Please complete the secret key', [], 'Modules.Tpay.Admin');
             $res = false;
         }
 
         if (empty(Tools::getValue('TPAY_MERCHANT_SECRET'))) {
-            $this->errors['merchant_secret'] = $this->module->l('Please complete the secret merchant key');
+            $this->errors['merchant_secret'] = $this->trans('Please complete the secret merchant key', [], 'Modules.Tpay.Admin');
             $res = false;
         }
 
         if (Tools::getValue('TPAY_NOTIFICATION_EMAILS')) {
             if (!Validate::isEmail(Tools::getValue('TPAY_NOTIFICATION_EMAILS'))) {
-                $this->errors['notification_emails'] = $this->module->l('Invalid email notification');
+                $this->errors['notification_emails'] = $this->trans('Invalid email notification', [], 'Modules.Tpay.Admin');
                 $res = false;
             }
         }
 
         if (Tools::getValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE')) {
             if (empty(Tools::getValue('TPAY_MERCHANT_ID'))) {
-                $this->errors['merchant_id'] = $this->module->l(
-                    'When the installment simulator is enabled, the merchant ID field must be filled in'
+                $this->errors['merchant_id'] = $this->trans(
+                    'When the installment simulator is enabled, the merchant ID field must be filled in', [], 'Modules.Tpay.Admin'
                 );
                 $res = false;
             }
@@ -175,8 +175,8 @@ class TpayConfigurationController extends ModuleAdminController
         if (Tools::getValue('TPAY_AUTO_CANCEL_ACTIVE')) {
             $val = Tools::getValue('TPAY_AUTO_CANCEL_DAYS');
             if ($val > 30 || $val < 1) {
-                $this->errors['auto_cancel'] = $this->module->l(
-                    'Auto cancel should be in range 1 - 30'
+                $this->errors['auto_cancel'] = $this->trans(
+                    'Auto cancel should be in range 1 - 30', [], 'Modules.Tpay.Admin'
                 );
                 $res = false;
             }
@@ -200,9 +200,9 @@ class TpayConfigurationController extends ModuleAdminController
                 $authorization = $this->module->authorization();
 
                 if ($authorization && empty($this->errors)) {
-                    $this->confirmations[] = $this->module->l('Credentials are correct.');
+                    $this->confirmations[] = $this->trans('Credentials are correct.', [], 'Modules.Tpay.Admin');
                 } elseif (!$authorization) {
-                    $this->warnings[] = $this->module->l('Credentials are incorrect!');
+                    $this->warnings[] = $this->trans('Credentials are incorrect!', [], 'Modules.Tpay.Admin');
                 }
 
                 Tools::clearSmartyCache();
@@ -216,7 +216,7 @@ class TpayConfigurationController extends ModuleAdminController
                 }
             } catch (Exception $exception) {
                 PrestaShopLogger::addLog($exception->getMessage(), 3);
-                $this->errors[] = $this->module->l('Settings not saved');
+                $this->errors[] = $this->trans('Settings not saved', [], 'Modules.Tpay.Admin');
             }
         }
     }

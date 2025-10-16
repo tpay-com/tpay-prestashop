@@ -12,7 +12,7 @@
 *  @license   LICENSE.txt
 *}
 <div id="tpay-success">
-    <h4>{l s='Thank you for your order and we invite you to further ' mod='tpay'} <a
-            href="{$homeLink}">{l s='shopping' mod='tpay'}</a>.</h4>
-    <h4>{l s='Browse list of your' mod='tpay'} <a href="{$historyLink}">{l s='orders' mod='tpay'}</a>.</h4>
+    <h4>{l s='Thank you for your order and we invite you to further ' d='Modules.Tpay.Shop'} <a
+            href="{$homeLink}">{l s='shopping' d='Modules.Tpay.Shop'}</a>.</h4>
+    <h4>{l s='Browse list of your' d='Modules.Tpay.Shop'} <a href="{$historyLink}">{l s='orders' d='Modules.Tpay.Shop'}</a>.</h4>
 </div>

@@ -13,15 +13,15 @@
 *}
 <div class="tpay-regulations">
 	<p class="tpay-regulations__content">
-        {l s='Paying,' mod='tpay'}
+        {l s='Paying,' d='Modules.Tpay.Shop'}
 		<a href="{$regulation_url|escape:'htmlall':'UTF-8'}" target="_blank">
-            {l s='you accept the terms and conditions.' mod='tpay'}
+            {l s='you accept the terms and conditions.' d='Modules.Tpay.Shop'}
 		</a>
 	</p>
 	<p class="tpay-regulations__content">
-		{l s='The administrator of the personal data is Krajowy Integrator Płatności spółka akcyjna, based in Poznań.' mod='tpay'}
+		{l s='The administrator of the personal data is Krajowy Integrator Płatności spółka akcyjna, based in Poznań.' d='Modules.Tpay.Shop'}
 		<a href="{$clause_url|escape:'htmlall':'UTF-8'}" target="_blank">
-			{l s='Read the full content.' mod='tpay'}
+			{l s='Read the full content.' d='Modules.Tpay.Shop'}
 		</a>
 	</p>
 </div>

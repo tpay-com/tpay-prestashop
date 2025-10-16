@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="ModulesTpayAdmin.xlf" source-language="en" target-language="pl-PL" datatype="plaintext">
+    <body>
+      <trans-unit id="3f984e2e893f87bc9b60d5b3f6867255">
+        <source> Fee charged for this payment method: </source>
+        <target>Opłata za płatność online:</target>
+      </trans-unit>
+      <trans-unit id="cd1df4e155d53f355819d9294f6671a1">
+        <source> you will use sandbox mode - it is a different environment with mocked payment gateways - don't use it in production!</source>
+        <target> będziesz używał środowiska sandbox - jest to środowisko z zaślepionymi bramkami płatności - nie używaj tego na produkcji!</target>
+      </trans-unit>
+      <trans-unit id="273ce967a1174efe9e1fd322497d77f1">
+        <source>API Client ID</source>
+        <target>API Client ID</target>
+      </trans-unit>
+      <trans-unit id="1ddec0f92f297e937bdf409977df0c02">
+        <source>API Secret</source>
+        <target>API Secret</target>
+      </trans-unit>
+      <trans-unit id="2396fe033cc25d5ded29929b32d65ae1">
+        <source>Accepting online payments</source>
+        <target>Przyjmowanie płatności online</target>
+      </trans-unit>
+      <trans-unit id="6f8ed830bb9e03530503d34d1c1f96e6">
+        <source>Auto cancel active</source>
+        <target>Automatyczne anulowanie aktywne</target>
+      </trans-unit>
+      <trans-unit id="8eaecdd79982c42c819acfd34ac54871">
+        <source>Auto cancel orders and transactions settings</source>
+        <target>Ustawienia automatycznego anulowania zamówień i transakcji</target>
+      </trans-unit>
+      <trans-unit id="1940a18b62fec09c51c4330a4d46fc54">
+        <source>Auto cancel should be in range 1 - 30</source>
+        <target>Zakres dni określających anulowanie transakcji powinien być w zakresie 1 - 30</target>
+      </trans-unit>
+      <trans-unit id="49d8964e7720caf354a55b6b9705f99e">
+        <source>BLIK payments active</source>
+        <target>Płatności BLIK aktywne</target>
+      </trans-unit>
+      <trans-unit id="7501403723d5060f09da5075eceb1447">
+        <source>BLIK widget</source>
+        <target>Widget BLIK</target>
+      </trans-unit>
+      <trans-unit id="93d74901738e996378295fb0a59bb977">
+        <source>Basic settings</source>
+        <target>Ustawienia podstawowe</target>
+      </trans-unit>
+      <trans-unit id="321d4f2bb69eb9edd173cfd0c02500f2">
+        <source>CRC field form</source>
+        <target>Forma pola CRC</target>
+      </trans-unit>
+      <trans-unit id="6c7a46afae7e3adec745b2b99711904a">
+        <source>Calculate installment!</source>
+        <target>Oblicz ratę!</target>
+      </trans-unit>
+      <trans-unit id="371fab8ddc1c54d1916d3422f2aee31b">
+        <source>Cancel orders and transactions after days</source>
+        <target>Anuluj zamówienie i transakcję po upływie wskazanej liczby dni</target>
+      </trans-unit>
+      <trans-unit id="483fd2351d43804a57ac0f4406c2112a">
+        <source>Card widget</source>
+        <target>Widget kart</target>
+      </trans-unit>
+      <trans-unit id="d75092a620c6d7aa0f074e2c33ced7ce">
+        <source>Context installation error</source>
+        <target>Błąd instalacji kontekstu</target>
+      </trans-unit>
+      <trans-unit id="82030f4ce1b47cde609f3a2df9ce0331">
+        <source>Credentials are correct.</source>
+        <target>Dane uwierzytelniające są poprawne.</target>
+      </trans-unit>
+      <trans-unit id="0b486a456348326927b40eaac4023ab5">
+        <source>Credentials are incorrect!</source>
+        <target>Dane uwierzytelniające są błędne!</target>
+      </trans-unit>
+      <trans-unit id="cff759bcb5713e0855988138ccfcb1ca">
+        <source>Credit card settings</source>
+        <target>Ustawienia bramki kartowej</target>
+      </trans-unit>
+      <trans-unit id="9291570afa178cc68f9fa711153822bd">
+        <source>Custom order</source>
+        <target>Własna kolejność</target>
+      </trans-unit>
+      <trans-unit id="520132326c61928684fbd55983f0ac64">
+        <source>Custom order of displayed banks. Drag to change order. The ability to change the order of payment methods is possible when the "Direct bank redirect" option is enabled.</source>
+        <target>Własna kolejność wyświetlanych banków. Przeciągnij, żeby zmienić kolejność.  Możliwość zmiany kolejności metod płatności jest możliwa przy uruchomionej opcji "Bezpośrednie przekierowanie do banku".</target>
+      </trans-unit>
+      <trans-unit id="0e4929b5127c6468265b817bad986f8b">
+        <source>Custom order of displayed payment methods. Drag to change order</source>
+        <target>Własna kolejność wyświetlanych metod płatności. Przeciągnij, żeby zmienić kolejność</target>
+      </trans-unit>
+      <trans-unit id="91ad370e230a248764bed1b84a50d36d">
+        <source>Delete this module?</source>
+        <target>Usunąć moduł?</target>
+      </trans-unit>
+      <trans-unit id="2ddfca98ad03eb144c17e30df230fdf2">
+        <source>Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.</source>
+        <target>Wyświetl metodę płatności w widgecie. W przypadku posiadania innych wtyczek, które modyfikują konfigurację koszyka zakupowego, należy wyłączyć tę opcję.</target>
+      </trans-unit>
+      <trans-unit id="050ab60fb800f2ff5c385dedec3b0bdc">
+        <source>Error adding order statuses</source>
+        <target>Błąd podczas dodawania statusów zamówienia</target>
+      </trans-unit>
+      <trans-unit id="b10547c2284c4238476534eb2b7c7f82">
+        <source><![CDATA[Find in Merchant’s panel: Credit cards payment -> API]]></source>
+        <target>Znajdziesz w Panelu Akceptanta: Płatności kartami -&gt; API</target>
+      </trans-unit>
+      <trans-unit id="9b69214c1831a4e8933268b1448c73ad">
+        <source><![CDATA[Find in Merchant’s panel: Integration -> API -> Open API Keys]]></source>
+        <target>Znajdziesz w Panelu Akceptanta: Integracje -&gt; API -&gt; Klucze do nowego Open API</target>
+      </trans-unit>
+      <trans-unit id="24c51ec90bdf028a6cade7c8d190d280">
+        <source><![CDATA[Find in Merchant’s panel: Settings -> Notifications]]></source>
+        <target>Znajdziesz w Panelu Akceptanta: Ustawienia -&gt; Powiadomienia</target>
+      </trans-unit>
+      <trans-unit id="8fb5aa4295ce81b72ee77bfcfc016d1f">
+        <source>Generic payments</source>
+        <target>Płatności generyczne</target>
+      </trans-unit>
+      <trans-unit id="03c122914ec4c2cd3d9a802bfc8e4ece">
+        <source>Installation error</source>
+        <target>Błąd instalacji</target>
+      </trans-unit>
+      <trans-unit id="19102b7dcca4902e45bc38777c6aaed6">
+        <source>Installment simulator active</source>
+        <target>Symulator rat aktywny</target>
+      </trans-unit>
+      <trans-unit id="603e78c0802f533e58f0a5f4b809e413">
+        <source>Invalid RSA key</source>
+        <target>Niepoprawny klucz RSA</target>
+      </trans-unit>
+      <trans-unit id="8977833f8069024c56bf3581ca073d21">
+        <source>Invalid email notification</source>
+        <target>Niepoprawny e-mail notyfikacji</target>
+      </trans-unit>
+      <trans-unit id="ff210a5f3024c4d2d1e373a68c320c03">
+        <source>May cause some performance issues. Use this method if you cannot set cronjob to run CLI task once a day: `php modules/tpay/cron.php`</source>
+        <target>Może powodować spadki wydajności. Używaj tej metody wyłącznie, gdy nie jesteś w stanie skonfigurować zadania harmonogramu (cron), aby uruchamiał raz dziennie konsolowe polecenie: `php modules/tpay/cron.php`</target>
+      </trans-unit>
+      <trans-unit id="229a7ec501323b94db7ff3157a7623c9">
+        <source>Merchant ID</source>
+        <target>ID merchanta</target>
+      </trans-unit>
+      <trans-unit id="a2436f156896e30797fae5cb4625ff06">
+        <source>Merchant secret key (in notifications)</source>
+        <target>Kod bezpieczeństwa (w powiadomieniach)</target>
+      </trans-unit>
+      <trans-unit id="bafd7322c6e97d25b6299b5d6fe8920b">
+        <source>No</source>
+        <target>Nie</target>
+      </trans-unit>
+      <trans-unit id="d5b501407738a0f21e63ea67ed1d64bf">
+        <source>Notification email</source>
+        <target>Email powiadomień</target>
+      </trans-unit>
+      <trans-unit id="bb8278c756e2855300ee104481ad7d27">
+        <source>Online payment fee</source>
+        <target>Opłata za płatność online</target>
+      </trans-unit>
+      <trans-unit id="9d34f4ec2ae75a549eec01e2f6868a52">
+        <source>Payment credit card</source>
+        <target>Płatność kartą</target>
+      </trans-unit>
+      <trans-unit id="0af709feff4fe0f53053a235f7678645">
+        <source>Payment error status</source>
+        <target>Status transakcji zakończonej błędem</target>
+      </trans-unit>
+      <trans-unit id="ce2b77424d52bfd70d71304f5c0ec39c">
+        <source>Pekao installments simulator settings</source>
+        <target>Ustawienia symulatora rat Pekao</target>
+      </trans-unit>
+      <trans-unit id="37be07209f53a5d636d5c904ca9ae64c">
+        <source>Percentage</source>
+        <target>Procent</target>
+      </trans-unit>
+      <trans-unit id="63f846009b94eb2573efe2829d0820ce">
+        <source>Please complete the secret key</source>
+        <target>Proszę uzupełnić Secret</target>
+      </trans-unit>
+      <trans-unit id="92061476d66160b02b5b8fe8dd752958">
+        <source>Please complete the secret merchant key</source>
+        <target>Proszę uzupełnić kod bezpieczeństwa</target>
+      </trans-unit>
+      <trans-unit id="8a2b144c06f49721bcfb939b503d85da">
+        <source>Please fill in the client id</source>
+        <target>Proszę uzupełnić Client ID</target>
+      </trans-unit>
+      <trans-unit id="c8c87719c140f83eebcd73638035440a">
+        <source>Process refund</source>
+        <target>Wykonaj zwrot</target>
+      </trans-unit>
+      <trans-unit id="d2d5c3e087f684e56b5b81d6212d7ccb">
+        <source>Quota</source>
+        <target>Kwota</target>
+      </trans-unit>
+      <trans-unit id="ed49333351d1fde4bcdb1faa5c33677d">
+        <source>RSA key</source>
+        <target>Klucz RSA</target>
+      </trans-unit>
+      <trans-unit id="d8061fcea5d39a9ff0f6c054a90fa9d1">
+        <source>Redirect directly to bank</source>
+        <target>Bezpośrednie przekierowanie do banku</target>
+      </trans-unit>
+      <trans-unit id="2b56754cc77ff1052b95dcdfbf491ad8">
+        <source>Refund amount </source>
+        <target>Kwota zwrotu</target>
+      </trans-unit>
+      <trans-unit id="9a49152f05f1c38bc892d4c3530c0d18">
+        <source>Refund date</source>
+        <target>Data zwrotu</target>
+      </trans-unit>
+      <trans-unit id="bdfbd27201a382ded201f75ddca04ba0">
+        <source>Refund error.
+                                   Check that the refund amount is correct and does not exceed the value of the order</source>
+        <target>Błąd podczas wykonywania zwrotu.
+                                   Sprawdź czy wartość zwrotu nie przekracza wartości zamówienia.</target>
+      </trans-unit>
+      <trans-unit id="e13ae084c076802ae1b4ce8d01ec33bd">
+        <source>Refund error. Amount Value is outside of declared precision</source>
+        <target>Błąd podczas wykonywania zwrotu. Wartość kwoty jest poza zadeklarowaną precyzją.</target>
+      </trans-unit>
+      <trans-unit id="392c5733b9355eda0b5e81ac9cb31d2d">
+        <source>Refund error. Provided transaction id does not exist, is not available or the transaction has been paid</source>
+        <target>Błąd podczas wykonywania zwrotu. Podany identyfikator transakcji nie istnieje, jest niedostępny lub transakcja została opłacona.</target>
+      </trans-unit>
+      <trans-unit id="2f5f589b85e66cd6d6f2c3372665a369">
+        <source>Refund error. Refund period for this transaction has expired</source>
+        <target>Błąd podczas wykonywania zwrotu. Okres zwrotu dla tej transakcji wygasł.</target>
+      </trans-unit>
+      <trans-unit id="e178c97cca02548154832247e52baaed">
+        <source>Refund error. You can not make a refund for a transaction that has already had a refund request within the last 60 seconds</source>
+        <target>Błąd podczas wykonywania zwrotu. Kolejna prośba o zwrot dla tej transakcji może zostać złożona najwcześniej za 60 sekund.</target>
+      </trans-unit>
+      <trans-unit id="2999b0913934cbe47961ccf2968b2796">
+        <source>Refund error. You cannot refund collect transaction</source>
+        <target>Błąd podczas wykonywania zwrotu. Nie można zwrócić transakcji Collect.</target>
+      </trans-unit>
+      <trans-unit id="1c4f5836e21022217396af1a0a1bc9c9">
+        <source>Refund error. You cannot refund marketplace transaction</source>
+        <target>Błąd podczas wykonywania zwrotu. Nie można dokonać zwrotu transakcji marketplace.</target>
+      </trans-unit>
+      <trans-unit id="7970422e4b4d117a279d222b1a73d10e">
+        <source>Refund error. You cannot refund transaction with status refunded</source>
+        <target>Błąd podczas wykonywania zwrotu. Transakcja została już zwrócona.</target>
+      </trans-unit>
+      <trans-unit id="32d357380657f524d6cd7aa8eccbf916">
+        <source>Refund successful. Return option is being processed please wait.</source>
+        <target>Zwrot wykonany pomyślnie. Proces zwrotu jest w trakcie przetwarzania, proszę czekać.</target>
+      </trans-unit>
+      <trans-unit id="7946392d6342cd056d3bec115298a4f3">
+        <source>Refunded transaction title</source>
+        <target>Transakcja, której dotyczy zwrot</target>
+      </trans-unit>
+      <trans-unit id="bfc6dbfcda2a0859892326a2f8b35fe4">
+        <source>Reset module error</source>
+        <target>Błąd resetowania modułu</target>
+      </trans-unit>
+      <trans-unit id="c9cc8cce247e49bae79f15173ce97354">
+        <source>Save</source>
+        <target>Zapisz</target>
+      </trans-unit>
+      <trans-unit id="f01cd1b2fc01de83f97ebfec55d0a986">
+        <source>Select payments to Easy on-site mechanism to</source>
+        <target>Wybierz płatności do mechanizmu Easy on-site</target>
+      </trans-unit>
+      <trans-unit id="fd33960436cea4dd9f47db03e0079280">
+        <source>Set your own email with notifications.  Leave blank to use the email configured in the tpay panel.</source>
+        <target>Ustaw własny adres powiadomień. Pozostaw puste, aby używać ustawień z panelu akceptanta Tpay.</target>
+      </trans-unit>
+      <trans-unit id="4e1a6c6363bef7f956fd2c4cb21f18fb">
+        <source>Settings for standard payment</source>
+        <target>Ustawienia do płatności standardowych</target>
+      </trans-unit>
+      <trans-unit id="79cb16d72eec21caeb9dfa09dd9acf15">
+        <source>Settings not saved</source>
+        <target>Ustawienia nie zostały zapisane</target>
+      </trans-unit>
+      <trans-unit id="96d4dadd096605d5813d2c6bdf82e82c">
+        <source>Settings saved</source>
+        <target>Ustawienia zapisane</target>
+      </trans-unit>
+      <trans-unit id="ac794f27a2403fc70aa3b05954b56bca">
+        <source>Show the method as a separate payment</source>
+        <target>Pokaż metodę jako osobną płatność</target>
+      </trans-unit>
+      <trans-unit id="f69d7a9f87546d78e76e0ee400dabeac">
+        <source>Status of a paid transaction with virtual products only</source>
+        <target>Status opłaconej transakcji, wyłącznie z produktami wirtualnymi</target>
+      </trans-unit>
+      <trans-unit id="0bca037451ac432ae9fae53a78387a6e">
+        <source>Status of paid transaction</source>
+        <target>Status transakcji opłaconej</target>
+      </trans-unit>
+      <trans-unit id="267e2ea73e5af21b7f89d2643d58ce78">
+        <source>Status of the transaction in process</source>
+        <target>Status transakcji oczekującej na płatność</target>
+      </trans-unit>
+      <trans-unit id="e932c2a6150177c4008813fd23c713da">
+        <source>Surcharge for the use of payment</source>
+        <target>Dopłata do obsługi płatności</target>
+      </trans-unit>
+      <trans-unit id="7a2b943fbd7b60ffd9f43d0f64118497">
+        <source>Surcharge type</source>
+        <target>Typ dopłaty</target>
+      </trans-unit>
+      <trans-unit id="49fd36974d3493e71b57ae24758da624">
+        <source>Surcharge value</source>
+        <target>Stała wartość</target>
+      </trans-unit>
+      <trans-unit id="d4df0ef56711109484c5c849a7f97a30">
+        <source>Table installation error</source>
+        <target>Błąd instalacji tabeli</target>
+      </trans-unit>
+      <trans-unit id="a118032ec91a097701ccd5f9c69b2026">
+        <source>The installment simulator is available in the checkout</source>
+        <target>Symulator rat jest dostępny na stronie zamówienia</target>
+      </trans-unit>
+      <trans-unit id="713b991c0d200181b04ba71d33696a2f">
+        <source>The installment simulator is available in the shopping cart</source>
+        <target>Symulator rat jest dostępny w koszyku zakupowym</target>
+      </trans-unit>
+      <trans-unit id="3c00b3356c3d24cf4ee08708058a4c15">
+        <source>The installment simulator is available on the product page</source>
+        <target>Symulator rat jest dostępny na karcie produktu</target>
+      </trans-unit>
+      <trans-unit id="51368092b1ba81910e4f8e1d7d39c795">
+        <source>Tpay</source>
+        <target>Tpay</target>
+      </trans-unit>
+      <trans-unit id="b4d9365fdbb507d023c4775afbb9373c">
+        <source>Tpay refunds</source>
+        <target>Zwroty Tpay</target>
+      </trans-unit>
+      <trans-unit id="b1b2bdeab48fdfb1e53da7d7ce10b22f">
+        <source>Transaction statuses</source>
+        <target>Statusy transakcji</target>
+      </trans-unit>
+      <trans-unit id="542b1d933b6142f66e3cfb215ffa2f70">
+        <source>Transfer widget</source>
+        <target>Widget przelewów</target>
+      </trans-unit>
+      <trans-unit id="fff2aa1cada298840d85be1dae59b1b0">
+        <source>Unable to process refund - amount is greater than allowed %s</source>
+        <target>Nie można przetworzyć zwrotu - kwota jest większa niż dozwolone %s</target>
+      </trans-unit>
+      <trans-unit id="82ed753b208ffd8fbe2900424d720d5f">
+        <source>Unable to process refund - invalid amount</source>
+        <target>Nie można przetworzyć zwrotu - nieprawidłowa kwota</target>
+      </trans-unit>
+      <trans-unit id="18059342ab22f4ce9dcb766714593cf1">
+        <source>Use Sandbox Account</source>
+        <target>Używaj konta Sandbox</target>
+      </trans-unit>
+      <trans-unit id="103de0deed0b650bab57f99565af0101">
+        <source>Use frontend to run CRON jobs</source>
+        <target>Wykorzystaj front sklepu do uruchamiania zadań harmonogramu</target>
+      </trans-unit>
+      <trans-unit id="1d682521d46887b13c231ce84055eec6">
+        <source>Use global settings</source>
+        <target>Używaj ustawień globalnych</target>
+      </trans-unit>
+      <trans-unit id="059e9861e0400dfbe05c98a841f3f96b">
+        <source>WARNING</source>
+        <target>UWAGA</target>
+      </trans-unit>
+      <trans-unit id="ac1ec9083d814b7c42257cb5d13fa31e">
+        <source>When the installment simulator is enabled, the merchant ID field must be filled in</source>
+        <target>Przy włączonym symulatorze rat, należy uzupełnić pole ID merchanta</target>
+      </trans-unit>
+      <trans-unit id="93cba07454f06a4a960172bbd6e2a435">
+        <source>Yes</source>
+        <target>Tak</target>
+      </trans-unit>
+      <trans-unit id="f46f4193b471a6eca1c1a7d2d53b78ac">
+        <source>You cannot manage from a "Group Shop" context, select directly the shop you want to edit</source>
+        <target>You cannot manage from a "Group Shop" context, select directly the shop you want to edit</target>
+      </trans-unit>
+      <trans-unit id="a41b276b797bf440f5417466020356cd">
+        <source>Your address for notifications</source>
+        <target>Adres do notyfikacji</target>
+      </trans-unit>
+      <trans-unit id="4b8aec2fcddde2152ac2f0b863fe2f69">
+        <source>amount is greater than allowed %s</source>
+        <target>kwota jest większa niż dopuszczalna %s</target>
+      </trans-unit>
+      <trans-unit id="c148fc3716e26845b88e662ccb99d4d3">
+        <source>invalid amount</source>
+        <target>nieprawidłowa kwota</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

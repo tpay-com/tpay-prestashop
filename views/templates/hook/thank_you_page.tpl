@@ -2,12 +2,12 @@
     <link rel="stylesheet" href="{$assets_path|escape:'htmlall':'UTF-8'}views/css/payment.css">
     <div class="payment-section">
         <div class="title-wrapper">
-            <h3 class="page-title">{l s='Payment with Tpay' mod='tpay'}:</h3>
+            <h3 class="page-title">{l s='Payment with Tpay' d='Modules.Tpay.Shop'}:</h3>
             <div class="page-title-line"></div>
         </div>
         <div class="payments-container">
           <p class="error-message-global">
-            {l s='Payment error, please try again.' mod='tpay'}
+            {l s='Payment error, please try again.' d='Modules.Tpay.Shop'}
           </p>
             {*            BLIK*}
             <div class="blik_payment">
@@ -35,7 +35,7 @@
                         />
                     </label>
                     <div class="blik-code-section" style="display: none">
-                        <label for="blik-code" class="blik-code-label">{l s='Enter BLIK code' mod='tpay'}</label>
+                        <label for="blik-code" class="blik-code-label">{l s='Enter BLIK code' d='Modules.Tpay.Shop'}</label>
                         <input
                                 type="text"
                                 id="blik-code"
@@ -45,27 +45,27 @@
                                 pattern="\d*"
                         />
                         <p class="error-message">
-                            {l s='Payment error, please try again.' mod='tpay'}
+                            {l s='Payment error, please try again.' d='Modules.Tpay.Shop'}
                         </p>
                         <p class="info-text">
-                            {l s="Paying, you accept the" mod='tpay'} <a
+                            {l s="Paying, you accept the" d='Modules.Tpay.Shop'} <a
                                     href="{$regulationUrl}"
-                                    target="_blank">{l s="terms and conditions." mod='tpay'}</a> {l s="The administrator of the personal data is Krajowy Integrator Płatności spółka akcyjna, based in Poznań." mod='tpay'}
+                                    target="_blank">{l s="terms and conditions." d='Modules.Tpay.Shop'}</a> {l s="The administrator of the personal data is Krajowy Integrator Płatności spółka akcyjna, based in Poznań." d='Modules.Tpay.Shop'}
                             <a
                                     href="{$clauseUrl}"
-                                    target="_blank">{l s="Read the full content." mod='tpay'}</a>
+                                    target="_blank">{l s="Read the full content." d='Modules.Tpay.Shop'}</a>
                         </p>
                     </div>
                     <div class="blik-waiting">
                         <img src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/device-mobile-check.svg"
                              alt="Ikona"/>
-                        {l s="Confirm the payment in your bank's mobile app." mod='tpay'}
+                        {l s="Confirm the payment in your bank's mobile app." d='Modules.Tpay.Shop'}
                     </div>
                 </div>
             </div>
 
             <p class="blik-master-error">
-                {l s='BLIK payment error, try paying online.' mod='tpay'}
+                {l s='BLIK payment error, try paying online.' d='Modules.Tpay.Shop'}
             </p>
 
             {*            Bank transfer*}
@@ -81,7 +81,7 @@
                 <div class="payment-option">
                     <label class="payment-label" for="bank-transfer-radio">
                         <span class="radio-mark"></span>
-                        <span class="payment-title">{l s='Online payment' mod='tpay'}</span>
+                        <span class="payment-title">{l s='Online payment' d='Modules.Tpay.Shop'}</span>
                         <img
                                 src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg"
                                 alt="Logo Tpay"
@@ -98,7 +98,7 @@
         </div>
         <button class="btn blue pay-button" id="payment-button" disabled>
             <span class="spinner"><img src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/spinner.svg"/></span>
-            <span class="label">{l s='Pay for your purchase with Tpay!' mod='tpay'}</span>
+            <span class="label">{l s='Pay for your purchase with Tpay!' d='Modules.Tpay.Shop'}</span>
         </button>
         <div class="section-divider"></div>
     </div>
@@ -107,8 +107,8 @@
             <img src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/success.svg" alt="Icon"/>
         </div>
         <div class="message">
-            <p class="title">{l s='Payment completed successfully!' mod='tpay'}</p>
-            <p class="subtitle">{l s='Thank you for using Tpay.' mod='tpay'}</p>
+            <p class="title">{l s='Payment completed successfully!' d='Modules.Tpay.Shop'}</p>
+            <p class="subtitle">{l s='Thank you for using Tpay.' d='Modules.Tpay.Shop'}</p>
         </div>
         <div class="underline"></div>
     </div>
