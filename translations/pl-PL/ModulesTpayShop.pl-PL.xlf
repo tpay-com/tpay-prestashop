@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="ModulesTpayShop.xlf" source-language="en" target-language="pl-PL" datatype="plaintext">
+    <body>
+      <trans-unit id="9dda1ce369a35b3d0a4993e05745bc99">
+        <source> Product</source>
+        <target>Produkt</target>
+      </trans-unit>
+      <trans-unit id="d9569fc09d7f6c6492c580cc964d23e0">
+        <source> Quantity</source>
+        <target>Ilość</target>
+      </trans-unit>
+      <trans-unit id="c2d69e8ff767359a3bff5870ae4f156d">
+        <source> Total price </source>
+        <target>Cena łączna</target>
+      </trans-unit>
+      <trans-unit id="d76f5adfb0bc9e7098952829774b2687">
+        <source> Unit price </source>
+        <target>Cena jednostkowa</target>
+      </trans-unit>
+      <trans-unit id="4db02be1f2d282b97277c4493cc51591">
+        <source>(total)</source>
+        <target>(łącznie)</target>
+      </trans-unit>
+      <trans-unit id="93b4afaba65d5574b270072b3c243ef5">
+        <source>Accept blik code on mobile app</source>
+        <target>Zaakceptuj kod blik w aplikacji mobilnej banku</target>
+      </trans-unit>
+      <trans-unit id="c979b399b9d0d982ed262cb78ab5fad3">
+        <source>Add new card</source>
+        <target>Dodaj nową kartę</target>
+      </trans-unit>
+      <trans-unit id="dd7bf230fde8d4836917806aff6a6b27">
+        <source>Address</source>
+        <target>Adres</target>
+      </trans-unit>
+      <trans-unit id="effdb9ce6c5d44df31b89d7069c8e0fb">
+        <source>Alias</source>
+        <target>Alias</target>
+      </trans-unit>
+      <trans-unit id="26e79570e8d6e15ee7168fc8bfdbf805">
+        <source>An error occurred while ordering.</source>
+        <target>Podczas składania zamówienia wystąpił błąd.</target>
+      </trans-unit>
+      <trans-unit id="d2171f86cc8b21fe0168a719d39d2999">
+        <source>BLIK</source>
+        <target>BLIK</target>
+      </trans-unit>
+      <trans-unit id="7795e9237d6f67c70ccd967c0949388c">
+        <source>BLIK POS is not available</source>
+        <target>BLIK niedostępny</target>
+      </trans-unit>
+      <trans-unit id="00d48f57f46115ec0b1a114c336d452c">
+        <source>BLIK insufficient funds / user authorization error</source>
+        <target>Niewystarczające środki lub anulowanie przez użytkownika</target>
+      </trans-unit>
+      <trans-unit id="a71c05587319f7d380342028fbccf42b">
+        <source>BLIK other error</source>
+        <target>Nieoczekiwany błąd BLIK</target>
+      </trans-unit>
+      <trans-unit id="5e1cb0cec63c1d802270ba2944e6b3a0">
+        <source>BLIK payment declined by user</source>
+        <target>płatność BLIK odrzucona przez użytkownika</target>
+      </trans-unit>
+      <trans-unit id="dd1e100b2be58624a42e86c787b4bf68">
+        <source>BLIK payment error, try paying online.</source>
+        <target>Błąd płatności blik, spróbuj zapłacić online.</target>
+      </trans-unit>
+      <trans-unit id="ec67175df10c793a460d905fb2949340">
+        <source>BLIK system general error</source>
+        <target>Błąd BLIK</target>
+      </trans-unit>
+      <trans-unit id="82cc8610887763d74f58be3b2eb4bb04">
+        <source>BLIK user or system timeout</source>
+        <target>Przekroczono czas oczekiwania na BLIK</target>
+      </trans-unit>
+      <trans-unit id="6e82844bda8eb4e4a77f0c927008089b">
+        <source>Browse list of your</source>
+        <target>Przeglądaj listę Twoich</target>
+      </trans-unit>
+      <trans-unit id="5ea7f231296949070013bc43715aae01">
+        <source>CVC</source>
+        <target>CVC</target>
+      </trans-unit>
+      <trans-unit id="6c7a46afae7e3adec745b2b99711904a">
+        <source>Calculate installment!</source>
+        <target>Oblicz ratę!</target>
+      </trans-unit>
+      <trans-unit id="a44217022190f5734b2f72ba1e4f8a79">
+        <source>Card number</source>
+        <target>Numer karty</target>
+      </trans-unit>
+      <trans-unit id="43423b4056880b08f2c9aa50d8670531">
+        <source>Cart cannot be loaded or an order has already been placed using this cart</source>
+        <target>Nie można załadować koszyka lub zamówienie zostało już złożone przy użyciu tego koszyka</target>
+      </trans-unit>
+      <trans-unit id="57d056ed0984166336b7879c2af3657f">
+        <source>City</source>
+        <target>Miasto</target>
+      </trans-unit>
+      <trans-unit id="e3c2a4b7674434194f201a1f99eabb7b">
+        <source>Client identificator not provided.</source>
+        <target>Nie podano identyfikatora klienta.</target>
+      </trans-unit>
+      <trans-unit id="1c76cbfe21c6f44c1d1e59d54f3e4420">
+        <source>Company</source>
+        <target>Firma</target>
+      </trans-unit>
+      <trans-unit id="25e712653c4f83dab8c5281806ee876d">
+        <source>Confirm the payment in your bank's mobile app.</source>
+        <target>Potwierdź płatność w aplikacji mobilnej swojego banku.</target>
+      </trans-unit>
+      <trans-unit id="59716c97497eb9694541f7c3d37b1a4d">
+        <source>Country</source>
+        <target>Kraj</target>
+      </trans-unit>
+      <trans-unit id="f2a6c498fb90ee345d997f888fce3b18">
+        <source>Delete</source>
+        <target>Usuń</target>
+      </trans-unit>
+      <trans-unit id="32063d827ff1f7d07455a7b8e3e1c098">
+        <source>Delivery address:</source>
+        <target>Adres dostawy</target>
+      </trans-unit>
+      <trans-unit id="29d5f8337283bab380731dc35d562c28">
+        <source>Enter BLIK code</source>
+        <target>Wpisz kod BLIK</target>
+      </trans-unit>
+      <trans-unit id="65d052f05f2992a05ac4eb65f2dbcb62">
+        <source>Enter a valid blik code</source>
+        <target>Podaj prawidłowy kod blik</target>
+      </trans-unit>
+      <trans-unit id="8c1279db4db86553e4b9682f78cf500e">
+        <source>Expiration date</source>
+        <target>Termin ważności</target>
+      </trans-unit>
+      <trans-unit id="b5911ca986bef55a551e74d788da8810">
+        <source>If your browser does not redirect you automatically press the button below.</source>
+        <target>Jeżeli Twoja przeglądarka nie przekieruje Cię automatycznie, kliknij przycisk poniżej.</target>
+      </trans-unit>
+      <trans-unit id="85ba3c31c68d02ccead3e04ba46f9c52">
+        <source>Incorrect BLIK code</source>
+        <target>Niepoprawny kod BLIK</target>
+      </trans-unit>
+      <trans-unit id="f74a55ac45ea4c40bb97dca10274a0d0">
+        <source>Incorrect card data</source>
+        <target>Nieprawidłowe dane karty</target>
+      </trans-unit>
+      <trans-unit id="47ae8a5b9cc7fd6ef2b3ce7b38e1ccc3">
+        <source>Incorrect transaction id</source>
+        <target>Niewłaściwe ID transakcji</target>
+      </trans-unit>
+      <trans-unit id="68c8a940afdd7e966a16717c70465b7a">
+        <source>Insufficient Funds</source>
+        <target>Niewystarczające środki</target>
+      </trans-unit>
+      <trans-unit id="aedf017ce77abb66f5a4c830ab268091">
+        <source>Invoicing address:</source>
+        <target>Adres rozliczeniowy</target>
+      </trans-unit>
+      <trans-unit id="2ebd5b4454c10397f030e53cb5071f64">
+        <source>List of saved credit cards.</source>
+        <target>Lista zapisanych kart kredytowych.</target>
+      </trans-unit>
+      <trans-unit id="4aa8b7197e93714c0425e0d6d25dd52b">
+        <source>My credit cards</source>
+        <target>Moje karty kredytowe</target>
+      </trans-unit>
+      <trans-unit id="8df4c6490187c3c1187e60e1dfb3b043">
+        <source>Name and surname</source>
+        <target>Imię i nazwisko</target>
+      </trans-unit>
+      <trans-unit id="5d174bcf51a1125e4daae98169c10560">
+        <source>No active payment gateways</source>
+        <target>Brak aktywnych płatności</target>
+      </trans-unit>
+      <trans-unit id="7efa2245476648cb763f40b3f3810f2a">
+        <source>No stored credit cards</source>
+        <target>Brak zapisanych kart kredytowych</target>
+      </trans-unit>
+      <trans-unit id="4e292ec2150291ab752d3071a8bfb988">
+        <source>No support for cards</source>
+        <target>Brak wsparcia dla kart</target>
+      </trans-unit>
+      <trans-unit id="4ce87fa1c8a1fa1751f95186feb6e589">
+        <source>Online payment</source>
+        <target>Płatność online</target>
+      </trans-unit>
+      <trans-unit id="bb8278c756e2855300ee104481ad7d27">
+        <source>Online payment fee</source>
+        <target>Opłata za płatność online</target>
+      </trans-unit>
+      <trans-unit id="782c8b38bce4f2f6975ca7f33ac8189b">
+        <source>Order history</source>
+        <target>Historia zamówień</target>
+      </trans-unit>
+      <trans-unit id="a5e70f4b39f50d075ec9ee5a8460570d">
+        <source>Order price </source>
+        <target>Kwota zamówienia</target>
+      </trans-unit>
+      <trans-unit id="569fd05bdafa1712c4f6be5b153b8418">
+        <source>Other payment methods</source>
+        <target>Inne metody płatności</target>
+      </trans-unit>
+      <trans-unit id="66d65528e66a3c4bbc8080dc4fca115a">
+        <source>Pay by online transfer with Tpay</source>
+        <target>Płać przelewem online za pomocą Tpay</target>
+      </trans-unit>
+      <trans-unit id="357667ee8bb30c807abbe6ec58e2a696">
+        <source>Pay for your purchase with Tpay!</source>
+        <target>Zapłać za zakupy z Tpay!</target>
+      </trans-unit>
+      <trans-unit id="2f0653cd17fe715bac12b8e249989e93">
+        <source>Paying,</source>
+        <target>Płacąc,</target>
+      </trans-unit>
+      <trans-unit id="77a11c5427c7f55f898fbb263377f9fd">
+        <source>Paying, you accept the</source>
+        <target>Płacąc, akceptujesz </target>
+      </trans-unit>
+      <trans-unit id="5bf76a04f8524673060e680b5193ed2b">
+        <source>Payment card</source>
+        <target>Płatność kartą</target>
+      </trans-unit>
+      <trans-unit id="6fa3e13c6f7496d4414295980ad11c07">
+        <source>Payment completed successfully!</source>
+        <target>Płatność zakończona sukcesem!</target>
+      </trans-unit>
+      <trans-unit id="1e97d97a923eaddd810e056c828e99ea">
+        <source>Payment error</source>
+        <target>Błąd płatności</target>
+      </trans-unit>
+      <trans-unit id="903992715a2e36a2f3875036ac0fb1f9">
+        <source>Payment error, please try again.</source>
+        <target>Błąd płatności, spróbuj ponownie.</target>
+      </trans-unit>
+      <trans-unit id="47ed62374011e9d3735080d564593c67">
+        <source>Payment surcharge</source>
+        <target>Opłata za metodę płatności</target>
+      </trans-unit>
+      <trans-unit id="e3da90949565f038a10d90af037680cf">
+        <source>Payment with Tpay</source>
+        <target>Płatność z Tpay</target>
+      </trans-unit>
+      <trans-unit id="bcc254b55c4a1babdf1dcb82c207506b">
+        <source>Phone</source>
+        <target>Telefon</target>
+      </trans-unit>
+      <trans-unit id="a6ac98340af2b888792994823f5974fd">
+        <source>Please accept the store rules</source>
+        <target>Proszę zaakceptować regulamin sklepu</target>
+      </trans-unit>
+      <trans-unit id="67588476dd42cb783d9608373bbd3b3c">
+        <source>Please choose payment method</source>
+        <target>Proszę wybrać metodę płatności</target>
+      </trans-unit>
+      <trans-unit id="8de08f92a66449fe2e29fef18d752f68">
+        <source>Please wait... In a moment you will be redirected to secure transaction panel.</source>
+        <target>Proszę czekać, za chwilę zostaniesz przekierowany do bezpiecznego panelu transakcyjnego.</target>
+      </trans-unit>
+      <trans-unit id="572ed696f21038e6cc6c86bb272a3222">
+        <source>Postal code</source>
+        <target>Kod pocztowy</target>
+      </trans-unit>
+      <trans-unit id="11803f40c277b679b08ce0b8d38fdefa">
+        <source>Preload</source>
+        <target>Ładowanie</target>
+      </trans-unit>
+      <trans-unit id="010d1ea2941d2b980ba8fe39ea68522c">
+        <source>Processing data, please wait...</source>
+        <target>Przetwarzanie danych, proszę czekać...</target>
+      </trans-unit>
+      <trans-unit id="fbd876361f4ffb764358fb520420e475">
+        <source>Read the full content.</source>
+        <target>Czytaj więcej.</target>
+      </trans-unit>
+      <trans-unit id="5f7ae98bdc36ea2686daed151216abf6">
+        <source>Retry payment</source>
+        <target>Ponów płatność</target>
+      </trans-unit>
+      <trans-unit id="ce0cfc81b8d76d6f908a45ac5ec0e3dd">
+        <source>Save my card</source>
+        <target>Zapisz moją kartę</target>
+      </trans-unit>
+      <trans-unit id="bc09ce4a025dc3ff29d9184110f7182c">
+        <source>Shipping cost: </source>
+        <target>Koszt przesyłki</target>
+      </trans-unit>
+      <trans-unit id="0203eced6da80c4f2458c91eee3fe223">
+        <source>Summary of ordered products:</source>
+        <target>Podsumowanie zamówionych produktów</target>
+      </trans-unit>
+      <trans-unit id="0fa8ab9a88dcc8cb28fb5bdbfb6d2e38">
+        <source>Thank you for using Tpay.</source>
+        <target>Dziękujemy za skorzystanie z usługi Tpay.</target>
+      </trans-unit>
+      <trans-unit id="672f5dcf8f3c4683f3610c2b402d4bc7">
+        <source>Thank you for your order and we invite you to further </source>
+        <target>Dziękujemy za złożenie zamówienia i zachęcamy do dalszych</target>
+      </trans-unit>
+      <trans-unit id="bf5a8c00d8d29b20e0488933df997fff">
+        <source>The administrator of the personal data is Krajowy Integrator Płatności spółka akcyjna, based in Poznań.</source>
+        <target>Administratorem danych osobowych jest Krajowy Integrator Płatności spółka akcyjna z siedzibą w Poznaniu.</target>
+      </trans-unit>
+      <trans-unit id="d62cfd7f41ceeeaf4185ee2c09b0ddf0">
+        <source>The blik code has expired</source>
+        <target>Kod blika stracił ważność</target>
+      </trans-unit>
+      <trans-unit id="5c9799c99b30ca7f3121d8e4fc48679a">
+        <source>The code you entered is invalid or has expired.</source>
+        <target>Podany kod jest nieprawidłowy, bądź utracił ważność.</target>
+      </trans-unit>
+      <trans-unit id="76530d778bad8c827dde4eece526deaa">
+        <source>The security number located on the back of the payment card.</source>
+        <target>Numer zabezpieczający, znajdujący się na odwrocie karty płatniczej.</target>
+      </trans-unit>
+      <trans-unit id="9bceca617a7b6591070c38f2fe3ffeb1">
+        <source>Tpay payment</source>
+        <target>Płatność Tpay</target>
+      </trans-unit>
+      <trans-unit id="53e6aeb75be1e8b3651276ab18ef6cc8">
+        <source>Transaction rejected by payer</source>
+        <target>Transakcja odrzucona przez płatnika</target>
+      </trans-unit>
+      <trans-unit id="0aa64da98773f7359263ce417bc039a5">
+        <source>Transaction was not accepted in the bank's application</source>
+        <target>Transakcja nie została zaakceptowana w aplikacji banku</target>
+      </trans-unit>
+      <trans-unit id="731ccd95b2be4b7bf0dfac9e2cb84489">
+        <source>Use BLIK code</source>
+        <target>Płatność kodem BLIK</target>
+      </trans-unit>
+      <trans-unit id="266d5092eb859f1d73258aa1074906ef">
+        <source>Use saved blik code</source>
+        <target>Płatność BLIK bez wpisywania kodu</target>
+      </trans-unit>
+      <trans-unit id="1545900c90049e48660d8bcf87596d46">
+        <source>Why don't I have to enter the code?</source>
+        <target>Dlaczego nie musisz wpisywać kodu?</target>
+      </trans-unit>
+      <trans-unit id="ac94115bf405ef70a9319b142fea5b14">
+        <source>You do not need to enter the BLIK code, because you linked your account to this device during one of the previous payments. The payment still requires confirmation in the app.</source>
+        <target>Nie musisz wpisywać kodu bo powiązałeś swoje konto z tym urządzeniem przy innej płatności. Płatność nadal wymaga potwierdzenia w aplikacji.</target>
+      </trans-unit>
+      <trans-unit id="a926feddcf50ed630d48f609c2e25716">
+        <source>You will be redirected to the payment gateway.</source>
+        <target>Zostaniesz przekierowany do bramki płatności.</target>
+      </trans-unit>
+      <trans-unit id="f1e79b043ddb77cc00d3209992071c15">
+        <source>Your payment was not yet confirmed by Tpay. If you break payment, you can try to pay again.</source>
+        <target>Twoja płatność nie została jeszcze potwierdzona przez Tpay. Jeżeli wystąpił błąd podczas płatności, możesz ją ponowić.</target>
+      </trans-unit>
+      <trans-unit id="879f6b8877752685a966564d072f498f">
+        <source>Your shopping cart is empty.</source>
+        <target>Twój koszyk jest pusty</target>
+      </trans-unit>
+      <trans-unit id="17c0fa0065346939dbce8ef32e070854">
+        <source>can not pay with BLIK code or alias for non BLIK transaction</source>
+        <target>nie możesz opłacić BLIKiem tej transakcji</target>
+      </trans-unit>
+      <trans-unit id="4d7d34151d1b0e9a91e6689ae41f9619">
+        <source>error connecting BLIK system</source>
+        <target>błąd połączenia z systemem BLIK</target>
+      </trans-unit>
+      <trans-unit id="6cbdae1f2f626726024b375d7a4181e0">
+        <source>given alias has not been registered or has been deregistered</source>
+        <target>ten alias nie został zarejestrowany lub został wyrejestrowany</target>
+      </trans-unit>
+      <trans-unit id="720fcba54e3c56ce7721c43a6527a9d3">
+        <source>given alias is non-unique</source>
+        <target>ten alias BLIK nie jest unikalny</target>
+      </trans-unit>
+      <trans-unit id="607aa6c135ed608ec4ab87f16550a614">
+        <source>given alias section is incorrect</source>
+        <target>ten alias jest niepoprawny</target>
+      </trans-unit>
+      <trans-unit id="fd5c1946e43426e22a30156653590d33">
+        <source>incorrect transaction status - should be pending</source>
+        <target>niewłaściwy status transakcji</target>
+      </trans-unit>
+      <trans-unit id="450700963a732785f78fa9e88700df0f">
+        <source>invalid BLIK code or alias data format</source>
+        <target>błędny kod BLIK lub alias</target>
+      </trans-unit>
+      <trans-unit id="80f53d786f0415ef6eefb2f93b4ccd93">
+        <source>invalid BLIK six-digit code</source>
+        <target>błędny kod BLIK</target>
+      </trans-unit>
+      <trans-unit id="12c500ed0b7879105fb46af0f246be87">
+        <source>orders</source>
+        <target>zamówień</target>
+      </trans-unit>
+      <trans-unit id="b2fe440cb7a0b127f1a90ffea296313b">
+        <source>shopping</source>
+        <target>zakupów</target>
+      </trans-unit>
+      <trans-unit id="3f6b73e1e263858f57738600f9bd6e7b">
+        <source>terms and conditions.</source>
+        <target>regulamin.</target>
+      </trans-unit>
+      <trans-unit id="a5c8678e9c1b744aef522eabe1e68350">
+        <source>tpay payment</source>
+        <target>Tpay</target>
+      </trans-unit>
+      <trans-unit id="2ff79200db441562e7d86856650838a5">
+        <source>you accept the terms and conditions.</source>
+        <target>akceptujesz regulamin.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

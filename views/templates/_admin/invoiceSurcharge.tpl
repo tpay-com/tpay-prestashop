@@ -20,7 +20,7 @@
 			<table id="payment-tab" width="100%" class="right">
 				<tr class="bold">
 					<td class="grey" width="50%">
-                        {l s='Online payment fee' mod='tpay'}
+                        {l s='Online payment fee' d='Modules.Tpay.Admin'}
 					</td>
 					<td class="white" width="50%">
                         {$surchargeCost}

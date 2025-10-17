@@ -28,7 +28,7 @@
         }
     }
 </style>
-{*<img src="{$tpay_path|escape:'htmlall':'UTF-8'}/img/loading.png" alt="{l s='Redirecting' mod='tpay'}" class="loader"/>*}
-<h4>{l s='Please wait... In a moment you will be redirected to secure transaction panel.' mod='tpay'}</h4>
-<h5>{l s='If your browser does not redirect you automatically press the button below.' mod='tpay'}</h5>
+{*<img src="{$tpay_path|escape:'htmlall':'UTF-8'}/img/loading.png" alt="{l s='Redirecting' d='Modules.Tpay.Shop'}" class="loader"/>*}
+<h4>{l s='Please wait... In a moment you will be redirected to secure transaction panel.' d='Modules.Tpay.Shop'}</h4>
+<h5>{l s='If your browser does not redirect you automatically press the button below.' d='Modules.Tpay.Shop'}</h5>
 {*{$tpay_form}*}

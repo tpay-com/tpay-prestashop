@@ -6,7 +6,7 @@
 
     </div>
     <div class="message">
-        <p class="title">{l s='Payment error' mod='tpay'}</p>
+        <p class="title">{l s='Payment error' d='Modules.Tpay.Shop'}</p>
     </div>
     <div class="underline"></div>
 </div>

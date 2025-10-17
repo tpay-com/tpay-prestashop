@@ -31,7 +31,7 @@ class Installment extends AbstractHook
     {
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART')) {
             $this->context->smarty->assign(array(
-                'installmentText' => $this->module->l('Calculate installment!'),
+                'installmentText' => $this->module->getTranslator()->trans('Calculate installment!', [], 'Modules.Tpay.Shop'),
                 'checkout_url' => $this->context->link->getPageLink('order'),
                 'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
                 'minAmount' => Config::PEKAO_INSTALLMENT_MIN,
@@ -52,7 +52,7 @@ class Installment extends AbstractHook
 
             if ($totalAmount >= Config::PEKAO_INSTALLMENT_MIN && $totalAmount <= Config::PEKAO_INSTALLMENT_MAX) {
                 $this->context->smarty->assign(array(
-                    'installmentText' => $this->module->l('Calculate installment!'),
+                    'installmentText' => $this->module->getTranslator()->trans('Calculate installment!', [], 'Modules.Tpay.Shop'),
                     'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
                     'amount' => $totalAmount,
                 ));

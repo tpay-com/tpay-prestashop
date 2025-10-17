@@ -19,6 +19,7 @@ namespace Tpay\Util;
 use Configuration as Cfg;
 use Context;
 use OrderState;
+use PrestaShopBundle\Translation\TranslatorComponent;
 use Shop;
 use Tpay;
 use Tpay\Config\Config;
@@ -33,48 +34,52 @@ class AdminFormBuilder
     /** @var Context */
     public $context;
 
+    /** @var TranslatorComponent|null  */
+    private $translator;
+
     public function __construct(Tpay $module, Context $context, array $channels)
     {
         $this->module = $module;
         $this->context = $context;
         $this->channels = $channels;
+        $this->translator = $this->module->getTranslator();
     }
 
     public function formBasicOptions(): array
     {
         $form['form'] = [
             'legend' => [
-                'title' => $this->module->l('Basic settings'),
+                'title' => $this->translator->trans('Basic settings', [], 'Modules.Tpay.Admin'),
                 'icon' => 'icon-cogs'
             ],
             'input' => [
                 [
                     'type' => 'text',
-                    'label' => $this->module->l('API Client ID'),
+                    'label' => $this->translator->trans('API Client ID', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_CLIENT_ID',
                     'size' => 50,
-                    'desc' => $this->module->l('Find in Merchant’s panel: Integration -> API -> Open API Keys'),
+                    'desc' => $this->translator->trans('Find in Merchant’s panel: Integration -> API -> Open API Keys', [], 'Modules.Tpay.Admin'),
                     'required' => true,
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->module->l('API Secret'),
+                    'label' => $this->translator->trans('API Secret', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_SECRET_KEY',
                     'size' => 50,
-                    'desc' => $this->module->l('Find in Merchant’s panel: Integration -> API -> Open API Keys'),
+                    'desc' => $this->translator->trans('Find in Merchant’s panel: Integration -> API -> Open API Keys', [], 'Modules.Tpay.Admin'),
                     'required' => true,
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->module->l('Merchant secret key (in notifications)'),
+                    'label' => $this->translator->trans('Merchant secret key (in notifications)', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_MERCHANT_SECRET',
                     'size' => 400,
-                    'desc' => $this->module->l('Find in Merchant’s panel: Settings -> Notifications'),
+                    'desc' => $this->translator->trans('Find in Merchant’s panel: Settings -> Notifications', [], 'Modules.Tpay.Admin'),
                     'required' => true,
                 ],
                 [
                     'type' => 'select',
-                    'label' => $this->module->l('CRC field form'),
+                    'label' => $this->translator->trans('CRC field form', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_CRC_FORM',
                     'options' => [
                         'query' => [
@@ -92,7 +97,7 @@ class AdminFormBuilder
                 ],
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('Use Sandbox Account'),
+                    'label' => $this->translator->trans('Use Sandbox Account', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_SANDBOX',
                     'is_bool' => true,
                     'class' => 't',
@@ -100,22 +105,24 @@ class AdminFormBuilder
                         [
                             'id' => 'tpay_sandbox_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_sandbox_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
-                    'desc' => '<b>' . $this->module->l('WARNING') . '</b> '
-                        . $this->module->l(
-                            ' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!'
+                    'desc' => '<b>' . $this->translator->trans('WARNING', [], 'Modules.Tpay.Admin') . '</b> '
+                        . $this->translator->trans(
+                            ' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!',
+                            [],
+                            'Modules.Tpay.Admin'
                         ),
                 ],
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('Redirect directly to bank'),
+                    'label' => $this->translator->trans('Redirect directly to bank', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_REDIRECT_TO_CHANNEL',
                     'is_bool' => true,
                     'class' => 't',
@@ -123,20 +130,22 @@ class AdminFormBuilder
                         [
                             'id' => 'tpay_redirect_to_channel_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_redirect_to_channel_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ]
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->module->l('Notification email'),
-                    'desc' => $this->module->l(
-                        'Set your own email with notifications.  Leave blank to use the email configured in the tpay panel.'
+                    'label' => $this->translator->trans('Notification email', [], 'Modules.Tpay.Admin'),
+                    'desc' => $this->translator->trans(
+                        'Set your own email with notifications.  Leave blank to use the email configured in the tpay panel.',
+                        [],
+                        'Modules.Tpay.Admin'
                     ),
                     'name' => 'TPAY_NOTIFICATION_EMAILS',
                     'size' => 50,
@@ -144,7 +153,7 @@ class AdminFormBuilder
                 ],
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('Surcharge for the use of payment'),
+                    'label' => $this->translator->trans('Surcharge for the use of payment', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_SURCHARGE_ACTIVE',
                     'is_bool' => true,
                     'class' => 't',
@@ -152,18 +161,18 @@ class AdminFormBuilder
                         [
                             'id' => 'tpay_surcharge_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_surcharge_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
                 ],
                 [
                     'type' => 'radio',
-                    'label' => $this->module->l('Surcharge type'),
+                    'label' => $this->translator->trans('Surcharge type', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_SURCHARGE_TYPE',
                     'is_bool' => false,
                     'class' => 'child',
@@ -171,18 +180,18 @@ class AdminFormBuilder
                         [
                             'id' => 'tpay_surcharge_type_on',
                             'value' => Config::TPAY_SURCHARGE_AMOUNT,
-                            'label' => $this->module->l('Quota'),
+                            'label' => $this->translator->trans('Quota', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_surcharge_type_off',
                             'value' => Config::TPAY_SURCHARGE_PERCENT,
-                            'label' => $this->module->l('Percentage'),
+                            'label' => $this->translator->trans('Percentage', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->module->l('Surcharge value'),
+                    'label' => $this->translator->trans('Surcharge value', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_SURCHARGE_VALUE',
                     'size' => 50,
                     'required' => false,
@@ -190,12 +199,12 @@ class AdminFormBuilder
                 [
                     'type' => '',
                     'name' => 'TPAY_NOTIFICATION_ADDRESS',
-                    'label' => $this->module->l('Your address for notifications'),
+                    'label' => $this->translator->trans('Your address for notifications', [], 'Modules.Tpay.Admin'),
                     'desc' => $this->context->link->getModuleLink('tpay', 'notifications'),
                 ],
             ],
             'submit' => [
-                'title' => $this->module->l('Save'),
+                'title' => $this->translator->trans('Save', [], 'Modules.Tpay.Admin'),
             ],
         ];
 
@@ -206,13 +215,13 @@ class AdminFormBuilder
     {
         $form['form'] = [
             'legend' => [
-                'title' => $this->module->l('Pekao installments simulator settings'),
+                'title' => $this->translator->trans('Pekao installments simulator settings', [], 'Modules.Tpay.Admin'),
                 'icon' => 'icon-cogs'
             ],
             'input' => [
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('Installment simulator active'),
+                    'label' => $this->translator->trans('Installment simulator active', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_PEKAO_INSTALLMENTS_ACTIVE',
                     'is_bool' => true,
                     'class' => 't',
@@ -220,24 +229,24 @@ class AdminFormBuilder
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->module->l('Merchant ID'),
+                    'label' => $this->translator->trans('Merchant ID', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_MERCHANT_ID',
                     'required' => true,
                 ],
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('The installment simulator is available on the product page'),
+                    'label' => $this->translator->trans('The installment simulator is available on the product page', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE',
                     'is_bool' => true,
                     'class' => 't',
@@ -245,18 +254,18 @@ class AdminFormBuilder
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
                 ],
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('The installment simulator is available in the shopping cart'),
+                    'label' => $this->translator->trans('The installment simulator is available in the shopping cart', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART',
                     'is_bool' => true,
                     'class' => 't',
@@ -264,18 +273,18 @@ class AdminFormBuilder
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
                 ],
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('The installment simulator is available in the checkout'),
+                    'label' => $this->translator->trans('The installment simulator is available in the checkout', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_PEKAO_INSTALLMENTS_CHECKOUT',
                     'is_bool' => true,
                     'class' => 't',
@@ -283,18 +292,18 @@ class AdminFormBuilder
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
                 ],
             ],
             'submit' => [
-                'title' => $this->module->l('Save'),
+                'title' => $this->translator->trans('Save', [], 'Modules.Tpay.Admin'),
             ],
         ];
 
@@ -305,13 +314,13 @@ class AdminFormBuilder
     {
         $form['form'] = [
             'legend' => [
-                'title' => $this->module->l('Auto cancel orders and transactions settings'),
+                'title' => $this->translator->trans('Auto cancel orders and transactions settings', [], 'Modules.Tpay.Admin'),
                 'icon' => 'icon-cogs'
             ],
             'input' => [
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('Auto cancel active'),
+                    'label' => $this->translator->trans('Auto cancel active', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_AUTO_CANCEL_ACTIVE',
                     'is_bool' => true,
                     'class' => 't',
@@ -319,19 +328,19 @@ class AdminFormBuilder
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
                 ],
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('Use frontend to run CRON jobs'),
-                    'desc' => '<b>' . $this->module->l('WARNING') . '</b> '.$this->module->l('May cause some performance issues. Use this method if you cannot set cronjob to run CLI task once a day: `php modules/tpay/cron.php`'),
+                    'label' => $this->translator->trans('Use frontend to run CRON jobs', [], 'Modules.Tpay.Admin'),
+                    'desc' => '<b>' . $this->translator->trans('WARNING', [], 'Modules.Tpay.Admin') . '</b> '.$this->translator->trans('May cause some performance issues. Use this method if you cannot set cronjob to run CLI task once a day: `php modules/tpay/cron.php`', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_AUTO_CANCEL_FRONTEND_RUN',
                     'is_bool' => true,
                     'class' => 't',
@@ -339,24 +348,24 @@ class AdminFormBuilder
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
                 ],
                 [
                     'type' => 'text',
-                    'label' => $this->module->l('Cancel orders and transactions after days'),
+                    'label' => $this->translator->trans('Cancel orders and transactions after days', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_AUTO_CANCEL_DAYS',
                     'required' => true,
                 ],
             ],
             'submit' => [
-                'title' => $this->module->l('Save'),
+                'title' => $this->translator->trans('Save', [], 'Modules.Tpay.Admin'),
             ],
         ];
 
@@ -368,80 +377,80 @@ class AdminFormBuilder
     {
         $form['form'] = [
             'legend' => [
-                'title' => $this->module->l('Settings for standard payment'),
+                'title' => $this->translator->trans('Settings for standard payment', [], 'Modules.Tpay.Admin'),
                 'icon' => 'icon-cogs'
             ],
             'input' => [
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('BLIK payments active'),
+                    'label' => $this->translator->trans('BLIK payments active', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_BLIK_ACTIVE',
-                    'desc' => $this->module->l('Show the method as a separate payment'),
+                    'desc' => $this->translator->trans('Show the method as a separate payment', [], 'Modules.Tpay.Admin'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
                 ],
 
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('BLIK widget'),
+                    'label' => $this->translator->trans('BLIK widget', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_BLIK_WIDGET',
-                    'desc' => $this->module->l('Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.'),
+                    'desc' => $this->translator->trans('Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.', [], 'Modules.Tpay.Admin'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
                 ],
 
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('Transfer widget'),
+                    'label' => $this->translator->trans('Transfer widget', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_TRANSFER_WIDGET',
-                    'desc' => $this->module->l('Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.'),
+                    'desc' => $this->translator->trans('Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.', [], 'Modules.Tpay.Admin'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
                 ],
 
                 [
                     'type' => 'select',
-                    'label' => $this->module->l('Custom order'),
+                    'label' => $this->translator->trans('Custom order', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_CUSTOM_ORDER[]',
                     'multiple' => true,
                     'class' => 'child',
-                    'desc' => $this->module->l('Custom order of displayed banks. Drag to change order. The ability to change the order of payment methods is possible when the "Direct bank redirect" option is enabled.'),
+                    'desc' => $this->translator->trans('Custom order of displayed banks. Drag to change order. The ability to change the order of payment methods is possible when the "Direct bank redirect" option is enabled.', [], 'Modules.Tpay.Admin'),
                     'size' => 20,
                     'options' => [
                         'query' => $this->sortPayment('TPAY_CUSTOM_ORDER'),
@@ -451,28 +460,28 @@ class AdminFormBuilder
                 ],
             ],
             'submit' => [
-                'title' => $this->module->l('Save'),
+                'title' => $this->translator->trans('Save', [], 'Modules.Tpay.Admin'),
             ],
         ];
 
         if (Shop::getContext() == Shop::CONTEXT_SHOP) {
             $globalSettingsSwitcher = [
                 'type' => 'switch',
-                'label' => $this->module->l('Use global settings'),
+                'label' => $this->translator->trans('Use global settings', [], 'Modules.Tpay.Admin'),
                 'name' => 'TPAY_GLOBAL_SETTINGS',
-                'desc' => $this->module->l('Use global settings'),
+                'desc' => $this->translator->trans('Use global settings', [], 'Modules.Tpay.Admin'),
                 'is_bool' => true,
                 'class' => 'd-none',
                 'values' => [
                     [
                         'id' => 'tpay_active_on',
                         'value' => 1,
-                        'label' => $this->module->l('Yes'),
+                        'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                     ],
                     [
                         'id' => 'tpay_active_off',
                         'value' => 0,
-                        'label' => $this->module->l('No'),
+                        'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                     ],
                 ],
             ];
@@ -487,64 +496,64 @@ class AdminFormBuilder
     {
         $form['form'] = [
             'legend' => [
-                'title' => $this->module->l('Credit card settings'),
+                'title' => $this->translator->trans('Credit card settings', [], 'Modules.Tpay.Admin'),
                 'icon' => 'icon-cogs'
             ],
             'input' => [
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('Payment credit card'),
+                    'label' => $this->translator->trans('Payment credit card', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_CARD_ACTIVE',
-                    'desc' => $this->module->l('Show the method as a separate payment'),
+                    'desc' => $this->translator->trans('Show the method as a separate payment', [], 'Modules.Tpay.Admin'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
                 ],
 
                 [
                     'type' => 'switch',
-                    'label' => $this->module->l('Card widget'),
+                    'label' => $this->translator->trans('Card widget', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_CARD_WIDGET',
-                    'desc' => $this->module->l('Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.'),
+                    'desc' => $this->translator->trans('Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.', [], 'Modules.Tpay.Admin'),
                     'is_bool' => true,
                     'class' => 't',
                     'values' => [
                         [
                             'id' => 'tpay_active_on',
                             'value' => 1,
-                            'label' => $this->module->l('Yes'),
+                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
                         ],
                         [
                             'id' => 'tpay_active_off',
                             'value' => 0,
-                            'label' => $this->module->l('No'),
+                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
                 ],
 
                 [
                     'type' => 'text',
-                    'label' => $this->module->l('RSA key'),
+                    'label' => $this->translator->trans('RSA key', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_CARD_RSA',
-                    'desc' => $this->module->l('Find in Merchant’s panel: Credit cards payment -> API'),
+                    'desc' => $this->translator->trans('Find in Merchant’s panel: Credit cards payment -> API', [], 'Modules.Tpay.Admin'),
                     'size' => 400,
                     'required' => false,
                 ],
 
             ],
             'submit' => [
-                'title' => $this->module->l('Save'),
+                'title' => $this->translator->trans('Save', [], 'Modules.Tpay.Admin'),
             ],
         ];
 
@@ -555,13 +564,13 @@ class AdminFormBuilder
     {
         $form['form'] = [
             'legend' => [
-                'title' => $this->module->l('Transaction statuses'),
+                'title' => $this->translator->trans('Transaction statuses', [], 'Modules.Tpay.Admin'),
                 'icon' => 'icon-cogs'
             ],
             'input' => [
                 [
                     'type' => 'select',
-                    'label' => $this->module->l('Status of the transaction in process'),
+                    'label' => $this->translator->trans('Status of the transaction in process', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_PENDING',
                     'options' => [
                         'query' => $this->getOrderStates(),
@@ -571,7 +580,7 @@ class AdminFormBuilder
                 ],
                 [
                     'type' => 'select',
-                    'label' => $this->module->l('Status of paid transaction'),
+                    'label' => $this->translator->trans('Status of paid transaction', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_CONFIRMED',
                     'options' => [
                         'query' => $this->getOrderStates(),
@@ -581,7 +590,7 @@ class AdminFormBuilder
                 ],
                 [
                     'type' => 'select',
-                    'label' => $this->module->l('Payment error status'),
+                    'label' => $this->translator->trans('Payment error status', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_ERROR',
                     'options' => [
                         'query' => $this->getOrderStates(),
@@ -591,7 +600,7 @@ class AdminFormBuilder
                 ],
                 [
                     'type' => 'select',
-                    'label' => $this->module->l('Status of a paid transaction with virtual products only'),
+                    'label' => $this->translator->trans('Status of a paid transaction with virtual products only', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_VIRTUAL_CONFIRMED',
                     'options' => [
                         'query' => $this->getOrderStates(),
@@ -601,7 +610,7 @@ class AdminFormBuilder
                 ],
             ],
             'submit' => [
-                'title' => $this->module->l('Save'),
+                'title' => $this->translator->trans('Save', [], 'Modules.Tpay.Admin'),
             ],
         ];
         return $form;
@@ -614,15 +623,15 @@ class AdminFormBuilder
         return [
             'form' => [
                 'legend' => [
-                    'title' => $this->module->l('Generic payments'),
+                    'title' => $this->translator->trans('Generic payments', [], 'Modules.Tpay.Admin'),
                     'icon' => 'icon-cogs'
                 ],
                 'input' => [
                     [
                         'type' => 'select',
-                        'label' => $this->module->l('Select payments to Easy on-site mechanism to'),
+                        'label' => $this->translator->trans('Select payments to Easy on-site mechanism to', [], 'Modules.Tpay.Admin'),
                         'name' => 'TPAY_GENERIC_PAYMENTS[]',
-                        'desc' => $this->module->l('Custom order of displayed payment methods. Drag to change order'),
+                        'desc' => $this->translator->trans('Custom order of displayed payment methods. Drag to change order', [], 'Modules.Tpay.Admin'),
                         'multiple' => true,
                         'size' => $result ? 20 : 1,
                         'options' => [
@@ -632,7 +641,7 @@ class AdminFormBuilder
                         ],
                     ]
                 ],
-                'submit' => ['title' => $this->module->l('Save')],
+                'submit' => ['title' => $this->translator->trans('Save', [], 'Modules.Tpay.Admin')],
             ]
         ];
     }

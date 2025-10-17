@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Tpay\Install;
 
+use PrestaShopBundle\Translation\TranslatorComponent;
 use Tpay;
 use Tpay\Exception\BaseException;
 use Tpay\Handler\InstallQueryHandler;
@@ -32,12 +33,18 @@ class Install
      */
     private $installQueryHandler;
 
+    /**
+     * @var TranslatorComponent
+     */
+    private $translator;
+
     public function __construct(
         Tpay $module,
         InstallQueryHandler $installQueryHandler
     ) {
         $this->module = $module;
         $this->installQueryHandler = $installQueryHandler;
+        $this->translator = $module->getTranslator();
     }
 
     /**
@@ -46,11 +53,11 @@ class Install
     public function install(): bool
     {
         if (!$this->installDb()) {
-            $this->module->_errors[] = $this->l('Table installation error');
+            $this->module->_errors[] = $this->translator->trans('Table installation error', [], 'Modules.Tpay.Admin');
         }
 
         if (!$this->installContext()) {
-            $this->module->_errors[] = $this->l('Context installation error');
+            $this->module->_errors[] = $this->translator->trans('Context installation error', [], 'Modules.Tpay.Admin');
         }
 
         return true;

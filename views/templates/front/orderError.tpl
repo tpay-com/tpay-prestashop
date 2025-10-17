@@ -15,7 +15,7 @@
 {block name='page_content'}
 	<div style="padding: 40px 10px">
 		<h2>
-            {l s='An error occurred while ordering.' mod='tpay'}
+            {l s='An error occurred while ordering.' d='Modules.Tpay.Shop'}
 		</h2>
         {if isset($error) && !empty($error)}
 			<h2 style="margin-top: 20px;">
@@ -25,7 +25,7 @@
 
 		<div style="margin-top: 20px;">
 			<a href="{$urls.pages.history}" class="btn btn-primary">
-	            {l s='Order history' mod='tpay'}
+	            {l s='Order history' d='Modules.Tpay.Shop'}
 			</a>
 		</div>
 	</div>

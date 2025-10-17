@@ -40,7 +40,7 @@ class Transfer implements GatewayType
             'isDirect' => (bool) Configuration::get('TPAY_REDIRECT_TO_CHANNEL'),
         ]);
 
-        $paymentOption->setCallToActionText($module->l('Pay by online transfer with Tpay'))
+        $paymentOption->setCallToActionText($module->getTranslator()->trans('Pay by online transfer with Tpay', [], 'Modules.Tpay.Shop'))
             ->setAction($moduleLink)
             ->setLogo($data['img'])
             ->setForm($this->generateForm())

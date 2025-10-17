@@ -13,7 +13,7 @@
 *}
 <div class="tpay-wrapper tpay-blik-wrapper" data-payment-type="blik">
     {if $blik_type === 'redirect'}
-        {l s='You will be redirected to the payment gateway.' mod='tpay'}
+        {l s='You will be redirected to the payment gateway.' d='Modules.Tpay.Shop'}
     {else}
         <form action="{$blik_moduleLink}" method="POST" id="tpay-blik-form" name="tpay-blik-form">
             <input type="hidden" name="cart_id" class="blikId" value="{$blik_order_id}"/>
@@ -32,11 +32,11 @@
                                 <img width="40"
                                      src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg" alt="TPAY">
                                 <label for="blikUse">
-                                    {l s='Use saved blik code' mod='tpay'}
+                                    {l s='Use saved blik code' d='Modules.Tpay.Shop'}
                                 </label>
                                 <p class="show-blik-info">
-                                    {l s='Why don\'t I have to enter the code?' mod='tpay'}
-                                    <span class="tooltip-text"> {l s='You do not need to enter the BLIK code, because you linked your account to this device during one of the previous payments. The payment still requires confirmation in the app.' mod='tpay'} </span>
+                                    {l s='Why don\'t I have to enter the code?' d='Modules.Tpay.Shop'}
+                                    <span class="tooltip-text"> {l s='You do not need to enter the BLIK code, because you linked your account to this device during one of the previous payments. The payment still requires confirmation in the app.' d='Modules.Tpay.Shop'} </span>
                                 </p>
                                 <div class="tpay-blik-response"></div>
                                 <div class="tpay-buttons-holder">
@@ -66,13 +66,13 @@
                                      src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg" alt="TPAY">
                             {/if}
                             <label for="blikNew">
-                                {l s='Use BLIK code' mod='tpay'}
+                                {l s='Use BLIK code' d='Modules.Tpay.Shop'}
                             </label>
 
 
                             <div class="tpay-radio-payments__description">
                                 <p>
-                                    {l s='Enter BLIK code' mod='tpay'}
+                                    {l s='Enter BLIK code' d='Modules.Tpay.Shop'}
                                 </p>
                                 <div class="tpay-blik">
                                     <div class="tpay-input-blik-code">
@@ -90,11 +90,11 @@
                                                    tabindex="1"
                                                    value=""
                                                    class="tpay-input-value tpay-blik-input"
-                                                   oninvalid="setCustomValidity('{l s='Enter a valid blik code' mod='tpay'}');"
+                                                   oninvalid="setCustomValidity('{l s='Enter a valid blik code' d='Modules.Tpay.Shop'}');"
                                                    onchange="setCustomValidity('')"
                                             />
                                             <label id="blik-error" class="text-danger"
-                                                   style="display: none; font-size: 11px; text-align: center; width: 100%;">{l s='Incorrect BLIK code' mod='tpay'}</label>
+                                                   style="display: none; font-size: 11px; text-align: center; width: 100%;">{l s='Incorrect BLIK code' d='Modules.Tpay.Shop'}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -115,7 +115,7 @@
 
                 <div id="blik-rr" style="display: none">
 					<span class="tpay-error">
-						{l s='Please accept the store rules' mod='tpay'}
+						{l s='Please accept the store rules' d='Modules.Tpay.Shop'}
 					</span>
                 </div>
                 {include file="module:tpay/views/templates/hook/regulations.tpl"}

@@ -54,7 +54,7 @@ class Card implements GatewayType
             'assets_path' => $module->getPath(),
         ]);
 
-        $paymentOption->setCallToActionText($module->l('Payment card'))
+        $paymentOption->setCallToActionText($module->getTranslator()->trans('Payment card', [], 'Modules.Tpay.Shop'))
             ->setAction($moduleLink)
             ->setLogo($data['img'])
             ->setInputs([

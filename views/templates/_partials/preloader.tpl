@@ -7,7 +7,7 @@
 			</svg>
 		</div>
 		<span class="tpay-preload__content">
-			{l s='Processing data, please wait...' mod='tpay'}
+			{l s='Processing data, please wait...' d='Modules.Tpay.Shop'}
 		</span>
 	</div>
 </div>
