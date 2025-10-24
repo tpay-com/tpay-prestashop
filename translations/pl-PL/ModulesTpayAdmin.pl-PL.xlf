@@ -34,6 +34,14 @@
         <source>Auto cancel should be in range 1 - 30</source>
         <target>Zakres dni określających anulowanie transakcji powinien być w zakresie 1 - 30</target>
       </trans-unit>
+      <trans-unit id="9f233de11017582ab42e24e0dd2cea51">
+        <source>BLIK Pay Later</source>
+        <target>BLIK Płacę Później</target>
+      </trans-unit>
+      <trans-unit id="088abb131ffb45a419d9c5080297f68f">
+        <source>BLIK Pay Later is a deferred payment service for transactions ranging from 30 PLN to 4,000 PLN. You will receive the money for the sold goods immediately, while the Customer will have 30 days to make the payment.</source>
+        <target>BLIK Płacę Później to usługa płatności odroczonych dla transakcji od 30 zł do 4 000 zł. Pieniądze za sprzedany towar dostaniesz od razu, a Klient będzie miał 30 dni na płatność.</target>
+      </trans-unit>
       <trans-unit id="49d8964e7720caf354a55b6b9705f99e">
         <source>BLIK payments active</source>
         <target>Płatności BLIK aktywne</target>
@@ -53,6 +61,10 @@
       <trans-unit id="6c7a46afae7e3adec745b2b99711904a">
         <source>Calculate installment!</source>
         <target>Oblicz ratę!</target>
+      </trans-unit>
+      <trans-unit id="2829602958fc042dafba09a1f237f502">
+        <source>Can't enable BLIK Pay Later?</source>
+        <target>Nie możesz włączyć BLIK Płacę Póżniej?</target>
       </trans-unit>
       <trans-unit id="371fab8ddc1c54d1916d3422f2aee31b">
         <source>Cancel orders and transactions after days</source>
@@ -104,15 +116,15 @@
       </trans-unit>
       <trans-unit id="b10547c2284c4238476534eb2b7c7f82">
         <source><![CDATA[Find in Merchant’s panel: Credit cards payment -> API]]></source>
-        <target>Znajdziesz w Panelu Akceptanta: Płatności kartami -&gt; API</target>
+        <target><![CDATA[Znajdziesz w Panelu Akceptanta: Płatności kartami -> API]]></target>
       </trans-unit>
       <trans-unit id="9b69214c1831a4e8933268b1448c73ad">
         <source><![CDATA[Find in Merchant’s panel: Integration -> API -> Open API Keys]]></source>
-        <target>Znajdziesz w Panelu Akceptanta: Integracje -&gt; API -&gt; Klucze do nowego Open API</target>
+        <target><![CDATA[Znajdziesz w Panelu Akceptanta: Integracje -> API -> Klucze do nowego Open API]]></target>
       </trans-unit>
       <trans-unit id="24c51ec90bdf028a6cade7c8d190d280">
         <source><![CDATA[Find in Merchant’s panel: Settings -> Notifications]]></source>
-        <target>Znajdziesz w Panelu Akceptanta: Ustawienia -&gt; Powiadomienia</target>
+        <target><![CDATA[Znajdziesz w Panelu Akceptanta: Ustawienia -> Powiadomienia]]></target>
       </trans-unit>
       <trans-unit id="8fb5aa4295ce81b72ee77bfcfc016d1f">
         <source>Generic payments</source>
@@ -133,6 +145,14 @@
       <trans-unit id="8977833f8069024c56bf3581ca073d21">
         <source>Invalid email notification</source>
         <target>Niepoprawny e-mail notyfikacji</target>
+      </trans-unit>
+      <trans-unit id="d59048f21fd887ad520398ce677be586">
+        <source>Learn more</source>
+        <target>Dowiedz się więcej</target>
+      </trans-unit>
+      <trans-unit id="24d353d8e3b38d0c13a67533d25e2088">
+        <source>Log in to </source>
+        <target>Zaloguj się do </target>
       </trans-unit>
       <trans-unit id="ff210a5f3024c4d2d1e373a68c320c03">
         <source>May cause some performance issues. Use this method if you cannot set cronjob to run CLI task once a day: `php modules/tpay/cron.php`</source>
@@ -260,8 +280,8 @@
         <source>Save</source>
         <target>Zapisz</target>
       </trans-unit>
-      <trans-unit id="f01cd1b2fc01de83f97ebfec55d0a986">
-        <source>Select payments to Easy on-site mechanism to</source>
+      <trans-unit id="b9518fab6bd5632aee7b78d4ccb1fac9">
+        <source>Select payments to Easy on-site mechanism</source>
         <target>Wybierz płatności do mechanizmu Easy on-site</target>
       </trans-unit>
       <trans-unit id="fd33960436cea4dd9f47db03e0079280">
@@ -328,6 +348,10 @@
         <source>Tpay</source>
         <target>Tpay</target>
       </trans-unit>
+      <trans-unit id="4f926a308ced7be330c37a4dbdde1811">
+        <source>Tpay Merchant Panel</source>
+        <target>Panelu Akceptanta Tpay</target>
+      </trans-unit>
       <trans-unit id="b4d9365fdbb507d023c4775afbb9373c">
         <source>Tpay refunds</source>
         <target>Zwroty Tpay</target>
@@ -364,6 +388,10 @@
         <source>WARNING</source>
         <target>UWAGA</target>
       </trans-unit>
+      <trans-unit id="17b7f5c7de8a57c4bc2bcf7085d4af82">
+        <source>What is BLIK Pay Later?</source>
+        <target>Co to jest BLIK Płacę Później?</target>
+      </trans-unit>
       <trans-unit id="ac1ec9083d814b7c42257cb5d13fa31e">
         <source>When the installment simulator is enabled, the merchant ID field must be filled in</source>
         <target>Przy włączonym symulatorze rat, należy uzupełnić pole ID merchanta</target>
@@ -383,6 +411,10 @@
       <trans-unit id="4b8aec2fcddde2152ac2f0b863fe2f69">
         <source>amount is greater than allowed %s</source>
         <target>kwota jest większa niż dopuszczalna %s</target>
+      </trans-unit>
+      <trans-unit id="4a5336964a8a665940152d53fa1ca0a6">
+        <source>and check if BLIK Pay Later is active. If the payment option is not enabled, activate it and then re-enable it in your store.</source>
+        <target>i sprawdź, czy masz aktywną płatność BLIK Płacę Później. Jeśli płatność nie jest włączona, aktywuj ją, a następnie uruchom ją ponownie w swoim sklepie.</target>
       </trans-unit>
       <trans-unit id="c148fc3716e26845b88e662ccb99d4d3">
         <source>invalid amount</source>

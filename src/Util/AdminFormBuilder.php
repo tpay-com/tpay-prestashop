@@ -616,36 +616,6 @@ class AdminFormBuilder
         return $form;
     }
 
-    public function formGenericPaymentOptions(): array
-    {
-        $result = $this->sortPayment('TPAY_GENERIC_PAYMENTS');
-
-        return [
-            'form' => [
-                'legend' => [
-                    'title' => $this->translator->trans('Generic payments', [], 'Modules.Tpay.Admin'),
-                    'icon' => 'icon-cogs'
-                ],
-                'input' => [
-                    [
-                        'type' => 'select',
-                        'label' => $this->translator->trans('Select payments to Easy on-site mechanism to', [], 'Modules.Tpay.Admin'),
-                        'name' => 'TPAY_GENERIC_PAYMENTS[]',
-                        'desc' => $this->translator->trans('Custom order of displayed payment methods. Drag to change order', [], 'Modules.Tpay.Admin'),
-                        'multiple' => true,
-                        'size' => $result ? 20 : 1,
-                        'options' => [
-                            'query' => $result,
-                            'id' => 'id',
-                            'name' => 'fullName'
-                        ],
-                    ]
-                ],
-                'submit' => ['title' => $this->translator->trans('Save', [], 'Modules.Tpay.Admin')],
-            ]
-        ];
-    }
-
     public function getOrderStates(): array
     {
         return OrderState::getOrderStates(Context::getContext()->language->id);

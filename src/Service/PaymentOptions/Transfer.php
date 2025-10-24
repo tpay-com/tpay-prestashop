@@ -20,6 +20,7 @@ use Configuration;
 use Tpay\Config\Config;
 use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
+use Tpay\Service\GenericPayments\GenericPaymentsManager;
 use Tpay\Util\Helper;
 
 class Transfer implements GatewayType
@@ -63,6 +64,10 @@ class Transfer implements GatewayType
 
     private function sortGateways(array $gateways)
     {
+        $gateways = array_filter($gateways, function ($gateway) {
+            return !in_array((int) $gateway['mainChannel'], array_keys(GenericPaymentsManager::EXTRACTED_PAYMENT_CHANNELS), true);
+        });
+
         if ((bool)Configuration::get('TPAY_REDIRECT_TO_CHANNEL') && !empty(Configuration::get('TPAY_CUSTOM_ORDER'))) {
             $orderedList = [];
             $customOrder = json_decode(Configuration::get('TPAY_CUSTOM_ORDER'), true);

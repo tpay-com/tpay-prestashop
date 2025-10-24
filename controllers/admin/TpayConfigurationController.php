@@ -19,6 +19,7 @@ if (!defined('_PS_VERSION_')) {
 use Configuration as Cfg;
 use Tpay\Adapter\ConfigurationAdapter;
 use Tpay\Install\ConfigurationSaveForm;
+use Tpay\Service\GenericPayments\GenericPaymentsManager;
 use Tpay\Util\AdminFormBuilder;
 use Tpay\Util\Helper;
 
@@ -118,16 +119,16 @@ class TpayConfigurationController extends ModuleAdminController
     {
         $this->getChannels();
         $formBuilder = new AdminFormBuilder($this->module, $this->context, $this->channels);
+        $genericPaymentsManager = new GenericPaymentsManager($this->channels, $this->translator);
 
         $form[] = $formBuilder->formBasicOptions();
         $form[] = $formBuilder->formPeKaoInstallments();
         $form[] = $formBuilder->formCancelOrder();
         $form[] = $formBuilder->formPaymentOptions();
-        $form[] = $formBuilder->formGenericPaymentOptions();
         $form[] = $formBuilder->formCardOptions();
         $form[] = $formBuilder->formStatusesOptions();
 
-        return $form;
+        return array_merge($form, $genericPaymentsManager->getForms());
     }
 
     public function validatePostProcess(): bool

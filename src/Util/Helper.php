@@ -43,6 +43,7 @@ class Helper
             'TPAY_CLIENT_ID',
             'TPAY_SECRET_KEY',
             'TPAY_BLIK_ACTIVE',
+            'TPAY_BLIK_BNPL_ACTIVE',
             'TPAY_BLIK_WIDGET',
             'TPAY_TRANSFER_WIDGET',
             'TPAY_CUSTOM_ORDER[]',
@@ -85,6 +86,7 @@ class Helper
         return [
             'TPAY_BLIK_ACTIVE' => '1',
             'TPAY_BLIK_WIDGET' => '1',
+            'TPAY_BLIK_BNPL_ACTIVE' => '0',
             'TPAY_TRANSFER_WIDGET' => '1',
             'TPAY_CARD_WIDGET' => '1',
             'TPAY_CARD_ACTIVE' => '0',

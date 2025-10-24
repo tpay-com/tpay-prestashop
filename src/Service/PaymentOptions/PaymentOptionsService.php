@@ -20,6 +20,7 @@ use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 use Tpay\Factory\PaymentOptionsFactory;
 use Tpay\Config\Config;
 use Tpay\Service\ConstraintValidator;
+use Tpay\Service\GenericPayments\GenericPaymentsManager;
 use Tpay\Util\Cache;
 use Tpay\Util\Helper;
 
@@ -95,7 +96,40 @@ class PaymentOptionsService
 
         $generics = $this->genericPayments();
 
-        return array_merge($payments, $generics);
+        return array_merge($payments, $generics, $this->getExtractedPaymentOptions());
+    }
+
+    private function getExtractedPaymentOptions(): array
+    {
+        $result = [];
+        foreach (GenericPaymentsManager::EXTRACTED_PAYMENT_CHANNELS as $channelId => $configField) {
+            $isActive = (bool) \Configuration::get($configField);
+            if (!$isActive) {
+                continue;
+            }
+
+            $channel = null;
+
+            foreach ($this->bankChannels as $bankChannel) {
+                if (isset($bankChannel['id']) && (int) $bankChannel['id'] === (int) $channelId) {
+                    $channel = $bankChannel;
+                    break;
+                }
+            }
+
+            if (!$channel) {
+                continue;
+            }
+
+            if (!empty($channel['constraints']) && !$this->constraintValidator->validate($channel['constraints'], $this->getBrowser())) {
+                continue;
+            }
+
+            $gateway = new PaymentType(new Generic());
+            $result[] = $gateway->getPaymentOption($this->module, new PaymentOption(), $channel);
+        }
+
+        return $result;
     }
 
     /**
@@ -247,7 +281,6 @@ class PaymentOptionsService
             $channels = array_filter($this->bankChannels, function (array $channel) {
                 return true === $channel['available'];
             });
-
             foreach ($channels as $channel) {
                 $channels[$channel['id']] = $channel;
             }
