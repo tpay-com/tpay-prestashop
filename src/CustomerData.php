@@ -129,7 +129,7 @@ class CustomerData
                 'city' => $this->address->city,
                 'country' => 'PL',
                 'ip' => \Tools::getRemoteAddr(),
-                'userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+                'userAgent' => substr(['HTTP_USER_AGENT'] ?? '', 0, 255),
             ],
         ];
 

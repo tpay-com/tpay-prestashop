@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Blik BNPL as separate option
 
+## [1.12.1]
+
+### Changed
+
+- Enforced length limit (trimming) on UserAgent field sent to payment gateway
+
 ## [1.12.0]
 
 ### Changed
