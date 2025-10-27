@@ -7,7 +7,7 @@ use PrestaShopBundle\Translation\TranslatorInterface;
 
 class GenericPaymentsManager
 {
-    private const CHANNEL_BLIK_BNPL = 84;
+    public const CHANNEL_BLIK_BNPL = 84;
     public const EXTRACTED_PAYMENT_CHANNELS = [
         self::CHANNEL_BLIK_BNPL => 'TPAY_BLIK_BNPL_ACTIVE'
     ];
@@ -29,6 +29,13 @@ class GenericPaymentsManager
             $this->buildGenericPaymentForm(),
             $this->buildExtractedChannelsForms()
         );
+    }
+
+    public static function isChannelExcluded(int $channelId): bool
+    {
+        $configField = self::EXTRACTED_PAYMENT_CHANNELS[$channelId] ?? null;
+
+        return $configField && (int) \Configuration::get($configField) === 1;
     }
 
     private function buildExtractedChannelsForms(): array
@@ -135,15 +142,15 @@ class GenericPaymentsManager
     {
         $storedOrder = json_decode((string) Cfg::get('TPAY_GENERIC_PAYMENTS'), true) ?? [];
 
-        if (empty($storedOrder)) {
-            return $this->activeChannels;
-        }
-
         $indexedChannels = [];
         foreach ($this->activeChannels as $ch) {
             if (!$this->isChannelExcluded((int) $ch['id'])) {
                 $indexedChannels[$ch['id']] = $ch;
             }
+        }
+
+        if (empty($storedOrder)) {
+            return $indexedChannels;
         }
 
         $ordered = [];
@@ -155,10 +162,5 @@ class GenericPaymentsManager
         }
 
         return array_merge($ordered, array_values($indexedChannels));
-    }
-
-    private function isChannelExcluded(int $channelId): bool
-    {
-        return in_array($channelId, array_keys(self::EXTRACTED_PAYMENT_CHANNELS), true);
     }
 }

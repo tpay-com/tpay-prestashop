@@ -65,7 +65,7 @@ class Transfer implements GatewayType
     private function sortGateways(array $gateways)
     {
         $gateways = array_filter($gateways, function ($gateway) {
-            return !in_array((int) $gateway['mainChannel'], array_keys(GenericPaymentsManager::EXTRACTED_PAYMENT_CHANNELS), true);
+            return !GenericPaymentsManager::isChannelExcluded((int) $gateway['mainChannel']);
         });
 
         if ((bool)Configuration::get('TPAY_REDIRECT_TO_CHANNEL') && !empty(Configuration::get('TPAY_CUSTOM_ORDER'))) {

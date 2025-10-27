@@ -7,7 +7,7 @@
                 type="radio" name="tpay_channel_id"
                 checked value="{$channelId}" required="required" style="display: none"/>
     </form>
-    {if isset($channelId) && $channelId == 84}
+    {if isset($channelId) && $channelId == $blikBnplId}
         <div class="blik-info">
             <details class="tpay-collapsible-desc">
                 <summary style="font-size:0.85rem;cursor: pointer">{l s='What is BLIK Pay Later?' d='Modules.Tpay.Shop'}</summary>

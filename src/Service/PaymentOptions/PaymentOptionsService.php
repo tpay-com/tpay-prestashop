@@ -103,8 +103,7 @@ class PaymentOptionsService
     {
         $result = [];
         foreach (GenericPaymentsManager::EXTRACTED_PAYMENT_CHANNELS as $channelId => $configField) {
-            $isActive = (bool) \Configuration::get($configField);
-            if (!$isActive) {
+            if (!GenericPaymentsManager::isChannelExcluded($channelId)) {
                 continue;
             }
 

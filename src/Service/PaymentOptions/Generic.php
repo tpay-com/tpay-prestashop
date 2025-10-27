@@ -6,6 +6,7 @@ namespace Tpay\Service\PaymentOptions;
 
 use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
+use Tpay\Service\GenericPayments\GenericPaymentsManager;
 
 class Generic implements GatewayType
 {
@@ -26,6 +27,7 @@ class Generic implements GatewayType
             'action' => $moduleLink,
             'tpay' => 'true',
             'channelId' => $channelId,
+            'blikBnplId' => GenericPaymentsManager::CHANNEL_BLIK_BNPL,
             'tpay_channel_id' => 0,
             'type' => 'generic',
         ]);
