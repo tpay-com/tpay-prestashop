@@ -122,13 +122,14 @@ class TpayConfigurationController extends ModuleAdminController
         $genericPaymentsManager = new GenericPaymentsManager($this->channels, $this->translator);
 
         $form[] = $formBuilder->formBasicOptions();
+        $form[] = $formBuilder->formPaymentOptions();
+        $form = array_merge($form, $genericPaymentsManager->getForms());
+        $form[] = $formBuilder->formCardOptions();
         $form[] = $formBuilder->formPeKaoInstallments();
         $form[] = $formBuilder->formCancelOrder();
-        $form[] = $formBuilder->formPaymentOptions();
-        $form[] = $formBuilder->formCardOptions();
         $form[] = $formBuilder->formStatusesOptions();
 
-        return array_merge($form, $genericPaymentsManager->getForms());
+        return $form;
     }
 
     public function validatePostProcess(): bool

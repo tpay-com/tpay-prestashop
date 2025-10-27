@@ -26,8 +26,8 @@ class GenericPaymentsManager
     public function getForms(): array
     {
         return array_merge(
-            $this->buildExtractedChannelsForms(),
-            $this->buildGenericPaymentForm()
+            $this->buildGenericPaymentForm(),
+            $this->buildExtractedChannelsForms()
         );
     }
 
@@ -55,8 +55,8 @@ class GenericPaymentsManager
             $disabledHelp = '<details class="tpay-collapsible-desc" style="margin-top:6px;">'
                 . '<summary style="cursor: pointer;"><a>' . $this->translator->trans('Can\'t enable BLIK Pay Later?', [], 'Modules.Tpay.Admin') . '</a></summary>'
                 . '<div style="margin-top:8px; padding:8px; border:1px solid #d6d4d4; background:#f8f8f8; border-radius:4px;">'
-                . $this->translator->trans('Log in to ')
-                . '<a href="https://panel.tpay.com" target="_blank">' . $this->translator->trans('Tpay Merchant Panel', [], 'Modules.Tpay.Admin') . '</a>'
+                . $this->translator->trans('Log in to', [], 'Modules.Tpay.Admin') . ' '
+                . '<a href="https://panel.tpay.com" target="_blank">' . $this->translator->trans('Tpay Merchant Panel', [], 'Modules.Tpay.Admin') . '</a> '
                 . $this->translator->trans('and check if BLIK Pay Later is active. If the payment option is not enabled, activate it and then re-enable it in your store.', [], 'Modules.Tpay.Admin')
                 . '</div></details>';
         }

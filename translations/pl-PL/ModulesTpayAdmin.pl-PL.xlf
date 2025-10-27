@@ -151,8 +151,8 @@
         <target>Dowiedz się więcej</target>
       </trans-unit>
       <trans-unit id="24d353d8e3b38d0c13a67533d25e2088">
-        <source>Log in to </source>
-        <target>Zaloguj się do </target>
+        <source>Log in to</source>
+        <target>Zaloguj się do</target>
       </trans-unit>
       <trans-unit id="ff210a5f3024c4d2d1e373a68c320c03">
         <source>May cause some performance issues. Use this method if you cannot set cronjob to run CLI task once a day: `php modules/tpay/cron.php`</source>

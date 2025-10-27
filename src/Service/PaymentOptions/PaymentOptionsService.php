@@ -85,6 +85,7 @@ class PaymentOptionsService
         $payments = array_filter(array_map(function (array $paymentData) {
             $optionClass = PaymentOptionsFactory::getOptionById((int)$paymentData['mainChannel']);
 
+
             if (is_object($optionClass)) {
                 $gateway = new PaymentType($optionClass);
 
