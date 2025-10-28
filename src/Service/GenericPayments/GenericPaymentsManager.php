@@ -144,7 +144,7 @@ class GenericPaymentsManager
 
         $indexedChannels = [];
         foreach ($this->activeChannels as $ch) {
-            if (!$this->isChannelExcluded((int) $ch['id'])) {
+            if (!isset(self::EXTRACTED_PAYMENT_CHANNELS[$ch['id']])) {
                 $indexedChannels[$ch['id']] = $ch;
             }
         }
