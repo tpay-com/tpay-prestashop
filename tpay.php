@@ -398,9 +398,7 @@ class Tpay extends PaymentModule
         $transactionRepository = $this->getService('tpay.repository.transaction');
         $transaction = $transactionRepository->getTransactionByOrderId($params['order']->id);
 
-        if ($transaction && $transaction['status'] == 'pending' && ($transaction['payment_type'] === 'blik' || Tools::getValue(
-                    'action'
-                ) == 'renew-payment')) {
+        if ($transaction && $transaction['status'] == 'pending' && $this->isBlikPayment($transaction)) {
             $moduleLink = Context::getContext()->link->getModuleLink('tpay', 'chargeBlik', [], true);
 
             $regulationUrl = "https://tpay.com/user/assets/files_for_download/payment-terms-and-conditions.pdf";
@@ -425,7 +423,7 @@ class Tpay extends PaymentModule
             $this->context->smarty->assign($blikData);
 
             return $this->fetch('module:tpay/views/templates/hook/thank_you_page.tpl');
-        } elseif ($transaction && $transaction['payment_type'] == 'transfer' && $transaction['transaction_id']) {
+        } elseif ($transaction && $transaction['transaction_id'] && $this->isTransferOrCardPayment($transaction)) {
             $this->initAPI();
             $result = $this->api->transactions()->getTransactionById($transaction['transaction_id']);
 
@@ -443,6 +441,16 @@ class Tpay extends PaymentModule
         }
 
         return '';
+    }
+
+    private function isBlikPayment($transaction): bool
+    {
+        return $transaction['payment_type'] === 'blik' || Tools::getValue('action') == 'renew-payment';
+    }
+
+    private function isTransferOrCardPayment($transaction): bool
+    {
+        return $transaction['payment_type'] === 'transfer' || $transaction['payment_type'] === 'cards';
     }
 
     /** Module call API. */
