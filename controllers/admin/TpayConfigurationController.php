@@ -119,15 +119,7 @@ class TpayConfigurationController extends ModuleAdminController
         $this->getChannels();
         $formBuilder = new AdminFormBuilder($this->module, $this->context, $this->channels);
 
-        $form[] = $formBuilder->formBasicOptions();
-        $form[] = $formBuilder->formPeKaoInstallments();
-        $form[] = $formBuilder->formCancelOrder();
-        $form[] = $formBuilder->formPaymentOptions();
-        $form[] = $formBuilder->formGenericPaymentOptions();
-        $form[] = $formBuilder->formCardOptions();
-        $form[] = $formBuilder->formStatusesOptions();
-
-        return $form;
+        return $formBuilder->createForms();
     }
 
     public function validatePostProcess(): bool
