@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Blik BNPL as separate option
 
+## [1.12.4]
+
+### Fixed
+
+- Translations for older version
+
+## [1.12.3]
+
+### Fixed
+
+- Validation for IPv6
+
 ## [1.12.2]
 
 ### Fixed
