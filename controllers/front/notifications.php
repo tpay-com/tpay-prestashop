@@ -28,40 +28,46 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
      */
     public function initContent()
     {
-        if (!$_POST) {
-            echo 'FALSE';
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $controller = new PageNotFoundControllerCore();
+            $controller->run();
+            exit;
+        }
+
+        if (empty($_POST)) {
+            $this->badRequestResponse();
+        }
+
+        $this->statusHandler = $this->module->getService('tpay.handler.order_status_handler');
+
+        $event = $_POST['event'] ?? false;
+        $alias = $_POST['msg_value'] ?? false;
+
+        if (!empty($event) && !empty($alias)) {
+            // if blik event process
+            $this->blikAliasProcess($event, $alias);
+            echo 'TRUE';
         } else {
-            $this->statusHandler = $this->module->getService('tpay.handler.order_status_handler');
+            // default process transaction
+            try {
+                $isProduction = (true !== (bool)Cfg::get('TPAY_SANDBOX'));
+                $NotificationWebhook = new JWSVerifiedPaymentNotification(
+                    new CacheCertificateProvider(
+                        new Tpay\OpenApi\Utilities\Cache(null, new PsrCache())
+                    ),
+                    html_entity_decode(Cfg::get('TPAY_MERCHANT_SECRET')),
+                    $isProduction
+                );
+                $notification = $NotificationWebhook->getNotification();
+                $notificationData = $notification->getNotificationAssociative();
 
-            $event = $_POST['event'] ?? false;
-            $alias = $_POST['msg_value'] ?? false;
-
-            if (!empty($event) && !empty($alias)) {
-                // if blik event process
-                $this->blikAliasProcess($event, $alias);
-                echo 'TRUE';
-            } else {
-                // default process transaction
-                try {
-                    $isProduction = (true !== (bool)Cfg::get('TPAY_SANDBOX'));
-                    $NotificationWebhook = new JWSVerifiedPaymentNotification(
-                        new CacheCertificateProvider(
-                            new Tpay\OpenApi\Utilities\Cache(null, new PsrCache())
-                        ),
-                        html_entity_decode(Cfg::get('TPAY_MERCHANT_SECRET')),
-                        $isProduction
-                    );
-                    $notification = $NotificationWebhook->getNotification();
-                    $notificationData = $notification->getNotificationAssociative();
-
-                    if (!empty($notificationData)) {
-                        $this->notificationTransaction($notification, $notificationData);
-                    }
-                    echo 'TRUE';
-                } catch (\Exception $exception) {
-                    \PrestaShopLogger::addLog($exception->getMessage(), 3);
-                    echo sprintf('%s - %s', 'FALSE', $exception->getMessage());
+                if (!empty($notificationData)) {
+                    $this->notificationTransaction($notification, $notificationData);
                 }
+                echo 'TRUE';
+            } catch (\Exception $exception) {
+                \PrestaShopLogger::addLog($exception->getMessage(), 3);
+                $this->badRequestResponse();
             }
         }
 
@@ -183,5 +189,11 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         );
 
         return $transactionRepository->getTransactionByCrc($notificationData['tr_crc']);
+    }
+
+    private function badRequestResponse(): void
+    {
+        header('HTTP/1.1 400 Bad Request', true, 400);
+        exit;
     }
 }
