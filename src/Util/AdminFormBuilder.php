@@ -16,13 +16,13 @@ declare(strict_types=1);
 
 namespace Tpay\Util;
 
-use Configuration as Cfg;
 use Context;
 use OrderState;
 use PrestaShopBundle\Translation\TranslatorComponent;
 use Shop;
 use Tpay;
 use Tpay\Config\Config;
+use Tpay\Service\GenericPayments\GenericPaymentsManager;
 
 class AdminFormBuilder
 {
@@ -37,15 +37,32 @@ class AdminFormBuilder
     /** @var TranslatorComponent|null  */
     private $translator;
 
+    /** @var GenericPaymentsManager  */
+    private $genericPaymentsManager;
+
     public function __construct(Tpay $module, Context $context, array $channels)
     {
         $this->module = $module;
         $this->context = $context;
         $this->channels = $channels;
         $this->translator = $this->module->getTranslator();
+        $this->genericPaymentsManager = new GenericPaymentsManager($this->channels, $this->translator);
     }
 
-    public function formBasicOptions(): array
+    public function createForms(): array
+    {
+        $form[] = $this->formBasicOptions();
+        $form[] = $this->formPaymentOptions();
+        $form[] = $this->genericPaymentsManager->buildGenericPaymentForm();
+        $form[] = $this->formCardOptions();
+        $form[] = $this->formPeKaoInstallments();
+        $form[] = $this->formCancelOrder();
+        $form[] = $this->formStatusesOptions();
+
+        return $form;
+    }
+
+    private function formBasicOptions(): array
     {
         $form['form'] = [
             'legend' => [
@@ -211,7 +228,7 @@ class AdminFormBuilder
         return $form;
     }
 
-    public function formPeKaoInstallments(): array
+    private function formPeKaoInstallments(): array
     {
         $form['form'] = [
             'legend' => [
@@ -310,7 +327,7 @@ class AdminFormBuilder
         return $form;
     }
 
-    public function formCancelOrder(): array
+    private function formCancelOrder(): array
     {
         $form['form'] = [
             'legend' => [
@@ -372,127 +389,35 @@ class AdminFormBuilder
         return $form;
     }
 
-
-    public function formPaymentOptions(): array
+    private function formPaymentOptions(): array
     {
         $form['form'] = [
             'legend' => [
                 'title' => $this->translator->trans('Settings for standard payment', [], 'Modules.Tpay.Admin'),
-                'icon' => 'icon-cogs'
+                'icon'  => 'icon-cogs',
             ],
-            'input' => [
-                [
-                    'type' => 'switch',
-                    'label' => $this->translator->trans('BLIK payments active', [], 'Modules.Tpay.Admin'),
-                    'name' => 'TPAY_BLIK_ACTIVE',
-                    'desc' => $this->translator->trans('Show the method as a separate payment', [], 'Modules.Tpay.Admin'),
-                    'is_bool' => true,
-                    'class' => 't',
-                    'values' => [
-                        [
-                            'id' => 'tpay_active_on',
-                            'value' => 1,
-                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
-                        ],
-                        [
-                            'id' => 'tpay_active_off',
-                            'value' => 0,
-                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
-                        ],
-                    ],
-                ],
 
-                [
-                    'type' => 'switch',
-                    'label' => $this->translator->trans('BLIK widget', [], 'Modules.Tpay.Admin'),
-                    'name' => 'TPAY_BLIK_WIDGET',
-                    'desc' => $this->translator->trans('Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.', [], 'Modules.Tpay.Admin'),
-                    'is_bool' => true,
-                    'class' => 't',
-                    'values' => [
-                        [
-                            'id' => 'tpay_active_on',
-                            'value' => 1,
-                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
-                        ],
-                        [
-                            'id' => 'tpay_active_off',
-                            'value' => 0,
-                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
-                        ],
-                    ],
-                ],
-
-                [
-                    'type' => 'switch',
-                    'label' => $this->translator->trans('Transfer widget', [], 'Modules.Tpay.Admin'),
-                    'name' => 'TPAY_TRANSFER_WIDGET',
-                    'desc' => $this->translator->trans('Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.', [], 'Modules.Tpay.Admin'),
-                    'is_bool' => true,
-                    'class' => 't',
-                    'values' => [
-                        [
-                            'id' => 'tpay_active_on',
-                            'value' => 1,
-                            'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
-                        ],
-                        [
-                            'id' => 'tpay_active_off',
-                            'value' => 0,
-                            'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
-                        ],
-                    ],
-                ],
-
-                [
-                    'type' => 'select',
-                    'label' => $this->translator->trans('Custom order', [], 'Modules.Tpay.Admin'),
-                    'name' => 'TPAY_CUSTOM_ORDER[]',
-                    'multiple' => true,
-                    'class' => 'child',
-                    'desc' => $this->translator->trans('Custom order of displayed banks. Drag to change order. The ability to change the order of payment methods is possible when the "Direct bank redirect" option is enabled.', [], 'Modules.Tpay.Admin'),
-                    'size' => 20,
-                    'options' => [
-                        'query' => $this->sortPayment('TPAY_CUSTOM_ORDER'),
-                        'id' => 'id',
-                        'name' => 'fullName'
-                    ],
-                ],
-            ],
             'submit' => [
                 'title' => $this->translator->trans('Save', [], 'Modules.Tpay.Admin'),
+            ],
+
+            'input' => [
+                $this->blikPaymentsForm(),
+                $this->genericPaymentsManager->buildBlikBnplForm(),
+                $this->blikWidgetForm(),
+                $this->transferWidgetForm(),
+                $this->genericPaymentsManager->customOrderForm(),
             ],
         ];
 
         if (Shop::getContext() == Shop::CONTEXT_SHOP) {
-            $globalSettingsSwitcher = [
-                'type' => 'switch',
-                'label' => $this->translator->trans('Use global settings', [], 'Modules.Tpay.Admin'),
-                'name' => 'TPAY_GLOBAL_SETTINGS',
-                'desc' => $this->translator->trans('Use global settings', [], 'Modules.Tpay.Admin'),
-                'is_bool' => true,
-                'class' => 'd-none',
-                'values' => [
-                    [
-                        'id' => 'tpay_active_on',
-                        'value' => 1,
-                        'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
-                    ],
-                    [
-                        'id' => 'tpay_active_off',
-                        'value' => 0,
-                        'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
-                    ],
-                ],
-            ];
-
-            array_unshift($form['form']['input'], $globalSettingsSwitcher);
+            array_unshift($form['form']['input'], $this->globalSettingsForm());
         }
 
         return $form;
     }
 
-    public function formCardOptions(): array
+    private function formCardOptions(): array
     {
         $form['form'] = [
             'legend' => [
@@ -560,7 +485,7 @@ class AdminFormBuilder
         return $form;
     }
 
-    public function formStatusesOptions(): array
+    private function formStatusesOptions(): array
     {
         $form['form'] = [
             'legend' => [
@@ -616,36 +541,104 @@ class AdminFormBuilder
         return $form;
     }
 
-    public function getOrderStates(): array
+    private function getOrderStates(): array
     {
         return OrderState::getOrderStates(Context::getContext()->language->id);
     }
 
-    private function sortPayment(string $field): array
+    private function globalSettingsForm(): array
     {
-        $channels = $this->channels;
+        return [
+            'type' => 'switch',
+            'label' => $this->translator->trans('Use global settings', [], 'Modules.Tpay.Admin'),
+            'name' => 'TPAY_GLOBAL_SETTINGS',
+            'desc' => $this->translator->trans('Use global settings', [], 'Modules.Tpay.Admin'),
+            'is_bool' => true,
+            'class' => 'd-none',
+            'values' => [
+                [
+                    'id' => 'tpay_active_on',
+                    'value' => 1,
+                    'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
+                ],
+                [
+                    'id' => 'tpay_active_off',
+                    'value' => 0,
+                    'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
+                ],
+            ],
+        ];
+    }
 
-        if (!Cfg::get($field)) {
-            return $channels;
-        }
+    private function blikPaymentsForm(): array
+    {
+        return [
+            'type' => 'switch',
+            'label' => $this->translator->trans('BLIK payments active', [], 'Modules.Tpay.Admin'),
+            'name' => 'TPAY_BLIK_ACTIVE',
+            'desc' => $this->translator->trans('Show the method as a separate payment', [], 'Modules.Tpay.Admin'),
+            'is_bool' => true,
+            'class' => 't',
+            'values' => [
+                [
+                    'id' => 'tpay_active_on',
+                    'value' => 1,
+                    'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
+                ],
+                [
+                    'id' => 'tpay_active_off',
+                    'value' => 0,
+                    'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
+                ],
+            ],
+        ];
+    }
 
-        $chosenPayments = json_decode(Cfg::get($field), true) ?? [];
+    private function blikWidgetForm(): array
+    {
+        return [
+            'type' => 'switch',
+            'label' => $this->translator->trans('BLIK widget', [], 'Modules.Tpay.Admin'),
+            'name' => 'TPAY_BLIK_WIDGET',
+            'desc' => $this->translator->trans('Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.', [], 'Modules.Tpay.Admin'),
+            'is_bool' => true,
+            'class' => 't',
+            'values' => [
+                [
+                    'id' => 'tpay_active_on',
+                    'value' => 1,
+                    'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
+                ],
+                [
+                    'id' => 'tpay_active_off',
+                    'value' => 0,
+                    'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
+                ],
+            ],
+        ];
+    }
 
-        if (count($chosenPayments) > 0) {
-            $orderedList = [];
-
-            foreach ($chosenPayments as $chosenPayment) {
-                foreach ($channels as $key => $channel) {
-                    if ($channel['id'] == $chosenPayment) {
-                        $orderedList[$key] = $channel;
-                        unset($channels[$key]);
-                    }
-                }
-            }
-
-            return array_merge($orderedList, $channels);
-        }
-
-        return $channels;
+    private function transferWidgetForm(): array
+    {
+        return [
+            'type' => 'switch',
+            'label' => $this->translator->trans('Transfer widget', [], 'Modules.Tpay.Admin'),
+            'name' => 'TPAY_TRANSFER_WIDGET',
+            'desc' => $this->translator->trans('Display the payment method in the widget. If you have other plugins that modify the shopping cart configuration, you should disable this option.', [], 'Modules.Tpay.Admin'),
+            'is_bool' => true,
+            'class' => 't',
+            'values' => [
+                [
+                    'id' => 'tpay_active_on',
+                    'value' => 1,
+                    'label' => $this->translator->trans('Yes', [], 'Modules.Tpay.Admin'),
+                ],
+                [
+                    'id' => 'tpay_active_off',
+                    'value' => 0,
+                    'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
+                ],
+            ],
+        ];
     }
 }

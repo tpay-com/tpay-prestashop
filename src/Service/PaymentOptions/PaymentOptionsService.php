@@ -94,9 +94,13 @@ class PaymentOptionsService
             return null;
         }, $this->channels));
 
+        $extracted = $this->getExtractedPaymentOptions();
         $generics = $this->genericPayments();
+        $payments = array_values($payments);
 
-        return array_merge($payments, $generics, $this->getExtractedPaymentOptions());
+        array_splice($payments, count($payments) - 1, 0, $extracted);
+
+        return array_merge($payments, $generics);
     }
 
     private function getExtractedPaymentOptions(): array
