@@ -13,12 +13,21 @@ class Generic implements GatewayType
     public function getPaymentOption(\Tpay $module, PaymentOption $paymentOption, array $data = []): PaymentOption
     {
         $moduleLink = Context::getContext()->link->getModuleLink('tpay', 'payment', [], true);
-        $paymentOption->setCallToActionText($data['fullName'])
+        $paymentOption->setCallToActionText($this->getActionText($module, $data))
             ->setAction($moduleLink)
             ->setLogo($data['image']['url'])
             ->setForm($this->generateForm($moduleLink, $data['id']));
 
         return $paymentOption;
+    }
+
+    private function getActionText(\Tpay $module, $data): string
+    {
+        if ((int) $data['id'] === GenericPaymentsManager::CHANNEL_BLIK_BNPL) {
+            return $module->getTranslator()->trans('BLIK Pay Later', [], 'Modules.Tpay.Shop');
+        }
+
+        return $data['fullName'];
     }
 
     private function generateForm(string $moduleLink, $channelId): string

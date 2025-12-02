@@ -286,6 +286,10 @@
         <source>Shipping cost: </source>
         <target>Koszt przesyłki</target>
       </trans-unit>
+      <trans-unit id="9f233de11017582ab42e24e0dd2cea51">
+        <source>BLIK Pay Later</source>
+        <target>BLIK Płacę Później</target>
+      </trans-unit>
       <trans-unit id="4068268ab17153e64d70d43a5bafec00">
         <source>BLIK Pay Later lets you defer payment for online purchases for 30 days, up to 4,000 PLN.</source>
         <target>BLIK Płacę Później to usługa, która pozwala na odroczenie płatności za zakupy online do 30 dni, maksymalnie do 4000 PLN.</target>
