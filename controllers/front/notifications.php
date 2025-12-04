@@ -35,6 +35,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         }
 
         if (empty($_POST)) {
+            echo 'False - Empty body received';
             $this->badRequestResponse();
         }
 
