@@ -20,6 +20,7 @@ use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 use Tpay\Factory\PaymentOptionsFactory;
 use Tpay\Config\Config;
 use Tpay\Service\ConstraintValidator;
+use Tpay\Service\GenericPayments\GenericPaymentsManager;
 use Tpay\Util\Cache;
 use Tpay\Util\Helper;
 
@@ -93,9 +94,45 @@ class PaymentOptionsService
             return null;
         }, $this->channels));
 
+        $extracted = $this->getExtractedPaymentOptions();
         $generics = $this->genericPayments();
+        $payments = array_values($payments);
+
+        array_splice($payments, count($payments) - 1, 0, $extracted);
 
         return array_merge($payments, $generics);
+    }
+
+    private function getExtractedPaymentOptions(): array
+    {
+        $result = [];
+        foreach (GenericPaymentsManager::EXTRACTED_PAYMENT_CHANNELS as $channelId => $configField) {
+            if (!GenericPaymentsManager::isChannelExcluded($channelId)) {
+                continue;
+            }
+
+            $channel = null;
+
+            foreach ($this->bankChannels as $bankChannel) {
+                if (isset($bankChannel['id']) && (int) $bankChannel['id'] === (int) $channelId) {
+                    $channel = $bankChannel;
+                    break;
+                }
+            }
+
+            if (!$channel) {
+                continue;
+            }
+
+            if (!empty($channel['constraints']) && !$this->constraintValidator->validate($channel['constraints'], $this->getBrowser())) {
+                continue;
+            }
+
+            $gateway = new PaymentType(new Generic());
+            $result[] = $gateway->getPaymentOption($this->module, new PaymentOption(), $channel);
+        }
+
+        return $result;
     }
 
     /**
@@ -247,7 +284,6 @@ class PaymentOptionsService
             $channels = array_filter($this->bankChannels, function (array $channel) {
                 return true === $channel['available'];
             });
-
             foreach ($channels as $channel) {
                 $channels[$channel['id']] = $channel;
             }
