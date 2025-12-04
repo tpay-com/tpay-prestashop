@@ -32,6 +32,7 @@ class Reset
             'TPAY_SECRET_KEY',
             'TPAY_BLIK_ACTIVE',
             'TPAY_BLIK_WIDGET',
+            'TPAY_BLIK_BNPL_ACTIVE',
             'TPAY_TRANSFER_WIDGET',
             'TPAY_CUSTOM_ORDER',
             'TPAY_CARD_WIDGET',

@@ -286,6 +286,14 @@
         <source>Shipping cost: </source>
         <target>Koszt przesyłki</target>
       </trans-unit>
+      <trans-unit id="9f233de11017582ab42e24e0dd2cea51">
+        <source>BLIK Pay Later</source>
+        <target>BLIK Płacę Później</target>
+      </trans-unit>
+      <trans-unit id="4068268ab17153e64d70d43a5bafec00">
+        <source>BLIK Pay Later lets you defer payment for online purchases for 30 days, up to 4,000 PLN.</source>
+        <target>BLIK Płacę Później to usługa, która pozwala na odroczenie płatności za zakupy online do 30 dni, maksymalnie do 4000 PLN.</target>
+      </trans-unit>
       <trans-unit id="0203eced6da80c4f2458c91eee3fe223">
         <source>Summary of ordered products:</source>
         <target>Podsumowanie zamówionych produktów</target>
@@ -333,6 +341,10 @@
       <trans-unit id="266d5092eb859f1d73258aa1074906ef">
         <source>Use saved blik code</source>
         <target>Płatność BLIK bez wpisywania kodu</target>
+      </trans-unit>
+      <trans-unit id="17b7f5c7de8a57c4bc2bcf7085d4af82">
+        <source>What is BLIK Pay Later?</source>
+        <target>Co to jest BLIK Płacę Później?</target>
       </trans-unit>
       <trans-unit id="1545900c90049e48660d8bcf87596d46">
         <source>Why don't I have to enter the code?</source>
