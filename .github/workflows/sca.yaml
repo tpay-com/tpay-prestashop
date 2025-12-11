@@ -1,11 +1,11 @@
 name: Static code analysis
 
-on:
-  push:
+on: [push]
 
 jobs:
   analyse:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
 
@@ -18,23 +18,17 @@ jobs:
       - run: composer validate --strict
         continue-on-error: true
 
-      - working-directory: .dev-tools
-        run: composer install
+      - run: composer install --no-interaction --prefer-dist
 
-      - working-directory: .dev-tools
-        run: composer normalize --diff --dry-run --indent-size=4 --indent-style=space ../composer.json
+      - run: composer normalize --diff --dry-run --indent-size=4 --indent-style=space
 
-      - working-directory: .dev-tools
-        run: composer cs:fixer -- --dry-run
+      - run: composer cs:fixer -- --dry-run
 
-      - working-directory: .dev-tools
-        run: composer cs:sniffer
+      - run: composer cs:sniffer
         continue-on-error: true
 
-      - working-directory: .dev-tools
-        run: composer cs:phpstan
+      - run: composer cs:phpstan
         continue-on-error: true
 
-      - working-directory: .dev-tools
-        run: composer cs:psalm -- --no-progress --shepherd
+      - run: composer cs:psalm -- --no-progress --shepherd
         continue-on-error: true
