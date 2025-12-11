@@ -39,8 +39,7 @@
     },
     "config": {
         "allow-plugins": {
-            "ergebnis/composer-normalize": true,
-            "kubawerlos/composer-smaller-lock": true
+            "ergebnis/composer-normalize": true
         },
         "optimize-autoloader": true,
         "preferred-install": "dist",
