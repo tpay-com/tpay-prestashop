@@ -19,7 +19,7 @@
         "ergebnis/composer-normalize": "^2.35",
         "kubawerlos/php-cs-fixer-custom-fixers": "^3.16.2",
         "mockery/mockery": "^1.2",
-        "php-cs-fixer/shim": "^3.91",
+        "php-cs-fixer/shim": "^3.23",
         "phpmd/phpmd": "@stable",
         "phpstan/phpstan": "^1.8",
         "phpunit/phpunit": "^8",

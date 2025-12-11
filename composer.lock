@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5517c5ada554ec3071c5db46bab0a32",
+    "content-hash": "fd17a6230fcb079df6182e039076fe2c",
     "packages": [
         {
             "name": "paragonie/constant_time_encoding",
@@ -1736,26 +1736,26 @@
         },
         {
             "name": "kubawerlos/php-cs-fixer-custom-fixers",
-            "version": "v3.35.1",
+            "version": "v3.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers.git",
-                "reference": "2a35f80ae24ca77443a7af1599c3a3db1b6bd395"
+                "reference": "3d1bb75be0df6c6fba4487c75b9e425a2c1d27c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kubawerlos/php-cs-fixer-custom-fixers/zipball/2a35f80ae24ca77443a7af1599c3a3db1b6bd395",
-                "reference": "2a35f80ae24ca77443a7af1599c3a3db1b6bd395",
+                "url": "https://api.github.com/repos/kubawerlos/php-cs-fixer-custom-fixers/zipball/3d1bb75be0df6c6fba4487c75b9e425a2c1d27c9",
+                "reference": "3d1bb75be0df6c6fba4487c75b9e425a2c1d27c9",
                 "shasum": ""
             },
             "require": {
                 "ext-filter": "*",
                 "ext-tokenizer": "*",
-                "friendsofphp/php-cs-fixer": "^3.87",
+                "friendsofphp/php-cs-fixer": "^3.50",
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.6.24 || ^10.5.51 || ^11.5.32"
+                "phpunit/phpunit": "^9.6.4 || ^10.0.14"
             },
             "type": "library",
             "autoload": {
@@ -1776,15 +1776,9 @@
             "description": "A set of custom fixers for PHP CS Fixer",
             "support": {
                 "issues": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/issues",
-                "source": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/tree/v3.35.1"
+                "source": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/tree/v3.21.0"
             },
-            "funding": [
-                {
-                    "url": "https://github.com/kubawerlos",
-                    "type": "github"
-                }
-            ],
-            "time": "2025-09-28T18:43:35+00:00"
+            "time": "2024-02-24T08:53:34+00:00"
         },
         {
             "name": "localheinz/diff",
@@ -2381,16 +2375,16 @@
         },
         {
             "name": "php-cs-fixer/shim",
-            "version": "v3.91.3",
+            "version": "v3.53.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/shim.git",
-                "reference": "ea5bb24909d3b00ad09daeaaa6f2ba66e0891678"
+                "reference": "1b2fab8b7351ce1feb7cadec1f0db4b43056f735"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/ea5bb24909d3b00ad09daeaaa6f2ba66e0891678",
-                "reference": "ea5bb24909d3b00ad09daeaaa6f2ba66e0891678",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/1b2fab8b7351ce1feb7cadec1f0db4b43056f735",
+                "reference": "1b2fab8b7351ce1feb7cadec1f0db4b43056f735",
                 "shasum": ""
             },
             "require": {
@@ -2427,9 +2421,9 @@
             "description": "A tool to automatically fix PHP code style",
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/shim/issues",
-                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.91.3"
+                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.53.0"
             },
-            "time": "2025-12-05T19:46:58+00:00"
+            "time": "2024-04-08T15:08:36+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
