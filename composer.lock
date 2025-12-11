@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fd17a6230fcb079df6182e039076fe2c",
+    "content-hash": "a030ec8813b83e27a4a1c9610a85ad15",
     "packages": [
         {
             "name": "paragonie/constant_time_encoding",
@@ -2732,16 +2732,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.11.5",
+            "version": "1.10.66",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "490f0ae1c92b082f154681d7849aee776a7c1443"
+                "reference": "94779c987e4ebd620025d9e5fdd23323903950bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/490f0ae1c92b082f154681d7849aee776a7c1443",
-                "reference": "490f0ae1c92b082f154681d7849aee776a7c1443",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/94779c987e4ebd620025d9e5fdd23323903950bd",
+                "reference": "94779c987e4ebd620025d9e5fdd23323903950bd",
                 "shasum": ""
             },
             "require": {
@@ -2784,9 +2784,13 @@
                 {
                     "url": "https://github.com/phpstan",
                     "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                    "type": "tidelift"
                 }
             ],
-            "time": "2024-06-17T15:10:54+00:00"
+            "time": "2024-03-28T16:17:31+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -4105,16 +4109,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.13.5",
+            "version": "3.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "0ca86845ce43291e8f5692c7356fccf3bcf02bf4"
+                "reference": "267a4405fff1d9c847134db3a3c92f1ab7f77909"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/0ca86845ce43291e8f5692c7356fccf3bcf02bf4",
-                "reference": "0ca86845ce43291e8f5692c7356fccf3bcf02bf4",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/267a4405fff1d9c847134db3a3c92f1ab7f77909",
+                "reference": "267a4405fff1d9c847134db3a3c92f1ab7f77909",
                 "shasum": ""
             },
             "require": {
@@ -4131,6 +4135,11 @@
                 "bin/phpcs"
             ],
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
@@ -4174,13 +4183,9 @@
                 {
                     "url": "https://opencollective.com/php_codesniffer",
                     "type": "open_collective"
-                },
-                {
-                    "url": "https://thanks.dev/u/gh/phpcsstandards",
-                    "type": "thanks_dev"
                 }
             ],
-            "time": "2025-11-04T16:30:35+00:00"
+            "time": "2024-03-31T21:03:09+00:00"
         },
         {
             "name": "symfony/config",
@@ -5378,22 +5383,22 @@
         },
         {
             "name": "tpay-com/coding-standards",
-            "version": "1.1.1",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tpay-com/php-coding-standards.git",
-                "reference": "5b0db4aea95f1e9e5c219ce00efa95645846d726"
+                "reference": "9a924d5098f7623dfa64ab8f6c228418048e02b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tpay-com/php-coding-standards/zipball/5b0db4aea95f1e9e5c219ce00efa95645846d726",
-                "reference": "5b0db4aea95f1e9e5c219ce00efa95645846d726",
+                "url": "https://api.github.com/repos/tpay-com/php-coding-standards/zipball/9a924d5098f7623dfa64ab8f6c228418048e02b9",
+                "reference": "9a924d5098f7623dfa64ab8f6c228418048e02b9",
                 "shasum": ""
             },
             "require": {
-                "friendsofphp/php-cs-fixer": "^3.22",
                 "kubawerlos/php-cs-fixer-custom-fixers": "^3.16.2",
-                "php": "^7.4 || ^8.0"
+                "php": "^7.4 || ^8.0",
+                "php-cs-fixer/shim": "^3.22"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.6.11",
@@ -5412,9 +5417,9 @@
             "description": "Tpay.com coding standards library",
             "support": {
                 "issues": "https://github.com/tpay-com/php-coding-standards/issues",
-                "source": "https://github.com/tpay-com/php-coding-standards/tree/1.1.1"
+                "source": "https://github.com/tpay-com/php-coding-standards/tree/1.0.1"
             },
-            "time": "2025-08-13T12:43:06+00:00"
+            "time": "2023-08-22T10:49:05+00:00"
         },
         {
             "name": "vimeo/psalm",
