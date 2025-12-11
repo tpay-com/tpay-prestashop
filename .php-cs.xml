@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ruleset name="Tpay Standard">
     <descripton>Tpay PHPCS coding standard</descripton>
+    <file>./</file>
     <exclude-pattern>/node_modules/</exclude-pattern>
     <exclude-pattern>/vendor/</exclude-pattern>
     <exclude-pattern>/tests/bootstrap.php</exclude-pattern>
