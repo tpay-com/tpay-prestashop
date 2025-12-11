@@ -1,13 +1,13 @@
 <?php
 
-$config = new PrestaShop\CodingStandards\CsFixer\Config();
+require __DIR__.'/vendor/tpay-com/coding-standards/bootstrap.php';
 
-$config
-    ->setUsingCache(true)
-    ->getFinder()
-    ->in(__DIR__)
-    ->exclude('translations')
-    ->exclude('prestashop')
-    ->exclude('vendor');
-
-return $config;
+return Tpay\CodingStandards\PhpCsFixerConfigFactory::createWithLegacyRules()
+    ->setFinder(
+        PhpCsFixer\Finder::create()
+            ->ignoreDotFiles(false)
+            ->in(__DIR__)
+            ->exclude('translations')
+            ->exclude('prestashop')
+            ->exclude('vendor')
+    );
