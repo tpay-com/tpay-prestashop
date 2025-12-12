@@ -49,7 +49,7 @@
     "scripts": {
         "build:prod": "composer install -v --no-dev",
         "cs:fixer": "./vendor/bin/php-cs-fixer fix -vvv --diff",
-        "cs:phpstan": "./vendor/bin/phpstan",
+        "cs:phpstan": "_PS_ROOT_DIR_=src ./vendor/bin/phpstan",
         "cs:psalm": "./vendor/bin/psalm",
         "cs:sniffer": "./vendor/bin/phpcs --standard=.php-cs.xml -n",
         "test": [
