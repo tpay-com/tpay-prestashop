@@ -187,8 +187,7 @@ class Admin extends AbstractHook
             }
         }
 
-        return $this->translator->trans(
-<<<'EOD'
+        return $this->translator->trans(<<<'EOD'
 Refund error.
                                    Check that the refund amount is correct and does not exceed the value of the order
 EOD,
@@ -282,7 +281,9 @@ EOD,
         return $refundAmount > $maxRefundAmount;
     }
 
-    /** Processing refund */
+    /**
+     * Processing refund
+     */
     private function processRefund(string $transactionId, float $refundAmount)
     {
         return $this->module->api()->transactions()->createRefundByTransactionId(
