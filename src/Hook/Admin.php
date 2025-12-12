@@ -188,7 +188,7 @@ class Admin extends AbstractHook
         }
 
         return $this->translator->trans(
-            <<<'EOD'
+<<<'EOD'
 Refund error.
                                    Check that the refund amount is correct and does not exceed the value of the order
 EOD,
