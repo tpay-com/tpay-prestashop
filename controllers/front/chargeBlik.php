@@ -1,6 +1,5 @@
 <?php
 
-
 use Configuration as Cfg;
 use Tpay\CustomerData;
 use Tpay\Handler\BasicPaymentHandler;

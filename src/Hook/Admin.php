@@ -276,9 +276,7 @@ class Admin extends AbstractHook
         return $refundAmount > $maxRefundAmount;
     }
 
-    /**
-     * Processing refund
-     */
+    /** Processing refund */
     private function processRefund(string $transactionId, float $refundAmount)
     {
         return $this->module->api()->transactions()->createRefundByTransactionId(

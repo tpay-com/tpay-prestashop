@@ -2,7 +2,10 @@
 
 require __DIR__.'/vendor/tpay-com/coding-standards/bootstrap.php';
 
-return Tpay\CodingStandards\PhpCsFixerConfigFactory::createWithLegacyRules()
+$config = Tpay\CodingStandards\PhpCsFixerConfigFactory::createWithLegacyRules();
+
+return $config
+    ->setRules(['multiline_string_to_heredoc' => false] + $config->getRules())
     ->setFinder(
         PhpCsFixer\Finder::create()
             ->ignoreDotFiles(false)
