@@ -16,7 +16,6 @@
         "tpay-com/tpay-openapi-php": "^2"
     },
     "require-dev": {
-        "composer": "*",
         "ergebnis/composer-normalize": "^2.35",
         "kubawerlos/php-cs-fixer-custom-fixers": "^3.16.2",
         "mockery/mockery": "^1.2",
@@ -24,7 +23,6 @@
         "phpmd/phpmd": "@stable",
         "phpstan/phpstan": "^1.10.30",
         "phpunit/phpunit": "^8",
-        "prestashop/php-dev-tools": "^5.0",
         "squizlabs/php_codesniffer": "*",
         "tpay-com/coding-standards": "^1.0.1",
         "vimeo/psalm": "^4.30"
