@@ -23,7 +23,6 @@ jobs:
       - run: composer normalize --diff --dry-run --indent-size=4 --indent-style=space
 
       - run: composer cs:fixer -- --dry-run
-        continue-on-error: true
 
       - run: composer cs:sniffer
         continue-on-error: true
