@@ -16,12 +16,13 @@ declare(strict_types=1);
 
 namespace Tpay\Util;
 
+use Configuration;
+use Context;
+
 class Helper
 {
     /**
      * Generate string
-     * @param int $length
-     * @return string
      */
     public static function generateRandomString(int $length = 46): string
     {
@@ -35,7 +36,6 @@ class Helper
 
         return $randomString;
     }
-
 
     public static function getFields(): array
     {
@@ -77,7 +77,7 @@ class Helper
             'TPAY_PEKAO_INSTALLMENTS_ACTIVE',
             'TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE',
             'TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART',
-            'TPAY_PEKAO_INSTALLMENTS_CHECKOUT'
+            'TPAY_PEKAO_INSTALLMENTS_CHECKOUT',
         ];
     }
 
@@ -107,16 +107,16 @@ class Helper
     public static function getMultistoreConfigurationValue($name)
     {
         if (
-            \Configuration::get(
+            '1' === Configuration::get(
                 'TPAY_GLOBAL_SETTINGS',
                 null,
-                \Context::getContext()->shop->id_shop_group,
-                \Context::getContext()->shop->id
-            ) === '1'
+                Context::getContext()->shop->id_shop_group,
+                Context::getContext()->shop->id
+            )
         ) {
-            return \Configuration::getGlobalValue($name);
-        } else {
-            return \Configuration::get($name);
+            return Configuration::getGlobalValue($name);
         }
+
+        return Configuration::get($name);
     }
 }

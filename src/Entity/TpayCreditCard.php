@@ -20,8 +20,9 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table()
- * @ORM\Entity()
+ * @ORM\Table
+ *
+ * @ORM\Entity
  */
 class TpayCreditCard
 {
@@ -29,7 +30,9 @@ class TpayCreditCard
      * @var int
      *
      * @ORM\Id
+     *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -102,85 +105,56 @@ class TpayCreditCard
         $this->cardHash = $cardHash;
         $this->userId = $userId;
         $this->crc = $crc;
-        $this->dateAdd = new \DateTime();
+        $this->dateAdd = new DateTime();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getCardVendor(): string
     {
         return $this->cardVendor;
     }
 
-    /**
-     * @return string
-     */
     public function getCardShortcode(): string
     {
         return $this->cardShortcode;
     }
 
-    /**
-     * @return string
-     */
     public function getCardHash(): string
     {
         return $this->cardHash;
     }
 
-    /**
-     * @return string
-     */
     public function getCardToken(): string
     {
         return $this->cardToken;
     }
 
-    /**
-     * @return int
-     */
     public function getUserId(): int
     {
         return $this->userId;
     }
 
-    /**
-     * @return string
-     */
     public function getCrc(): string
     {
         return $this->crc;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getDateAdd(): DateTime
     {
         return $this->dateAdd;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getDateUpdate(): DateTime
     {
         return $this->dateUpdate;
     }
 
     /**
-     * @param string $cardToken
-     *
-     * @return TpayCreditCard
+     * @return self
      */
     public function setCardToken(string $cardToken)
     {
@@ -197,7 +171,7 @@ class TpayCreditCard
             'card_shortcode' => $this->getCardShortcode(),
             'card_hash' => $this->getCardHash(),
             'user_id' => $this->getUserId(),
-            'crc' => $this->getCrc()
+            'crc' => $this->getCrc(),
         ];
     }
 }

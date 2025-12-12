@@ -16,26 +16,24 @@ declare(strict_types=1);
 
 namespace Tpay\Install;
 
+use Context;
+use Db;
 use PrestaShopBundle\Translation\TranslatorComponent;
+use Shop;
+use Tools;
 use Tpay;
 use Tpay\Exception\BaseException;
 use Tpay\Handler\InstallQueryHandler;
 
 class Install
 {
-    /**
-     * @var Tpay
-     */
+    /** @var Tpay */
     private $module;
 
-    /**
-     * @var InstallQueryHandler
-     */
+    /** @var InstallQueryHandler */
     private $installQueryHandler;
 
-    /**
-     * @var TranslatorComponent
-     */
+    /** @var TranslatorComponent */
     private $translator;
 
     public function __construct(
@@ -47,9 +45,7 @@ class Install
         $this->translator = $module->getTranslator();
     }
 
-    /**
-     * @throws BaseException
-     */
+    /** @throws BaseException */
     public function install(): bool
     {
         if (!$this->installDb()) {
@@ -67,16 +63,15 @@ class Install
      * Sql data installation
      *
      * @throws BaseException
-     * @return bool
      */
     private function installDb(): bool
     {
         $status = true;
-        $database = \Db::getInstance();
-        $sql = \Tools::file_get_contents($this->module->getLocalPath() . 'src/Install/install.sql');
+        $database = Db::getInstance();
+        $sql = Tools::file_get_contents($this->module->getLocalPath().'src/Install/install.sql');
         $sql = str_replace(['_DB_PREFIX_', '_MYSQL_ENGINE_'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sql);
 
-        $sqlQuery = explode(";", $sql);
+        $sqlQuery = explode(';', $sql);
         foreach ($sqlQuery as $q) {
             $q = trim($q);
             if (!empty($q)) {
@@ -92,13 +87,11 @@ class Install
 
     /**
      * Starts context if there is a store running multistore option
-     *
-     * @return bool
      */
     private function installContext(): bool
     {
-        if (\Shop::isFeatureActive()) {
-            \Shop::setContext(\Shop::CONTEXT_SHOP, \Context::getContext()->shop->id);
+        if (Shop::isFeatureActive()) {
+            Shop::setContext(Shop::CONTEXT_SHOP, Context::getContext()->shop->id);
         }
 
         return true;

@@ -16,6 +16,6 @@ declare(strict_types=1);
 
 namespace Tpay\Exception;
 
-class PaymentException extends \Exception
-{
-}
+use Exception;
+
+class PaymentException extends Exception {}

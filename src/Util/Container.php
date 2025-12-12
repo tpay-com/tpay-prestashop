@@ -2,13 +2,14 @@
 
 namespace Tpay\Util;
 
+use Exception;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Tpay\Entity\TpayRefund;
 
 final class Container
 {
     /** @var self */
-    private static $instance = null;
+    private static $instance;
 
     /**
      * Get a singleton instance of SymfonyContainer
@@ -35,15 +36,16 @@ final class Container
         $container = SymfonyContainer::getInstance();
         try {
             if (null !== $container) {
-                //just try to fetch random Tpay service
-                //if exception occures - it means that container is built with only core presta modules (v 1.7.3 and lower)
+                // just try to fetch random Tpay service
+                // if exception occures - it means that container is built with only core presta modules (v 1.7.3 and lower)
                 $container->get('tpay.service.surcharge');
 
-                //if exception <<class>> was not found in the chain configured namespaces occur, we should instantiate legacy container
+                // if exception <<class>> was not found in the chain configured namespaces occur, we should instantiate legacy container
                 $container->get('doctrine')->getRepository(TpayRefund::class);
+
                 return true;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return false;

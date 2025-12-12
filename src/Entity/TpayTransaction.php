@@ -19,8 +19,9 @@ namespace Tpay\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table()
- * @ORM\Entity()
+ * @ORM\Table
+ *
+ * @ORM\Entity
  */
 class TpayTransaction
 {
@@ -28,7 +29,9 @@ class TpayTransaction
      * @var int
      *
      * @ORM\Id
+     *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -100,65 +103,41 @@ class TpayTransaction
         $this->status = $status;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
     public function getOrderId(): int
     {
         return $this->orderId;
     }
 
-    /**
-     * @return string
-     */
     public function getCrc(): string
     {
         return $this->crc;
     }
 
-    /**
-     * @return string
-     */
     public function getTransactionId(): string
     {
         return $this->transactionId;
     }
 
-    /**
-     * @return string
-     */
     public function getPaymentType(): string
     {
         return $this->paymentType;
     }
 
-    /**
-     * @return int
-     */
     public function getRegisterUser(): int
     {
         return $this->registerUser;
     }
 
-    /**
-     * @return float
-     */
     public function getSurcharge(): float
     {
         return $this->surcharge;
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;

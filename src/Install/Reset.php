@@ -17,13 +17,15 @@ declare(strict_types=1);
 namespace Tpay\Install;
 
 use Configuration;
+use Exception;
+use PrestaShopLogger;
 use Tpay\Exception\BaseException;
 
 class Reset
 {
     /**
      * Deleting sql data
-     * @return bool
+     *
      * @throws BaseException
      */
     public function resetDb(): bool
@@ -69,11 +71,11 @@ class Reset
             foreach ($configurations as $configName) {
                 Configuration::deleteByName($configName);
             }
+
             return true;
-        } catch (\Exception $exception) {
-            \PrestaShopLogger::addLog($exception->getMessage(), 3);
+        } catch (Exception $exception) {
+            PrestaShopLogger::addLog($exception->getMessage(), 3);
             throw new BaseException($exception->getMessage());
         }
-
     }
 }

@@ -16,9 +16,10 @@ declare(strict_types=1);
 
 namespace Tpay\Service\PaymentOptions;
 
-use Tpay\Config\Config;
 use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
+use Tpay;
+use Tpay\Config\Config;
 use Tpay\Util\Helper;
 
 class Blik implements GatewayType
@@ -26,7 +27,7 @@ class Blik implements GatewayType
     private $method;
 
     public function getPaymentOption(
-        \Tpay $module,
+        Tpay $module,
         PaymentOption $paymentOption,
         array $data = []
     ): PaymentOption {
@@ -34,9 +35,8 @@ class Blik implements GatewayType
 
         $blikSavedAliases = $this->getSavedBlikAliases(
             $module,
-            \Context::getContext()->customer->id
+            Context::getContext()->customer->id
         );
-
 
         $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
         Context::getContext()->smarty->assign([
@@ -44,7 +44,7 @@ class Blik implements GatewayType
             'blik_gateway' => $data['id'],
             'blik_moduleLink' => $moduleLink,
             'blik_saved_aliases' => $blikSavedAliases,
-            'blik_order_id' => \Context::getContext()->cart->id,
+            'blik_order_id' => Context::getContext()->cart->id,
             'assets_path' => $module->getPath(),
         ]);
 
@@ -78,6 +78,7 @@ class Blik implements GatewayType
     public function getSavedBlikAliases($module, $userId)
     {
         $blikRepository = $module->getService('tpay.repository.blik');
+
         return $blikRepository->getBlikAliasIdByUserId($userId);
     }
 

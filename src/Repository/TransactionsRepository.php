@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Tpay\Repository;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
@@ -29,32 +30,18 @@ class TransactionsRepository
 {
     public const TABLE = 'tpay_transaction';
 
-    /**
-     * @var Connection the Database connection
-     */
+    /** @var Connection the Database connection */
     private $connection;
 
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
 
-    /**
-     * @var RepositoryQueryHandler
-     */
+    /** @var RepositoryQueryHandler */
     private $repositoryQueryHandler;
 
-    /**
-     * @var string the Database prefix
-     */
+    /** @var string the Database prefix */
     private $dbPrefix;
 
-    /**
-     * @param Connection $connection
-     * @param EntityManager $entityManager
-     * @param RepositoryQueryHandler $repositoryQueryHandler
-     * @param string $dbPrefix
-     */
     public function __construct(
         Connection $connection,
         EntityManager $entityManager,
@@ -68,14 +55,14 @@ class TransactionsRepository
     }
 
     /**
-     * @throws RepositoryException|BaseException
+     * @throws BaseException|RepositoryException
      */
     public function getTransactionIdByOrderId($orderId)
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('transaction_id')
-            ->from($this->dbPrefix . self::TABLE, 't')
+            ->from($this->dbPrefix.self::TABLE, 't')
             ->andWhere('t.order_id = :orderId')
             ->setParameter('orderId', (int) $orderId);
 
@@ -83,14 +70,14 @@ class TransactionsRepository
     }
 
     /**
-     * @throws RepositoryException|BaseException
+     * @throws BaseException|RepositoryException
      */
     public function getTransactionByOrderId($orderId)
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('*')
-            ->from($this->dbPrefix . self::TABLE, 't')
+            ->from($this->dbPrefix.self::TABLE, 't')
             ->andWhere('t.order_id = :orderId')
             ->setParameter('orderId', (int) $orderId);
 
@@ -98,19 +85,19 @@ class TransactionsRepository
     }
 
     /**
-     * @throws RepositoryException|BaseException
+     * @throws BaseException|RepositoryException
      */
     public function getTransactionsQualifiedToCancel($timegapInDays)
     {
-        $date = new \DateTime('now -'.((int)$timegapInDays).' days');
+        $date = new DateTime('now -'.((int) $timegapInDays).' days');
         $dateMin = clone $date;
         $dateMin->modify('-1 day');
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('distinct o.id_order, o.valid, t.transaction_id')
-            ->from($this->dbPrefix . self::TABLE, 't')
-            ->join('t', $this->dbPrefix . 'orders', 'o', 't.order_id = o.id_order')
-            ->join('t', $this->dbPrefix . 'order_state', 'os', 't.order_id = o.id_order')
+            ->from($this->dbPrefix.self::TABLE, 't')
+            ->join('t', $this->dbPrefix.'orders', 'o', 't.order_id = o.id_order')
+            ->join('t', $this->dbPrefix.'order_state', 'os', 't.order_id = o.id_order')
             ->andWhere('o.date_add >= :dateMin')
             ->andWhere('o.date_add <= :dateMax')
             ->andWhere('t.status = "pending"')
@@ -121,13 +108,13 @@ class TransactionsRepository
     }
 
     /**
-     * @throws RepositoryException|BaseException
+     * @throws BaseException|RepositoryException
      */
     public function updateTransaction($orderId, $oldTransactionId, $crc, $transactionId, $paymentType)
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix . self::TABLE)
+            ->update($this->dbPrefix.self::TABLE)
             ->set('crc', ':crc')
             ->set('transaction_id', ':transactionId')
             ->set('payment_type', ':paymentType')
@@ -143,14 +130,14 @@ class TransactionsRepository
     }
 
     /**
-     * @throws RepositoryException|BaseException
+     * @throws BaseException|RepositoryException
      */
     public function getSurchargeValueByOrderId($orderId)
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('surcharge')
-            ->from($this->dbPrefix . self::TABLE, 't')
+            ->from($this->dbPrefix.self::TABLE, 't')
             ->andWhere('t.order_id = :orderId')
             ->setParameter('orderId', (int) $orderId);
 
@@ -158,14 +145,14 @@ class TransactionsRepository
     }
 
     /**
-     * @throws RepositoryException|BaseException
+     * @throws BaseException|RepositoryException
      */
     public function getTransactionByCrc($crc)
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('*')
-            ->from($this->dbPrefix . self::TABLE, 't')
+            ->from($this->dbPrefix.self::TABLE, 't')
             ->andWhere('t.crc = :crc')
             ->setParameter('crc', $crc);
 
@@ -173,14 +160,14 @@ class TransactionsRepository
     }
 
     /**
-     * @throws RepositoryException|BaseException
+     * @throws BaseException|RepositoryException
      */
     public function getTransactionByTransactionId($transactionId)
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('*')
-            ->from($this->dbPrefix . self::TABLE, 't')
+            ->from($this->dbPrefix.self::TABLE, 't')
             ->andWhere('t.transaction_id = :transactionId')
             ->setParameter('transactionId', $transactionId);
 
@@ -188,16 +175,17 @@ class TransactionsRepository
     }
 
     /**
-     * @throws RepositoryException|BaseException
+     * @throws BaseException|RepositoryException
      */
     public function getPaymentType($orderId)
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('payment_type')
-            ->from($this->dbPrefix . self::TABLE, 'r')
+            ->from($this->dbPrefix.self::TABLE, 'r')
             ->andWhere('r.order_id = :orderId')
             ->setParameter('orderId', (int) $orderId);
+
         return $this->repositoryQueryHandler->execute($qb, 'Error get payment type', 'fetchColumn');
     }
 
@@ -206,7 +194,7 @@ class TransactionsRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('id_order_state')
-            ->from($this->dbPrefix . 'order_history', 'cc')
+            ->from($this->dbPrefix.'order_history', 'cc')
             ->andWhere('cc.id_order = :orderId')
             ->setParameter('orderId', $orderId);
 
@@ -252,18 +240,14 @@ class TransactionsRepository
     /**
      * Update transaction status
      *
-     * @param string $crc
-     * @param string $status
-     *
      * @throws RepositoryException
      * @throws BaseException
-     * @return void
      */
     public function updateTransactionStatus(string $crc, string $status): void
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix . self::TABLE)
+            ->update($this->dbPrefix.self::TABLE)
             ->set('status', ':status')
             ->andWhere('crc = :crc')
             ->setParameter('status', $status)
@@ -274,18 +258,14 @@ class TransactionsRepository
     /**
      * Update transaction status
      *
-     * @param string $transactionId
-     * @param string $status
-     *
      * @throws RepositoryException
      * @throws BaseException
-     * @return void
      */
     public function updateTransactionStatusByTransactionId(string $transactionId, string $status): void
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix . self::TABLE)
+            ->update($this->dbPrefix.self::TABLE)
             ->set('status', ':status')
             ->andWhere('transaction_id = :transaction_id')
             ->setParameter('status', $status)
@@ -301,7 +281,7 @@ class TransactionsRepository
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix . self::TABLE)
+            ->update($this->dbPrefix.self::TABLE)
             ->set('order_id', ':orderId')
             ->andWhere('transaction_id = :transactionId')
             ->setParameter('orderId', $orderId)

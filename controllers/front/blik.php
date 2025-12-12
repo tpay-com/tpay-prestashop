@@ -27,7 +27,7 @@ class TpayBlikModuleFrontController extends ModuleFrontController
         $customer = new Customer($order->id_customer);
 
         if (!Validate::isLoadedObject($customer)) {
-            Tools::redirect(__PS_BASE_URI__ . 'order.php?step=1');
+            Tools::redirect(__PS_BASE_URI__.'order.php?step=1');
         }
 
         if (!$this->module->active) {
@@ -41,12 +41,12 @@ class TpayBlikModuleFrontController extends ModuleFrontController
                     'confirmation',
                     [
                         'type' => Config::TPAY_PAYMENT_BLIK,
-                        'order_id' => $order->id
+                        'order_id' => $order->id,
                     ]
                 )
             );
         } else {
-            \PrestaShopLogger::addLog('Unknown blik status', 3);
+            PrestaShopLogger::addLog('Unknown blik status', 3);
             throw new PaymentException('Unknown blik status');
         }
     }

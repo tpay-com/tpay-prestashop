@@ -30,15 +30,13 @@ class Design extends AbstractHook
 
     /**
      * Module header register scripts and styles.
-     *
-     * @return void
      */
     public function displayHeader(): void
     {
-        $this->context->controller->addCSS($this->module->getPath() . 'views/css/main.css');
-        $this->context->controller->addJS($this->module->getPath() . 'views/js/main.min.js');
+        $this->context->controller->addCSS($this->module->getPath().'views/css/main.css');
+        $this->context->controller->addJS($this->module->getPath().'views/js/main.min.js');
         if (Cfg::get('TPAY_AUTO_CANCEL_ACTIVE') && Cfg::get('TPAY_AUTO_CANCEL_FRONTEND_RUN')) {
-            $this->context->controller->addJS($this->module->getPath() . 'cron.php', false);
+            $this->context->controller->addJS($this->module->getPath().'cron.php', false);
         }
 
         $ajax = $this->context->link->getModuleLink('tpay', 'ajax', [], true);
@@ -76,7 +74,6 @@ class Design extends AbstractHook
                 'blik_rejected_msg' => $translator->trans('Transaction rejected by payer', [], 'Modules.Tpay.Shop'),
                 'blik_insufficient_funds_msg' => $translator->trans('Insufficient Funds', [], 'Modules.Tpay.Shop'),
 
-
                 'blik_msg' => [
                     61 => $translator->trans('invalid BLIK code or alias data format', [], 'Modules.Tpay.Shop'),
                     62 => $translator->trans('error connecting BLIK system', [], 'Modules.Tpay.Shop'),
@@ -108,7 +105,7 @@ class Design extends AbstractHook
                         'Modules.Tpay.Shop'
                     ),
                     104 => $translator->trans('BLIK user or system timeout', [], 'Modules.Tpay.Shop'),
-                ]
+                ],
             ]
         );
 
@@ -125,15 +122,15 @@ class Design extends AbstractHook
                 ]
             );
 
-            $this->context->controller->addJS($this->module->getPath() . 'views/js/jquery.formance.min.js');
-            $this->context->controller->addJS($this->module->getPath() . 'views/js/jsencrypt.min.js');
-            $this->context->controller->addJS($this->module->getPath() . 'views/js/string_routines.js');
-            $this->context->controller->addJS($this->module->getPath() . 'views/js/jquery.payment.js');
-            $this->context->controller->addJS($this->module->getPath() . 'views/js/cardPayment.js');
+            $this->context->controller->addJS($this->module->getPath().'views/js/jquery.formance.min.js');
+            $this->context->controller->addJS($this->module->getPath().'views/js/jsencrypt.min.js');
+            $this->context->controller->addJS($this->module->getPath().'views/js/string_routines.js');
+            $this->context->controller->addJS($this->module->getPath().'views/js/jquery.payment.js');
+            $this->context->controller->addJS($this->module->getPath().'views/js/cardPayment.js');
         }
 
         if (Cfg::get('TPAY_BLIK_ACTIVE') && Cfg::get('TPAY_BLIK_WIDGET')) {
-            $this->context->controller->addJS($this->module->getPath() . 'views/js/blikPayment.js');
+            $this->context->controller->addJS($this->module->getPath().'views/js/blikPayment.js');
         }
     }
 

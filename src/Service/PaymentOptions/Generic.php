@@ -6,11 +6,12 @@ namespace Tpay\Service\PaymentOptions;
 
 use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
+use Tpay;
 use Tpay\Service\GenericPayments\GenericPaymentsManager;
 
 class Generic implements GatewayType
 {
-    public function getPaymentOption(\Tpay $module, PaymentOption $paymentOption, array $data = []): PaymentOption
+    public function getPaymentOption(Tpay $module, PaymentOption $paymentOption, array $data = []): PaymentOption
     {
         $moduleLink = Context::getContext()->link->getModuleLink('tpay', 'payment', [], true);
         $paymentOption->setCallToActionText($this->getActionText($module, $data))
@@ -21,9 +22,9 @@ class Generic implements GatewayType
         return $paymentOption;
     }
 
-    private function getActionText(\Tpay $module, $data): string
+    private function getActionText(Tpay $module, $data): string
     {
-        if ((int) $data['id'] === GenericPaymentsManager::CHANNEL_BLIK_BNPL) {
+        if (GenericPaymentsManager::CHANNEL_BLIK_BNPL === (int) $data['id']) {
             return $module->getTranslator()->trans('BLIK Pay Later', [], 'Modules.Tpay.Shop');
         }
 

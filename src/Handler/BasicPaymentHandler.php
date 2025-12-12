@@ -16,6 +16,11 @@ declare(strict_types=1);
 
 namespace Tpay\Handler;
 
+use Context;
+use Customer;
+use Exception;
+use Order;
+use Tpay;
 use Tpay\Exception\PaymentException;
 use Tpay\Exception\TransactionException;
 use Tpay\Service\TransactionService;
@@ -28,7 +33,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
     /** @var array */
     protected $clientData;
 
-    /** @var \Tpay */
+    /** @var Tpay */
     protected $module;
 
     public function getName(): string
@@ -38,13 +43,13 @@ class BasicPaymentHandler implements PaymentMethodHandler
 
     /**
      * @throws PaymentException|TransactionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function createPayment(
-        \Tpay $module,
-        \Order $order,
-        \Customer $customer,
-        \Context $context,
+        Tpay $module,
+        Order $order,
+        Customer $customer,
+        Context $context,
         array $clientData,
         array $data
     ): void {
@@ -58,15 +63,15 @@ class BasicPaymentHandler implements PaymentMethodHandler
 
         $this->initTransactionProcess($transaction, $this->module->currentOrder);
 
-
         throw new PaymentException(
-            'Unable to create payment method. Response: ' . json_encode($transaction)
+            'Unable to create payment method. Response: '.json_encode($transaction)
         );
     }
 
     /**
      * @param array|string $transaction
-     * @throws \Exception
+     *
+     * @throws Exception
      */
     public function initTransactionProcess($transaction, int $orderId, bool $redirect = true): void
     {
@@ -84,9 +89,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
         );
     }
 
-    /**
-     * @throws TransactionException
-     */
+    /** @throws TransactionException */
     protected function createTransaction(): array
     {
         $result = $this->module->api()->transactions()->createTransaction($this->clientData);
@@ -104,7 +107,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
 
     protected function updatePayData(array $data): void
     {
-        if ($data['type'] == 'transfer' && !Helper::getMultistoreConfigurationValue('TPAY_TRANSFER_WIDGET')) {
+        if ('transfer' == $data['type'] && !Helper::getMultistoreConfigurationValue('TPAY_TRANSFER_WIDGET')) {
             unset($this->clientData['pay']);
         } else {
             $this->checkPayType($data);
@@ -117,9 +120,9 @@ class BasicPaymentHandler implements PaymentMethodHandler
         $channelId = $data['tpay_channel_id'] ?? 0;
 
         if ($channelId) {
-            $this->clientData['pay']['channelId'] = (int)$channelId;
+            $this->clientData['pay']['channelId'] = (int) $channelId;
         } elseif ($gatewayId) {
-            $this->clientData['pay']['groupId'] = (int)$gatewayId;
+            $this->clientData['pay']['groupId'] = (int) $gatewayId;
         } else {
             unset($this->clientData['pay']);
         }

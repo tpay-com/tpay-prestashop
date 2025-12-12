@@ -26,6 +26,7 @@ if (!defined('_PS_VERSION_')) {
 class TpayChargeBlikModuleFrontController extends ModuleFrontController
 {
     public const TYPE = 'blik';
+
     public $cartId;
 
     /**
@@ -37,11 +38,11 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         parent::initContent();
 
         $cartId = Tools::getValue('cartId');
-        $cart = $cartId ? new \Cart($cartId) : $this->context->cart;
+        $cart = $cartId ? new Cart($cartId) : $this->context->cart;
 
         $context = $this->context;
-        $customer = new \Customer($cart->id_customer);
-        $address = new \AddressCore($cart->id_address_invoice);
+        $customer = new Customer($cart->id_customer);
+        $address = new AddressCore($cart->id_address_invoice);
         $action = Tools::getValue('action');
         $status = true;
 
@@ -71,12 +72,12 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
                 $this->createTransaction($address, $customer, $context, $cart, $order);
                 break;
             case 'payBlikTransaction':
-                $order = new \Order(\Order::getIdByCartId($cart->id));
+                $order = new Order(Order::getIdByCartId($cart->id));
 
                 $this->payBlikTransaction($address, $customer, $context, $cart, $order, Tools::getValue('transactionId'));
                 break;
             case 'payByTransfer':
-                $order = new \Order(Tools::getValue('orderIdForTransfer'));
+                $order = new Order(Tools::getValue('orderIdForTransfer'));
 
                 $this->payByTransfer($address, $customer, $context, $cart, $order, Tools::getValue('transactionId'));
                 break;
@@ -94,26 +95,14 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $this->ajaxRender(
             json_encode([
                 'status' => $result['status'],
-                'result' => $result
+                'result' => $result,
             ])
         );
     }
 
     /**
-     * @param $cart
-     * @return bool
-     */
-    private function currentCartValidate($cart): bool
-    {
-        return $cart->id_customer === 0 || $cart->id_address_delivery === 0 || $cart->id_address_invoice === 0;
-    }
-
-    /**
      * Create transaction
-     * @param $address
-     * @param $customer
-     * @param $context
-     * @param $cart
+     *
      * @throws PrestaShopException
      * @throws Exception
      */
@@ -153,7 +142,6 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
     }
 
     /**
-     * @param $transactionId
      * @throws PrestaShopException
      * @throws Exception
      */
@@ -190,9 +178,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
     /**
      * Process of saving the transaction
-     * @param $transaction
-     * @param $orderId
-     * @param boolean $redirect
+     *
      * @throws Exception
      */
     public function createTransactionInDb($transaction, $orderId, bool $redirect = true): void
@@ -203,7 +189,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             $transactionService->transactionProcess(
                 $transaction,
                 self::TYPE,
-                (int)$orderId,
+                (int) $orderId,
                 $redirect
             );
         }
@@ -211,9 +197,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
     /**
      * Process of saving the transaction
-     * @param $transaction
-     * @param $orderId
-     * @param boolean $redirect
+     *
      * @throws Exception
      */
     public function updateTransactionInDb($transaction, $orderId, $oldTransactionId, $paymentType): void
@@ -227,17 +211,14 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
     /**
      * Get customer data
-     * @param $address
-     * @param $customer
-     * @param $context
-     * @return array
+     *
      * @throws Exception
      */
     public function getCustomerData($address, $customer, $context, $cart, $order, $type): array
     {
         $customerData = new CustomerData($address, $customer, $context, $cart, $order);
 
-        if ($type === self::TYPE) {
+        if (self::TYPE === $type) {
             $customerData->createBlikCallbacks(self::TYPE);
         } else {
             $customerData->createCallbacks($order, BasicPaymentHandler::TYPE);
@@ -249,29 +230,41 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
     }
 
     /**
+     * @return false|string
+     */
+    public function validateBlikCode($blikCode)
+    {
+        if (preg_match('/[^a-z_\-0-9 ]/i', $blikCode) && 6 !== Tools::strlen($blikCode)) {
+            return false;
+        }
+
+        return (string) $blikCode;
+    }
+
+    private function currentCartValidate($cart): bool
+    {
+        return 0 === $cart->id_customer || 0 === $cart->id_address_delivery || 0 === $cart->id_address_invoice;
+    }
+
+    /**
      * Validate order
-     * @param $cartId
-     * @param $orderTotal
-     * @param $customer
      */
     private function blikValidateOrder($cartId, $orderTotal, $customer): void
     {
         $this->module->validateOrder(
-            (int)$cartId,
-            (int)Cfg::get('TPAY_PENDING'),
+            (int) $cartId,
+            (int) Cfg::get('TPAY_PENDING'),
             $orderTotal,
             $this->module->displayName,
             null,
             [],
-            (int)$this->context->currency->id,
+            (int) $this->context->currency->id,
             $customer->isGuest() ? 0 : 1,
             $customer->secure_key
         );
     }
 
     /**
-     * @param $cart
-     * @return float
      * @throws Exception
      */
     private function getOrderTotal($cart): float
@@ -279,29 +272,17 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $surcharge = new SurchargeService();
         $orderTotal = $cart->getOrderTotal();
         $surchargeTotal = $surcharge->getSurchargeValue($orderTotal);
-        return (float)$orderTotal + $surchargeTotal;
-    }
 
-    /**
-     * @param $blikCode
-     * @return false|string
-     */
-    public function validateBlikCode($blikCode)
-    {
-        if (preg_match('/[^a-z_\-0-9 ]/i', $blikCode) && Tools::strlen($blikCode) !== 6) {
-            return false;
-        }
-
-        return (string)$blikCode;
+        return (float) $orderTotal + $surchargeTotal;
     }
 
     private function createOrder($cart, $customer)
     {
-        $order = new \Order(\Order::getIdByCartId($cart->id));
+        $order = new Order(Order::getIdByCartId($cart->id));
         if (!$order->id) {
             if (Validate::isLoadedObject($cart) && !$cart->OrderExists()) {
                 $this->blikValidateOrder($cart->id, $this->getOrderTotal($cart), $customer);
-                $order = new \Order($this->module->currentOrder);
+                $order = new Order($this->module->currentOrder);
             }
         }
 
@@ -314,11 +295,11 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
     private function getBlikAlias($cart, $blikCode = '')
     {
         // Use new blik token
-        $userAlias = 'user_' . $cart->id_customer . '_' . Helper::generateRandomString(5);
+        $userAlias = 'user_'.$cart->id_customer.'_'.Helper::generateRandomString(5);
 
         // Use alias
         if (empty($blikCode)) {
-            $userAlias = $this->module->getService("tpay.repository.blik")->getBlikAliasIdByUserId(
+            $userAlias = $this->module->getService('tpay.repository.blik')->getBlikAliasIdByUserId(
                 $cart->id_customer
             );
         }
@@ -368,7 +349,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $isoCode = Language::getLanguage($cart->id_lang)['iso_code'];
         $transactionParams['lang'] = in_array($isoCode, ['pl', 'en']) ? $isoCode : 'en';
 
-        if (empty($transactionParams['payer']['name']) || $transactionParams['payer']['name'] == " ") {
+        if (empty($transactionParams['payer']['name']) || ' ' == $transactionParams['payer']['name']) {
             $transactionParams['payer']['name'] = sprintf(
                 '%s %s',
                 $customer->firstname,
@@ -385,7 +366,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         if (!isset($transaction['transactionPaymentUrl'])) {
             $this->ajaxRender(
                 json_encode([
-                    'status' => 'error'
+                    'status' => 'error',
                 ])
             );
         }
@@ -401,7 +382,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $this->ajaxRender(
             json_encode([
                 'status' => 'correct',
-                'payment_url' => $transaction['transactionPaymentUrl']
+                'payment_url' => $transaction['transactionPaymentUrl'],
             ])
         );
     }
