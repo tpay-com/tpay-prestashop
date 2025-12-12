@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__ . '/vendor/prestashop/php-dev-tools/src/CsFixer/Config.php';
+
 $config = new PrestaShop\CodingStandards\CsFixer\Config();
 
 $config
