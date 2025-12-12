@@ -20,8 +20,9 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table()
- * @ORM\Entity()
+ * @ORM\Table
+ *
+ * @ORM\Entity
  */
 class TpayRefund
 {
@@ -29,7 +30,9 @@ class TpayRefund
      * @var int
      *
      * @ORM\Id
+     *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -73,33 +76,21 @@ class TpayRefund
         $this->date = new DateTime();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
     public function getOrderId(): int
     {
         return $this->orderId;
     }
 
-    /**
-     * @return string
-     */
     public function getTransactionTitle(): string
     {
         return $this->transactionId;
     }
 
-    /**
-     * @return float
-     */
     public function getAmount(): float
     {
         return $this->amount;

@@ -29,32 +29,18 @@ class BlikRepository
 {
     public const TABLE = 'tpay_blik';
 
-    /**
-     * @var Connection the Database connection
-     */
+    /** @var Connection the Database connection */
     private $connection;
 
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
 
-    /**
-     * @var RepositoryQueryHandler
-     */
+    /** @var RepositoryQueryHandler */
     private $repositoryQueryHandler;
 
-    /**
-     * @var string the Database prefix
-     */
+    /** @var string the Database prefix */
     private $dbPrefix;
 
-    /**
-     * @param Connection $connection
-     * @param EntityManager $entityManager
-     * @param RepositoryQueryHandler $repositoryQueryHandler
-     * @param string $dbPrefix
-     */
     public function __construct(
         Connection $connection,
         EntityManager $entityManager,
@@ -76,12 +62,11 @@ class BlikRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('alias')
-            ->from($this->dbPrefix . self::TABLE, 't')
+            ->from($this->dbPrefix.self::TABLE, 't')
             ->andWhere('t.user_id = :userId')
 
-
-
             ->setParameter('userId', (int) $userId);
+
         return $this->repositoryQueryHandler->execute($qb, 'Get blik Alias', 'fetchColumn');
     }
 
@@ -108,7 +93,7 @@ class BlikRepository
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->delete($this->dbPrefix . self::TABLE)
+            ->delete($this->dbPrefix.self::TABLE)
             ->where('user_id = :userId')
             ->andWhere('alias = :alias')
             ->setParameter('userId', $userId)

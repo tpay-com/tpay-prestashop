@@ -23,31 +23,21 @@ use Tpay\Repository\TransactionsRepository;
 
 class OrderStatusHandler
 {
-    /**
-     * @var OrderHistory
-     */
+    /** @var OrderHistory */
     public $orderHistory;
 
-    /**
-     * @var transactionsRepository
-     */
+    /** @var TransactionsRepository */
     private $transactionsRepository;
 
     public function __construct(
         OrderHistory $orderHistory,
-        transactionsRepository $transactionsRepository
+        TransactionsRepository $transactionsRepository
     ) {
         $this->orderHistory = $orderHistory;
         $this->transactionsRepository = $transactionsRepository;
     }
 
-    /**
-     * Update orders statuses.
-     * @param Order $order
-     * @param string $tpayPaymentId
-     * @param bool $error
-     * @return void
-     */
+    /** Update orders statuses. */
     public function setOrdersAsConfirmed(Order $order, string $tpayPaymentId, bool $error = false): void
     {
         $reference = $order->reference;
@@ -59,13 +49,7 @@ class OrderStatusHandler
         }
     }
 
-    /**
-     * Update order status.
-     * @param Order $order
-     * @param string $tpayPaymentId
-     * @param bool $error
-     * @return void
-     */
+    /** Update order status. */
     private function changeOrderStatus(Order $order, string $tpayPaymentId, bool $error = false): void
     {
         $orderStateId = $this->getOrderStatus($order, $error);

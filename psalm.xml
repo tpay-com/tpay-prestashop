@@ -8,9 +8,9 @@
        findUnusedCode='false'
 >
     <projectFiles>
-        <directory name='../' />
+        <directory name='./' />
         <ignoreFiles>
-            <directory name='./' />
+            <directory name='vendor' />
         </ignoreFiles>
     </projectFiles>
 

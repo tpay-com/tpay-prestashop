@@ -21,9 +21,7 @@ use Tpay\Repository\CreditCardsRepository;
 
 class CardService
 {
-    /**
-     * @var CreditCardsRepository
-     */
+    /** @var CreditCardsRepository */
     private $repository;
 
     public function __construct(
@@ -33,11 +31,7 @@ class CardService
     }
 
     /**
-     * @param $savedCardId
-     * @param $customerId
-     *
      * @throws RepositoryException
-     * @return string
      */
     public function transactionSavedCard($savedCardId, $customerId): string
     {
@@ -66,13 +60,6 @@ class CardService
         );
     }
 
-    /**
-     * @param $cardVendor
-     * @param $cardShortcode
-     * @param $cardHash
-     * @param $userId
-     * @param $crc
-     */
     public function saveUserCardDetails($cardVendor, $cardShortcode, $cardHash, $userId, $crc): void
     {
         $this->repository->createCard(
@@ -85,11 +72,7 @@ class CardService
     }
 
     /**
-     * @param $cardHash
-     * @param $crc
-     *
      * @throws RepositoryException
-     * @return mixed
      */
     public function getCreditCardByCardHashAndCrc($cardHash, $crc)
     {

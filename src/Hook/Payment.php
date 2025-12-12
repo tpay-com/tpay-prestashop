@@ -16,9 +16,8 @@ declare(strict_types=1);
 
 namespace Tpay\Hook;
 
-use Cart;
 use PrestaShop\PrestaShop\Core\Localization\Exception\LocalizationException;
-use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
+use PrestaShopException;
 use Tools;
 use Tpay\Service\PaymentOptions\PaymentOptionsService;
 
@@ -31,7 +30,8 @@ class Payment extends AbstractHook
 
     /**
      * Create payment methods
-     * @throws \PrestaShopException|LocalizationException
+     *
+     * @throws LocalizationException|PrestaShopException
      */
     public function paymentOptions($params)
     {
@@ -46,19 +46,19 @@ class Payment extends AbstractHook
 
         $langData = [
             'regulation_url' => 'https://tpay.com/user/assets/files_for_download/payment-terms-and-conditions.pdf',
-            'clause_url' => 'https://tpay.com/user/assets/files_for_download/information-clause-payer.pdf'
+            'clause_url' => 'https://tpay.com/user/assets/files_for_download/information-clause-payer.pdf',
         ];
 
-        if ($this->context->language->iso_code == 'pl') {
+        if ('pl' == $this->context->language->iso_code) {
             $langData = [
                 'regulation_url' => 'https://secure.tpay.com/regulamin.pdf',
-                'clause_url' => 'https://tpay.com/user/assets/files_for_download/klauzula-informacyjna-platnik.pdf'
+                'clause_url' => 'https://tpay.com/user/assets/files_for_download/klauzula-informacyjna-platnik.pdf',
             ];
         }
 
         $this->context->smarty->assign(array_merge($langData, [
-            'tpay_path' => Tools::getHttpHost(true) . __PS_BASE_URI__ . 'modules/tpay/views/',
-            'surcharge' => $surcharge > 0 ? Tools::displayPrice($this->getSurchargeCost()) : false
+            'tpay_path' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/tpay/views/',
+            'surcharge' => $surcharge > 0 ? Tools::displayPrice($this->getSurchargeCost()) : false,
         ]));
 
         $paymentService = new PaymentOptionsService($this->module);
@@ -76,7 +76,6 @@ class Payment extends AbstractHook
         return $payments;
     }
 
-
     /**
      * Return payment/order confirmation step hook
      *
@@ -92,7 +91,7 @@ class Payment extends AbstractHook
             'historyLink' => 'index.php?controller=history',
             'homeLink' => 'index.php',
             'contactLink' => 'index.php?controller=contact',
-            'modulesDir' => Tools::getHttpHost(true) . __PS_BASE_URI__ . 'modules/',
+            'modulesDir' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/',
         ]);
 
         return $this->module->fetch('module:tpay/views/templates/hook/paymentReturn.tpl');
@@ -100,9 +99,9 @@ class Payment extends AbstractHook
 
     private function getSurchargeCost()
     {
-        $orderTotal = (float)$this->context->cart->getOrderTotal();
+        $orderTotal = (float) $this->context->cart->getOrderTotal();
         $surchargeService = $this->module->getService('tpay.service.surcharge');
+
         return $surchargeService->getSurchargeValue($orderTotal);
     }
-
 }

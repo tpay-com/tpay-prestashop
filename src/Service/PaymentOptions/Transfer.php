@@ -17,9 +17,10 @@ declare(strict_types=1);
 namespace Tpay\Service\PaymentOptions;
 
 use Configuration;
-use Tpay\Config\Config;
 use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
+use Tpay;
+use Tpay\Config\Config;
 use Tpay\Service\GenericPayments\GenericPaymentsManager;
 use Tpay\Util\Helper;
 
@@ -28,7 +29,7 @@ class Transfer implements GatewayType
     private $method = 'payment';
 
     public function getPaymentOption(
-        \Tpay $module,
+        Tpay $module,
         PaymentOption $paymentOption,
         array $data = []
     ): PaymentOption {
@@ -44,8 +45,7 @@ class Transfer implements GatewayType
         $paymentOption->setCallToActionText($module->getTranslator()->trans('Pay by online transfer with Tpay', [], 'Modules.Tpay.Shop'))
             ->setAction($moduleLink)
             ->setLogo($data['img'])
-            ->setForm($this->generateForm())
-        ;
+            ->setForm($this->generateForm());
 
         return $paymentOption;
     }
@@ -68,7 +68,7 @@ class Transfer implements GatewayType
             return !GenericPaymentsManager::isChannelExcluded((int) $gateway['mainChannel']);
         });
 
-        if ((bool)Configuration::get('TPAY_REDIRECT_TO_CHANNEL') && !empty(Configuration::get('TPAY_CUSTOM_ORDER'))) {
+        if ((bool) Configuration::get('TPAY_REDIRECT_TO_CHANNEL') && !empty(Configuration::get('TPAY_CUSTOM_ORDER'))) {
             $orderedList = [];
             $customOrder = json_decode(Configuration::get('TPAY_CUSTOM_ORDER'), true);
 

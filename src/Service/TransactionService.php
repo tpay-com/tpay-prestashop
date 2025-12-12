@@ -16,33 +16,31 @@ declare(strict_types=1);
 
 namespace Tpay\Service;
 
-use Tpay\Repository\TransactionsRepository;
+use Cart;
+use Context;
+use Exception;
 use Tools;
+use Tpay\Repository\TransactionsRepository;
 
 class TransactionService
 {
-    /**
-     * @var \Cart
-     */
+    /** @var Cart */
     private $cart;
-    /**
-     * @var TransactionsRepository
-     */
+
+    /** @var TransactionsRepository */
     private $repository;
-    /**
-     * @var SurchargeService
-     */
+
+    /** @var SurchargeService */
     private $surchargeService;
-    /**
-     * @var \Context
-     */
+
+    /** @var Context */
     private $context;
 
     public function __construct(
-        \Cart $cart,
+        Cart $cart,
         TransactionsRepository $repository,
         SurchargeService $surchargeService,
-        \Context $context
+        Context $context
     ) {
         $this->cart = $cart;
         $this->repository = $repository;
@@ -51,16 +49,13 @@ class TransactionService
     }
 
     /**
-     * @param $transaction
-     * @param $type
-     * @param $orderId
      * @param bool $redirect (redirect use new card/payment basic)
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function transactionProcess($transaction, $type, $orderId, bool $redirect = true): void
     {
-        if ($type !== 'blik' && $transaction['result'] !== 'success') {
+        if ('blik' !== $type && 'success' !== $transaction['result']) {
             Tools::redirect($this->context->link->getModuleLink(
                 'tpay',
                 'ordererror'
@@ -85,7 +80,7 @@ class TransactionService
         }
     }
 
-    /** @throws \Exception */
+    /** @throws Exception */
     public function updateTransaction($transaction, $oldTransactionId, $type, $orderId): void
     {
         $this->repository->updateTransaction(

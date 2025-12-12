@@ -1,17 +1,5 @@
 <?php
 
-/**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
- *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
- */
-
 namespace Tpay\Adapter;
 
 use Configuration as Cfg;
@@ -20,9 +8,7 @@ use Tools;
 
 class ConfigurationAdapter
 {
-    /**
-     * @var Shop
-     */
+    /** @var Shop */
     private $shopId;
 
     public function __construct($shopId)
@@ -32,7 +18,7 @@ class ConfigurationAdapter
 
     public function get($key, $idLang = null, $idShopGroup = null, $idShop = null, $default = false)
     {
-        if ($idShop === null) {
+        if (null === $idShop) {
             $idShop = $this->shopId;
         }
 
@@ -41,11 +27,11 @@ class ConfigurationAdapter
 
     public function updateValue($key, $value, $html = false, $idShopGroup = null, $idShop = null)
     {
-        if ($idShop === null) {
+        if (null === $idShop) {
             $idShop = $this->shopId;
         }
 
-        if ($key == "TPAY_MERCHANT_SECRET") {
+        if ('TPAY_MERCHANT_SECRET' == $key) {
             $value = Tools::safeOutput($value, true);
         }
 

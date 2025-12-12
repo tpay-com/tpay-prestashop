@@ -18,8 +18,9 @@ namespace Tpay\Hook;
 
 use Context;
 use Exception;
+use Order;
+use OrderInvoice;
 use PrestaShop\PrestaShop\Core\Localization\Exception\LocalizationException;
-use Tools;
 
 class EmailOrder extends AbstractHook
 {
@@ -36,18 +37,17 @@ class EmailOrder extends AbstractHook
     public function actionEmailAddAfterContent($params)
     {
         $cart = $this->context->cart;
-        $order = $cart ? \Order::getByCartId($cart->id) : null;
+        $order = $cart ? Order::getByCartId($cart->id) : null;
 
         if (
-            !$this->module->active ||
-            !$order ||
-            ($order->module !== $this->module->name) ||
-            !empty($this->context->controller->errors) ||
-            (substr_count($params['template'], 'error') > 0)
+            !$this->module->active
+            || !$order
+            || ($order->module !== $this->module->name)
+            || !empty($this->context->controller->errors)
+            || (substr_count($params['template'], 'error') > 0)
         ) {
             return $params;
         }
-
 
         $search = false !== strpos(
             $params['template_html'],
@@ -65,48 +65,13 @@ class EmailOrder extends AbstractHook
                 $this->context->currency->iso_code
             );
 
-            $emailFooter = str_replace("{total_paid}", $total, (string)$emailFooter);
-            $params['template_html'] = $emailHeader . $this->renderExtraChargeDataInMail(
+            $emailFooter = str_replace('{total_paid}', $total, (string) $emailFooter);
+            $params['template_html'] = $emailHeader.$this->renderExtraChargeDataInMail(
                 $this->getSurchargeCost()
-            ) . $emailFooter;
+            ).$emailFooter;
         }
 
         return $params;
-    }
-
-    private function renderExtraChargeDataInMail($surchargeCost): string
-    {
-        if ($surchargeCost === 0.00) {
-            return '';
-        }
-
-        $this->context->smarty->assign([
-            'surchargeCost' => Context::getContext()->getCurrentLocale()->formatPrice(
-                $surchargeCost,
-                $this->context->currency->iso_code
-            )
-        ]);
-
-        return $this->module->fetch('module:tpay/views/templates/hook/emailSurcharge.tpl');
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function getSurchargeCost()
-    {
-        $orderTotal = (float) $this->context->cart->getOrderTotal();
-        $surchargeService = $this->module->getService('tpay.service.surcharge');
-        return $surchargeService->getSurchargeValue($orderTotal);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function getOrderSurchargeCost($orderId): float
-    {
-        $surchargeService = $this->module->getService('tpay.repository.transaction');
-        return (float) $surchargeService->getSurchargeValueByOrderId($orderId);
     }
 
     /**
@@ -118,7 +83,7 @@ class EmailOrder extends AbstractHook
         if (!isset($params['object'])) {
             return '';
         }
-        if (!$params['object'] instanceof \OrderInvoice) {
+        if (!$params['object'] instanceof OrderInvoice) {
             return '';
         }
 
@@ -129,12 +94,47 @@ class EmailOrder extends AbstractHook
                 'surchargeCost' => Context::getContext()->getCurrentLocale()->formatPrice(
                     $surchargeValue,
                     $this->context->currency->iso_code
-                )
+                ),
             ]);
 
             return $this->module->fetch('module:tpay/views/templates/_admin/invoiceSurcharge.tpl');
         }
 
         return '';
+    }
+
+    private function renderExtraChargeDataInMail($surchargeCost): string
+    {
+        if (0.00 === $surchargeCost) {
+            return '';
+        }
+
+        $this->context->smarty->assign([
+            'surchargeCost' => Context::getContext()->getCurrentLocale()->formatPrice(
+                $surchargeCost,
+                $this->context->currency->iso_code
+            ),
+        ]);
+
+        return $this->module->fetch('module:tpay/views/templates/hook/emailSurcharge.tpl');
+    }
+
+    /** @throws Exception */
+    private function getSurchargeCost()
+    {
+        $orderTotal = (float) $this->context->cart->getOrderTotal();
+        $surchargeService = $this->module->getService('tpay.service.surcharge');
+
+        return $surchargeService->getSurchargeValue($orderTotal);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getOrderSurchargeCost($orderId): float
+    {
+        $surchargeService = $this->module->getService('tpay.repository.transaction');
+
+        return (float) $surchargeService->getSurchargeValueByOrderId($orderId);
     }
 }
