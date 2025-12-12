@@ -25,7 +25,8 @@
         "phpunit/phpunit": "^8",
         "squizlabs/php_codesniffer": "*",
         "tpay-com/coding-standards": "^1.0.1",
-        "vimeo/psalm": "^4.30"
+        "vimeo/psalm": "^4.30",
+        "stancer/php-stubs-prestashop": "^8.2"
     },
     "minimum-stability": "stable",
     "autoload": {
