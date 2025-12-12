@@ -187,10 +187,14 @@ class Admin extends AbstractHook
             }
         }
 
-        return $this->translator->trans(<<<'EOD'
+        return $this->translator->trans(
+            <<<'EOD'
 Refund error.
                                    Check that the refund amount is correct and does not exceed the value of the order
-EOD, [], 'Modules.Tpay.Admin');
+EOD,
+            [],
+            'Modules.Tpay.Admin'
+        );
     }
 
     private function getRefundErrorCodeMessages()
@@ -278,9 +282,7 @@ EOD, [], 'Modules.Tpay.Admin');
         return $refundAmount > $maxRefundAmount;
     }
 
-    /**
-     * Processing refund
-     */
+    /** Processing refund */
     private function processRefund(string $transactionId, float $refundAmount)
     {
         return $this->module->api()->transactions()->createRefundByTransactionId(

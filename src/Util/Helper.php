@@ -21,9 +21,7 @@ use Context;
 
 class Helper
 {
-    /**
-     * Generate string
-     */
+    /** Generate string */
     public static function generateRandomString(int $length = 46): string
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

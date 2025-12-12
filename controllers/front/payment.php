@@ -1,6 +1,5 @@
 <?php
 
-
 use Configuration as Cfg;
 use Tpay\Config\Config;
 use Tpay\Factory\PaymentFactory;

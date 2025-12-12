@@ -1,4 +1,5 @@
 <?php
+
 use Tpay\Config\Config;
 use Tpay\Handler\ExceptionHandler;
 

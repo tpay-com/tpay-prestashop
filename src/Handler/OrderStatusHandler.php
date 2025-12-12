@@ -37,9 +37,7 @@ class OrderStatusHandler
         $this->transactionsRepository = $transactionsRepository;
     }
 
-    /**
-     * Update orders statuses.
-     */
+    /** Update orders statuses. */
     public function setOrdersAsConfirmed(Order $order, string $tpayPaymentId, bool $error = false): void
     {
         $reference = $order->reference;
@@ -51,9 +49,7 @@ class OrderStatusHandler
         }
     }
 
-    /**
-     * Update order status.
-     */
+    /** Update order status. */
     private function changeOrderStatus(Order $order, string $tpayPaymentId, bool $error = false): void
     {
         $orderStateId = $this->getOrderStatus($order, $error);

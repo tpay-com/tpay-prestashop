@@ -50,9 +50,7 @@ class FactoryState
         ];
     }
 
-    /**
-     * Get all states by configuration
-     */
+    /** Get all states by configuration */
     public function getAllStatuses(): array
     {
         if (Cfg::get('TPAY_PENDING')) {

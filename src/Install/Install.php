@@ -85,9 +85,7 @@ class Install
         return $status;
     }
 
-    /**
-     * Starts context if there is a store running multistore option
-     */
+    /** Starts context if there is a store running multistore option */
     private function installContext(): bool
     {
         if (Shop::isFeatureActive()) {

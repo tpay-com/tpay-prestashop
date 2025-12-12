@@ -2,8 +2,6 @@
 
 namespace Tpay\Util;
 
-use AppKernel;
-
 $autoload = _PS_ROOT_DIR_.'/app/autoload.php';
 if (file_exists($autoload)) {
     require_once $autoload;
@@ -11,6 +9,8 @@ if (file_exists($autoload)) {
 if (!class_exists('\AppKernel')) {
     require_once _PS_ROOT_DIR_.'/app/AppKernel.php';
 }
+
+use AppKernel;
 
 class LegacyAppKernel extends AppKernel
 {

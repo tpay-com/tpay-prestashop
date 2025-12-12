@@ -226,9 +226,7 @@ class CustomerData
         $this->customerDetails = $data;
     }
 
-    /**
-     * Create crc
-     */
+    /** Create crc */
     private function createCrc(): string
     {
         $order = $this->order;

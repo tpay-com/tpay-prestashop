@@ -145,9 +145,7 @@ class Tpay extends PaymentModule
         }
     }
 
-    /**
-     * Dispatch hooks
-     */
+    /** Dispatch hooks */
     public function __call(string $methodName, array $arguments = [])
     {
         return $this->getHookDispatcher()->dispatch(
@@ -302,17 +300,13 @@ class Tpay extends PaymentModule
         return parent::disable($force_all);
     }
 
-    /**
-     * Module hooks
-     */
+    /** Module hooks */
     public function getHookDispatcher(): HookDispatcher
     {
         return $this->hookDispatcher;
     }
 
-    /**
-     * Return current context
-     */
+    /** Return current context */
     public function getContext(): Context
     {
         return $this->context;

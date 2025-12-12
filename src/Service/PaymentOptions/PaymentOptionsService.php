@@ -62,9 +62,7 @@ class PaymentOptionsService
         }
     }
 
-    /**
-     * Create all transfer group
-     */
+    /** Create all transfer group */
     public function createTransferPaymentChannel(): void
     {
         $payment = [
@@ -101,9 +99,7 @@ class PaymentOptionsService
         return array_merge($payments, $generics);
     }
 
-    /**
-     * Grouping of payments delivered from api
-     */
+    /** Grouping of payments delivered from api */
     public function getGroupTransfers(): array
     {
         return $this->transfers ?? [];
@@ -146,9 +142,7 @@ class PaymentOptionsService
         $this->channels[] = $array;
     }
 
-    /**
-     * @throws Exception
-     */
+    /** @throws Exception */
     private function getSeparatePayments(array $channels): array
     {
         $paymentsMethods = [
@@ -231,9 +225,7 @@ class PaymentOptionsService
         return $bankChannels;
     }
 
-    /**
-     * Grouping of payments delivered from api
-     */
+    /** Grouping of payments delivered from api */
     private function groupChannel(array $channels, array $compareArray): array
     {
         return array_filter($channels, function ($val) use ($compareArray) {

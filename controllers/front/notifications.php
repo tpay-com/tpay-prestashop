@@ -1,6 +1,5 @@
 <?php
 
-
 use Configuration as Cfg;
 use Tpay\Exception\NotificationHandlingException;
 use Tpay\OpenApi\Utilities\CacheCertificateProvider;

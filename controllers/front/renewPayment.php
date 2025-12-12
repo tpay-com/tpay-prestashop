@@ -1,6 +1,5 @@
 <?php
 
-
 use Tpay\Config\Config;
 
 class TpayRenewPaymentModuleFrontController extends ModuleFrontController
