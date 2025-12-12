@@ -23,10 +23,11 @@
         "phpmd/phpmd": "@stable",
         "phpstan/phpstan": "^1.10.30",
         "phpunit/phpunit": "^8",
-        "prestashop/php-dev-tools": "^4.2",
+        "prestashop/php-dev-tools": "^5.0",
         "squizlabs/php_codesniffer": "*",
         "tpay-com/coding-standards": "^1.0.1",
-        "vimeo/psalm": "^4.30"
+        "vimeo/psalm": "^4.30",
+        "composer": "*"
     },
     "minimum-stability": "stable",
     "autoload": {
