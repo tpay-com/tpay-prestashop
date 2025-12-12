@@ -24,9 +24,9 @@
         "phpstan/phpstan": "^1.10.30",
         "phpunit/phpunit": "^8",
         "squizlabs/php_codesniffer": "*",
+        "stancer/php-stubs-prestashop": "^8.2",
         "tpay-com/coding-standards": "^1.0.1",
-        "vimeo/psalm": "^4.30",
-        "stancer/php-stubs-prestashop": "^8.2"
+        "vimeo/psalm": "^4.30"
     },
     "minimum-stability": "stable",
     "autoload": {
