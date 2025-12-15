@@ -11,9 +11,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
 {
     private $statusHandler;
 
-    /**
-     * @throws Exception|TpayException 
-     */
+    /** @throws Exception|TpayException */
     public function initContent()
     {
         if ('POST' !== $_SERVER['REQUEST_METHOD']) {

@@ -36,11 +36,11 @@ class Transfer implements GatewayType
         $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
         Context::getContext()->smarty->assign(
             [
-            'transfer_type' => Helper::getMultistoreConfigurationValue('TPAY_TRANSFER_WIDGET') ? 'widget' : 'redirect',
-            'transfer_gateway' => $data['id'],
-            'transfer_moduleLink' => $moduleLink,
-            'gateways' => $this->sortGateways($data['gateways']),
-            'isDirect' => (bool) Configuration::get('TPAY_REDIRECT_TO_CHANNEL'),
+                'transfer_type' => Helper::getMultistoreConfigurationValue('TPAY_TRANSFER_WIDGET') ? 'widget' : 'redirect',
+                'transfer_gateway' => $data['id'],
+                'transfer_moduleLink' => $moduleLink,
+                'gateways' => $this->sortGateways($data['gateways']),
+                'isDirect' => (bool) Configuration::get('TPAY_REDIRECT_TO_CHANNEL'),
             ]
         );
 
@@ -56,10 +56,10 @@ class Transfer implements GatewayType
     {
         Context::getContext()->smarty->assign(
             [
-            'action' => Context::getContext()->link->getModuleLink('tpay', $this->method, [], true),
-            'tpay' => true,
-            'type' => Config::TPAY_PAYMENT_BASIC,
-            'tpay_transfer_id' => 0,
+                'action' => Context::getContext()->link->getModuleLink('tpay', $this->method, [], true),
+                'tpay' => true,
+                'type' => Config::TPAY_PAYMENT_BASIC,
+                'tpay_transfer_id' => 0,
             ]
         );
 

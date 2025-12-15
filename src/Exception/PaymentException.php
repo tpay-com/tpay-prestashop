@@ -18,6 +18,4 @@ namespace Tpay\Exception;
 
 use Exception;
 
-class PaymentException extends Exception
-{
-}
+class PaymentException extends Exception {}

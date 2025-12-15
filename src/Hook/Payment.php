@@ -60,8 +60,8 @@ class Payment extends AbstractHook
             array_merge(
                 $langData,
                 [
-                'tpay_path' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/tpay/views/',
-                'surcharge' => $surcharge > 0 ? Tools::displayPrice($this->getSurchargeCost()) : false,
+                    'tpay_path' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/tpay/views/',
+                    'surcharge' => $surcharge > 0 ? Tools::displayPrice($this->getSurchargeCost()) : false,
                 ]
             )
         );
@@ -93,11 +93,11 @@ class Payment extends AbstractHook
         }
         $this->context->smarty->assign(
             [
-            'status' => Tools::getValue('status'),
-            'historyLink' => 'index.php?controller=history',
-            'homeLink' => 'index.php',
-            'contactLink' => 'index.php?controller=contact',
-            'modulesDir' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/',
+                'status' => Tools::getValue('status'),
+                'historyLink' => 'index.php?controller=history',
+                'homeLink' => 'index.php',
+                'contactLink' => 'index.php?controller=contact',
+                'modulesDir' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/',
             ]
         );
 

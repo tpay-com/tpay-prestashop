@@ -39,8 +39,7 @@ class EmailOrder extends AbstractHook
         $cart = $this->context->cart;
         $order = $cart ? Order::getByCartId($cart->id) : null;
 
-        if (
-            !$this->module->active
+        if (!$this->module->active
             || !$order
             || ($order->module !== $this->module->name)
             || !empty($this->context->controller->errors)
@@ -92,10 +91,10 @@ class EmailOrder extends AbstractHook
         if ($surchargeValue > 0.00) {
             $this->context->smarty->assign(
                 [
-                'surchargeCost' => Context::getContext()->getCurrentLocale()->formatPrice(
-                    $surchargeValue,
-                    $this->context->currency->iso_code
-                ),
+                    'surchargeCost' => Context::getContext()->getCurrentLocale()->formatPrice(
+                        $surchargeValue,
+                        $this->context->currency->iso_code
+                    ),
                 ]
             );
 
@@ -113,19 +112,17 @@ class EmailOrder extends AbstractHook
 
         $this->context->smarty->assign(
             [
-            'surchargeCost' => Context::getContext()->getCurrentLocale()->formatPrice(
-                $surchargeCost,
-                $this->context->currency->iso_code
-            ),
+                'surchargeCost' => Context::getContext()->getCurrentLocale()->formatPrice(
+                    $surchargeCost,
+                    $this->context->currency->iso_code
+                ),
             ]
         );
 
         return $this->module->fetch('module:tpay/views/templates/hook/emailSurcharge.tpl');
     }
 
-    /**
-     * @throws Exception 
-     */
+    /** @throws Exception */
     private function getSurchargeCost()
     {
         $orderTotal = (float) $this->context->cart->getOrderTotal();

@@ -21,9 +21,7 @@ use Context;
 
 class Helper
 {
-    /**
-     * Generate string 
-     */
+    /** Generate string */
     public static function generateRandomString(int $length = 46): string
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -106,14 +104,7 @@ class Helper
 
     public static function getMultistoreConfigurationValue($name)
     {
-        if (
-            '1' === Configuration::get(
-                'TPAY_GLOBAL_SETTINGS',
-                null,
-                Context::getContext()->shop->id_shop_group,
-                Context::getContext()->shop->id
-            )
-        ) {
+        if ('1' === Configuration::get('TPAY_GLOBAL_SETTINGS', null, Context::getContext()->shop->id_shop_group, Context::getContext()->shop->id)) {
             return Configuration::getGlobalValue($name);
         }
 

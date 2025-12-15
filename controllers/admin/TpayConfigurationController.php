@@ -17,9 +17,7 @@ class TpayConfigurationController extends ModuleAdminController
     public $configuration = [];
     public $channels = [];
 
-    /**
-     * @var Tpay 
-     */
+    /** @var Tpay */
     public $module;
 
     public function __construct()

@@ -30,36 +30,24 @@ use Tpay\Service\SurchargeService;
 
 class CustomerData
 {
-    /**
-     * @var AddressCore 
-     */
+    /** @var AddressCore */
     private $address;
 
-    /**
-     * @var Customer 
-     */
+    /** @var Customer */
     private $customer;
 
-    /**
-     * @var Context 
-     */
+    /** @var Context */
     private $context;
 
-    /**
-     * @var Cart 
-     */
+    /** @var Cart */
     private $cart;
 
     private $customerDetails;
 
-    /**
-     * @var Order 
-     */
+    /** @var Order */
     private $order;
 
-    /**
-     * @throws Exception 
-     */
+    /** @throws Exception */
     public function __construct(
         AddressCore $address,
         Customer $customer,
@@ -238,9 +226,7 @@ class CustomerData
         $this->customerDetails = $data;
     }
 
-    /**
-     * Create crc 
-     */
+    /** Create crc */
     private function createCrc(): string
     {
         $order = $this->order;

@@ -23,14 +23,10 @@ use Tpay\Repository\TransactionsRepository;
 
 class AutoCancelService
 {
-    /**
-     * @var TransactionsRepository 
-     */
+    /** @var TransactionsRepository */
     private $repository;
 
-    /**
-     * @var Tpay 
-     */
+    /** @var Tpay */
     private $tpay;
 
     public function __construct(

@@ -37,9 +37,7 @@ class PaymentOptionsService
     private $transfers;
     private $bankChannels;
 
-    /**
-     * @var ConstraintValidator 
-     */
+    /** @var ConstraintValidator */
     private $constraintValidator;
 
     /**
@@ -53,9 +51,7 @@ class PaymentOptionsService
         $this->getGroup();
     }
 
-    /**
-     * @throws PrestaShopException 
-     */
+    /** @throws PrestaShopException */
     public function getGroup(): void
     {
         try {
@@ -66,9 +62,7 @@ class PaymentOptionsService
         }
     }
 
-    /**
-     * Create all transfer group 
-     */
+    /** Create all transfer group */
     public function createTransferPaymentChannel(): void
     {
         $payment = [
@@ -110,9 +104,7 @@ class PaymentOptionsService
         return array_merge($payments, $generics);
     }
 
-    /**
-     * Grouping of payments delivered from api 
-     */
+    /** Grouping of payments delivered from api */
     public function getGroupTransfers(): array
     {
         return $this->transfers ?? [];
@@ -155,9 +147,7 @@ class PaymentOptionsService
         $this->channels[] = $array;
     }
 
-    /**
-     * @throws Exception 
-     */
+    /** @throws Exception */
     private function getSeparatePayments(array $channels): array
     {
         $paymentsMethods = [
@@ -243,9 +233,7 @@ class PaymentOptionsService
         return $bankChannels;
     }
 
-    /**
-     * Grouping of payments delivered from api 
-     */
+    /** Grouping of payments delivered from api */
     private function groupChannel(array $channels, array $compareArray): array
     {
         return array_filter(
@@ -274,9 +262,7 @@ class PaymentOptionsService
         );
     }
 
-    /**
-     * @return array<PaymentOption> 
-     */
+    /** @return array<PaymentOption> */
     private function genericPayments(): array
     {
         $generics = Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS') ? json_decode(Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS')) : [];

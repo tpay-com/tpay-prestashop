@@ -8,9 +8,7 @@ use Tools;
 
 class ConfigurationAdapter
 {
-    /**
-     * @var Shop 
-     */
+    /** @var Shop */
     private $shopId;
 
     public function __construct($shopId)

@@ -28,24 +28,16 @@ class AdminFormBuilder
 {
     public $channels = [];
 
-    /**
-     * @var Tpay 
-     */
+    /** @var Tpay */
     public $module;
 
-    /**
-     * @var Context 
-     */
+    /** @var Context */
     public $context;
 
-    /**
-     * @var null|TranslatorComponent 
-     */
+    /** @var null|TranslatorComponent */
     private $translator;
 
-    /**
-     * @var GenericPaymentsManager 
-     */
+    /** @var GenericPaymentsManager */
     private $genericPaymentsManager;
 
     public function __construct(Tpay $module, Context $context, array $channels)

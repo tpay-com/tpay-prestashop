@@ -35,12 +35,12 @@ class Generic implements GatewayType
     {
         Context::getContext()->smarty->assign(
             [
-            'action' => $moduleLink,
-            'tpay' => 'true',
-            'channelId' => $channelId,
-            'blikBnplId' => GenericPaymentsManager::CHANNEL_BLIK_BNPL,
-            'tpay_channel_id' => 0,
-            'type' => 'generic',
+                'action' => $moduleLink,
+                'tpay' => 'true',
+                'channelId' => $channelId,
+                'blikBnplId' => GenericPaymentsManager::CHANNEL_BLIK_BNPL,
+                'tpay_channel_id' => 0,
+                'type' => 'generic',
             ]
         );
 

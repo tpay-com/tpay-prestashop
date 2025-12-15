@@ -32,11 +32,11 @@ class Installment extends AbstractHook
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART')) {
             $this->context->smarty->assign(
                 [
-                'installmentText' => $this->module->getTranslator()->trans('Calculate installment!', [], 'Modules.Tpay.Shop'),
-                'checkout_url' => $this->context->link->getPageLink('order'),
-                'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
-                'minAmount' => Config::PEKAO_INSTALLMENT_MIN,
-                'maxAmount' => Config::PEKAO_INSTALLMENT_MAX,
+                    'installmentText' => $this->module->getTranslator()->trans('Calculate installment!', [], 'Modules.Tpay.Shop'),
+                    'checkout_url' => $this->context->link->getPageLink('order'),
+                    'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
+                    'minAmount' => Config::PEKAO_INSTALLMENT_MIN,
+                    'maxAmount' => Config::PEKAO_INSTALLMENT_MAX,
                 ]
             );
 
@@ -55,9 +55,9 @@ class Installment extends AbstractHook
             if ($totalAmount >= Config::PEKAO_INSTALLMENT_MIN && $totalAmount <= Config::PEKAO_INSTALLMENT_MAX) {
                 $this->context->smarty->assign(
                     [
-                    'installmentText' => $this->module->getTranslator()->trans('Calculate installment!', [], 'Modules.Tpay.Shop'),
-                    'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
-                    'amount' => $totalAmount,
+                        'installmentText' => $this->module->getTranslator()->trans('Calculate installment!', [], 'Modules.Tpay.Shop'),
+                        'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
+                        'amount' => $totalAmount,
                     ]
                 );
 

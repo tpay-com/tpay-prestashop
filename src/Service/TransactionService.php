@@ -24,24 +24,16 @@ use Tpay\Repository\TransactionsRepository;
 
 class TransactionService
 {
-    /**
-     * @var Cart 
-     */
+    /** @var Cart */
     private $cart;
 
-    /**
-     * @var TransactionsRepository 
-     */
+    /** @var TransactionsRepository */
     private $repository;
 
-    /**
-     * @var SurchargeService 
-     */
+    /** @var SurchargeService */
     private $surchargeService;
 
-    /**
-     * @var Context 
-     */
+    /** @var Context */
     private $context;
 
     public function __construct(
@@ -91,7 +83,7 @@ class TransactionService
     }
 
     /**
-     * @throws Exception 
+     * @throws Exception
      */
     public function updateTransaction($transaction, $oldTransactionId, $type, $orderId): void
     {

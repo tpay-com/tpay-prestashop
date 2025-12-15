@@ -30,9 +30,7 @@ class Card implements GatewayType
 {
     private $method = 'payment';
 
-    /**
-     * @throws Exception 
-     */
+    /** @throws Exception */
     public function getPaymentOption(
         Tpay $module,
         PaymentOption $paymentOption,
@@ -52,10 +50,10 @@ class Card implements GatewayType
 
         Context::getContext()->smarty->assign(
             [
-            'card_type' => Helper::getMultistoreConfigurationValue('TPAY_CARD_WIDGET') ? 'widget' : 'redirect',
-            'cards_moduleLink' => $moduleLink,
-            'saved_cards' => $creditCardsArray,
-            'assets_path' => $module->getPath(),
+                'card_type' => Helper::getMultistoreConfigurationValue('TPAY_CARD_WIDGET') ? 'widget' : 'redirect',
+                'cards_moduleLink' => $moduleLink,
+                'saved_cards' => $creditCardsArray,
+                'assets_path' => $module->getPath(),
             ]
         );
 
@@ -64,16 +62,16 @@ class Card implements GatewayType
             ->setLogo($data['img'])
             ->setInputs(
                 [
-                [
-                    'type' => 'hidden',
-                    'name' => 'tpay',
-                    'value' => true,
-                ],
-                [
-                    'type' => 'hidden',
-                    'name' => 'type',
-                    'value' => Config::TPAY_PAYMENT_CARDS,
-                ],
+                    [
+                        'type' => 'hidden',
+                        'name' => 'tpay',
+                        'value' => true,
+                    ],
+                    [
+                        'type' => 'hidden',
+                        'name' => 'type',
+                        'value' => Config::TPAY_PAYMENT_CARDS,
+                    ],
                 ]
             )
             ->setAdditionalInformation(

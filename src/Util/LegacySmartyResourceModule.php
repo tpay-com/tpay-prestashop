@@ -21,9 +21,9 @@ class LegacySmartyResourceModule extends SmartyResourceModule
                     $source = implode(
                         '',
                         [
-                        '<!-- begin '.$file.' -->',
-                        file_get_contents($file),
-                        '<!-- end '.$file.' -->',
+                            '<!-- begin '.$file.' -->',
+                            file_get_contents($file),
+                            '<!-- end '.$file.' -->',
                         ]
                     );
                 } else {

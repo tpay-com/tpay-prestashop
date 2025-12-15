@@ -18,6 +18,4 @@ namespace Tpay\Exception;
 
 use Exception;
 
-class RepositoryException extends Exception
-{
-}
+class RepositoryException extends Exception {}

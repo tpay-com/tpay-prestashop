@@ -226,12 +226,7 @@ class Tpay extends PaymentModule
             );
         }
 
-        if (
-            !parent::install() || false === (new Install(
-                $this,
-                new InstallQueryHandler()
-            ))->install()
-        ) {
+        if (!parent::install() || false === (new Install($this, new InstallQueryHandler()))->install()) {
             $this->_errors[] = $this->trans('Installation error', [], 'Modules.Tpay.Admin');
         }
 
@@ -268,12 +263,7 @@ class Tpay extends PaymentModule
      */
     public function uninstall(): bool
     {
-        if (
-            !parent::uninstall() || false === (new Uninstall(
-                $this,
-                new InstallQueryHandler()
-            ))->uninstallDb()
-        ) {
+        if (!parent::uninstall() || false === (new Uninstall($this, new InstallQueryHandler()))->uninstallDb()) {
             $this->_errors[] = $this->trans('Installation error', [], 'Modules.Tpay.Admin');
         }
 
@@ -357,10 +347,8 @@ class Tpay extends PaymentModule
 
     public function hookDisplayProductAdditionalInfo($params): string
     {
-        if (
-            Helper::getMultistoreConfigurationValue(
-                'TPAY_PEKAO_INSTALLMENTS_ACTIVE'
-            ) && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')
+        if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE')
+            && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')
         ) {
             $this->context->smarty->assign([
                 'installmentText' => $this->trans('Calculate installment!', [], 'Modules.Tpay.Admin'),

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ruleset name="Tpay Standard">
-    <descripton>Tpay PHPCS coding standard</descripton>
+    <description>Tpay PHPCS coding standard</description>
 
     <arg name="extensions" value="php"/>
 
@@ -10,12 +10,19 @@
     <exclude-pattern>/vendor/</exclude-pattern>
     <exclude-pattern>/tests/bootstrap.php</exclude-pattern>
     <exclude-pattern>/translations/</exclude-pattern>
-    <rule ref="PSR12">
+    <rule ref="PSR1">
         <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
         <exclude name="PSR1.Classes.ClassDeclaration.MultipleClasses"/>
-
+    </rule>
+    <rule ref="PSR2">
+        <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore" />
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine" />
+        <exclude name="PSR2.Classes.ClassDeclaration.OpenBraceNewLine"/>
+        <exclude name="Generic.Functions.OpeningFunctionBraceBsdAllman.BraceOnSameLine"/>
+    </rule>
+    <rule ref="PSR12">
         <exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine"/>
-
+        <exclude name="PSR12.ControlStructures.ControlStructureSpacing.FirstExpressionLine"/>
         <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceBefore" />
         <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceAfter" />
     </rule>

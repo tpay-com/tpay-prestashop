@@ -41,12 +41,12 @@ class Blik implements GatewayType
         $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
         Context::getContext()->smarty->assign(
             [
-            'blik_type' => Helper::getMultistoreConfigurationValue('TPAY_BLIK_WIDGET') ? 'widget' : 'redirect',
-            'blik_gateway' => $data['id'],
-            'blik_moduleLink' => $moduleLink,
-            'blik_saved_aliases' => $blikSavedAliases,
-            'blik_order_id' => Context::getContext()->cart->id,
-            'assets_path' => $module->getPath(),
+                'blik_type' => Helper::getMultistoreConfigurationValue('TPAY_BLIK_WIDGET') ? 'widget' : 'redirect',
+                'blik_gateway' => $data['id'],
+                'blik_moduleLink' => $moduleLink,
+                'blik_saved_aliases' => $blikSavedAliases,
+                'blik_order_id' => Context::getContext()->cart->id,
+                'assets_path' => $module->getPath(),
             ]
         );
 
@@ -55,21 +55,21 @@ class Blik implements GatewayType
             ->setLogo($data['img'])
             ->setInputs(
                 [
-                [
-                    'type' => 'hidden',
-                    'name' => 'tpay',
-                    'value' => true,
-                ],
-                [
-                    'type' => 'hidden',
-                    'name' => 'type',
-                    'value' => Config::TPAY_PAYMENT_BLIK,
-                ],
-                [
-                    'type' => 'hidden',
-                    'name' => 'tpay_transfer_id',
-                    'value' => Config::GATEWAY_BLIK_0,
-                ],
+                    [
+                        'type' => 'hidden',
+                        'name' => 'tpay',
+                        'value' => true,
+                    ],
+                    [
+                        'type' => 'hidden',
+                        'name' => 'type',
+                        'value' => Config::TPAY_PAYMENT_BLIK,
+                    ],
+                    [
+                        'type' => 'hidden',
+                        'name' => 'tpay_transfer_id',
+                        'value' => Config::GATEWAY_BLIK_0,
+                    ],
                 ]
             )
             ->setAdditionalInformation(

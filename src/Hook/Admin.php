@@ -34,9 +34,7 @@ class Admin extends AbstractHook
 
     private static $refundsRendered = false;
 
-    /**
-     * @var null|TranslatorComponent 
-     */
+    /** @var null|TranslatorComponent */
     private $translator;
 
     public function __construct(Tpay $module)
@@ -85,11 +83,7 @@ class Admin extends AbstractHook
                 if (empty($errors)) {
                     try {
                         $result = $this->processRefund($transactionId, (float) $refundAmount);
-                        if (
-                            isset($result['result'])
-                            && 'success' === $result['result']
-                            && 'correct' === $result['status']
-                        ) {
+                        if (isset($result['result']) && 'success' === $result['result'] && 'correct' === $result['status']) {
                             $refunds = $this->module->getService('tpay.repository.refund');
                             $refunds->insertRefund(
                                 $orderId,
@@ -101,9 +95,9 @@ class Admin extends AbstractHook
 
                             $this->context->smarty->assign(
                                 [
-                                'tpay_refund_status' => $this->module->displayConfirmation(
-                                    $this->translator->trans('Refund successful. Return option is being processed please wait.', [], 'Modules.Tpay.Admin')
-                                ),
+                                    'tpay_refund_status' => $this->module->displayConfirmation(
+                                        $this->translator->trans('Refund successful. Return option is being processed please wait.', [], 'Modules.Tpay.Admin')
+                                    ),
                                 ]
                             );
                         }
@@ -114,7 +108,7 @@ class Admin extends AbstractHook
                             if (null !== $errorMessage) {
                                 $this->context->smarty->assign(
                                     [
-                                    'tpay_refund_status' => $this->module->displayError($errorMessage),
+                                        'tpay_refund_status' => $this->module->displayError($errorMessage),
                                     ]
                                 );
                             }
@@ -122,7 +116,7 @@ class Admin extends AbstractHook
                     } catch (Exception $TException) {
                         $this->context->smarty->assign(
                             [
-                            'tpay_refund_status' => $this->module->displayError($TException->getMessage()),
+                                'tpay_refund_status' => $this->module->displayError($TException->getMessage()),
                             ]
                         );
                     }
@@ -132,7 +126,7 @@ class Admin extends AbstractHook
             if (!empty($errors)) {
                 $this->context->smarty->assign(
                     [
-                    'tpay_refund_status' => $this->module->displayError($errors),
+                        'tpay_refund_status' => $this->module->displayError($errors),
                     ]
                 );
             }
@@ -290,9 +284,7 @@ class Admin extends AbstractHook
         return $refundAmount > $maxRefundAmount;
     }
 
-    /**
-     * Processing refund 
-     */
+    /** Processing refund */
     private function processRefund(string $transactionId, float $refundAmount)
     {
         return $this->module->api()->transactions()->createRefundByTransactionId(
@@ -320,7 +312,7 @@ class Admin extends AbstractHook
         }
         $this->context->smarty->assign(
             [
-            'tpayRefunds' => $smartyRefunds,
+                'tpayRefunds' => $smartyRefunds,
             ]
         );
     }

@@ -35,24 +35,16 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     private $cardService;
     private $clientData;
 
-    /**
-     * @var Tpay 
-     */
+    /** @var Tpay */
     private $module;
 
-    /**
-     * @var Order 
-     */
+    /** @var Order */
     private $order;
 
-    /**
-     * @var Customer 
-     */
+    /** @var Customer */
     private $customer;
 
-    /**
-     * @var Context 
-     */
+    /** @var Context */
     private $context;
 
     public function getName(): string

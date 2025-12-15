@@ -8,9 +8,7 @@ use Tpay\Entity\TpayRefund;
 
 final class Container
 {
-    /**
-     * @var self 
-     */
+    /** @var self */
     private static $instance;
 
     /**

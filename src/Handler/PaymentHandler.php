@@ -27,39 +27,25 @@ use Tpay\CustomerData;
 
 class PaymentHandler
 {
-    /**
-     * @var Tpay 
-     */
+    /** @var Tpay */
     private $module;
 
-    /**
-     * @var Context 
-     */
+    /** @var Context */
     private $context;
 
-    /**
-     * @var PaymentMethodHandler 
-     */
+    /** @var PaymentMethodHandler */
     private $paymentMethodHandler;
 
-    /**
-     * @var Customer 
-     */
+    /** @var Customer */
     private $customer;
 
-    /**
-     * @var Order 
-     */
+    /** @var Order */
     private $order;
 
-    /**
-     * @var AddressCore 
-     */
+    /** @var AddressCore */
     private $address;
 
-    /**
-     * @var array 
-     */
+    /** @var array */
     private $data;
 
     public function __construct(
@@ -79,9 +65,7 @@ class PaymentHandler
         $this->context = $this->module->getContext();
     }
 
-    /**
-     * @throws Exception 
-     */
+    /** @throws Exception */
     public function getCustomerDetails(): array
     {
         $customer = new CustomerData(
@@ -97,9 +81,7 @@ class PaymentHandler
         return $customer->getData();
     }
 
-    /**
-     * @throws Exception 
-     */
+    /** @throws Exception */
     public function get(): void
     {
         $this->paymentMethodHandler->createPayment(

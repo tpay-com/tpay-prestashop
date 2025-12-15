@@ -54,9 +54,7 @@ class SurchargeService
         return $surcharge;
     }
 
-    /**
-     * @throws Exception 
-     */
+    /** @throws Exception */
     public function getTotalOrderAndSurchargeCost()
     {
         $cart = Context::getContext()->cart;
