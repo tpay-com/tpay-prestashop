@@ -16,7 +16,6 @@ jobs:
           coverage: none
 
       - run: composer validate --strict
-        continue-on-error: true
 
       - run: composer install --no-interaction --prefer-dist
 
@@ -29,4 +28,3 @@ jobs:
       - run: composer cs:phpstan
 
       - run: composer cs:psalm -- --no-progress --shepherd
-        continue-on-error: true

@@ -9,7 +9,7 @@ use Tpay\Util\Logger\PsrLoggerV3;
 
 $parameter = new ReflectionParameter([LoggerInterface::class, 'log'], 'message');
 if ($parameter->hasType()) {
-    class PsrLogger extends PsrLoggerV3 {}
+    class_alias(PsrLoggerV3::class, PsrLogger::class);
 } else {
-    class PsrLogger extends PsrLoggerV1 {}
+    class_alias(PsrLoggerV1::class, PsrLogger::class);
 }
