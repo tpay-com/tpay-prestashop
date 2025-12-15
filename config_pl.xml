@@ -2,7 +2,7 @@
 <module>
     <name>tpay</name>
     <displayName><![CDATA[Tpay]]></displayName>
-    <version><![CDATA[1.13.1]]></version>
+    <version><![CDATA[1.13.2]]></version>
     <description><![CDATA[Przyjmowanie płatności online]]></description>
     <author><![CDATA[Krajowy Integrator Płatności S.A.]]></author>
     <tab><![CDATA[payments_gateways]]></tab>
