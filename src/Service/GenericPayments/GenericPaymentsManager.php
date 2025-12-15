@@ -3,6 +3,7 @@
 namespace Tpay\Service\GenericPayments;
 
 use Configuration as Cfg;
+use PrestaShopBundle\Translation\TranslatorComponent;
 use PrestaShopBundle\Translation\TranslatorInterface;
 
 class GenericPaymentsManager
@@ -14,10 +15,12 @@ class GenericPaymentsManager
 
     private $activeChannels;
 
-    /** @var null|TranslatorInterface */
+    /**
+     * @var null|TranslatorComponent
+     */
     private $translator;
 
-    public function __construct(array $activeChannels, ?TranslatorInterface $translator)
+    public function __construct(array $activeChannels, ?TranslatorComponent $translator)
     {
         $this->activeChannels = $activeChannels;
         $this->translator = $translator;
@@ -73,9 +76,12 @@ class GenericPaymentsManager
 
     public function buildBlikBnplForm(): array
     {
-        $activeIds = array_map(static function ($channel) {
-            return (int) $channel['id'];
-        }, $this->activeChannels);
+        $activeIds = array_map(
+            static function ($channel) {
+                return (int) $channel['id'];
+            },
+            $this->activeChannels
+        );
 
         return $this->blikBnplForm(in_array(self::CHANNEL_BLIK_BNPL, $activeIds, true));
     }

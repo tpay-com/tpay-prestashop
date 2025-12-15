@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ruleset name="Tpay Standard">
     <descripton>Tpay PHPCS coding standard</descripton>
+
+    <arg name="extensions" value="php"/>
+
     <file>./</file>
+
     <exclude-pattern>/node_modules/</exclude-pattern>
     <exclude-pattern>/vendor/</exclude-pattern>
     <exclude-pattern>/tests/bootstrap.php</exclude-pattern>
     <exclude-pattern>/translations/</exclude-pattern>
     <rule ref="PSR12">
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+        <exclude name="PSR1.Classes.ClassDeclaration.MultipleClasses"/>
+
+        <exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine"/>
+
         <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceBefore" />
         <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceAfter" />
     </rule>

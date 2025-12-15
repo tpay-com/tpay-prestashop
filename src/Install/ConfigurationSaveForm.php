@@ -25,7 +25,9 @@ use Tpay\Util\Helper;
 
 class ConfigurationSaveForm
 {
-    /** @var ConfigurationAdapter */
+    /**
+     * @var ConfigurationAdapter 
+     */
     private $configuration;
 
     private $shopGroupsList = [];

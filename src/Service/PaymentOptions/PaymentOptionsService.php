@@ -37,7 +37,9 @@ class PaymentOptionsService
     private $transfers;
     private $bankChannels;
 
-    /** @var ConstraintValidator */
+    /**
+     * @var ConstraintValidator 
+     */
     private $constraintValidator;
 
     /**
@@ -51,7 +53,9 @@ class PaymentOptionsService
         $this->getGroup();
     }
 
-    /** @throws PrestaShopException */
+    /**
+     * @throws PrestaShopException 
+     */
     public function getGroup(): void
     {
         try {
@@ -62,7 +66,9 @@ class PaymentOptionsService
         }
     }
 
-    /** Create all transfer group */
+    /**
+     * Create all transfer group 
+     */
     public function createTransferPaymentChannel(): void
     {
         $payment = [
@@ -80,15 +86,20 @@ class PaymentOptionsService
         // Adding transfer group
         $this->createTransferPaymentChannel();
 
-        $payments = array_filter(array_map(function (array $paymentData) {
-            $optionClass = PaymentOptionsFactory::getOptionById((int) $paymentData['mainChannel']);
+        $payments = array_filter(
+            array_map(
+                function (array $paymentData) {
+                    $optionClass = PaymentOptionsFactory::getOptionById((int) $paymentData['mainChannel']);
 
-            if (is_object($optionClass)) {
-                $gateway = new PaymentType($optionClass);
+                    if (is_object($optionClass)) {
+                        $gateway = new PaymentType($optionClass);
 
-                return $gateway->getPaymentOption($this->module, new PaymentOption(), $paymentData);
-            }
-        }, $this->channels));
+                        return $gateway->getPaymentOption($this->module, new PaymentOption(), $paymentData);
+                    }
+                },
+                $this->channels
+            )
+        );
 
         $extracted = $this->getExtractedPaymentOptions();
         $generics = $this->genericPayments();
@@ -99,7 +110,9 @@ class PaymentOptionsService
         return array_merge($payments, $generics);
     }
 
-    /** Grouping of payments delivered from api */
+    /**
+     * Grouping of payments delivered from api 
+     */
     public function getGroupTransfers(): array
     {
         return $this->transfers ?? [];
@@ -142,7 +155,9 @@ class PaymentOptionsService
         $this->channels[] = $array;
     }
 
-    /** @throws Exception */
+    /**
+     * @throws Exception 
+     */
     private function getSeparatePayments(array $channels): array
     {
         $paymentsMethods = [
@@ -192,14 +207,17 @@ class PaymentOptionsService
     {
         if (!Helper::getMultistoreConfigurationValue('TPAY_REDIRECT_TO_CHANNEL')) {
             $seenNames = [];
-            $transfers = array_filter($transfers, function ($channel) use (&$seenNames) {
-                if (in_array($channel['id'], $seenNames)) {
-                    return false;
-                }
-                $seenNames[] = $channel['id'];
+            $transfers = array_filter(
+                $transfers,
+                function ($channel) use (&$seenNames) {
+                    if (in_array($channel['id'], $seenNames)) {
+                        return false;
+                    }
+                    $seenNames[] = $channel['id'];
 
-                return true;
-            });
+                    return true;
+                }
+            );
         }
 
         $this->transfers = $transfers;
@@ -225,12 +243,17 @@ class PaymentOptionsService
         return $bankChannels;
     }
 
-    /** Grouping of payments delivered from api */
+    /**
+     * Grouping of payments delivered from api 
+     */
     private function groupChannel(array $channels, array $compareArray): array
     {
-        return array_filter($channels, function ($val) use ($compareArray) {
-            return in_array($val['mainChannel'], $compareArray);
-        });
+        return array_filter(
+            $channels,
+            function ($val) use ($compareArray) {
+                return in_array($val['mainChannel'], $compareArray);
+            }
+        );
     }
 
     /**
@@ -243,21 +266,29 @@ class PaymentOptionsService
         $generics = Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS') ? json_decode(Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS')) : [];
         $compareChannels = array_merge($compareArray, $generics);
 
-        return array_filter($channels, function ($val) use ($compareChannels) {
-            return !in_array($val['mainChannel'], array_merge($compareChannels));
-        });
+        return array_filter(
+            $channels,
+            function ($val) use ($compareChannels) {
+                return !in_array($val['mainChannel'], array_merge($compareChannels));
+            }
+        );
     }
 
-    /** @return array<PaymentOption> */
+    /**
+     * @return array<PaymentOption> 
+     */
     private function genericPayments(): array
     {
         $generics = Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS') ? json_decode(Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS')) : [];
         $channels = unserialize(Cache::get('channels', 'N;'));
 
         if (null === $channels) {
-            $channels = array_filter($this->bankChannels, function (array $channel) {
-                return true === $channel['available'];
-            });
+            $channels = array_filter(
+                $this->bankChannels,
+                function (array $channel) {
+                    return true === $channel['available'];
+                }
+            );
             foreach ($channels as $channel) {
                 $channels[$channel['id']] = $channel;
             }
@@ -265,20 +296,25 @@ class PaymentOptionsService
             Cache::set('channels', serialize($channels));
         }
 
-        return array_filter(array_map(function (string $generic) use ($channels) {
-            $channel = $channels[$generic] ?? null;
+        return array_filter(
+            array_map(
+                function (string $generic) use ($channels) {
+                    $channel = $channels[$generic] ?? null;
 
-            if (null === $channel) {
-                return;
-            }
-            if (!empty($channel['constraints']) && !$this->constraintValidator->validate($channel['constraints'], $this->getBrowser())) {
-                return;
-            }
+                    if (null === $channel) {
+                        return;
+                    }
+                    if (!empty($channel['constraints']) && !$this->constraintValidator->validate($channel['constraints'], $this->getBrowser())) {
+                        return;
+                    }
 
-            $gateway = new PaymentType(new Generic());
+                    $gateway = new PaymentType(new Generic());
 
-            return $gateway->getPaymentOption($this->module, new PaymentOption(), $channel);
-        }, $generics));
+                    return $gateway->getPaymentOption($this->module, new PaymentOption(), $channel);
+                },
+                $generics
+            )
+        );
     }
 
     private function getBrowser(): string

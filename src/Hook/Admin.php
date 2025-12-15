@@ -34,7 +34,9 @@ class Admin extends AbstractHook
 
     private static $refundsRendered = false;
 
-    /** @var null|TranslatorComponent */
+    /**
+     * @var null|TranslatorComponent 
+     */
     private $translator;
 
     public function __construct(Tpay $module)
@@ -97,34 +99,42 @@ class Admin extends AbstractHook
 
                             $this->createHistory($order, new OrderHistory());
 
-                            $this->context->smarty->assign([
+                            $this->context->smarty->assign(
+                                [
                                 'tpay_refund_status' => $this->module->displayConfirmation(
                                     $this->translator->trans('Refund successful. Return option is being processed please wait.', [], 'Modules.Tpay.Admin')
                                 ),
-                            ]);
+                                ]
+                            );
                         }
 
                         if (isset($result['result']) && 'failed' === $result['result']) {
                             $errorMessage = $this->getRefundErrorMessage($result['errors'] ?? []);
 
                             if (null !== $errorMessage) {
-                                $this->context->smarty->assign([
+                                $this->context->smarty->assign(
+                                    [
                                     'tpay_refund_status' => $this->module->displayError($errorMessage),
-                                ]);
+                                    ]
+                                );
                             }
                         }
                     } catch (Exception $TException) {
-                        $this->context->smarty->assign([
+                        $this->context->smarty->assign(
+                            [
                             'tpay_refund_status' => $this->module->displayError($TException->getMessage()),
-                        ]);
+                            ]
+                        );
                     }
                 }
             }
 
             if (!empty($errors)) {
-                $this->context->smarty->assign([
+                $this->context->smarty->assign(
+                    [
                     'tpay_refund_status' => $this->module->displayError($errors),
-                ]);
+                    ]
+                );
             }
             $view = 'module:tpay/views/templates/hook/refunds.tpl';
             if ($legacyTheme) {
@@ -187,8 +197,12 @@ class Admin extends AbstractHook
             }
         }
 
-        return $this->translator->trans('Refund error.
-                                   Check that the refund amount is correct and does not exceed the value of the order', [], 'Modules.Tpay.Admin');
+        return $this->translator->trans(
+            'Refund error.
+                                   Check that the refund amount is correct and does not exceed the value of the order',
+            [],
+            'Modules.Tpay.Admin'
+        );
     }
 
     private function getRefundErrorCodeMessages()
@@ -276,7 +290,9 @@ class Admin extends AbstractHook
         return $refundAmount > $maxRefundAmount;
     }
 
-    /** Processing refund */
+    /**
+     * Processing refund 
+     */
     private function processRefund(string $transactionId, float $refundAmount)
     {
         return $this->module->api()->transactions()->createRefundByTransactionId(
@@ -302,8 +318,10 @@ class Admin extends AbstractHook
                 'tpay_refund_amount' => $refund['amount'],
             ];
         }
-        $this->context->smarty->assign([
+        $this->context->smarty->assign(
+            [
             'tpayRefunds' => $smartyRefunds,
-        ]);
+            ]
+        );
     }
 }

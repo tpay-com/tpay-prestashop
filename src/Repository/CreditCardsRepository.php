@@ -30,16 +30,24 @@ class CreditCardsRepository
 {
     public const TABLE = 'tpay_credit_card';
 
-    /** @var Connection the Database connection */
+    /**
+     * @var Connection the Database connection 
+     */
     private $connection;
 
-    /** @var EntityManager */
+    /**
+     * @var EntityManager 
+     */
     private $entityManager;
 
-    /** @var RepositoryQueryHandler */
+    /**
+     * @var RepositoryQueryHandler 
+     */
     private $repositoryQueryHandler;
 
-    /** @var string the Database prefix */
+    /**
+     * @var string the Database prefix 
+     */
     private $dbPrefix;
 
     public function __construct(

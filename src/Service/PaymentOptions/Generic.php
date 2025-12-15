@@ -33,14 +33,16 @@ class Generic implements GatewayType
 
     private function generateForm(string $moduleLink, $channelId): string
     {
-        Context::getContext()->smarty->assign([
+        Context::getContext()->smarty->assign(
+            [
             'action' => $moduleLink,
             'tpay' => 'true',
             'channelId' => $channelId,
             'blikBnplId' => GenericPaymentsManager::CHANNEL_BLIK_BNPL,
             'tpay_channel_id' => 0,
             'type' => 'generic',
-        ]);
+            ]
+        );
 
         return Context::getContext()->smarty->fetch('module:tpay/views/templates/hook/generic.tpl');
     }

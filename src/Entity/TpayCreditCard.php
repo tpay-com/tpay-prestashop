@@ -153,7 +153,9 @@ class TpayCreditCard
         return $this->dateUpdate;
     }
 
-    /** @return self */
+    /**
+     * @return self 
+     */
     public function setCardToken(string $cardToken)
     {
         $this->cardToken = $cardToken;

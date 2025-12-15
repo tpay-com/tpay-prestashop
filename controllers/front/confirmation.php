@@ -5,7 +5,9 @@ use Tpay\Handler\ExceptionHandler;
 
 class TpayConfirmationModuleFrontController extends ModuleFrontController
 {
-    /** @throws PrestaShopException */
+    /**
+     * @throws PrestaShopException 
+     */
     public function initContent()
     {
         $type = Tools::getValue('type');

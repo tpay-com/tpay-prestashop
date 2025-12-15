@@ -10,7 +10,9 @@ class TpaySavedCardsModuleFrontController extends ModuleFrontController
     public $auth = true;
     private $repositoryCreditCard;
 
-    /** @throws PrestaShopException */
+    /**
+     * @throws PrestaShopException 
+     */
     public function initContent()
     {
         parent::initContent();
@@ -32,7 +34,9 @@ class TpaySavedCardsModuleFrontController extends ModuleFrontController
         $this->setTemplate('module:tpay/views/templates/front/accountCreditCardsPage.tpl');
     }
 
-    /** @throws PrestaShopException */
+    /**
+     * @throws PrestaShopException 
+     */
     public function displayAjaxDeleteCard()
     {
         $id = (int) Tools::getValue('id');

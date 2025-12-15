@@ -30,10 +30,14 @@ class BasicPaymentHandler implements PaymentMethodHandler
 {
     public const TYPE = 'transfer';
 
-    /** @var array */
+    /**
+     * @var array 
+     */
     protected $clientData;
 
-    /** @var Tpay */
+    /**
+     * @var Tpay 
+     */
     protected $module;
 
     public function getName(): string
@@ -79,7 +83,9 @@ class BasicPaymentHandler implements PaymentMethodHandler
             return;
         }
 
-        /** @var TransactionService $transactionService */
+        /**
+ * @var TransactionService $transactionService 
+*/
         $transactionService = $this->module->getService('tpay.service.transaction');
         $transactionService->transactionProcess(
             $transaction,
@@ -89,7 +95,9 @@ class BasicPaymentHandler implements PaymentMethodHandler
         );
     }
 
-    /** @throws TransactionException */
+    /**
+     * @throws TransactionException 
+     */
     protected function createTransaction(): array
     {
         $result = $this->module->api()->transactions()->createTransaction($this->clientData);

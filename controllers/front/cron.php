@@ -5,16 +5,22 @@ use Tpay\Util\Container;
 
 class TpayCronModuleFrontController extends ModuleFrontController
 {
-    /** @var bool If set to true, will be redirected to authentication page */
+    /**
+     * @var bool If set to true, will be redirected to authentication page 
+     */
     public $auth = false;
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     public $ajax = 1;
 
     public function display()
     {
-        if (!Cfg::get('TPAY_AUTO_CANCEL_ACTIVE') || (!Cfg::get('TPAY_AUTO_CANCEL_FRONTEND_RUN') && !Tools::isPHPCLI(
-        ))) {
+        if (
+            !Cfg::get('TPAY_AUTO_CANCEL_ACTIVE')
+            || (!Cfg::get('TPAY_AUTO_CANCEL_FRONTEND_RUN') && !Tools::isPHPCLI())
+        ) {
             $this->ajaxRender(json_encode(['error' => 'Forbidden call.']));
             exit;
         }

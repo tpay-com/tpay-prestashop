@@ -81,10 +81,12 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $result = $this->waitForBlikAccept($transactionId, 0);
 
         $this->ajaxRender(
-            json_encode([
+            json_encode(
+                [
                 'status' => $result['status'],
                 'result' => $result,
-            ])
+                ]
+            )
         );
     }
 
@@ -113,7 +115,8 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         }
 
         $this->ajaxRender(
-            json_encode([
+            json_encode(
+                [
                 'status' => $transaction['status'],
                 'backUrl' => $this->module->getContext()->link->getModuleLink(
                     'tpay',
@@ -125,7 +128,8 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
                 ),
                 'orderId' => $order->id,
                 'transactionId' => $transactionId,
-            ])
+                ]
+            )
         );
     }
 
@@ -158,9 +162,11 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         }
 
         $this->ajaxRender(
-            json_encode([
+            json_encode(
+                [
                 'result' => $result['status'],
-            ])
+                ]
+            )
         );
     }
 
@@ -172,7 +178,9 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
     public function createTransactionInDb($transaction, $orderId, bool $redirect = true): void
     {
         if (isset($transaction['transactionId'])) {
-            /** @var TransactionService $transactionService */
+            /**
+ * @var TransactionService $transactionService 
+*/
             $transactionService = $this->module->getService('tpay.service.transaction');
             $transactionService->transactionProcess(
                 $transaction,
@@ -191,7 +199,9 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
     public function updateTransactionInDb($transaction, $orderId, $oldTransactionId, $paymentType): void
     {
         if (isset($transaction['transactionId'])) {
-            /** @var TransactionService $transactionService */
+            /**
+ * @var TransactionService $transactionService 
+*/
             $transactionService = $this->module->getService('tpay.service.transaction');
             $transactionService->updateTransaction($transaction, $oldTransactionId, $paymentType, $orderId);
         }
@@ -353,9 +363,11 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
         if (!isset($transaction['transactionPaymentUrl'])) {
             $this->ajaxRender(
-                json_encode([
+                json_encode(
+                    [
                     'status' => 'error',
-                ])
+                    ]
+                )
             );
         }
 
@@ -368,10 +380,12 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         }
 
         $this->ajaxRender(
-            json_encode([
+            json_encode(
+                [
                 'status' => 'correct',
                 'payment_url' => $transaction['transactionPaymentUrl'],
-            ])
+                ]
+            )
         );
     }
 

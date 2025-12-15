@@ -35,16 +35,24 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     private $cardService;
     private $clientData;
 
-    /** @var Tpay */
+    /**
+     * @var Tpay 
+     */
     private $module;
 
-    /** @var Order */
+    /**
+     * @var Order 
+     */
     private $order;
 
-    /** @var Customer */
+    /**
+     * @var Customer 
+     */
     private $customer;
 
-    /** @var Context */
+    /**
+     * @var Context 
+     */
     private $context;
 
     public function getName(): string
@@ -161,10 +169,12 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
             }
         }
         PrestaShopLogger::addLog('Unable to create new card payment. Response: '.json_encode($transaction), 3);
-        Tools::redirect($this->context->link->getModuleLink(
-            'tpay',
-            'ordererror'
-        ));
+        Tools::redirect(
+            $this->context->link->getModuleLink(
+                'tpay',
+                'ordererror'
+            )
+        );
     }
 
     private function payBySavedCard($cardToken, $transaction): void

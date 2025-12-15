@@ -56,10 +56,15 @@ class Payment extends AbstractHook
             ];
         }
 
-        $this->context->smarty->assign(array_merge($langData, [
-            'tpay_path' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/tpay/views/',
-            'surcharge' => $surcharge > 0 ? Tools::displayPrice($this->getSurchargeCost()) : false,
-        ]));
+        $this->context->smarty->assign(
+            array_merge(
+                $langData,
+                [
+                'tpay_path' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/tpay/views/',
+                'surcharge' => $surcharge > 0 ? Tools::displayPrice($this->getSurchargeCost()) : false,
+                ]
+            )
+        );
 
         $paymentService = new PaymentOptionsService($this->module);
 
@@ -86,13 +91,15 @@ class Payment extends AbstractHook
         if (!$this->module->active) {
             return;
         }
-        $this->context->smarty->assign([
+        $this->context->smarty->assign(
+            [
             'status' => Tools::getValue('status'),
             'historyLink' => 'index.php?controller=history',
             'homeLink' => 'index.php',
             'contactLink' => 'index.php?controller=contact',
             'modulesDir' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/',
-        ]);
+            ]
+        );
 
         return $this->module->fetch('module:tpay/views/templates/hook/paymentReturn.tpl');
     }

@@ -30,7 +30,9 @@ class Card implements GatewayType
 {
     private $method = 'payment';
 
-    /** @throws Exception */
+    /**
+     * @throws Exception 
+     */
     public function getPaymentOption(
         Tpay $module,
         PaymentOption $paymentOption,
@@ -48,17 +50,20 @@ class Card implements GatewayType
             }
         }
 
-        Context::getContext()->smarty->assign([
+        Context::getContext()->smarty->assign(
+            [
             'card_type' => Helper::getMultistoreConfigurationValue('TPAY_CARD_WIDGET') ? 'widget' : 'redirect',
             'cards_moduleLink' => $moduleLink,
             'saved_cards' => $creditCardsArray,
             'assets_path' => $module->getPath(),
-        ]);
+            ]
+        );
 
         $paymentOption->setCallToActionText($module->getTranslator()->trans('Payment card', [], 'Modules.Tpay.Shop'))
             ->setAction($moduleLink)
             ->setLogo($data['img'])
-            ->setInputs([
+            ->setInputs(
+                [
                 [
                     'type' => 'hidden',
                     'name' => 'tpay',
@@ -69,7 +74,8 @@ class Card implements GatewayType
                     'name' => 'type',
                     'value' => Config::TPAY_PAYMENT_CARDS,
                 ],
-            ])
+                ]
+            )
             ->setAdditionalInformation(
                 $module->fetch('module:tpay/views/templates/hook/card.tpl')
             );

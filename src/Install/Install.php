@@ -27,13 +27,19 @@ use Tpay\Handler\InstallQueryHandler;
 
 class Install
 {
-    /** @var Tpay */
+    /**
+     * @var Tpay 
+     */
     private $module;
 
-    /** @var InstallQueryHandler */
+    /**
+     * @var InstallQueryHandler 
+     */
     private $installQueryHandler;
 
-    /** @var TranslatorComponent */
+    /**
+     * @var TranslatorComponent 
+     */
     private $translator;
 
     public function __construct(
@@ -45,7 +51,9 @@ class Install
         $this->translator = $module->getTranslator();
     }
 
-    /** @throws BaseException */
+    /**
+     * @throws BaseException 
+     */
     public function install(): bool
     {
         if (!$this->installDb()) {
@@ -85,7 +93,9 @@ class Install
         return $status;
     }
 
-    /** Starts context if there is a store running multistore option */
+    /**
+     * Starts context if there is a store running multistore option 
+     */
     private function installContext(): bool
     {
         if (Shop::isFeatureActive()) {

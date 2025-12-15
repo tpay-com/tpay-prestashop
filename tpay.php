@@ -357,9 +357,11 @@ class Tpay extends PaymentModule
 
     public function hookDisplayProductAdditionalInfo($params): string
     {
-        if (Helper::getMultistoreConfigurationValue(
-            'TPAY_PEKAO_INSTALLMENTS_ACTIVE'
-        ) && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')) {
+        if (
+            Helper::getMultistoreConfigurationValue(
+                'TPAY_PEKAO_INSTALLMENTS_ACTIVE'
+            ) && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')
+        ) {
             $this->context->smarty->assign([
                 'installmentText' => $this->trans('Calculate installment!', [], 'Modules.Tpay.Admin'),
                 'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),

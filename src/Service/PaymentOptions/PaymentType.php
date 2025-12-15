@@ -21,7 +21,9 @@ use Tpay;
 
 class PaymentType
 {
-    /** @var GatewayType */
+    /**
+     * @var GatewayType 
+     */
     private $gateway;
 
     public function __construct(

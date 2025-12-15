@@ -50,7 +50,9 @@ class HookDispatcher
      */
     private $module;
 
-    /** Init hooks */
+    /**
+     * Init hooks 
+     */
     public function __construct(Tpay $module)
     {
         $this->module = $module;

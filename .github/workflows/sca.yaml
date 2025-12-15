@@ -25,10 +25,8 @@ jobs:
       - run: composer cs:fixer -- --dry-run
 
       - run: composer cs:sniffer
-        continue-on-error: true
 
       - run: composer cs:phpstan
-        continue-on-error: true
 
       - run: composer cs:psalm -- --no-progress --shepherd
         continue-on-error: true

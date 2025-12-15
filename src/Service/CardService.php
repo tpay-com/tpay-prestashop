@@ -21,7 +21,9 @@ use Tpay\Repository\CreditCardsRepository;
 
 class CardService
 {
-    /** @var CreditCardsRepository */
+    /**
+     * @var CreditCardsRepository 
+     */
     private $repository;
 
     public function __construct(

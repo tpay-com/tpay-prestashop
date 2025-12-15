@@ -4,7 +4,9 @@ use Tpay\Config\Config;
 
 class TpayRenewPaymentModuleFrontController extends ModuleFrontController
 {
-    /** @throws PrestaShopException */
+    /**
+     * @throws PrestaShopException 
+     */
     public function initContent()
     {
         parent::initContent();

@@ -24,16 +24,24 @@ use Tpay\Repository\TransactionsRepository;
 
 class TransactionService
 {
-    /** @var Cart */
+    /**
+     * @var Cart 
+     */
     private $cart;
 
-    /** @var TransactionsRepository */
+    /**
+     * @var TransactionsRepository 
+     */
     private $repository;
 
-    /** @var SurchargeService */
+    /**
+     * @var SurchargeService 
+     */
     private $surchargeService;
 
-    /** @var Context */
+    /**
+     * @var Context 
+     */
     private $context;
 
     public function __construct(
@@ -56,10 +64,12 @@ class TransactionService
     public function transactionProcess($transaction, $type, $orderId, bool $redirect = true): void
     {
         if ('blik' !== $type && 'success' !== $transaction['result']) {
-            Tools::redirect($this->context->link->getModuleLink(
-                'tpay',
-                'ordererror'
-            ));
+            Tools::redirect(
+                $this->context->link->getModuleLink(
+                    'tpay',
+                    'ordererror'
+                )
+            );
         }
 
         $orderTotal = (float) $this->cart->getOrderTotal();
@@ -80,7 +90,9 @@ class TransactionService
         }
     }
 
-    /** @throws Exception */
+    /**
+     * @throws Exception 
+     */
     public function updateTransaction($transaction, $oldTransactionId, $type, $orderId): void
     {
         $this->repository->updateTransaction(

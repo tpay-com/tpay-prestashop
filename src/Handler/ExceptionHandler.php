@@ -22,7 +22,9 @@ use PrestaShopLogger;
 
 class ExceptionHandler
 {
-    /** @throws PrestaShopException */
+    /**
+     * @throws PrestaShopException 
+     */
     public static function handle(Exception $e): void
     {
         PrestaShopLogger::addLog($e->getMessage(), 3);

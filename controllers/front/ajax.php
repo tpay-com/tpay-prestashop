@@ -18,7 +18,9 @@ class TpayAjaxModuleFrontController extends ModuleFrontController
         parent::init();
     }
 
-    /** @throws PrestaShopException */
+    /**
+     * @throws PrestaShopException 
+     */
     public function initContent()
     {
         parent::initContent();
@@ -70,10 +72,12 @@ class TpayAjaxModuleFrontController extends ModuleFrontController
 
         if ('false' === $tpayPayment || $paymentFee <= 0) {
             $presenterCart = $this->cart_presenter->present($this->context->cart);
-            $this->context->smarty->assign([
+            $this->context->smarty->assign(
+                [
                 'configuration' => $this->getTemplateVarConfiguration(),
                 'cart' => $presenterCart,
-            ]);
+                ]
+            );
 
             $this->renderFragment($tpayPayment);
         }
@@ -117,10 +121,12 @@ class TpayAjaxModuleFrontController extends ModuleFrontController
             ],
         ];
 
-        $this->context->smarty->assign([
+        $this->context->smarty->assign(
+            [
             'configuration' => $this->getTemplateVarConfiguration(),
             'cart' => $presenterCart,
-        ]);
+            ]
+        );
 
         $this->renderFragment($tpayPayment);
     }

@@ -34,13 +34,15 @@ class Transfer implements GatewayType
         array $data = []
     ): PaymentOption {
         $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
-        Context::getContext()->smarty->assign([
+        Context::getContext()->smarty->assign(
+            [
             'transfer_type' => Helper::getMultistoreConfigurationValue('TPAY_TRANSFER_WIDGET') ? 'widget' : 'redirect',
             'transfer_gateway' => $data['id'],
             'transfer_moduleLink' => $moduleLink,
             'gateways' => $this->sortGateways($data['gateways']),
             'isDirect' => (bool) Configuration::get('TPAY_REDIRECT_TO_CHANNEL'),
-        ]);
+            ]
+        );
 
         $paymentOption->setCallToActionText($module->getTranslator()->trans('Pay by online transfer with Tpay', [], 'Modules.Tpay.Shop'))
             ->setAction($moduleLink)
@@ -52,21 +54,26 @@ class Transfer implements GatewayType
 
     protected function generateForm()
     {
-        Context::getContext()->smarty->assign([
+        Context::getContext()->smarty->assign(
+            [
             'action' => Context::getContext()->link->getModuleLink('tpay', $this->method, [], true),
             'tpay' => true,
             'type' => Config::TPAY_PAYMENT_BASIC,
             'tpay_transfer_id' => 0,
-        ]);
+            ]
+        );
 
         return Context::getContext()->smarty->fetch('module:tpay/views/templates/hook/payment.tpl');
     }
 
     private function sortGateways(array $gateways)
     {
-        $gateways = array_filter($gateways, function ($gateway) {
-            return !GenericPaymentsManager::isChannelExcluded((int) $gateway['mainChannel']);
-        });
+        $gateways = array_filter(
+            $gateways,
+            function ($gateway) {
+                return !GenericPaymentsManager::isChannelExcluded((int) $gateway['mainChannel']);
+            }
+        );
 
         if ((bool) Configuration::get('TPAY_REDIRECT_TO_CHANNEL') && !empty(Configuration::get('TPAY_CUSTOM_ORDER'))) {
             $orderedList = [];

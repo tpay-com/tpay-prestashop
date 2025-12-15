@@ -4,10 +4,10 @@ namespace Tpay\Util;
 
 $autoload = _PS_ROOT_DIR_.'/app/autoload.php';
 if (file_exists($autoload)) {
-    require_once $autoload;
+    include_once $autoload;
 }
 if (!class_exists('\AppKernel')) {
-    require_once _PS_ROOT_DIR_.'/app/AppKernel.php';
+    include_once _PS_ROOT_DIR_.'/app/AppKernel.php';
 }
 
 use AppKernel;

@@ -13,7 +13,9 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
     public $data;
     public $display_column_left = false;
 
-    /** @throws PrestaShopException */
+    /**
+     * @throws PrestaShopException 
+     */
     public function initContent()
     {
         parent::initContent();

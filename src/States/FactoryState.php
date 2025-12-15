@@ -27,10 +27,14 @@ use Tpay;
 
 class FactoryState
 {
-    /** @var Tpay */
+    /**
+     * @var Tpay 
+     */
     private $module;
 
-    /** @var OrderState */
+    /**
+     * @var OrderState 
+     */
     private $orderState;
 
     public function __construct(
@@ -50,7 +54,9 @@ class FactoryState
         ];
     }
 
-    /** Get all states by configuration */
+    /**
+     * Get all states by configuration 
+     */
     public function getAllStatuses(): array
     {
         if (Cfg::get('TPAY_PENDING')) {

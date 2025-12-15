@@ -18,11 +18,14 @@ class LegacySmartyResourceModule extends SmartyResourceModule
         foreach ($this->paths as $path) {
             if (Tools::file_exists_cache($file = $path.$name)) {
                 if (_PS_MODE_DEV_) {
-                    $source = implode('', [
+                    $source = implode(
+                        '',
+                        [
                         '<!-- begin '.$file.' -->',
                         file_get_contents($file),
                         '<!-- end '.$file.' -->',
-                    ]);
+                        ]
+                    );
                 } else {
                     $source = file_get_contents($file);
                 }

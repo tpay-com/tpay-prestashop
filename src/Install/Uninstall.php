@@ -22,10 +22,14 @@ use Tpay\Handler\InstallQueryHandler;
 
 class Uninstall
 {
-    /** @var Tpay */
+    /**
+     * @var Tpay 
+     */
     private $module;
 
-    /** @var InstallQueryHandler */
+    /**
+     * @var InstallQueryHandler 
+     */
     private $installQueryHandler;
 
     public function __construct(

@@ -90,12 +90,14 @@ class EmailOrder extends AbstractHook
         $surchargeValue = $this->getOrderSurchargeCost($params['object']->id_order);
 
         if ($surchargeValue > 0.00) {
-            $this->context->smarty->assign([
+            $this->context->smarty->assign(
+                [
                 'surchargeCost' => Context::getContext()->getCurrentLocale()->formatPrice(
                     $surchargeValue,
                     $this->context->currency->iso_code
                 ),
-            ]);
+                ]
+            );
 
             return $this->module->fetch('module:tpay/views/templates/_admin/invoiceSurcharge.tpl');
         }
@@ -109,17 +111,21 @@ class EmailOrder extends AbstractHook
             return '';
         }
 
-        $this->context->smarty->assign([
+        $this->context->smarty->assign(
+            [
             'surchargeCost' => Context::getContext()->getCurrentLocale()->formatPrice(
                 $surchargeCost,
                 $this->context->currency->iso_code
             ),
-        ]);
+            ]
+        );
 
         return $this->module->fetch('module:tpay/views/templates/hook/emailSurcharge.tpl');
     }
 
-    /** @throws Exception */
+    /**
+     * @throws Exception 
+     */
     private function getSurchargeCost()
     {
         $orderTotal = (float) $this->context->cart->getOrderTotal();

@@ -28,7 +28,9 @@ class Design extends AbstractHook
         'displayCustomerAccount',
     ];
 
-    /** Module header register scripts and styles. */
+    /**
+     * Module header register scripts and styles. 
+     */
     public function displayHeader(): void
     {
         $this->context->controller->addCSS($this->module->getPath().'views/css/main.css');

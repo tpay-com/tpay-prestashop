@@ -31,10 +31,14 @@ class PendingState implements StateType
     ];
     public $id;
 
-    /** @var string */
+    /**
+     * @var string 
+     */
     private $moduleName;
 
-    /** @var OrderState */
+    /**
+     * @var OrderState 
+     */
     private $orderState;
 
     public function __construct(

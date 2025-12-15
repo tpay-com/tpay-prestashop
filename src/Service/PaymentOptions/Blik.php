@@ -39,19 +39,22 @@ class Blik implements GatewayType
         );
 
         $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
-        Context::getContext()->smarty->assign([
+        Context::getContext()->smarty->assign(
+            [
             'blik_type' => Helper::getMultistoreConfigurationValue('TPAY_BLIK_WIDGET') ? 'widget' : 'redirect',
             'blik_gateway' => $data['id'],
             'blik_moduleLink' => $moduleLink,
             'blik_saved_aliases' => $blikSavedAliases,
             'blik_order_id' => Context::getContext()->cart->id,
             'assets_path' => $module->getPath(),
-        ]);
+            ]
+        );
 
         $paymentOption->setCallToActionText($module->getTranslator()->trans('BLIK', [], 'Modules.Tpay.Shop'))
             ->setAction($moduleLink)
             ->setLogo($data['img'])
-            ->setInputs([
+            ->setInputs(
+                [
                 [
                     'type' => 'hidden',
                     'name' => 'tpay',
@@ -67,7 +70,8 @@ class Blik implements GatewayType
                     'name' => 'tpay_transfer_id',
                     'value' => Config::GATEWAY_BLIK_0,
                 ],
-            ])
+                ]
+            )
             ->setAdditionalInformation(
                 $module->fetch('module:tpay/views/templates/hook/blik.tpl')
             );
