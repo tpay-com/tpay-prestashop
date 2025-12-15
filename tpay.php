@@ -437,6 +437,7 @@ class Tpay extends PaymentModule
 
         if ($clientId && $secretKey) {
             try {
+                /* @phpstan-ignore-next-line */
                 Logger::setLogger(new PsrLogger());
                 $this->api = new TpayApi(
                     new Tpay\OpenApi\Utilities\Cache(null, new PsrCache()),
