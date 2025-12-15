@@ -3,7 +3,6 @@
 namespace Tpay\Service\GenericPayments;
 
 use Configuration as Cfg;
-use PrestaShopBundle\Translation\TranslatorInterface;
 
 class GenericPaymentsManager
 {
@@ -14,10 +13,13 @@ class GenericPaymentsManager
 
     private $activeChannels;
 
-    /** @var TranslatorInterface|null $translator */
+    /**
+     * For 1.7.X => Symfony\Component\Translation\TranslatorInterface
+     * Newer versions => PrestaShopBundle\Translation\TranslatorInterface
+     */
     private $translator;
 
-    public function __construct(array $activeChannels, ?TranslatorInterface $translator)
+    public function __construct(array $activeChannels, $translator = null)
     {
         $this->activeChannels = $activeChannels;
         $this->translator = $translator;
