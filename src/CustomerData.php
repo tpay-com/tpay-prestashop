@@ -16,49 +16,45 @@ declare(strict_types=1);
 
 namespace Tpay;
 
+use AddressCore;
+use Cart;
 use Configuration as Cfg;
+use Context;
+use Customer;
+use Exception;
+use Order;
+use PrestaShopDatabaseException;
+use PrestaShopException;
+use Tools;
 use Tpay\Service\SurchargeService;
 
 class CustomerData
 {
-    /**
-     * @var \AddressCore
-     */
+    /** @var AddressCore */
     private $address;
 
-    /**
-     * @var \Customer
-     */
+    /** @var Customer */
     private $customer;
 
-    /**
-     * @var \Context
-     */
+    /** @var Context */
     private $context;
 
-    /**
-     * @var \Cart
-     */
+    /** @var Cart */
     private $cart;
 
-
     private $customerDetails;
-    /**
-     * @var \Order
-     */
+
+    /** @var Order */
     private $order;
 
-    /**
-     * @throws \Exception
-     */
+    /** @throws Exception */
     public function __construct(
-        \AddressCore $address,
-        \Customer    $customer,
-        \Context     $context,
-        \Cart        $cart,
-        \Order       $order
-    )
-    {
+        AddressCore $address,
+        Customer $customer,
+        Context $context,
+        Cart $cart,
+        Order $order
+    ) {
         $this->address = $address;
         $this->customer = $customer;
         $this->context = $context;
@@ -68,16 +64,15 @@ class CustomerData
         $this->setBasicClient();
     }
 
-
     public function getData()
     {
         return $this->customerDetails;
     }
 
     /**
-     * @throws \PrestaShopDatabaseException
-     * @throws \PrestaShopException
-     * @throws \Exception
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     * @throws Exception
      */
     public function getOrderTotalAmount(): string
     {
@@ -86,64 +81,7 @@ class CustomerData
         $surchargeTotal = $surcharge->getSurchargeValue($orderTotal);
         $total = $orderTotal + $surchargeTotal;
 
-        return (string)$total;
-    }
-
-
-    /**
-     * Create basic client data
-     *
-     * @return void
-     * @throws \Exception
-     */
-    private function setBasicClient(): void
-    {
-        $orderTotal = $this->getOrderTotalAmount();
-        $phoneNumber = (isset($this->address->phone_mobile) && strlen($this->address->phone_mobile) > 3) ? $this->address->phone_mobile : ($this->address->phone ?: '000');
-        $email = $this->context->cookie->email ?? $this->customer->email;
-        $customerFirstName = !empty($this->context->cookie->customer_firstname) ? $this->context->cookie->customer_firstname : $this->customer->firstname;
-        $customerLastName = !empty($this->context->cookie->customer_lastname) ? $this->context->cookie->customer_lastname : $this->customer->lastname;
-
-        $data = [
-            'amount' => number_format(
-                (float)str_replace(
-                    [',', ' ',],
-                    ['.', '',],
-                    (string)$orderTotal
-                ),
-                2,
-                '.',
-                ''
-            ),
-            'hiddenDescription' => $this->createCrc(),
-            'payer' => [
-                'email' => $email,
-                'name' => sprintf(
-                    '%s %s',
-                    $customerFirstName,
-                    $customerLastName
-                ),
-                'phone' => $phoneNumber,
-                'address' => $this->address->address1 . ' ' . $this->address->address2,
-                'code' => $this->address->postcode,
-                'city' => $this->address->city,
-                'country' => 'PL',
-                'ip' => \Tools::getRemoteAddr(),
-                'userAgent' => substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255),
-            ],
-        ];
-
-        if (isset($this->address->vat_number) && strlen($this->address->vat_number) > 1) {
-            $data['payer']['taxId'] = $this->address->vat_number;
-        }
-
-        foreach ($data as $key => $value) {
-            if (empty($value)) {
-                unset($data[$key]);
-            }
-        }
-
-        $this->customerDetails = $data;
+        return (string) $total;
     }
 
     public function createDescription($order = null)
@@ -156,14 +94,13 @@ class CustomerData
         $context->cookie->customer_firstname = $firstName;
         $context->cookie->customer_lastname = $lastName;
 
-        $this->customerDetails['description'] = '#BLIK - ' . $firstName . ' ' . $lastName;
+        $this->customerDetails['description'] = '#BLIK - '.$firstName.' '.$lastName;
 
         if ($order) {
             $reference = $order->reference;
             $this->customerDetails['description'] = $this->getCustomerTitle($reference, $context->cookie);
         }
     }
-
 
     public function createCallbacks($order, $type): void
     {
@@ -174,7 +111,7 @@ class CustomerData
                     'confirmation',
                     [
                         'type' => $type,
-                        'order_id' => $order->id
+                        'order_id' => $order->id,
                     ]
                 ),
                 'error' => $this->context->link->getModuleLink(
@@ -182,7 +119,7 @@ class CustomerData
                     'ordererror',
                     [
                         'type' => $type,
-                        'order_id' => $order->id
+                        'order_id' => $order->id,
                     ]
                 ),
             ],
@@ -197,7 +134,6 @@ class CustomerData
 
         $this->customerDetails['callbacks'] = $data;
     }
-
 
     public function createBlikCallbacks($type): void
     {
@@ -230,32 +166,80 @@ class CustomerData
         $this->customerDetails['callbacks'] = $data;
     }
 
-
     public function getCustomerTitle($reference, $context): string
     {
-        return '#' . $reference . ' - ' . $context->customer_firstname . ' ' . $context->customer_lastname;
+        return '#'.$reference.' - '.$context->customer_firstname.' '.$context->customer_lastname;
     }
 
     /**
-     * Create crc
+     * Create basic client data
      *
-     * @param $context
-     *
-     * @return string
+     * @throws Exception
      */
+    private function setBasicClient(): void
+    {
+        $orderTotal = $this->getOrderTotalAmount();
+        $phoneNumber = (isset($this->address->phone_mobile) && strlen($this->address->phone_mobile) > 3) ? $this->address->phone_mobile : ($this->address->phone ?: '000');
+        $email = $this->context->cookie->email ?? $this->customer->email;
+        $customerFirstName = !empty($this->context->cookie->customer_firstname) ? $this->context->cookie->customer_firstname : $this->customer->firstname;
+        $customerLastName = !empty($this->context->cookie->customer_lastname) ? $this->context->cookie->customer_lastname : $this->customer->lastname;
+
+        $data = [
+            'amount' => number_format(
+                (float) str_replace(
+                    [',', ' '],
+                    ['.', ''],
+                    (string) $orderTotal
+                ),
+                2,
+                '.',
+                ''
+            ),
+            'hiddenDescription' => $this->createCrc(),
+            'payer' => [
+                'email' => $email,
+                'name' => sprintf(
+                    '%s %s',
+                    $customerFirstName,
+                    $customerLastName
+                ),
+                'phone' => $phoneNumber,
+                'address' => $this->address->address1.' '.$this->address->address2,
+                'code' => $this->address->postcode,
+                'city' => $this->address->city,
+                'country' => 'PL',
+                'ip' => Tools::getRemoteAddr(),
+                'userAgent' => substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255),
+            ],
+        ];
+
+        if (isset($this->address->vat_number) && strlen($this->address->vat_number) > 1) {
+            $data['payer']['taxId'] = $this->address->vat_number;
+        }
+
+        foreach ($data as $key => $value) {
+            if (empty($value)) {
+                unset($data[$key]);
+            }
+        }
+
+        $this->customerDetails = $data;
+    }
+
+    /** Create crc */
     private function createCrc(): string
     {
         $order = $this->order;
         $customer = $this->customer;
 
-        switch (\Configuration::get('TPAY_CRC_FORM')) {
+        switch (Cfg::get('TPAY_CRC_FORM')) {
             case 'order_id_and_rest':
-                return $order->id . '-' . md5($customer->secure_key . time());
+                return $order->id.'-'.md5($customer->secure_key.time());
             case 'order_id':
-                return (string)$order->id;
+                return (string) $order->id;
             case 'md5_all':
             default:
-                return md5($order->id . $customer->secure_key . time());
+                return md5($order->id.$customer->secure_key.time());
         }
     }
 }

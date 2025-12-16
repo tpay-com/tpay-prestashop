@@ -1,0 +1,8 @@
+parameters:
+  scanDirectories:
+    - %currentWorkingDirectory%/vendor/stancer/php-stubs-prestashop/stubs/
+  paths:
+    - src
+    - tpay.php
+  level: 1
+

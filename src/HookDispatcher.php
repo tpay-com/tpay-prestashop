@@ -50,11 +50,7 @@ class HookDispatcher
      */
     private $module;
 
-    /**
-     * Init hooks
-     *
-     * @param Tpay $module
-     */
+    /** Init hooks */
     public function __construct(Tpay $module)
     {
         $this->module = $module;
@@ -77,9 +73,6 @@ class HookDispatcher
 
     /**
      * Find hook and dispatch it
-     *
-     * @param string $hookName
-     * @param array $params
      *
      * @return mixed|void
      */

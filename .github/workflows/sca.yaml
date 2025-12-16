@@ -1,40 +1,30 @@
 name: Static code analysis
 
-on:
-  push:
+on: [push]
 
 jobs:
   analyse:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
-          extensions: none, bcmath, curl, dom, fileinfo, gd, iconv, intl, mbstring, pdo_mysql, simplexml, soap, sockets, tokenizer, xsl, xmlwriter, zip, fileinfo
+          extensions: none, bcmath, curl, dom, fileinfo, gd, iconv, intl, mbstring, pdo_mysql, simplexml, soap, sockets, tokenizer, xsl, xml, xmlwriter, zip, fileinfo
           coverage: none
 
       - run: composer validate --strict
-        continue-on-error: true
 
-      - working-directory: .dev-tools
-        run: composer install
+      - run: composer install --no-interaction --prefer-dist
 
-      - working-directory: .dev-tools
-        run: composer normalize --diff --dry-run --indent-size=4 --indent-style=space ../composer.json
+      - run: composer normalize --diff --dry-run --indent-size=4 --indent-style=space
 
-      - working-directory: .dev-tools
-        run: composer cs:fixer -- --dry-run
+      - run: composer cs:fixer -- --dry-run
 
-      - working-directory: .dev-tools
-        run: composer cs:sniffer
-        continue-on-error: true
+      - run: composer cs:sniffer
 
-      - working-directory: .dev-tools
-        run: composer cs:phpstan
-        continue-on-error: true
+      - run: composer cs:phpstan
 
-      - working-directory: .dev-tools
-        run: composer cs:psalm -- --no-progress --shepherd
-        continue-on-error: true
+      - run: composer cs:psalm -- --no-progress --shepherd

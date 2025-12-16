@@ -30,32 +30,18 @@ class CreditCardsRepository
 {
     public const TABLE = 'tpay_credit_card';
 
-    /**
-     * @var Connection the Database connection
-     */
+    /** @var Connection the Database connection */
     private $connection;
 
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
 
-    /**
-     * @var RepositoryQueryHandler
-     */
+    /** @var RepositoryQueryHandler */
     private $repositoryQueryHandler;
 
-    /**
-     * @var string the Database prefix
-     */
+    /** @var string the Database prefix */
     private $dbPrefix;
 
-    /**
-     * @param Connection $connection
-     * @param EntityManager $entityManager
-     * @param RepositoryQueryHandler $repositoryQueryHandler
-     * @param string $dbPrefix
-     */
     public function __construct(
         Connection $connection,
         EntityManager $entityManager,
@@ -71,88 +57,83 @@ class CreditCardsRepository
     /**
      * Get all credit cards by user id
      *
-     * @param $userId
-     *
      * @throws RepositoryException
      * @throws BaseException
-     * @return Statement|int
+     *
+     * @return int|Statement
      */
     public function getAllCreditCardsByUserId($userId)
     {
         if (!$userId) {
-            return null;
+            return;
         }
 
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('*')
-            ->from($this->dbPrefix . self::TABLE, 'cc')
+            ->from($this->dbPrefix.self::TABLE, 'cc')
             ->andWhere('cc.user_id = :userId')
             ->andWhere('cc.card_token != ""')
             ->andWhere('cc.card_token IS NOT NULL')
             ->addOrderBy('cc.date_update', 'DESC');
         $qb->setParameter('userId', $userId);
+
         return $this->repositoryQueryHandler->execute($qb, 'Get credit card by user id', 'fetchAll');
     }
 
     /**
      * Get credit card by card_hash
      *
-     * @param string $cardHash
-     * @param string $crc
-     *
      * @throws BaseException
      * @throws RepositoryException
-     * @return Statement|int
+     *
+     * @return int|Statement
      */
     public function getCreditCardByCardHashAndCrc(string $cardHash, string $crc)
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('*')
-            ->from($this->dbPrefix . self::TABLE, 'cc')
+            ->from($this->dbPrefix.self::TABLE, 'cc')
             ->andWhere('cc.card_hash = :cardHash')
             ->andWhere('cc.crc = :crc');
         $qb->setParameter('cardHash', $cardHash);
         $qb->setParameter('crc', $crc);
+
         return $this->repositoryQueryHandler->execute($qb, 'Get credit card by hash', 'fetchAll');
     }
 
     /**
      * Get credit card by crc
      *
-     * @param string $crc
-     *
      * @throws BaseException
      * @throws RepositoryException
-     * @return Statement|int
+     *
+     * @return int|Statement
      */
     public function getCreditCardTokenByCardCrc(string $crc)
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('card_token')
-            ->from($this->dbPrefix . self::TABLE, 'cc')
+            ->from($this->dbPrefix.self::TABLE, 'cc')
             ->andWhere('cc.crc = :crc');
 
         $qb->setParameter('crc', $crc);
+
         return $this->repositoryQueryHandler->execute($qb, 'Get credit card crc', 'fetchColumn');
     }
 
     /**
      * Delete selected card
      *
-     * @param int $id
-     * @param int $customerId
-     *
-     * @throws RepositoryException|BaseException
-     * @return void
+     * @throws BaseException|RepositoryException
      */
     public function deleteCard(int $id, int $customerId): void
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->delete($this->dbPrefix . self::TABLE)
+            ->delete($this->dbPrefix.self::TABLE)
             ->where('id = :id')
             ->andWhere('user_id = :userId')
             ->setParameter('id', $id)
@@ -163,39 +144,30 @@ class CreditCardsRepository
     /**
      * Update card token after successful transaction
      *
-     * @param string $cardToken
-     * @param string $crc
-     *
-     * @throws RepositoryException|BaseException
-     * @return void
+     * @throws BaseException|RepositoryException
      */
     public function updateToken(string $crc, string $cardToken): void
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix . self::TABLE)
+            ->update($this->dbPrefix.self::TABLE)
             ->set('card_token', ':cardToken')
             ->andWhere('crc = :crc')
             ->setParameter('cardToken', $cardToken)
-            ->setParameter('crc', $crc)
-        ;
+            ->setParameter('crc', $crc);
         $this->repositoryQueryHandler->execute($qb, 'Update token error');
     }
 
     /**
      * Update the card
      *
-     * @param string $cardHash
-     * @param string $crc
-     *
-     * @throws RepositoryException|BaseException
-     * @return void
+     * @throws BaseException|RepositoryException
      */
     public function updateCard(string $cardHash, string $crc): void
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix . self::TABLE)
+            ->update($this->dbPrefix.self::TABLE)
             ->set('date_update', ':dateUpdate')
             ->set('crc', ':crc')
             ->andWhere('card_hash = :cardHash')
@@ -209,15 +181,8 @@ class CreditCardsRepository
     /**
      * Saving the card
      *
-     * @param string $cardVendor
-     * @param string $cardShortCode
-     * @param string $cardHash
-     * @param int $userId
-     * @param string $crc
-     *
      * @throws ORMException
      * @throws OptimisticLockException
-     * @return void
      */
     public function createCard(
         string $cardVendor,

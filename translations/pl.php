@@ -1,7 +1,7 @@
 <?php
 
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{tpay}prestashop>admin_3f984e2e893f87bc9b60d5b3f6867255'] = 'Opłata za płatność online:';
 $_MODULE['<{tpay}prestashop>admin_cd1df4e155d53f355819d9294f6671a1'] = ' będziesz używał środowiska sandbox - jest to środowisko z zaślepionymi bramkami płatności - nie używaj tego na produkcji!';
 $_MODULE['<{tpay}prestashop>admin_273ce967a1174efe9e1fd322497d77f1'] = 'API Client ID';
@@ -200,4 +200,3 @@ $_MODULE['<{tpay}prestashop>shop_b2fe440cb7a0b127f1a90ffea296313b'] = 'zakupów'
 $_MODULE['<{tpay}prestashop>shop_3f6b73e1e263858f57738600f9bd6e7b'] = 'regulamin.';
 $_MODULE['<{tpay}prestashop>shop_a5c8678e9c1b744aef522eabe1e68350'] = 'Tpay';
 $_MODULE['<{tpay}prestashop>shop_2ff79200db441562e7d86856650838a5'] = 'akceptujesz regulamin.';
-

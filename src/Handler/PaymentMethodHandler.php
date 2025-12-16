@@ -16,14 +16,20 @@ declare(strict_types=1);
 
 namespace Tpay\Handler;
 
+use Context;
+use Customer;
+use Order;
+use Tpay;
+
 interface PaymentMethodHandler
 {
     public function getName(): string;
+
     public function createPayment(
-        \Tpay $module,
-        \Order $order,
-        \Customer $customer,
-        \Context $context,
+        Tpay $module,
+        Order $order,
+        Customer $customer,
+        Context $context,
         array $clientData,
         array $data
     );

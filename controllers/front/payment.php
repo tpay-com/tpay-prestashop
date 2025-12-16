@@ -1,17 +1,5 @@
 <?php
 
-/**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
- *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
- */
-
 use Configuration as Cfg;
 use Tpay\Config\Config;
 use Tpay\Factory\PaymentFactory;
@@ -25,9 +13,7 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
     public $data;
     public $display_column_left = false;
 
-    /**
-     * @throws PrestaShopException
-     */
+    /** @throws PrestaShopException */
     public function initContent()
     {
         parent::initContent();
@@ -42,7 +28,7 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
 
         if (true === $cart->orderExists()) {
             exit(
-            $this->trans('Cart cannot be loaded or an order has already been placed using this cart', [], 'Modules.Tpay.Shop')
+                $this->trans('Cart cannot be loaded or an order has already been placed using this cart', [], 'Modules.Tpay.Shop')
             );
         }
 
@@ -59,7 +45,7 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
             $cart
         );
 
-        $this->setTemplate(Config::TPAY_PATH . '/redirect.tpl');
+        $this->setTemplate(Config::TPAY_PATH.'/redirect.tpl');
     }
 
     private function processPayment($orderTotal, $customer, $cart)
@@ -82,29 +68,24 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
                 $this->data
             );
             $controller->get();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             ExceptionHandler::handle($e);
         }
     }
 
     /**
      * Validate current order
-     *
-     * @param float $orderTotal
-     * @param $customer
-     *
-     * @return void
      */
     private function validateUserOrder(float $orderTotal, $customer): void
     {
         $this->module->validateOrder(
-            (int)$this->module->getContext()->cart->id,
-            (int)Cfg::get('TPAY_PENDING'),
+            (int) $this->module->getContext()->cart->id,
+            (int) Cfg::get('TPAY_PENDING'),
             $orderTotal,
             $this->module->displayName,
             null,
             [],
-            (int)$this->module->getContext()->currency->id,
+            (int) $this->module->getContext()->currency->id,
             $customer->isGuest() ? 0 : 1,
             $customer->secure_key
         );
@@ -115,7 +96,8 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
         $surcharge = new SurchargeService();
         $orderTotal = $cart->getOrderTotal();
         $surchargeTotal = $surcharge->getSurchargeValue($orderTotal);
-        return (float)$orderTotal + $surchargeTotal;
+
+        return (float) $orderTotal + $surchargeTotal;
     }
 
     private function updateLang(Cart $cart): void

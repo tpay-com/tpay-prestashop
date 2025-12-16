@@ -1,23 +1,11 @@
 <?php
-/**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
- *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
- */
+
 use Tpay\Config\Config;
 use Tpay\Handler\ExceptionHandler;
 
 class TpayConfirmationModuleFrontController extends ModuleFrontController
 {
-    /**
-     * @throws PrestaShopException
-     */
+    /** @throws PrestaShopException */
     public function initContent()
     {
         $type = Tools::getValue('type');
@@ -29,25 +17,24 @@ class TpayConfirmationModuleFrontController extends ModuleFrontController
                 $this->confirmPaymentBasic();
                 break;
             default:
-                \PrestaShopLogger::addLog('Incorrect payment type', 3);
-                throw new \PrestaShopException('Incorrect payment type');
+                PrestaShopLogger::addLog('Incorrect payment type', 3);
+                throw new PrestaShopException('Incorrect payment type');
         }
 
-        $this->setTemplate(Config::TPAY_PATH . '/redirect.tpl');
+        $this->setTemplate(Config::TPAY_PATH.'/redirect.tpl');
     }
 
     private function confirmPaymentBasic(): void
     {
         try {
-            $orderId = (int)Tools::getValue('order_id');
+            $orderId = (int) Tools::getValue('order_id');
 
-            if ($orderId === 0) {
-                throw new \Exception('No order exist in Tpay table for the specified crc');
+            if (0 === $orderId) {
+                throw new Exception('No order exist in Tpay table for the specified crc');
             }
 
             $this->redirectSuccess($orderId);
-
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             ExceptionHandler::handle($e);
         }
     }
@@ -59,8 +46,8 @@ class TpayConfirmationModuleFrontController extends ModuleFrontController
         $customer = new Customer($order->id_customer);
 
         Tools::redirect(
-            'index.php?controller=order-confirmation&id_cart=' . (int)$cart->id . '&id_module=' .
-            (int)$this->module->id . '&id_order=' . $order->id . '&key=' . $customer->secure_key
+            'index.php?controller=order-confirmation&id_cart='.(int) $cart->id.'&id_module='
+            .(int) $this->module->id.'&id_order='.$order->id.'&key='.$customer->secure_key
         );
     }
 }

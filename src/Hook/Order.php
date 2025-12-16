@@ -17,11 +17,11 @@ declare(strict_types=1);
 namespace Tpay\Hook;
 
 use Cart;
-use Tools;
-use Order as PrestaOrder;
 use Currency;
 use Exception;
+use Order as PrestaOrder;
 use PrestaShopException;
+use Tools;
 use Tpay\OpenApi\Utilities\Util;
 
 class Order extends AbstractHook
@@ -35,9 +35,6 @@ class Order extends AbstractHook
     /**
      * Hook display order detail.
      *
-     * @param $params
-     *
-     * @return string
      * @throws Exception
      */
     public function displayOrderDetail($params): string
@@ -48,9 +45,6 @@ class Order extends AbstractHook
     /**
      * Hook display order confirmation.
      *
-     * @param $params
-     *
-     * @return string
      * @throws Exception
      */
     public function displayOrderConfirmation($params): string
@@ -59,43 +53,12 @@ class Order extends AbstractHook
     }
 
     /**
-     * @throws Exception
-     */
-    private function getSurchargeSmartyTemplate($params = []): string
-    {
-        if (!isset($params['order']) || $params['order']->module !== 'tpay') {
-            return '';
-        }
-
-        $orderId = $params['order']->id;
-        $order = new PrestaOrder($orderId);
-        $currency = new Currency($order->id_currency);
-        $surchargeService = $this->module->getService('tpay.service.surcharge');
-        $transactionService = $this->module->getService('tpay.repository.transaction');
-
-        if ($surchargeService->hasOrderSurcharge($transactionService, $orderId)) {
-            $surchargeValue = $surchargeService->getOrderSurcharge($transactionService, $orderId);
-            if ($surchargeValue > 0.00) {
-                $this->context->smarty->assign(
-                    [
-                        'surcharge_title' => $this->module->getTranslator()->trans('Online payment fee', [], 'Modules.Tpay.Shop'),
-                        'surcharge_cost' => Util::numberFormat($surchargeValue) . ' ' . $currency->getSign(),
-                    ]
-                );
-                return $this->module->fetch('module:tpay/views/templates/hook/orderConfirmationSurcharge.tpl');
-            }
-        }
-
-        return '';
-    }
-
-    /**
      * @throws PrestaShopException
      * @throws Exception
      */
     public function actionValidateOrder($params)
     {
-        if ($params['order']->module !== 'tpay') {
+        if ('tpay' !== $params['order']->module) {
             return;
         }
 
@@ -118,11 +81,12 @@ class Order extends AbstractHook
 
     /**
      * Add a surcharge to a created order
+     *
      * @throws PrestaShopException
      */
     public function addSurchargeToOrderCreated($surchargeValue, $order, $cart)
     {
-        if (!$order instanceof \Order) {
+        if (!$order instanceof PrestaOrder) {
             return;
         }
         $computePresicion = 2;
@@ -155,5 +119,37 @@ class Order extends AbstractHook
         );
 
         $order->update();
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getSurchargeSmartyTemplate($params = []): string
+    {
+        if (!isset($params['order']) || 'tpay' !== $params['order']->module) {
+            return '';
+        }
+
+        $orderId = $params['order']->id;
+        $order = new PrestaOrder($orderId);
+        $currency = new Currency($order->id_currency);
+        $surchargeService = $this->module->getService('tpay.service.surcharge');
+        $transactionService = $this->module->getService('tpay.repository.transaction');
+
+        if ($surchargeService->hasOrderSurcharge($transactionService, $orderId)) {
+            $surchargeValue = $surchargeService->getOrderSurcharge($transactionService, $orderId);
+            if ($surchargeValue > 0.00) {
+                $this->context->smarty->assign(
+                    [
+                        'surcharge_title' => $this->module->getTranslator()->trans('Online payment fee', [], 'Modules.Tpay.Shop'),
+                        'surcharge_cost' => Util::numberFormat($surchargeValue).' '.$currency->getSign(),
+                    ]
+                );
+
+                return $this->module->fetch('module:tpay/views/templates/hook/orderConfirmationSurcharge.tpl');
+            }
+        }
+
+        return '';
     }
 }

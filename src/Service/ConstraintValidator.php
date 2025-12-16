@@ -2,12 +2,14 @@
 
 namespace Tpay\Service;
 
+use Tpay;
+
 class ConstraintValidator
 {
-    /** @var SurchargeService|null */
+    /** @var null|SurchargeService */
     protected $surchargeService;
 
-    public function __construct(\Tpay $module)
+    public function __construct(Tpay $module)
     {
         $this->surchargeService = $module->getService('tpay.service.surcharge');
     }
@@ -55,10 +57,6 @@ class ConstraintValidator
 
     private function isApplePayPossible(string $browserSupport, string $browser): bool
     {
-        if ('ApplePaySession' == $browserSupport && 'Safari' == $browser) {
-            return true;
-        }
-
-        return false;
+        return (bool) ('ApplePaySession' == $browserSupport && 'Safari' == $browser);
     }
 }

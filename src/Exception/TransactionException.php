@@ -16,7 +16,9 @@ declare(strict_types=1);
 
 namespace Tpay\Exception;
 
-class TransactionException extends \Exception
+use Exception;
+
+class TransactionException extends Exception
 {
     public static function unableToCreateTransaction(array $data): self
     {

@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace Tpay\Handler;
 
+use Context;
+use Customer;
+use Order;
+use Tpay;
 use Tpay\Exception\PaymentException;
 use Tpay\Exception\TransactionException;
 
 class InstantPaymentHandler extends BasicPaymentHandler
 {
     public function createPayment(
-        \Tpay $module,
-        \Order $order,
-        \Customer $customer,
-        \Context $context,
+        Tpay $module,
+        Order $order,
+        Customer $customer,
+        Context $context,
         array $clientData,
         array $data
     ): void {
@@ -27,9 +31,8 @@ class InstantPaymentHandler extends BasicPaymentHandler
 
         $this->initTransactionProcess($transaction, $this->module->currentOrder);
 
-
         throw new PaymentException(
-            'Unable to create payment method. Response: ' . json_encode($transaction)
+            'Unable to create payment method. Response: '.json_encode($transaction)
         );
     }
 

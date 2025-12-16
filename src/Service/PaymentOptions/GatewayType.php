@@ -17,11 +17,12 @@ declare(strict_types=1);
 namespace Tpay\Service\PaymentOptions;
 
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
+use Tpay;
 
 interface GatewayType
 {
     public function getPaymentOption(
-        \Tpay $module,
+        Tpay $module,
         PaymentOption $paymentOption,
         array $data = []
     ): PaymentOption;

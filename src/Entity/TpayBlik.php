@@ -19,8 +19,9 @@ namespace Tpay\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table()
- * @ORM\Entity()
+ * @ORM\Table
+ *
+ * @ORM\Entity
  */
 class TpayBlik
 {
@@ -28,7 +29,9 @@ class TpayBlik
      * @var int
      *
      * @ORM\Id
+     *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -55,33 +58,21 @@ class TpayBlik
         $this->alias = $alias;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
     public function getUserId(): int
     {
         return $this->userId;
     }
 
-    /**
-     * @return string
-     */
     public function getAlias(): string
     {
         return $this->alias;
     }
 
-    /**
-     * @param string $alias
-     */
     public function setAlias(string $alias)
     {
         $this->alias = $alias;

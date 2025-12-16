@@ -1,17 +1,5 @@
 <?php
 
-/**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
- *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
- */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -20,12 +8,9 @@ class TpaySavedCardsModuleFrontController extends ModuleFrontController
 {
     public $ssl = true;
     public $auth = true;
-
     private $repositoryCreditCard;
 
-    /**
-     * @throws PrestaShopException
-     */
+    /** @throws PrestaShopException */
     public function initContent()
     {
         parent::initContent();
@@ -36,7 +21,7 @@ class TpaySavedCardsModuleFrontController extends ModuleFrontController
             Tools::redirect('index.php');
         }
 
-        if (Tools::getValue('action') === 'delete') {
+        if ('delete' === Tools::getValue('action')) {
             $id = (int) Tools::getValue('id');
             $this->deleteCard($id);
         }
@@ -47,16 +32,15 @@ class TpaySavedCardsModuleFrontController extends ModuleFrontController
         $this->setTemplate('module:tpay/views/templates/front/accountCreditCardsPage.tpl');
     }
 
-    /**
-     * @throws PrestaShopException
-     */
+    /** @throws PrestaShopException */
     public function displayAjaxDeleteCard()
     {
         $id = (int) Tools::getValue('id');
         $customerId = (int) $this->context->customer->id;
 
         if (!$id || !$customerId) {
-            \PrestaShopLogger::addLog('No delete card', 3);
+            PrestaShopLogger::addLog('No delete card', 3);
+
             return;
         }
 

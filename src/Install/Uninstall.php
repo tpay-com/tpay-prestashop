@@ -22,14 +22,10 @@ use Tpay\Handler\InstallQueryHandler;
 
 class Uninstall
 {
-    /**
-     * @var Tpay
-     */
+    /** @var Tpay */
     private $module;
 
-    /**
-     * @var InstallQueryHandler
-     */
+    /** @var InstallQueryHandler */
     private $installQueryHandler;
 
     public function __construct(
@@ -44,10 +40,9 @@ class Uninstall
      * Deleting sql data
      *
      * @throws BaseException
-     * @return bool
      */
     public function uninstallDb(): bool
     {
-        return $this->installQueryHandler->execute($this->module->getLocalPath() . 'src/Install/uninstall.sql') && (new Reset())->resetDb();
+        return $this->installQueryHandler->execute($this->module->getLocalPath().'src/Install/uninstall.sql') && (new Reset())->resetDb();
     }
 }

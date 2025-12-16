@@ -1,0 +1,33 @@
+<?xml version='1.0'?>
+<psalm errorLevel='7'
+       resolveFromConfigFile='true'
+       xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+       xmlns='https://getpsalm.org/schema/config'
+       xsi:schemaLocation='https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd'
+       findUnusedBaselineEntry='true'
+       findUnusedCode='false'
+>
+    <stubs>
+        <file name="vendor/stancer/php-stubs-prestashop/stubs/config/alias.php"/>
+        <file name="vendor/stancer/php-stubs-prestashop/stubs/config/autoload.php"/>
+        <file name="vendor/stancer/php-stubs-prestashop/stubs/config/bootstrap.php"/>
+        <file name="vendor/stancer/php-stubs-prestashop/stubs/config/config.inc.php"/>
+        <file name="vendor/stancer/php-stubs-prestashop/stubs/config/defines.inc.php"/>
+        <file name="vendor/stancer/php-stubs-prestashop/stubs/config/defines_uri.inc.php"/>
+    </stubs>
+    <extraFiles>
+        <directory name="vendor/stancer/php-stubs-prestashop/stubs/" />
+    </extraFiles>
+    <projectFiles>
+        <directory name='./' />
+        <ignoreFiles>
+            <directory name='vendor' />
+        </ignoreFiles>
+    </projectFiles>
+
+    <issueHandlers>
+        <MethodSignatureMismatch errorLevel='suppress' />
+        <UndefinedClass errorLevel='suppress' />
+        <InvalidGlobal errorLevel="suppress"/>
+    </issueHandlers>
+</psalm>
