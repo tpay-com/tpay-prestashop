@@ -16,16 +16,16 @@ declare(strict_types=1);
 
 namespace Tpay\Handler;
 
+use Exception;
 use PrestaShopException;
+use PrestaShopLogger;
 
 class ExceptionHandler
 {
-    /**
-     * @throws PrestaShopException
-     */
-    public static function handle(\Exception $e): void
+    /** @throws PrestaShopException */
+    public static function handle(Exception $e): void
     {
-        \PrestaShopLogger::addLog($e->getMessage(), 3);
+        PrestaShopLogger::addLog($e->getMessage(), 3);
         throw new PrestaShopException($e->getMessage());
     }
 }

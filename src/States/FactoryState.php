@@ -17,41 +17,40 @@ declare(strict_types=1);
 namespace Tpay\States;
 
 use Configuration as Cfg;
+use Db;
+use Exception;
+use Language;
 use OrderState;
+use Shop;
+use Tools;
+use Tpay;
 
 class FactoryState
 {
-    /**
-     * @var \Tpay
-     */
+    /** @var Tpay */
     private $module;
-    /**
-     * @var OrderState
-     */
+
+    /** @var OrderState */
     private $orderState;
 
     public function __construct(
-        \Tpay $module,
+        Tpay $module,
         OrderState $orderState
     ) {
         $this->module = $module;
         $this->orderState = $orderState;
     }
 
-
     public function getStatusTypes(): array
     {
         return [
             'pending',
             'confirmed',
-            'error'
+            'error',
         ];
     }
 
-    /**
-     * Get all states by configuration
-     * @return array
-     */
+    /** Get all states by configuration */
     public function getAllStatuses(): array
     {
         if (Cfg::get('TPAY_PENDING')) {
@@ -76,13 +75,12 @@ class FactoryState
     /**
      * Create states
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute(): void
     {
         if (!empty($this->getStatusTypes())) {
             foreach ($this->getStatusTypes() as $type) {
-
                 $status = $this->statusBuilder(
                     $type,
                     new OrderState()
@@ -93,31 +91,27 @@ class FactoryState
                 }
 
                 $this->assignConfiguration($status, $type);
-
             }
         }
     }
-
 
     public function assignConfiguration($state, $name)
     {
-        $nameUpper = 'TPAY_' . \Tools::strtoupper($name);
+        $nameUpper = 'TPAY_'.Tools::strtoupper($name);
 
-
-        if (\Shop::isFeatureActive()) {
-            $shops = \Shop::getCompleteListOfShopsID();
+        if (Shop::isFeatureActive()) {
+            $shops = Shop::getCompleteListOfShopsID();
 
             foreach ($shops as $shop) {
-                \Configuration::updateValue($nameUpper, $state->id, false, null, (int)$shop);
+                Cfg::updateValue($nameUpper, $state->id, false, null, (int) $shop);
             }
         }
 
-        \Configuration::updateGlobalValue($nameUpper, $state->id);
+        Cfg::updateGlobalValue($nameUpper, $state->id);
     }
 
-
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function statusBuilder(string $type, OrderState $orderState, $moduleName = 'tpay')
     {
@@ -132,26 +126,23 @@ class FactoryState
                 $state = new ConfirmedState($orderState, $moduleName);
                 break;
             default:
-                throw new \Exception("Incorrect type when creating status for orders");
+                throw new Exception('Incorrect type when creating status for orders');
         }
+
         return $state;
     }
 
-
-
     /**
      * Checks if the status is available
-     * @return bool
      */
     public function statusAvailable($names): bool
     {
         if (!empty($names->stateLanguage)) {
-            foreach (\Language::getLanguages() as $lang) {
-
+            foreach (Language::getLanguages() as $lang) {
                 return $this->existsLocalizedNameInDatabase(
                     $names->stateLanguage[$lang['iso_code']] ?? $names->stateLanguage['en'],
-                    (int)$lang['id_lang'],
-                    \Tools::getIsset('id_order_state') ? (int)\Tools::getValue('id_order_state') : null
+                    (int) $lang['id_lang'],
+                    Tools::getIsset('id_order_state') ? (int) Tools::getValue('id_order_state') : null
                 );
             }
         }
@@ -159,21 +150,20 @@ class FactoryState
         return false;
     }
 
-
     private function existsLocalizedNameInDatabase($name, $idLang, $excludeIdOrderState): bool
     {
-        if(method_exists(OrderState::class, 'existsLocalizedNameInDatabase')){
+        if (method_exists(OrderState::class, 'existsLocalizedNameInDatabase')) {
             return OrderState::existsLocalizedNameInDatabase($name, $idLang, $excludeIdOrderState);
         }
 
-        return (bool) \Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
-            'SELECT COUNT(*) AS count' .
-            ' FROM ' . _DB_PREFIX_ . 'order_state_lang osl' .
-            ' INNER JOIN ' . _DB_PREFIX_ . 'order_state os ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = ' . $idLang . ')' .
-            ' WHERE osl.id_lang = ' . $idLang .
-            ' AND osl.name =  \'' . pSQL($name) . '\'' .
-            ' AND os.deleted = 0' .
-            ($excludeIdOrderState ? ' AND osl.id_order_state != ' . $excludeIdOrderState : '')
+        return (bool) Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
+            'SELECT COUNT(*) AS count'
+            .' FROM '._DB_PREFIX_.'order_state_lang osl'
+            .' INNER JOIN '._DB_PREFIX_.'order_state os ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.$idLang.')'
+            .' WHERE osl.id_lang = '.$idLang
+            .' AND osl.name =  \''.pSQL($name).'\''
+            .' AND os.deleted = 0'
+            .($excludeIdOrderState ? ' AND osl.id_order_state != '.$excludeIdOrderState : '')
         );
     }
 }

@@ -16,20 +16,11 @@ declare(strict_types=1);
 
 namespace Tpay\States;
 
+use Language;
 use OrderState;
 
 class ErrorState implements StateType
 {
-    /**
-     * @var string
-     */
-    private $moduleName;
-
-    /**
-     * @var OrderState
-     */
-    private $orderState;
-
     public $stateLanguage = [
         'pl' => 'Błąd płatności (Tpay)',
         'en' => 'Error payment (Tpay)',
@@ -38,8 +29,13 @@ class ErrorState implements StateType
         'cz' => 'Chybná platba (Tpay)',
         'sk' => 'Chybná platba (Tpay)',
     ];
-
     public $id;
+
+    /** @var string */
+    private $moduleName;
+
+    /** @var OrderState */
+    private $orderState;
 
     public function __construct(
         OrderState $orderState,
@@ -49,14 +45,11 @@ class ErrorState implements StateType
         $this->orderState = $orderState;
     }
 
-    /**
-     * @return OrderState
-     */
     public function create(): OrderState
     {
         $name = [];
 
-        foreach (\Language::getLanguages() as $lang) {
+        foreach (Language::getLanguages() as $lang) {
             $name[$lang['id_lang']] = $this->stateLanguage[$lang['iso_code']]
                 ?? $this->stateLanguage['pl'];
         }

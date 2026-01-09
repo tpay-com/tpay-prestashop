@@ -23,14 +23,10 @@ abstract class AbstractHook
 {
     public const AVAILABLE_HOOKS = [];
 
-    /**
-     * @var Tpay
-     */
+    /** @var Tpay */
     protected $module;
 
-    /**
-     * @var Context
-     */
+    /** @var Context */
     protected $context;
 
     public function __construct(Tpay $module)
@@ -39,9 +35,6 @@ abstract class AbstractHook
         $this->context = $module->getContext();
     }
 
-    /**
-     * @return array
-     */
     public function getAvailableHooks(): array
     {
         return static::AVAILABLE_HOOKS;

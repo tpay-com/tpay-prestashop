@@ -1,17 +1,5 @@
 <?php
 
-/**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
- *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
- */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -25,6 +13,7 @@ use Tpay\Util\Helper;
 class TpayConfigurationController extends ModuleAdminController
 {
     public const SEPARATE_PAYMENT_INFO = 'Show the method as a separate payment';
+
     public $configuration = [];
     public $channels = [];
 
@@ -36,7 +25,7 @@ class TpayConfigurationController extends ModuleAdminController
         parent::__construct();
 
         $this->bootstrap = true;
-        $lang = new Language((int)Cfg::get('PS_LANG_DEFAULT'));
+        $lang = new Language((int) Cfg::get('PS_LANG_DEFAULT'));
 
         if (!$this->module->active) {
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminHome'));
@@ -50,15 +39,15 @@ class TpayConfigurationController extends ModuleAdminController
         foreach (Helper::getFields() as $field) {
             $value = Tools::getValue($field, Cfg::get($field));
 
-            if ($field == "TPAY_MERCHANT_SECRET") {
+            if ('TPAY_MERCHANT_SECRET' == $field) {
                 $value = html_entity_decode($value);
             }
 
-            if ($field == 'TPAY_GENERIC_PAYMENTS[]') {
+            if ('TPAY_GENERIC_PAYMENTS[]' == $field) {
                 $value = json_decode(Cfg::get('TPAY_GENERIC_PAYMENTS'), true);
             }
 
-            if ($field == 'TPAY_CUSTOM_ORDER[]') {
+            if ('TPAY_CUSTOM_ORDER[]' == $field) {
                 $value = json_decode(Cfg::get('TPAY_CUSTOM_ORDER'), true);
             }
 
@@ -86,32 +75,6 @@ class TpayConfigurationController extends ModuleAdminController
         $this->module->clearCache();
 
         return $content;
-    }
-
-    protected function getWarningMultishopHtml()
-    {
-        if (Shop::getContext() == Shop::CONTEXT_GROUP) {
-            return '<p class="alert alert-warning">' .
-                $this->trans(
-                    'You cannot manage from a "Group Shop" context, select directly the shop you want to edit', [], 'Modules.Tpay.Admin'
-                ) .
-                '</p>';
-        } else {
-            return '';
-        }
-    }
-
-    protected function contextIsGroup(): bool
-    {
-        $res = false;
-
-        if (Shop::isFeatureActive()) {
-            if (Shop::getContext() == Shop::CONTEXT_GROUP) {
-                $res = true;
-            }
-        }
-
-        return $res;
     }
 
     public function createForm(): array
@@ -158,7 +121,9 @@ class TpayConfigurationController extends ModuleAdminController
         if (Tools::getValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE')) {
             if (empty(Tools::getValue('TPAY_MERCHANT_ID'))) {
                 $this->errors['merchant_id'] = $this->trans(
-                    'When the installment simulator is enabled, the merchant ID field must be filled in', [], 'Modules.Tpay.Admin'
+                    'When the installment simulator is enabled, the merchant ID field must be filled in',
+                    [],
+                    'Modules.Tpay.Admin'
                 );
                 $res = false;
             }
@@ -168,7 +133,9 @@ class TpayConfigurationController extends ModuleAdminController
             $val = Tools::getValue('TPAY_AUTO_CANCEL_DAYS');
             if ($val > 30 || $val < 1) {
                 $this->errors['auto_cancel'] = $this->trans(
-                    'Auto cancel should be in range 1 - 30', [], 'Modules.Tpay.Admin'
+                    'Auto cancel should be in range 1 - 30',
+                    [],
+                    'Modules.Tpay.Admin'
                 );
                 $res = false;
             }
@@ -179,7 +146,7 @@ class TpayConfigurationController extends ModuleAdminController
 
     public function postProcess()
     {
-        if (Tools::isSubmit('submit' . $this->module->name)) {
+        if (Tools::isSubmit('submit'.$this->module->name)) {
             try {
                 if (!$this->validatePostProcess()) {
                     return false;
@@ -203,9 +170,9 @@ class TpayConfigurationController extends ModuleAdminController
                     echo $output;
 
                     return false;
-                } else {
-                    return true;
                 }
+
+                return true;
             } catch (Exception $exception) {
                 PrestaShopLogger::addLog($exception->getMessage(), 3);
                 $this->errors[] = $this->trans('Settings not saved', [], 'Modules.Tpay.Admin');
@@ -215,7 +182,7 @@ class TpayConfigurationController extends ModuleAdminController
 
     public function displayForm(): string
     {
-        $langId = (int)Cfg::get('PS_LANG_DEFAULT');
+        $langId = (int) Cfg::get('PS_LANG_DEFAULT');
         $helper = new HelperForm();
 
         $fields_form = $this->createForm();
@@ -238,9 +205,37 @@ class TpayConfigurationController extends ModuleAdminController
         $helper->title = $this->module->displayName;
         $helper->show_toolbar = true;
         $helper->toolbar_scroll = true;
-        $helper->submit_action = 'submit' . $this->module->name;
+        $helper->submit_action = 'submit'.$this->module->name;
 
         return $helper->generateForm($fields_form);
+    }
+
+    protected function getWarningMultishopHtml()
+    {
+        if (Shop::CONTEXT_GROUP == Shop::getContext()) {
+            return '<p class="alert alert-warning">'
+                .$this->trans(
+                    'You cannot manage from a "Group Shop" context, select directly the shop you want to edit',
+                    [],
+                    'Modules.Tpay.Admin'
+                )
+                .'</p>';
+        }
+
+        return '';
+    }
+
+    protected function contextIsGroup(): bool
+    {
+        $res = false;
+
+        if (Shop::isFeatureActive()) {
+            if (Shop::CONTEXT_GROUP == Shop::getContext()) {
+                $res = true;
+            }
+        }
+
+        return $res;
     }
 
     private function getChannels()

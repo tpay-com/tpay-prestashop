@@ -16,7 +16,10 @@ declare(strict_types=1);
 
 namespace Tpay\Service;
 
+use Cart;
 use Configuration as Cfg;
+use Context;
+use Exception;
 use Tpay\Config\Config;
 
 class SurchargeService
@@ -26,8 +29,7 @@ class SurchargeService
      *
      * @param null $orderTotal
      *
-     * @throws \Exception
-     * @return float
+     * @throws Exception
      */
     public function getSurchargeValue($orderTotal = null): float
     {
@@ -36,8 +38,8 @@ class SurchargeService
         }
 
         if (!$orderTotal) {
-            $cart = \Context::getContext()->cart;
-            $orderTotal = (float) $cart->getOrderTotal(true, \Cart::BOTH);
+            $cart = Context::getContext()->cart;
+            $orderTotal = (float) $cart->getOrderTotal(true, Cart::BOTH);
         }
 
         $surchargeValue = $this->parseSurchargeValue();
@@ -48,41 +50,33 @@ class SurchargeService
         } else {
             $surcharge = $surchargeValue;
         }
+
         return $surcharge;
     }
 
-    /**
-     * @throws \Exception
-     */
+    /** @throws Exception */
     public function getTotalOrderAndSurchargeCost()
     {
-        $cart = \Context::getContext()->cart;
-        $orderTotal = (float) $cart->getOrderTotal(true, \Cart::BOTH);
+        $cart = Context::getContext()->cart;
+        $orderTotal = (float) $cart->getOrderTotal(true, Cart::BOTH);
         $surcharge = $this->getSurchargeValue();
 
         return (float) ($orderTotal + $surcharge);
     }
 
-
-
-
     public function activeSurcharge(): bool
     {
         $surchargeActive = (bool) Cfg::get('TPAY_SURCHARGE_ACTIVE');
-        if (!$surchargeActive || $this->parseSurchargeValue() <= 0.00) {
-            return false;
-        }
 
-        return true;
+        return !(!$surchargeActive || $this->parseSurchargeValue() <= 0.00);
     }
-
 
     public function getOrderSurcharge($repository, $orderId): float
     {
         $surcharge = $repository->getSurchargeValueByOrderId($orderId);
+
         return (float) $surcharge;
     }
-
 
     public function hasOrderSurcharge($repository, $orderId): bool
     {
@@ -91,10 +85,10 @@ class SurchargeService
 
     private function parseSurchargeValue()
     {
-        return (float)number_format(
-            (float)str_replace(
-                [',', ' ',],
-                ['.', '',],
+        return (float) number_format(
+            (float) str_replace(
+                [',', ' '],
+                ['.', ''],
                 Cfg::get('TPAY_SURCHARGE_VALUE')
             ),
             2,

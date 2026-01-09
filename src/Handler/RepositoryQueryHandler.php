@@ -16,21 +16,20 @@ declare(strict_types=1);
 
 namespace Tpay\Handler;
 
-use Tpay\Exception\BaseException;
-use Tpay\Exception\RepositoryException;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Exception;
+use PrestaShopLogger;
+use Tpay\Exception\BaseException;
+use Tpay\Exception\RepositoryException;
 
 class RepositoryQueryHandler
 {
     /**
-     * @param QueryBuilder $qb
-     * @param string $errorPrefix
-     * @param string $type
-     *
-     * @return Statement|int
      * @throws BaseException
      * @throws RepositoryException
+     *
+     * @return int|Statement
      */
     public function execute(QueryBuilder $qb, string $errorPrefix = 'SQL error', string $type = '')
     {
@@ -64,15 +63,15 @@ class RepositoryQueryHandler
                         $statement = $qb->execute();
                 }
             }
-        } catch (\Exception $exception) {
-            \PrestaShopLogger::addLog($exception->getMessage(), 3);
+        } catch (Exception $exception) {
+            PrestaShopLogger::addLog($exception->getMessage(), 3);
             throw new BaseException($exception->getMessage());
         }
 
         if (method_exists(Statement::class, 'errorInfo')) {
             if ($statement instanceof Statement && !empty($statement->errorInfo())) {
-                \PrestaShopLogger::addLog($errorPrefix, 3);
-                throw new RepositoryException($errorPrefix . ': ' . var_export($statement->errorInfo(), true));
+                PrestaShopLogger::addLog($errorPrefix, 3);
+                throw new RepositoryException($errorPrefix.': '.var_export($statement->errorInfo(), true));
             }
         }
 

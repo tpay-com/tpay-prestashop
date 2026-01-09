@@ -16,9 +16,10 @@ declare(strict_types=1);
 
 namespace Tpay\Service\PaymentOptions;
 
-use Tpay\Config\Config;
 use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
+use Tpay;
+use Tpay\Config\Config;
 use Tpay\Util\Helper;
 
 class Blik implements GatewayType
@@ -26,7 +27,7 @@ class Blik implements GatewayType
     private $method;
 
     public function getPaymentOption(
-        \Tpay $module,
+        Tpay $module,
         PaymentOption $paymentOption,
         array $data = []
     ): PaymentOption {
@@ -34,40 +35,43 @@ class Blik implements GatewayType
 
         $blikSavedAliases = $this->getSavedBlikAliases(
             $module,
-            \Context::getContext()->customer->id
+            Context::getContext()->customer->id
         );
 
-
         $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
-        Context::getContext()->smarty->assign([
-            'blik_type' => Helper::getMultistoreConfigurationValue('TPAY_BLIK_WIDGET') ? 'widget' : 'redirect',
-            'blik_gateway' => $data['id'],
-            'blik_moduleLink' => $moduleLink,
-            'blik_saved_aliases' => $blikSavedAliases,
-            'blik_order_id' => \Context::getContext()->cart->id,
-            'assets_path' => $module->getPath(),
-        ]);
+        Context::getContext()->smarty->assign(
+            [
+                'blik_type' => Helper::getMultistoreConfigurationValue('TPAY_BLIK_WIDGET') ? 'widget' : 'redirect',
+                'blik_gateway' => $data['id'],
+                'blik_moduleLink' => $moduleLink,
+                'blik_saved_aliases' => $blikSavedAliases,
+                'blik_order_id' => Context::getContext()->cart->id,
+                'assets_path' => $module->getPath(),
+            ]
+        );
 
         $paymentOption->setCallToActionText($module->getTranslator()->trans('BLIK', [], 'Modules.Tpay.Shop'))
             ->setAction($moduleLink)
             ->setLogo($data['img'])
-            ->setInputs([
+            ->setInputs(
                 [
-                    'type' => 'hidden',
-                    'name' => 'tpay',
-                    'value' => true,
-                ],
-                [
-                    'type' => 'hidden',
-                    'name' => 'type',
-                    'value' => Config::TPAY_PAYMENT_BLIK,
-                ],
-                [
-                    'type' => 'hidden',
-                    'name' => 'tpay_transfer_id',
-                    'value' => Config::GATEWAY_BLIK_0,
-                ],
-            ])
+                    [
+                        'type' => 'hidden',
+                        'name' => 'tpay',
+                        'value' => true,
+                    ],
+                    [
+                        'type' => 'hidden',
+                        'name' => 'type',
+                        'value' => Config::TPAY_PAYMENT_BLIK,
+                    ],
+                    [
+                        'type' => 'hidden',
+                        'name' => 'tpay_transfer_id',
+                        'value' => Config::GATEWAY_BLIK_0,
+                    ],
+                ]
+            )
             ->setAdditionalInformation(
                 $module->fetch('module:tpay/views/templates/hook/blik.tpl')
             );
@@ -78,6 +82,7 @@ class Blik implements GatewayType
     public function getSavedBlikAliases($module, $userId)
     {
         $blikRepository = $module->getService('tpay.repository.blik');
+
         return $blikRepository->getBlikAliasIdByUserId($userId);
     }
 

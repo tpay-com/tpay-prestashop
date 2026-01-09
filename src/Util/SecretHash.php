@@ -16,17 +16,20 @@ declare(strict_types=1);
 
 namespace Tpay\Util;
 
-
 class SecretHash
 {
     private $value;
-    public function __construct($value = null) {
+
+    public function __construct($value = null)
+    {
         $this->value = $value;
     }
 
-    public function getValue() {
+    public function getValue()
+    {
         return $this->value;
     }
+
     public static function getHash($secret)
     {
         return new self($secret);

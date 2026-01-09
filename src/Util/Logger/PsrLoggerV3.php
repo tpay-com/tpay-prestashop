@@ -2,60 +2,59 @@
 
 namespace Tpay\Util\Logger;
 
+use PrestaShopLogger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Stringable;
 
 class PsrLoggerV3 implements LoggerInterface
 {
-
-    public function emergency(Stringable|string $message, array $context = array()): void
+    public function emergency($message, array $context = []): void
     {
-        \PrestaShopLogger::addLog($message, 4);
+        PrestaShopLogger::addLog($message, 4);
     }
 
-    public function alert(Stringable|string $message, array $context = array()): void
+    public function alert($message, array $context = []): void
     {
-        \PrestaShopLogger::addLog($message, 4);
+        PrestaShopLogger::addLog($message, 4);
     }
 
-    public function critical(Stringable|string $message, array $context = array()): void
+    public function critical($message, array $context = []): void
     {
-        \PrestaShopLogger::addLog($message, 4);
+        PrestaShopLogger::addLog($message, 4);
     }
 
-    public function error(Stringable|string $message, array $context = array()): void
+    public function error($message, array $context = []): void
     {
-        \PrestaShopLogger::addLog($message, 3);
+        PrestaShopLogger::addLog($message, 3);
     }
 
-    public function warning(Stringable|string $message, array $context = array()): void
+    public function warning($message, array $context = []): void
     {
-        \PrestaShopLogger::addLog($message, 2);
+        PrestaShopLogger::addLog($message, 2);
     }
 
-    public function notice(Stringable|string $message, array $context = array()): void
+    public function notice($message, array $context = []): void
     {
         if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_) {
-            \PrestaShopLogger::addLog($message, 1);
+            PrestaShopLogger::addLog($message, 1);
         }
     }
 
-    public function info(Stringable|string $message, array $context = array()): void
+    public function info($message, array $context = []): void
     {
         if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_) {
-            \PrestaShopLogger::addLog($message, 1);
+            PrestaShopLogger::addLog($message, 1);
         }
     }
 
-    public function debug(Stringable|string $message, array $context = array()): void
+    public function debug($message, array $context = []): void
     {
         if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_) {
-            \PrestaShopLogger::addLog($message, 1);
+            PrestaShopLogger::addLog($message, 1);
         }
     }
 
-    public function log($level, Stringable|string $message, array $context = array()): void
+    public function log($level, $message, array $context = []): void
     {
         switch ($level) {
             case LogLevel::EMERGENCY:
@@ -81,6 +80,6 @@ class PsrLoggerV3 implements LoggerInterface
             return;
         }
 
-        \PrestaShopLogger::addLog($message, $legacyLevel);
+        PrestaShopLogger::addLog($message, $legacyLevel);
     }
 }

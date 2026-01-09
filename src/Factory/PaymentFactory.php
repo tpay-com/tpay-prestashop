@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Tpay\Factory;
 
+use PrestaShopLogger;
 use Tpay\Config\Config;
 use Tpay\Exception\PaymentException;
 use Tpay\Handler\BasicPaymentHandler;
@@ -28,9 +29,8 @@ class PaymentFactory
     /**
      * Get a payment method by type
      *
-     * @param string $type
-     *
      * @throws PaymentException
+     *
      * @return PaymentMethodHandler
      */
     public static function getPaymentMethod(string $type)
@@ -41,11 +41,11 @@ class PaymentFactory
             case Config::TPAY_PAYMENT_BLIK:
                 return new BasicPaymentHandler();
             case Config::TPAY_PAYMENT_GENERIC:
-                return new InstantPaymenthandler();
+                return new InstantPaymentHandler();
             case Config::TPAY_PAYMENT_CARDS:
                 return new CreditCardPaymentHandler();
             default:
-                \PrestaShopLogger::addLog('Unknown Payment Method', 3);
+                PrestaShopLogger::addLog('Unknown Payment Method', 3);
                 throw new PaymentException('Unknown Payment Method');
         }
     }

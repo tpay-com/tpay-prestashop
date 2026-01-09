@@ -6,7 +6,6 @@ use Psr\SimpleCache\CacheInterface;
 
 class PsrCache implements CacheInterface
 {
-
     public function get($key, $default = null)
     {
         return unserialize(Cache::get($key, $default));
@@ -14,17 +13,17 @@ class PsrCache implements CacheInterface
 
     public function set($key, $value, $ttl = null)
     {
-        Cache::set($key, serialize($value), (int)$ttl);
+        return Cache::set($key, serialize($value), (int) $ttl);
     }
 
     public function delete($key)
     {
-        Cache::delete($key);
+        return Cache::delete($key);
     }
 
     public function clear()
     {
-        Cache::erase();
+        return Cache::erase();
     }
 
     public function getMultiple($keys, $default = null)
@@ -40,15 +39,23 @@ class PsrCache implements CacheInterface
     public function setMultiple($values, $ttl = null)
     {
         foreach ($values as $key => $value) {
-            $this->set($key, $value, $ttl);
+            if (false === $this->set($key, $value, $ttl)) {
+                return false;
+            }
         }
+
+        return true;
     }
 
     public function deleteMultiple($keys)
     {
         foreach ($keys as $key) {
-            $this->delete($key);
+            if (false === $this->delete($key)) {
+                return false;
+            }
         }
+
+        return true;
     }
 
     public function has($key)

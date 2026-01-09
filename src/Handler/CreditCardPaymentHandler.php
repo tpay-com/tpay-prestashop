@@ -16,7 +16,13 @@ declare(strict_types=1);
 
 namespace Tpay\Handler;
 
+use Context;
+use Customer;
+use Exception;
+use Order;
+use PrestaShopLogger;
 use Tools;
+use Tpay;
 use Tpay\Config\Config;
 use Tpay\Exception\PaymentException;
 use Tpay\Exception\TransactionException;
@@ -29,23 +35,17 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     private $cardService;
     private $clientData;
 
-    /**
-     * @var \Tpay
-     */
+    /** @var Tpay */
     private $module;
-    /**
-     * @var \Order
-     */
-    private $order;
-    /**
-     * @var \Customer
-     */
-    private $customer;
-    /**
-     * @var \Context
-     */
-    private $context;
 
+    /** @var Order */
+    private $order;
+
+    /** @var Customer */
+    private $customer;
+
+    /** @var Context */
+    private $context;
 
     public function getName(): string
     {
@@ -57,10 +57,10 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
      * @throws PaymentException
      */
     public function createPayment(
-        \Tpay $module,
-        \Order $order,
-        \Customer $customer,
-        \Context $context,
+        Tpay $module,
+        Order $order,
+        Customer $customer,
+        Context $context,
         array $clientData,
         array $data
     ) {
@@ -83,75 +83,9 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     }
 
     /**
-     * Check is saved card not empty
-     *
-     * @throws TransactionException
-     */
-    private function processSavedCardPayment($savedCardId): void
-    {
-        $transaction = $this->createTransaction();
-        $savedCard = $this->cardService->transactionSavedCard($savedCardId, $this->customer->id);
-
-        if (empty($savedCard)) {
-            \PrestaShopLogger::addLog('Unauthorized payment try (empty token)', 3);
-            Tools::redirect($transaction['transactionPaymentUrl']);
-        }
-
-        $this->payBySavedCard($savedCard, $transaction);
-    }
-
-    /**
-     * Create new card
-     *
-     * @throws PaymentException|TransactionException
-     * @throws \Exception
-     */
-    private function processPaymentNewCard(): void
-    {
-        $transaction = $this->createTransaction();
-
-        if (isset($transaction['transactionId'])) {
-            // Try to sale with provided card data
-            $response = $this->makeCardPayment($transaction);
-
-            if ($response['result'] === 'failure') {
-                Tools::redirect($response['transactionPaymentUrl']);
-            }
-
-
-            if (isset($response['status']) && $response['status'] === 'correct') {
-                Tools::redirect(
-                    $this->context->link->getModuleLink(
-                        'tpay',
-                        'confirmation',
-                        [
-                            'type' => Config::TPAY_PAYMENT_CARDS,
-                            'order_id' => $this->order->id
-                        ]
-                    )
-                );
-            }
-
-            if (isset($response['transactionPaymentUrl'])) {
-                $this->initTransactionProcess($transaction, $this->module->currentOrder);
-
-                Tools::redirect($response['transactionPaymentUrl']);
-            }
-        }
-        \PrestaShopLogger::addLog('Unable to create new card payment. Response: ' . json_encode($transaction), 3);
-        Tools::redirect($this->context->link->getModuleLink(
-            'tpay',
-            'ordererror'
-        ));
-    }
-
-    /**
      * Process of saving the transaction
      *
-     * @param $transaction
-     * @param $orderId
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function initTransactionProcess($transaction, $orderId): void
     {
@@ -166,10 +100,75 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         }
     }
 
+    protected function updateLang(array $data): void
+    {
+        $this->clientData['lang'] = in_array($data['isolang'], ['pl', 'en']) ? $data['isolang'] : 'en';
+    }
+
     /**
-     * @param $cardToken
-     * @param $transaction
+     * Check is saved card not empty
+     *
+     * @throws TransactionException
      */
+    private function processSavedCardPayment($savedCardId): void
+    {
+        $transaction = $this->createTransaction();
+        $savedCard = $this->cardService->transactionSavedCard($savedCardId, $this->customer->id);
+
+        if (empty($savedCard)) {
+            PrestaShopLogger::addLog('Unauthorized payment try (empty token)', 3);
+            Tools::redirect($transaction['transactionPaymentUrl']);
+        }
+
+        $this->payBySavedCard($savedCard, $transaction);
+    }
+
+    /**
+     * Create new card
+     *
+     * @throws PaymentException|TransactionException
+     * @throws Exception
+     */
+    private function processPaymentNewCard(): void
+    {
+        $transaction = $this->createTransaction();
+
+        if (isset($transaction['transactionId'])) {
+            // Try to sale with provided card data
+            $response = $this->makeCardPayment($transaction);
+
+            if ('failure' === $response['result']) {
+                Tools::redirect($response['transactionPaymentUrl']);
+            }
+
+            if (isset($response['status']) && 'correct' === $response['status']) {
+                Tools::redirect(
+                    $this->context->link->getModuleLink(
+                        'tpay',
+                        'confirmation',
+                        [
+                            'type' => Config::TPAY_PAYMENT_CARDS,
+                            'order_id' => $this->order->id,
+                        ]
+                    )
+                );
+            }
+
+            if (isset($response['transactionPaymentUrl'])) {
+                $this->initTransactionProcess($transaction, $this->module->currentOrder);
+
+                Tools::redirect($response['transactionPaymentUrl']);
+            }
+        }
+        PrestaShopLogger::addLog('Unable to create new card payment. Response: '.json_encode($transaction), 3);
+        Tools::redirect(
+            $this->context->link->getModuleLink(
+                'tpay',
+                'ordererror'
+            )
+        );
+    }
+
     private function payBySavedCard($cardToken, $transaction): void
     {
         $request = [
@@ -185,7 +184,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
             $transaction['transactionId']
         );
 
-        if (isset($result['result'], $result['status']) && $result['status'] === 'correct') {
+        if (isset($result['result'], $result['status']) && 'correct' === $result['status']) {
             $transactionService = $this->module->getService('tpay.service.transaction');
             $transactionService->transactionProcess(
                 $transaction,
@@ -200,7 +199,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
                     'confirmation',
                     [
                         'type' => Config::TPAY_PAYMENT_CARDS,
-                        'order_id' => $this->order->id
+                        'order_id' => $this->order->id,
                     ]
                 )
             );
@@ -231,7 +230,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function makeCardPayment($transaction)
     {
@@ -239,15 +238,14 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         $cardHashInput = filter_input(INPUT_POST, 'card_hash', FILTER_SANITIZE_STRING);
         $cartHash = $this->module->getService('tpay.util.secret_hash')->getValue();
 
-        $cardHash = SHA1($cardHashInput . $cartHash);
+        $cardHash = sha1($cardHashInput.$cartHash);
         $saveCard = false;
 
         if (isset($_POST['card_save'])) {
             $cardVendor = (string) ($_POST['card_vendor'] ?? null);
             $cardShortCode = (string) ($_POST['card_short_code'] ?? null);
-            $saveCard = $_POST['card_save'] === 'on';
+            $saveCard = 'on' === $_POST['card_save'];
             $crc = $this->clientData['hiddenDescription'];
-
 
             if ($cardVendor && $cardShortCode && $crc) {
                 //  check if exists card
@@ -281,10 +279,5 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
             $request,
             $transaction['transactionId']
         );
-    }
-
-    protected function updateLang(array $data): void
-    {
-        $this->clientData['lang'] = in_array($data['isolang'], ['pl', 'en']) ? $data['isolang'] : 'en';
     }
 }

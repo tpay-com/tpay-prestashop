@@ -26,7 +26,7 @@ class PaymentOptionsFactory
 {
     /**
      * Build payment method
-     * @param int $id
+     *
      * @return GatewayType|string
      */
     public static function getOptionById(int $id)
@@ -44,6 +44,7 @@ class PaymentOptionsFactory
             default:
                 $paymentMethod = '';
         }
+
         return $paymentMethod;
     }
 }

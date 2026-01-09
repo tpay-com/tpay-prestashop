@@ -34,10 +34,10 @@ class AdminFormBuilder
     /** @var Context */
     public $context;
 
-    /** @var TranslatorComponent|null  */
+    /** @var null|TranslatorComponent */
     private $translator;
 
-    /** @var GenericPaymentsManager  */
+    /** @var GenericPaymentsManager */
     private $genericPaymentsManager;
 
     public function __construct(Tpay $module, Context $context, array $channels)
@@ -67,7 +67,7 @@ class AdminFormBuilder
         $form['form'] = [
             'legend' => [
                 'title' => $this->translator->trans('Basic settings', [], 'Modules.Tpay.Admin'),
-                'icon' => 'icon-cogs'
+                'icon' => 'icon-cogs',
             ],
             'input' => [
                 [
@@ -103,14 +103,14 @@ class AdminFormBuilder
                             ['id' => 'md5_all', 'name' => 'md5($order->id . $customer->secure_key . time())'],
                             [
                                 'id' => 'order_id_and_rest',
-                                'name' => '$order->id . "-" . md5($customer->secure_key . time())'
+                                'name' => '$order->id . "-" . md5($customer->secure_key . time())',
                             ],
                             ['id' => 'order_id', 'name' => '$order->id'],
                         ],
                         'id' => 'id',
                         'name' => 'name',
                     ],
-                    'class' => 't'
+                    'class' => 't',
                 ],
                 [
                     'type' => 'switch',
@@ -130,8 +130,8 @@ class AdminFormBuilder
                             'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
-                    'desc' => '<b>' . $this->translator->trans('WARNING', [], 'Modules.Tpay.Admin') . '</b> '
-                        . $this->translator->trans(
+                    'desc' => '<b>'.$this->translator->trans('WARNING', [], 'Modules.Tpay.Admin').'</b> '
+                        .$this->translator->trans(
                             ' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!',
                             [],
                             'Modules.Tpay.Admin'
@@ -154,7 +154,7 @@ class AdminFormBuilder
                             'value' => 0,
                             'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'type' => 'text',
@@ -233,7 +233,7 @@ class AdminFormBuilder
         $form['form'] = [
             'legend' => [
                 'title' => $this->translator->trans('Pekao installments simulator settings', [], 'Modules.Tpay.Admin'),
-                'icon' => 'icon-cogs'
+                'icon' => 'icon-cogs',
             ],
             'input' => [
                 [
@@ -332,7 +332,7 @@ class AdminFormBuilder
         $form['form'] = [
             'legend' => [
                 'title' => $this->translator->trans('Auto cancel orders and transactions settings', [], 'Modules.Tpay.Admin'),
-                'icon' => 'icon-cogs'
+                'icon' => 'icon-cogs',
             ],
             'input' => [
                 [
@@ -357,7 +357,7 @@ class AdminFormBuilder
                 [
                     'type' => 'switch',
                     'label' => $this->translator->trans('Use frontend to run CRON jobs', [], 'Modules.Tpay.Admin'),
-                    'desc' => '<b>' . $this->translator->trans('WARNING', [], 'Modules.Tpay.Admin') . '</b> '.$this->translator->trans('May cause some performance issues. Use this method if you cannot set cronjob to run CLI task once a day: `php modules/tpay/cron.php`', [], 'Modules.Tpay.Admin'),
+                    'desc' => '<b>'.$this->translator->trans('WARNING', [], 'Modules.Tpay.Admin').'</b> '.$this->translator->trans('May cause some performance issues. Use this method if you cannot set cronjob to run CLI task once a day: `php modules/tpay/cron.php`', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_AUTO_CANCEL_FRONTEND_RUN',
                     'is_bool' => true,
                     'class' => 't',
@@ -394,7 +394,7 @@ class AdminFormBuilder
         $form['form'] = [
             'legend' => [
                 'title' => $this->translator->trans('Settings for standard payment', [], 'Modules.Tpay.Admin'),
-                'icon'  => 'icon-cogs',
+                'icon' => 'icon-cogs',
             ],
 
             'submit' => [
@@ -410,7 +410,7 @@ class AdminFormBuilder
             ],
         ];
 
-        if (Shop::getContext() == Shop::CONTEXT_SHOP) {
+        if (Shop::CONTEXT_SHOP == Shop::getContext()) {
             array_unshift($form['form']['input'], $this->globalSettingsForm());
         }
 
@@ -422,7 +422,7 @@ class AdminFormBuilder
         $form['form'] = [
             'legend' => [
                 'title' => $this->translator->trans('Credit card settings', [], 'Modules.Tpay.Admin'),
-                'icon' => 'icon-cogs'
+                'icon' => 'icon-cogs',
             ],
             'input' => [
                 [
@@ -475,7 +475,6 @@ class AdminFormBuilder
                     'size' => 400,
                     'required' => false,
                 ],
-
             ],
             'submit' => [
                 'title' => $this->translator->trans('Save', [], 'Modules.Tpay.Admin'),
@@ -490,7 +489,7 @@ class AdminFormBuilder
         $form['form'] = [
             'legend' => [
                 'title' => $this->translator->trans('Transaction statuses', [], 'Modules.Tpay.Admin'),
-                'icon' => 'icon-cogs'
+                'icon' => 'icon-cogs',
             ],
             'input' => [
                 [
@@ -538,6 +537,7 @@ class AdminFormBuilder
                 'title' => $this->translator->trans('Save', [], 'Modules.Tpay.Admin'),
             ],
         ];
+
         return $form;
     }
 

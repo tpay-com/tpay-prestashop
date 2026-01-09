@@ -16,9 +16,15 @@ declare(strict_types=1);
 
 namespace Tpay\Service\PaymentOptions;
 
+use Configuration;
+use Context;
+use Exception;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
-use Tpay\Factory\PaymentOptionsFactory;
+use PrestaShopException;
+use PrestaShopLogger;
+use Tpay;
 use Tpay\Config\Config;
+use Tpay\Factory\PaymentOptionsFactory;
 use Tpay\Service\ConstraintValidator;
 use Tpay\Service\GenericPayments\GenericPaymentsManager;
 use Tpay\Util\Cache;
@@ -35,37 +41,32 @@ class PaymentOptionsService
     private $constraintValidator;
 
     /**
-     * @throws \PrestaShopException
-     * @throws \Exception
+     * @throws PrestaShopException
+     * @throws Exception
      */
-    public function __construct(\Tpay $module)
+    public function __construct(Tpay $module)
     {
         $this->module = $module;
         $this->constraintValidator = new ConstraintValidator($module);
         $this->getGroup();
     }
 
-    /**
-     * @throws \PrestaShopException
-     */
+    /** @throws PrestaShopException */
     public function getGroup(): void
     {
         try {
             $this->getPaymentGroups();
-        } catch (\PrestaShopException $e) {
-            \PrestaShopLogger::addLog('Error getGroup ' . $e->getMessage(), 4);
-            throw new \PrestaShopException($e->getMessage());
+        } catch (PrestaShopException $e) {
+            PrestaShopLogger::addLog('Error getGroup '.$e->getMessage(), 4);
+            throw new PrestaShopException($e->getMessage());
         }
     }
 
-    /**
-     * Create all transfer group
-     * @return void
-     */
+    /** Create all transfer group */
     public function createTransferPaymentChannel(): void
     {
         $payment = [
-            'img' => \Context::getContext()->shop->getBaseURL(true) . 'modules/tpay/views/img/tpay.svg',
+            'img' => Context::getContext()->shop->getBaseURL(true).'modules/tpay/views/img/tpay.svg',
             'gateways' => $this->getGroupTransfers(),
             'id' => Config::GATEWAY_TRANSFER,
             'mainChannel' => Config::GATEWAY_TRANSFER,
@@ -74,25 +75,25 @@ class PaymentOptionsService
         $this->createGateway($payment);
     }
 
-    /**
-     * @return array
-     */
     public function getActivePayments(): array
     {
         // Adding transfer group
         $this->createTransferPaymentChannel();
 
-        $payments = array_filter(array_map(function (array $paymentData) {
-            $optionClass = PaymentOptionsFactory::getOptionById((int)$paymentData['mainChannel']);
+        $payments = array_filter(
+            array_map(
+                function (array $paymentData) {
+                    $optionClass = PaymentOptionsFactory::getOptionById((int) $paymentData['mainChannel']);
 
-            if (is_object($optionClass)) {
-                $gateway = new PaymentType($optionClass);
+                    if (is_object($optionClass)) {
+                        $gateway = new PaymentType($optionClass);
 
-                return $gateway->getPaymentOption($this->module, new PaymentOption(), $paymentData);
-            }
-
-            return null;
-        }, $this->channels));
+                        return $gateway->getPaymentOption($this->module, new PaymentOption(), $paymentData);
+                    }
+                },
+                $this->channels
+            )
+        );
 
         $extracted = $this->getExtractedPaymentOptions();
         $generics = $this->genericPayments();
@@ -101,6 +102,12 @@ class PaymentOptionsService
         array_splice($payments, count($payments) - 1, 0, $extracted);
 
         return array_merge($payments, $generics);
+    }
+
+    /** Grouping of payments delivered from api */
+    public function getGroupTransfers(): array
+    {
+        return $this->transfers ?? [];
     }
 
     private function getExtractedPaymentOptions(): array
@@ -135,36 +142,20 @@ class PaymentOptionsService
         return $result;
     }
 
-    /**
-     * Grouping of payments delivered from api
-     * @return array
-     */
-    public function getGroupTransfers(): array
-    {
-        return $this->transfers ?? [];
-    }
-
-    /**
-     * @param array $array
-     * @return void
-     */
     private function createGateway(array $array = []): void
     {
         $this->channels[] = $array;
     }
 
-    /**
-     * @return array
-     * @throws \Exception
-     */
+    /** @throws Exception */
     private function getSeparatePayments(array $channels): array
     {
         $paymentsMethods = [
-            Config::GATEWAY_BLIK => (bool)Helper::getMultistoreConfigurationValue('TPAY_BLIK_ACTIVE'),
+            Config::GATEWAY_BLIK => (bool) Helper::getMultistoreConfigurationValue('TPAY_BLIK_ACTIVE'),
         ];
 
         if ($this->hasActiveCard()) {
-            $paymentsMethods[Config::GATEWAY_CARD] = (bool)Helper::getMultistoreConfigurationValue(
+            $paymentsMethods[Config::GATEWAY_CARD] = (bool) Helper::getMultistoreConfigurationValue(
                 'TPAY_CARD_ACTIVE'
             );
         }
@@ -181,14 +172,13 @@ class PaymentOptionsService
 
     private function hasActiveCard(): bool
     {
-        return \Configuration::get('TPAY_CARD_ACTIVE') || !empty(\Configuration::get('TPAY_CARD_RSA'));
+        return Configuration::get('TPAY_CARD_ACTIVE') || !empty(Configuration::get('TPAY_CARD_RSA'));
     }
 
     /**
      * Grouping of payments delivered from api
      *
-     * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     private function getPaymentGroups(): void
     {
@@ -207,14 +197,17 @@ class PaymentOptionsService
     {
         if (!Helper::getMultistoreConfigurationValue('TPAY_REDIRECT_TO_CHANNEL')) {
             $seenNames = [];
-            $transfers = array_filter($transfers, function ($channel) use (&$seenNames) {
-                if (in_array($channel['id'], $seenNames)) {
-                    return false;
-                } else {
+            $transfers = array_filter(
+                $transfers,
+                function ($channel) use (&$seenNames) {
+                    if (in_array($channel['id'], $seenNames)) {
+                        return false;
+                    }
                     $seenNames[] = $channel['id'];
+
                     return true;
                 }
-            });
+            );
         }
 
         $this->transfers = $transfers;
@@ -240,50 +233,48 @@ class PaymentOptionsService
         return $bankChannels;
     }
 
-    /**
-     * Grouping of payments delivered from api
-     * @param array $channels
-     * @param array $compareArray
-     * @return array
-     */
+    /** Grouping of payments delivered from api */
     private function groupChannel(array $channels, array $compareArray): array
     {
-        return array_filter($channels, function ($val) use ($compareArray) {
-            return in_array($val['mainChannel'], $compareArray);
-        });
+        return array_filter(
+            $channels,
+            function ($val) use ($compareArray) {
+                return in_array($val['mainChannel'], $compareArray);
+            }
+        );
     }
 
     /**
      * Downloading payment gateways to the online money transfer group
      *
-     * @param array $channels
-     * @param array $compareArray
-     *
-     * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     private function groupTransfer(array $channels, array $compareArray): array
     {
         $generics = Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS') ? json_decode(Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS')) : [];
         $compareChannels = array_merge($compareArray, $generics);
 
-        return array_filter($channels, function ($val) use ($compareChannels) {
-            return !in_array($val['mainChannel'], array_merge($compareChannels));
-        });
+        return array_filter(
+            $channels,
+            function ($val) use ($compareChannels) {
+                return !in_array($val['mainChannel'], array_merge($compareChannels));
+            }
+        );
     }
 
-    /**
-     * @return array<PaymentOption>
-     */
+    /** @return array<PaymentOption> */
     private function genericPayments(): array
     {
         $generics = Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS') ? json_decode(Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS')) : [];
         $channels = unserialize(Cache::get('channels', 'N;'));
 
         if (null === $channels) {
-            $channels = array_filter($this->bankChannels, function (array $channel) {
-                return true === $channel['available'];
-            });
+            $channels = array_filter(
+                $this->bankChannels,
+                function (array $channel) {
+                    return true === $channel['available'];
+                }
+            );
             foreach ($channels as $channel) {
                 $channels[$channel['id']] = $channel;
             }
@@ -291,20 +282,25 @@ class PaymentOptionsService
             Cache::set('channels', serialize($channels));
         }
 
-        return array_filter(array_map(function (string $generic) use ($channels) {
-            $channel = $channels[$generic] ?? null;
+        return array_filter(
+            array_map(
+                function (string $generic) use ($channels) {
+                    $channel = $channels[$generic] ?? null;
 
-            if ($channel === null) {
-                return null;
-            }
-            if (!empty($channel['constraints']) && !$this->constraintValidator->validate($channel['constraints'], $this->getBrowser())) {
-                return null;
-            }
+                    if (null === $channel) {
+                        return;
+                    }
+                    if (!empty($channel['constraints']) && !$this->constraintValidator->validate($channel['constraints'], $this->getBrowser())) {
+                        return;
+                    }
 
-            $gateway = new PaymentType(new Generic());
+                    $gateway = new PaymentType(new Generic());
 
-            return $gateway->getPaymentOption($this->module, new PaymentOption(), $channel);
-        }, $generics));
+                    return $gateway->getPaymentOption($this->module, new PaymentOption(), $channel);
+                },
+                $generics
+            )
+        );
     }
 
     private function getBrowser(): string
