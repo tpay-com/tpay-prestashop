@@ -63,7 +63,8 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
     {
         $order = new Order((int) $orderId);
         if (!Validate::isLoadedObject($order)
-            || $order->current_state !== (int) Cfg::get('TPAY_PENDING')) {
+            || $order->current_state !== (int) Cfg::get('TPAY_PENDING'))
+        {
             Tools::redirect($this->context->link->getPageLink('history', true));
         }
         $customer = new Customer($order->id_customer);
