@@ -14,7 +14,7 @@
     <div class="text-center mt-3">
         <a href="{$link->getModuleLink('tpay', 'payment', ['retry_order' => $retry_order], true)}"
            class="btn btn-primary small">
-            Ponów płatność
+            {l s='Retry payment' d='Modules.Tpay.Shop'}
         </a>
     </div>
     <div class="underline"></div>

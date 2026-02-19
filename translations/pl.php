@@ -200,3 +200,4 @@ $_MODULE['<{tpay}prestashop>shop_b2fe440cb7a0b127f1a90ffea296313b'] = 'zakupów'
 $_MODULE['<{tpay}prestashop>shop_3f6b73e1e263858f57738600f9bd6e7b'] = 'regulamin.';
 $_MODULE['<{tpay}prestashop>shop_a5c8678e9c1b744aef522eabe1e68350'] = 'Tpay';
 $_MODULE['<{tpay}prestashop>shop_2ff79200db441562e7d86856650838a5'] = 'akceptujesz regulamin.';
+$_MODULE['<{tpay}prestashop>shop_da3a88788547e05a4ae0466e45d2c4f4'] = 'Nie udało się utworzyć transakcji. Spróbuj ponownie.';

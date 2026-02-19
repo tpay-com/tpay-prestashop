@@ -72,7 +72,11 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
             $paymentType = PaymentFactory::getPaymentMethod($type);
             $this->createTransaction($order, $paymentType);
         } catch (Exception $e) {
-            $this->context->cookie->__set('tpay_errors', 'Nie udało się utworzyć transakcji. Spróbuj ponownie.');
+            PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID '.$order->id.': '.$e->getMessage(), 3);
+            $this->context->cookie->__set(
+                'tpay_errors',
+                $this->trans('Failed to create the transaction. Please try again.', [], 'Modules.Tpay.Shop')
+            );
             Tools::redirect(
                 'index.php?controller=order-confirmation&action=renew-payment&id_cart='.$order->id_cart.'&id_module='
                 .(int) $this->module->id.'&id_order='.$order->id.'&key='.$customer->secure_key
@@ -101,7 +105,10 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
             PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID '.$order->id.': '.$e->getMessage(), 3);
 
             $order->setCurrentState(Cfg::get('TPAY_FAILED'));
-            $this->context->cookie->__set('tpay_errors', 'Nie udało się utworzyć transakcji. Spróbuj ponownie.');
+            $this->context->cookie->__set(
+                'tpay_errors',
+                $this->trans('Failed to create the transaction. Please try again.', [], 'Modules.Tpay.Shop')
+            );
 
             Tools::redirect(
                 'index.php?controller=order-confirmation&action=renew-payment&id_cart='.(int) $cart->id.'&id_module='
