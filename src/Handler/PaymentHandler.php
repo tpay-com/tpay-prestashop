@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Tpay\Handler;
 
 use AddressCore;
+use Cart;
 use Context;
 use Customer;
 use Exception;
@@ -68,11 +69,13 @@ class PaymentHandler
     /** @throws Exception */
     public function getCustomerDetails(): array
     {
+        $cart = new Cart($this->order->id_cart);
+
         $customer = new CustomerData(
             $this->address,
             $this->customer,
             $this->context,
-            $this->context->cart,
+            $cart,
             $this->order
         );
         $customer->createCallbacks($this->order, $this->paymentMethodHandler->getName());

@@ -29,7 +29,7 @@ class InstantPaymentHandler extends BasicPaymentHandler
 
         $transaction = $this->createTransaction();
 
-        $this->initTransactionProcess($transaction, $this->module->currentOrder);
+        $this->initTransactionProcess($transaction, (int) $order->id);
 
         throw new PaymentException(
             'Unable to create payment method. Response: '.json_encode($transaction)

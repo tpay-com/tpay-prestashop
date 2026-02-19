@@ -112,7 +112,7 @@ class Tpay extends PaymentModule
     {
         $this->name = 'tpay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.13.2';
+        $this->version = '1.13.3';
         $this->author = 'Krajowy Integrator Płatności S.A.';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
@@ -411,6 +411,17 @@ class Tpay extends PaymentModule
             if (isset($result['status']) && in_array($result['status'], ['correct', 'success'])) {
                 return $this->fetch('module:tpay/views/templates/hook/thank_you_page_success.tpl');
             }
+
+            return $this->fetch('module:tpay/views/templates/hook/thank_you_page_error.tpl');
+        }
+
+        if (!$transaction) {
+            $this->context->smarty->assign([
+                'errors' => $this->context->cookie->__get('tpay_errors'),
+                'retry_order' => $params['order']->id,
+                'assets_path' => $this->getPath(),
+            ]);
+            $this->context->cookie->__unset('tpay_errors');
 
             return $this->fetch('module:tpay/views/templates/hook/thank_you_page_error.tpl');
         }
