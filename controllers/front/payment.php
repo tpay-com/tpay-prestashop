@@ -62,9 +62,7 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
     private function handleRetry($orderId)
     {
         $order = new Order((int) $orderId);
-        if (!Validate::isLoadedObject($order)
-            || $order->current_state !== (int) Cfg::get('TPAY_PENDING'))
-        {
+        if (!Validate::isLoadedObject($order) || $order->current_state !== (int) Cfg::get('TPAY_PENDING')) {
             Tools::redirect($this->context->link->getPageLink('history', true));
         }
         $customer = new Customer($order->id_customer);
