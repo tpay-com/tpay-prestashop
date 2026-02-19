@@ -95,6 +95,7 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
         try {
             $paymentType = PaymentFactory::getPaymentMethod(Tools::getValue('type'));
             $this->context->cookie->__set('tpay_payment_type', $paymentType->getName());
+            $this->module->getContext()->smarty->assign(['nbProducts' => $cart->nbProducts()]);
             $this->createTransaction($order, $paymentType);
         } catch (Exception $e) {
             PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID '.$order->id.': '.$e->getMessage(), 3);
