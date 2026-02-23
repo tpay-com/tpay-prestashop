@@ -165,6 +165,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             json_encode(
                 [
                     'result' => $result['status'],
+                    'transactionId' => $transaction['transactionId'],
                 ]
             )
         );
