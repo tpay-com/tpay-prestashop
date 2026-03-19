@@ -133,7 +133,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                 3
             );
 
-            throw new RuntimeException('Niezgodna kwota zamówienia');
+            throw new TpayException('Order amount mismatch');
         }
 
         $this->transactionStatusUpdate(
