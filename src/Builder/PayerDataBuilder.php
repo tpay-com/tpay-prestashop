@@ -12,14 +12,19 @@ use Tpay\OpenApi\Model\Fields\Payer\Address;
 
 class PayerDataBuilder
 {
-    private const VALIDATED_FIELDS = [
-        'phone' => Phone::class,
-        'address' => Address::class,
-        'code' => PostalCode::class,
-        'city' => City::class,
-    ];
-
     private $payer = [];
+
+    private $validatedFields;
+
+    public function __construct()
+    {
+        $this->validatedFields = [
+            'phone' => new Phone(),
+            'address' => new Address(),
+            'code' => new PostalCode(),
+            'city' => new City(),
+        ];
+    }
 
     public function set(string $key, $value): self
     {
@@ -32,7 +37,7 @@ class PayerDataBuilder
 
     public function add(string $key, ?string $value): self
     {
-        if (!isset(self::VALIDATED_FIELDS[$key])) {
+        if (!isset($this->validatedFields[$key])) {
             return $this;
         }
 
@@ -42,10 +47,9 @@ class PayerDataBuilder
             return $this;
         }
 
-        $fieldClass = self::VALIDATED_FIELDS[$key];
+        $field = $this->validatedFields[$key];
 
         try {
-            $field = new $fieldClass();
             $field->setValue($value);
             $this->payer[$key] = $value;
         } catch (InvalidArgumentException $e) {
