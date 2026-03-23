@@ -13,6 +13,7 @@ use Tpay\OpenApi\Model\Fields\Payer\Address;
 class PayerDataBuilder
 {
     private const MIN_LENGTH = 3;
+
     private $payer = [];
     private $validatedFields;
 
