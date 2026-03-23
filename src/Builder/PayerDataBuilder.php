@@ -12,6 +12,7 @@ use Tpay\OpenApi\Model\Fields\Payer\Address;
 
 class PayerDataBuilder
 {
+    private const MIN_LENGTH = 3;
     private $payer = [];
     private $validatedFields;
 
@@ -42,7 +43,7 @@ class PayerDataBuilder
 
         $value = trim((string) $value);
 
-        if ('' === $value) {
+        if ('' === $value || mb_strlen($value) < self::MIN_LENGTH) {
             return $this;
         }
 
