@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cba969bc2590c67aee5084e22606c35f",
+    "content-hash": "d1593ddfd179e7d714437684e3fd492d",
     "packages": [
         {
             "name": "paragonie/constant_time_encoding",
@@ -385,16 +385,16 @@
         },
         {
             "name": "tpay-com/tpay-openapi-php",
-            "version": "dev-check-test-notification",
+            "version": "2.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tpay-com/tpay-openapi-php.git",
-                "reference": "df39da4d542d02461c1d0a469e5d91b39139cbbd"
+                "reference": "54bb63bd182e8aa21b9e046bb3085092df86420d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tpay-com/tpay-openapi-php/zipball/df39da4d542d02461c1d0a469e5d91b39139cbbd",
-                "reference": "df39da4d542d02461c1d0a469e5d91b39139cbbd",
+                "url": "https://api.github.com/repos/tpay-com/tpay-openapi-php/zipball/54bb63bd182e8aa21b9e046bb3085092df86420d",
+                "reference": "54bb63bd182e8aa21b9e046bb3085092df86420d",
                 "shasum": ""
             },
             "require": {
@@ -440,9 +440,9 @@
                 "docs": "https://openapi.tpay.com",
                 "email": "support@tpay.com",
                 "issues": "https://github.com/tpay-com/tpay-openapi-php/issues",
-                "source": "https://github.com/tpay-com/tpay-openapi-php/tree/check-test-notification"
+                "source": "https://github.com/tpay-com/tpay-openapi-php/tree/2.4.2"
             },
-            "time": "2026-03-19T08:29:30+00:00"
+            "time": "2026-03-25T07:42:47+00:00"
         }
     ],
     "packages-dev": [
@@ -5454,17 +5454,9 @@
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "tpay-com/tpay-openapi-php",
-            "version": "dev-check-test-notification",
-            "alias": "2.5.0",
-            "alias_normalized": "2.5.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "tpay-com/tpay-openapi-php": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": false,
