@@ -88,6 +88,14 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
 
     private function handleBasicPayment($notification): void
     {
+        if ($notification->isTestNotification()) {
+            PrestaShopLogger::addLog(
+                'Odebrano testowe powiadomienie: '.print_r($notification->getNotificationAssociative(), 1)
+            );
+
+            return;
+        }
+
         $trStatus = $notification->tr_status->getValue();
         $trError = $notification->tr_error->getValue();
         $trCrc = $notification->tr_crc->getValue();
@@ -112,6 +120,20 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                     'Transaction not found for CRC: '.$trCrc
                 );
             }
+        }
+
+        $order = new Order((int) $transaction['order_id']);
+        if (!$this->validateAmount($order, $notification)) {
+            PrestaShopLogger::addLog(
+                sprintf(
+                    'Niezgodna kwota zamówienia: order=%s, notification=%s',
+                    $order->total_paid,
+                    $notification->tr_amount->getValue()
+                ),
+                3
+            );
+
+            throw new TpayException('Order amount mismatch');
         }
 
         $this->transactionStatusUpdate(
@@ -201,5 +223,13 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
     {
         header('HTTP/1.1 400 Bad Request', true, 400);
         exit;
+    }
+
+    private function validateAmount(Order $order, BasicPayment $notification): bool
+    {
+        $orderAmount = number_format((float) $order->total_paid, 2, '.', '');
+        $notificationAmount = number_format((float) $notification->tr_amount->getValue(), 2, '.', '');
+
+        return $orderAmount === $notificationAmount;
     }
 }
