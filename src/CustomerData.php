@@ -26,6 +26,7 @@ use Order;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 use Tools;
+use Tpay\Builder\PayerDataBuilder;
 use Tpay\Service\SurchargeService;
 
 class CustomerData
@@ -184,6 +185,18 @@ class CustomerData
         $customerFirstName = !empty($this->context->cookie->customer_firstname) ? $this->context->cookie->customer_firstname : $this->customer->firstname;
         $customerLastName = !empty($this->context->cookie->customer_lastname) ? $this->context->cookie->customer_lastname : $this->customer->lastname;
 
+        $payer = (new PayerDataBuilder())
+            ->set('email', $email)
+            ->set('name', sprintf('%s %s', $customerFirstName, $customerLastName))
+            ->add('phone', $phoneNumber)
+            ->add('address', trim($this->address->address1.' '.$this->address->address2))
+            ->add('code', $this->address->postcode)
+            ->add('city', $this->address->city)
+            ->set('country', 'PL')
+            ->set('ip', Tools::getRemoteAddr())
+            ->set('userAgent', substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255))
+            ->get();
+
         $data = [
             'amount' => number_format(
                 (float) str_replace(
@@ -196,21 +209,7 @@ class CustomerData
                 ''
             ),
             'hiddenDescription' => $this->createCrc(),
-            'payer' => [
-                'email' => $email,
-                'name' => sprintf(
-                    '%s %s',
-                    $customerFirstName,
-                    $customerLastName
-                ),
-                'phone' => $phoneNumber,
-                'address' => $this->address->address1.' '.$this->address->address2,
-                'code' => $this->address->postcode,
-                'city' => $this->address->city,
-                'country' => 'PL',
-                'ip' => Tools::getRemoteAddr(),
-                'userAgent' => substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255),
-            ],
+            'payer' => $payer,
         ];
 
         if (isset($this->address->vat_number) && strlen($this->address->vat_number) > 1) {
