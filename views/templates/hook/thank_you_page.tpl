@@ -122,6 +122,8 @@
             const paymentsInputs = document.getElementsByName('payment');
             const action = '{$action}';
 
+            let currentTransactionId = "{$transactionId}";
+
             if (parseInt(parseInt(localStorage.getItem('tpay_transaction_counter'))) === 3) {
                 document.querySelector('.payment-section').style.display = 'block';
                 document.querySelector('.transfer_payment').style.display = 'block';
@@ -151,7 +153,7 @@
                 let paymentData = {
                     action: 'blik0Status',
                     cartId: "{$cartId}",
-                    transactionId: "{$transactionId}"
+                    transactionId: currentTransactionId
                 };
                 const data = (new URLSearchParams(paymentData)).toString();
 
@@ -243,7 +245,7 @@
                 let paymentData = {
                     action: 'blik0Status',
                     cartId: "{$cartId}",
-                    transactionId: "{$transactionId}"
+                    transactionId: currentTransactionId
                 };
 
                 if (isBlik()) {
@@ -277,6 +279,10 @@
                 })
                     .then(response => {
                         return response.json().then(data => {
+                            if (data.transactionId) {
+                                currentTransactionId = data.transactionId;
+                            }
+
                             if (data.result === 'correct') {
                                 document.querySelector('.payment-section').style.display = 'none';
                                 document.querySelector('.payment-confirmation-container').style.display = 'block';
