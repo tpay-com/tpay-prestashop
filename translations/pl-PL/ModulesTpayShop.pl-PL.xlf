@@ -134,6 +134,10 @@
         <source>Expiration date</source>
         <target>Termin ważności</target>
       </trans-unit>
+      <trans-unit id="da3a88788547e05a4ae0466e45d2c4f4">
+        <source>Failed to create the transaction. Please try again.</source>
+        <target>Nie udało się utworzyć transakcji. Spróbuj ponownie.</target>
+      </trans-unit>
       <trans-unit id="b5911ca986bef55a551e74d788da8810">
         <source>If your browser does not redirect you automatically press the button below.</source>
         <target>Jeżeli Twoja przeglądarka nie przekieruje Cię automatycznie, kliknij przycisk poniżej.</target>

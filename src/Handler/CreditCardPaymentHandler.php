@@ -155,7 +155,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
             }
 
             if (isset($response['transactionPaymentUrl'])) {
-                $this->initTransactionProcess($transaction, $this->module->currentOrder);
+                $this->initTransactionProcess($transaction, $this->order->id);
 
                 Tools::redirect($response['transactionPaymentUrl']);
             }

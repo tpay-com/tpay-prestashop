@@ -61,7 +61,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
 
         $transaction = $this->createTransaction();
 
-        $this->initTransactionProcess($transaction, $this->module->currentOrder);
+        $this->initTransactionProcess($transaction, (int) $order->id);
 
         throw new PaymentException(
             'Unable to create payment method. Response: '.json_encode($transaction)
@@ -107,7 +107,8 @@ class BasicPaymentHandler implements PaymentMethodHandler
 
     protected function updatePayData(array $data): void
     {
-        if ('transfer' == $data['type'] && !Helper::getMultistoreConfigurationValue('TPAY_TRANSFER_WIDGET')) {
+        $type = $data['type'] ?? self::TYPE;
+        if ('transfer' == $type && !Helper::getMultistoreConfigurationValue('TPAY_TRANSFER_WIDGET')) {
             unset($this->clientData['pay']);
         } else {
             $this->checkPayType($data);
@@ -130,6 +131,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
 
     protected function updateLang(array $data): void
     {
-        $this->clientData['lang'] = in_array($data['isolang'], ['pl', 'en']) ? $data['isolang'] : 'en';
+        $lang = $data['isolang'] ?? 'en';
+        $this->clientData['lang'] = in_array($lang, ['pl', 'en']) ? $lang : 'en';
     }
 }
