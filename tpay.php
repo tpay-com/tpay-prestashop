@@ -421,7 +421,7 @@ class Tpay extends PaymentModule
                 'retry_order' => $params['order']->id,
                 'assets_path' => $this->getPath(),
             ]);
-            $this->context->cookie->tpay_errors;
+            unset($this->context->cookie->tpay_errors);
 
             return $this->fetch('module:tpay/views/templates/hook/thank_you_page_error.tpl');
         }
