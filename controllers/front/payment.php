@@ -68,14 +68,15 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
         $customer = new Customer($order->id_customer);
 
         try {
-            $type = $this->context->cookie->__get('tpay_payment_type');
+            $type = $this->context->cookie->tpay_payment_type;
             $paymentType = PaymentFactory::getPaymentMethod($type);
             $this->createTransaction($order, $paymentType);
         } catch (Exception $e) {
             PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID '.$order->id.': '.$e->getMessage(), 3);
-            $this->context->cookie->__set(
-                'tpay_errors',
-                $this->trans('Failed to create the transaction. Please try again.', [], 'Modules.Tpay.Shop')
+            $this->context->cookie->tpay_errors = $this->trans(
+                'Failed to create the transaction. Please try again.',
+                [],
+                'Modules.Tpay.Shop'
             );
             Tools::redirect(
                 'index.php?controller=order-confirmation&action=renew-payment&id_cart='.$order->id_cart.'&id_module='
@@ -98,16 +99,17 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
 
         try {
             $paymentType = PaymentFactory::getPaymentMethod(Tools::getValue('type'));
-            $this->context->cookie->__set('tpay_payment_type', $paymentType->getName());
+            $this->context->cookie->tpay_payment_type = $paymentType->getName();
             $this->module->getContext()->smarty->assign(['nbProducts' => $cart->nbProducts()]);
             $this->createTransaction($order, $paymentType);
         } catch (Exception $e) {
             PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID '.$order->id.': '.$e->getMessage(), 3);
 
             $order->setCurrentState(Cfg::get('TPAY_FAILED'));
-            $this->context->cookie->__set(
-                'tpay_errors',
-                $this->trans('Failed to create the transaction. Please try again.', [], 'Modules.Tpay.Shop')
+            $this->context->cookie->tpay_errors = $this->trans(
+                'Failed to create the transaction. Please try again.',
+                [],
+                'Modules.Tpay.Shop'
             );
 
             Tools::redirect(

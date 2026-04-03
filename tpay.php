@@ -417,11 +417,11 @@ class Tpay extends PaymentModule
 
         if (!$transaction) {
             $this->context->smarty->assign([
-                'errors' => $this->context->cookie->__get('tpay_errors'),
+                'errors' => $this->context->cookie->tpay_errors,
                 'retry_order' => $params['order']->id,
                 'assets_path' => $this->getPath(),
             ]);
-            $this->context->cookie->__unset('tpay_errors');
+            $this->context->cookie->tpay_errors;
 
             return $this->fetch('module:tpay/views/templates/hook/thank_you_page_error.tpl');
         }
