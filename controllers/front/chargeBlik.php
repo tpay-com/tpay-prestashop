@@ -146,6 +146,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
         $blikCode = $this->validateBlikCode(Tools::getValue('blikCode'));
         $transaction = $this->createBlikZero($transactionParams, $blikCode, $customer->isGuest() ? null : $cart);
+        $transactionId = $transaction['transactionId'];
 
         $this->cancelTransaction($oldTransactionId);
         $transactionRepository = $this->module->getService('tpay.repository.transaction');
@@ -165,6 +166,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             json_encode(
                 [
                     'result' => $result['status'],
+                    'transactionId' => $transactionId,
                 ]
             )
         );
@@ -339,7 +341,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
     private function payByTransfer($address, $customer, $context, $cart, $order, string $oldTransactionId)
     {
         $transactionParams = $this->getCustomerData($address, $customer, $context, $cart, $order, 'transfer');
-        $transactionParams['amount'] = $order->total_paid;
+        $transactionParams['amount'] = $order->total_paid - $order->total_paid_real;
         $isoCode = Language::getLanguage($cart->id_lang)['iso_code'];
         $transactionParams['lang'] = in_array($isoCode, ['pl', 'en']) ? $isoCode : 'en';
 
