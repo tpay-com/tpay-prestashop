@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Retry payment on transaction error
+- Partially paid orders support
+
+### Fixed
+- Update transactionId in Blik payment response to support retry
 
 ## [1.14.1]
 
