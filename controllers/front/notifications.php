@@ -2,6 +2,9 @@
 
 use Configuration as Cfg;
 use Tpay\Exception\NotificationHandlingException;
+use Tpay\OpenApi\Model\Objects\NotificationBody\BasicPayment;
+use Tpay\OpenApi\Model\Objects\NotificationBody\BlikAliasRegister;
+use Tpay\OpenApi\Model\Objects\NotificationBody\BlikAliasUnregister;
 use Tpay\OpenApi\Utilities\CacheCertificateProvider;
 use Tpay\OpenApi\Utilities\TpayException;
 use Tpay\OpenApi\Webhook\JWSVerifiedPaymentNotification;
@@ -11,101 +14,148 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
 {
     private $statusHandler;
 
-    /** @throws Exception|TpayException */
     public function initContent()
     {
         if ('POST' !== $_SERVER['REQUEST_METHOD']) {
-            $controller = new PageNotFoundControllerCore();
-            $controller->run();
-            exit;
-        }
-
-        if (empty($_POST)) {
-            echo 'False - Empty body received';
             $this->badRequestResponse();
         }
 
-        $this->statusHandler = $this->module->getService('tpay.handler.order_status_handler');
+        try {
+            $this->statusHandler = $this->module->getService('tpay.handler.order_status_handler');
 
-        $event = $_POST['event'] ?? false;
-        $alias = $_POST['msg_value'] ?? false;
+            $isProduction = true !== (bool) Cfg::get('TPAY_SANDBOX');
 
-        if (!empty($event) && !empty($alias)) {
-            // if blik event process
-            $this->blikAliasProcess($event, $alias);
+            $notificationHandler = new JWSVerifiedPaymentNotification(
+                new CacheCertificateProvider(
+                    new Tpay\OpenApi\Utilities\Cache(null, new PsrCache())
+                ),
+                html_entity_decode(Cfg::get('TPAY_MERCHANT_SECRET')),
+                $isProduction
+            );
+
+            $notification = $notificationHandler->getNotification();
+
+            $this->handleNotification($notification);
+
             echo 'TRUE';
-        } else {
-            // default process transaction
-            try {
-                $isProduction = true !== (bool) Cfg::get('TPAY_SANDBOX');
-                $NotificationWebhook = new JWSVerifiedPaymentNotification(
-                    new CacheCertificateProvider(
-                        new Tpay\OpenApi\Utilities\Cache(null, new PsrCache())
-                    ),
-                    html_entity_decode(Cfg::get('TPAY_MERCHANT_SECRET')),
-                    $isProduction
-                );
-                $notification = $NotificationWebhook->getNotification();
+        } catch (TpayException $e) {
+            PrestaShopLogger::addLog($e->getMessage(), 3);
+            echo 'FALSE - '.$e->getMessage();
+            $this->badRequestResponse();
+        } catch (Exception $e) {
+            PrestaShopLogger::addLog($e->getMessage(), 3);
+            echo 'FALSE - Internal error';
+            $this->badRequestResponse();
+        }
+
+        exit;
+    }
+
+    private function handleNotification($notification): void
+    {
+        switch (true) {
+            case $notification instanceof BasicPayment:
+                $this->handleBasicPayment($notification);
+                break;
+            case $notification instanceof BlikAliasRegister:
+                $this->handleBlikRegister($notification);
+                break;
+            case $notification instanceof BlikAliasUnregister:
+                $this->handleBlikUnregister($notification);
+                break;
+            default:
+                throw new TpayException('Unsupported notification type: '.get_class($notification));
+        }
+    }
+
+    private function handleBlikRegister($notification): void
+    {
+        $aliasValue = $notification->value->getValue();
+        $userId = explode('_', $aliasValue)[1];
+
+        $blikRepository = $this->module->getService('tpay.repository.blik');
+        $blikRepository->saveBlikAlias((int) $userId, $aliasValue);
+    }
+
+    private function handleBlikUnregister($notification): void
+    {
+        $aliasValue = $notification->value->getValue();
+        $userId = explode('_', $aliasValue)[1];
+
+        $blikRepository = $this->module->getService('tpay.repository.blik');
+        $blikRepository->removeBlikAlias((int) $userId, $aliasValue);
+    }
+
+    private function handleBasicPayment($notification): void
+    {
+        if ($notification->isTestNotification()) {
+            PrestaShopLogger::addLog(
+                'Odebrano testowe powiadomienie: '.print_r($notification->getNotificationAssociative(), 1)
+            );
+
+            return;
+        }
+
+        $trStatus = $notification->tr_status->getValue();
+        $trError = $notification->tr_error->getValue();
+        $trCrc = $notification->tr_crc->getValue();
+
+        if (!in_array($trStatus, ['TRUE', 'CHARGEBACK']) || 'none' !== $trError) {
+            return;
+        }
+
+        $transactionRepository = $this->module->getService('tpay.repository.transaction');
+        $transaction = $transactionRepository->getTransactionByCrc($trCrc);
+
+        if (!$transaction) {
+            if ('TRUE' === $trStatus) {
                 $notificationData = $notification->getNotificationAssociative();
 
-                if (!empty($notificationData)) {
-                    $this->notificationTransaction($notification, $notificationData);
-                }
-                echo 'TRUE';
-            } catch (Exception $exception) {
-                PrestaShopLogger::addLog($exception->getMessage(), 3);
-                echo sprintf('%s - %s', 'FALSE', $exception->getMessage());
-                $this->badRequestResponse();
+                $transaction = $this->forceSaveTransaction(
+                    $transactionRepository,
+                    $notificationData
+                );
+            } else {
+                throw new NotificationHandlingException(
+                    'Transaction not found for CRC: '.$trCrc
+                );
             }
         }
 
-        ob_flush();
-        exit();
-    }
-
-    public function notificationTransaction($notification, $notificationData): void
-    {
-        $trStatus = $notificationData['tr_status'];
-        $trError = $notificationData['tr_error'];
-        $trCrc = $notificationData['tr_crc'];
-
-        // check transaction status
-        if (('TRUE' === $trStatus || 'CHARGEBACK' === $trStatus) && 'none' === $trError) {
-            $transactionRepository = $this->module->getService('tpay.repository.transaction');
-            $transaction = $transactionRepository->getTransactionByCrc($trCrc);
-            $crc = $transaction['crc'] ?? '';
-
-            if ($crc !== $trCrc) {
-                if ('TRUE' === $trStatus && in_array(Cfg::get('TPAY_CRC_FORM'), ['order_id', 'order_id_and_rest'])) {
-                    $transaction = $this->forceSaveTransaction($transactionRepository, $notificationData);
-                } else {
-                    throw new NotificationHandlingException('CRC mismatch expected from database: '.$crc.'. given: '.$trCrc);
-                }
-            }
-
-            $this->transactionStatusUpdate(
-                $transactionRepository,
-                $transaction,
-                $trStatus
+        $order = new Order((int) $transaction['order_id']);
+        if (!$this->validateAmount($order, $notification)) {
+            PrestaShopLogger::addLog(
+                sprintf(
+                    'Niezgodna kwota zamówienia: order=%s, notification=%s',
+                    $order->total_paid,
+                    $notification->tr_amount->getValue()
+                ),
+                3
             );
-            // Payment card update token card
-            if ($notification->card_token->getValue()) {
-                $cardsRepository = $this->module->getService('tpay.repository.credit_card');
 
-                // check if token is empty
-                $hasToken = (bool) $cardsRepository->getCreditCardTokenByCardCrc($trCrc);
+            throw new TpayException('Order amount mismatch');
+        }
 
-                if (!$hasToken) {
-                    $cardsRepository->updateToken(
-                        $trCrc,
-                        $notification->card_token->getValue()
-                    );
-                }
+        $this->transactionStatusUpdate(
+            $transactionRepository,
+            $transaction,
+            $trStatus
+        );
+
+        if ($notification->card_token && $notification->card_token->getValue()) {
+            $cardsRepository = $this->module->getService('tpay.repository.credit_card');
+            $hasToken = (bool) $cardsRepository->getCreditCardTokenByCardCrc($trCrc);
+
+            if (!$hasToken) {
+                $cardsRepository->updateToken(
+                    $trCrc,
+                    $notification->card_token->getValue()
+                );
             }
         }
     }
 
-    public function transactionStatusUpdate($transactionRepository, $transaction, $status): void
+    private function transactionStatusUpdate($transactionRepository, $transaction, $status): void
     {
         try {
             $currentStatus = $transaction['status'] ?? '';
@@ -131,27 +181,6 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         }
     }
 
-    /**
-     * @throws Exception
-     */
-    public function blikAliasProcess($eventType, $alias): void
-    {
-        $userId = explode('_', $alias['value'])[1];
-        $blikRepository = $this->module->getService('tpay.repository.blik');
-
-        if ('ALIAS_REGISTER' === $eventType) {
-            $blikRepository->saveBlikAlias(
-                (int) $userId,
-                (string) $alias['value']
-            );
-        } elseif ('ALIAS_UNREGISTER' === $eventType) {
-            $blikRepository->removeBlikAlias(
-                (int) $userId,
-                (string) $alias['value']
-            );
-        }
-    }
-
     private function setConfirmed($orderId, $transactionId): void
     {
         $this->statusHandler->setOrdersAsConfirmed(
@@ -160,12 +189,25 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         );
     }
 
-    private function forceSaveTransaction($transactionRepository, $notificationData): array
+    /**
+     * @throws Exception
+     */
+    private function forceSaveTransaction($transactionRepository, array $notificationData): array
     {
-        $orderId = 'order_id' === Cfg::get('TPAY_CRC_FORM') ? $notificationData['tr_crc'] : strstr($notificationData['tr_crc'], '-', true);
+        $crcForm = Cfg::get('TPAY_CRC_FORM');
+
+        if ('order_id' === $crcForm) {
+            $orderId = (int) $notificationData['tr_crc'];
+        } elseif ('order_id_and_rest' === $crcForm) {
+            $orderId = (int) strstr($notificationData['tr_crc'], '-', true);
+        } else {
+            throw new NotificationHandlingException(
+                'CRC mismatch and recovery disabled. CRC: '.$notificationData['tr_crc']
+            );
+        }
 
         $transactionRepository->processCreateTransaction(
-            (int) $orderId,
+            $orderId,
             $notificationData['tr_crc'],
             $notificationData['tr_id'],
             'transfer',
@@ -181,5 +223,13 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
     {
         header('HTTP/1.1 400 Bad Request', true, 400);
         exit;
+    }
+
+    private function validateAmount(Order $order, BasicPayment $notification): bool
+    {
+        $orderAmount = number_format((float) $order->total_paid, 2, '.', '');
+        $notificationAmount = number_format((float) $notification->tr_amount->getValue(), 2, '.', '');
+
+        return $orderAmount === $notificationAmount;
     }
 }

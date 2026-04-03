@@ -5,11 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.13.3]
+## [1.14.2]
 
 ### Added
 
 - Retry payment on transaction error
+
+## [1.14.1]
+
+### Added
+
+- Validation of `phone`, `address`, `city`, and `code` fields using Tpay SDK classes
+
+## [1.14.0]
+
+### Added
+
+- Notification amount validation
+- Test notification detection
+
+## [1.13.3]
+
+### Changed
+
+- New SDK notifications support
 
 ## [1.13.2]
 
