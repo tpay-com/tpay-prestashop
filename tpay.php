@@ -369,6 +369,10 @@ class Tpay extends PaymentModule
             return '';
         }
 
+        if ($params['order']->module !== $this->name) {
+            return '';
+        }
+
         $transactionRepository = $this->getService('tpay.repository.transaction');
         $transaction = $transactionRepository->getTransactionByOrderId($params['order']->id);
 
