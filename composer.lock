@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bbe04924f1b9b1e050fb1f8daa44848d",
+    "content-hash": "217bce11e10e5b348864cf67df19144c",
     "packages": [
         {
             "name": "paragonie/constant_time_encoding",
@@ -5457,8 +5457,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "phpmd/phpmd": 0,
-        "tpay-com/tpay-openapi-php": 20
+        "tpay-com/tpay-openapi-php": 20,
+        "phpmd/phpmd": 0
     },
     "prefer-stable": false,
     "prefer-lowest": false,
