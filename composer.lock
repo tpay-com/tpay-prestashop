@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1593ddfd179e7d714437684e3fd492d",
+    "content-hash": "f75cab8a8c18c38e8d8f2bace7e09e7c",
     "packages": [
         {
             "name": "paragonie/constant_time_encoding",
@@ -385,16 +385,16 @@
         },
         {
             "name": "tpay-com/tpay-openapi-php",
-            "version": "2.4.2",
+            "version": "dev-sanitize_path_params",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tpay-com/tpay-openapi-php.git",
-                "reference": "54bb63bd182e8aa21b9e046bb3085092df86420d"
+                "reference": "34c399377b48d6b1f63cdb2db04bb907cf2cffff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tpay-com/tpay-openapi-php/zipball/54bb63bd182e8aa21b9e046bb3085092df86420d",
-                "reference": "54bb63bd182e8aa21b9e046bb3085092df86420d",
+                "url": "https://api.github.com/repos/tpay-com/tpay-openapi-php/zipball/34c399377b48d6b1f63cdb2db04bb907cf2cffff",
+                "reference": "34c399377b48d6b1f63cdb2db04bb907cf2cffff",
                 "shasum": ""
             },
             "require": {
@@ -440,9 +440,9 @@
                 "docs": "https://openapi.tpay.com",
                 "email": "support@tpay.com",
                 "issues": "https://github.com/tpay-com/tpay-openapi-php/issues",
-                "source": "https://github.com/tpay-com/tpay-openapi-php/tree/2.4.2"
+                "source": "https://github.com/tpay-com/tpay-openapi-php/tree/sanitize_path_params"
             },
-            "time": "2026-03-25T07:42:47+00:00"
+            "time": "2026-04-23T08:50:34+00:00"
         }
     ],
     "packages-dev": [
@@ -5457,7 +5457,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "phpmd/phpmd": 0
+        "phpmd/phpmd": 0,
+        "tpay-com/tpay-openapi-php": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
@@ -5466,6 +5467,6 @@
         "ext-json": "*",
         "ext-xml": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
