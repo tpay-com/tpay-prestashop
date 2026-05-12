@@ -15,6 +15,7 @@
             </details>
         </div>
     {/if}
-
-    {include file="module:tpay/views/templates/hook/regulations.tpl"}
+    <div class="generic-regulation-wrapper">
+        {include file="module:tpay/views/templates/hook/regulations.tpl"}
+    </div>
 </div>

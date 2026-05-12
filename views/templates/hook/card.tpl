@@ -16,11 +16,10 @@
 		{if $card_type === 'widget'}
 			{if isset($saved_cards) && !empty($saved_cards)}
 				<div class="row tpay-cards">
-					<div class="col-xs-12">
-						<h6 style="margin-bottom: 26px; font-size: .8375rem;">
-							{l s='List of saved credit cards.' d='Modules.Tpay.Shop'}
-						</h6>
-					</div>
+					<p>
+						{l s='Please select the card you wish to use for payment' d='Modules.Tpay.Shop'}
+					</p>
+					<hr class="separator-line">
 
 					{foreach from=$saved_cards item=card}
 						<div class="tpay-cards__item" data-card-id="{$card['id']}">
@@ -31,20 +30,20 @@
 									<span></span>
 								</div>
 
-								<label for="cardN{$card['id']}" style="text-align:left; margin: 0;">
+								<label class="added-card" for="cardN{$card['id']}" style="text-align:left; margin: 0;">
+									<img src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/{$card.card_vendor|lower}-card-icon.svg"/>
 									**** {$card['card_shortcode']}
-									<p>{$card['card_vendor']}</p>
 								</label>
 
-								<div class="" style="margin-left: auto;">
+								<div class="delete-card" style="margin-left: auto;">
 									<a href="{url entity='module' name='tpay' controller='savedCards' params=['action' => 'deleteCard','ajax' => true]}"
 									   data-link-action="delete-credit-card" data-id="{$card['id']}"
 									   data-token="{Tools::getToken()}">
-										<i class="material-icons"></i>
+										<img src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/trash.svg"/>
 									</a>
 								</div>
-
 							</div>
+							<hr class="separator-line">
 						</div>
 					{/foreach}
 
@@ -56,18 +55,19 @@
 							</div>
 
 							<label for="newCard">
-								{l s='Add new card' d='Modules.Tpay.Shop'}
+								{l s='Pay with a different card' d='Modules.Tpay.Shop'}
 							</label>
 						</div>
 					</div>
-
+					<hr class="separator-line" style="display: block">
 				</div>
 			{/if}
-			<div class="tpay-card-new {if isset($saved_cards) && !empty($saved_cards)}tpay-animated tpay-fadeOut{/if}">
-				<div class="tpay-card">
-					<img width="40" class="tpay-logo--small img-fluid"
-						 src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg" alt="TPAY">
-
+			<div class="tpay-card-new {if isset($saved_cards) && !empty($saved_cards)}tpay-animated tpay-fadeOut other-cards{/if}">
+				<p>
+					{l s='Please enter your payment card details below' d='Modules.Tpay.Shop'}
+				</p>
+				<hr class="separator-line">
+				<div class="tpay-card {if isset($saved_cards) && !empty($saved_cards)}other-cards{/if}">
 					<input type="hidden" name="carddata" id="carddata" value=""/>
 					<input type="hidden" name="card_vendor" id="card_vendor" value=""/>
 					<input type="hidden" name="card_hash" id="card_hash" value=""/>
@@ -85,29 +85,42 @@
 					<div class="tpay-card__wrap">
 						<div id="exp-container">
 							<label for="card-exp" class="tpay-label-info">{l s='Expiration date' d='Modules.Tpay.Shop'}</label>
-							<input id="expiry_date" maxlength="9" type="tel" placeholder="00 / 0000"
-								   autocomplete="off" autocompletetype="cc-exp" tabindex="2" value=""
-								   class="tpay-input-value tpay-card__input-small"/>
+							<input
+									id="expiry_date"
+									type="text"
+									placeholder="00/00"
+									maxlength="9"
+									inputmode="numeric"
+									oninput="
+                                        let v = this.value.replace(/\D/g, '').slice(0,4);
+                                        if (v.length >= 3) {
+                                          v = v.slice(0,2) + '/' + v.slice(2);
+                                        }
+                                        this.value = v;
+                                    "
+							/>
 						</div>
 
 						<div id="exp-container">
 							<label for="card-cvc" class="tpay-label-info">
-								{l s='CVC' d='Modules.Tpay.Shop'}
-								<img src="{$tpay_path|escape:'htmlall':'UTF-8'}/img/info.svg"
-									 alt="{l s='Preload' d='Modules.Tpay.Shop'}"
-									 data-toggle="tooltip" data-placement="bottom"
-									 title="{l s='The security number located on the back of the payment card.' d='Modules.Tpay.Shop'}"/>
+								{l s='CVV2/CVC2' d='Modules.Tpay.Shop'}
 							</label>
-							<input id="cvc" maxlength="3" type="tel" autocomplete="off" autocompletetype="cc-cvc"
-								   placeholder="000" tabindex="3" value=""
-								   class="tpay-input-value tpay-card__input-small"/>
+							<div class="tooltip-container">
+								<input id="cvc" maxlength="3" type="tel" autocomplete="off" autocompletetype="cc-cvc"
+									   placeholder="000" tabindex="3" value=""
+									   class="tpay-input-value tpay-card__input-small"/>
+								<p class="show-tooltip">
+									<img src="{$tpay_path|escape:'htmlall':'UTF-8'}/img/info.svg"
+										 alt="{l s='Preload' d='Modules.Tpay.Shop'}"/>
+									<span class="tooltip-text"> {l s='The CVV2/CVC2 code is a 3-digit number located on the back of Mastercard and Visa cards.' d='Modules.Tpay.Shop'} </span>
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>
-
 				{if !$customer.is_guest}
 					<div class="row">
-						<div class="tpay-card__save col-xs-12">
+						<div class="tpay-card__save">
 							<div class="custom-checkbox">
 								<input type="checkbox" id="card_save" name="card_save"/>
 								<span><i class="material-icons rtl-no-flip checkbox-checked"></i></span>
@@ -120,8 +133,7 @@
 						</div>
 					</div>
 				{/if}
-
-
+				<hr class="separator-line">
 			</div>
 		{else}
 			{l s='You will be redirected to the payment gateway.' d='Modules.Tpay.Shop'}

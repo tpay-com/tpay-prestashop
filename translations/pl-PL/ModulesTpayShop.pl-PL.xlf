@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file original="ModulesTpayShop.xlf" source-language="en" target-language="pl-PL" datatype="plaintext">
+  <file original="ModulesTpayShop.xlf" source-language="pl-PL" target-language="pl-PL" datatype="plaintext">
     <body>
       <trans-unit id="9dda1ce369a35b3d0a4993e05745bc99">
         <source> Product</source>
@@ -26,10 +26,6 @@
         <source>Accept blik code on mobile app</source>
         <target>Zaakceptuj kod blik w aplikacji mobilnej banku</target>
       </trans-unit>
-      <trans-unit id="c979b399b9d0d982ed262cb78ab5fad3">
-        <source>Add new card</source>
-        <target>Dodaj nową kartę</target>
-      </trans-unit>
       <trans-unit id="dd7bf230fde8d4836917806aff6a6b27">
         <source>Address</source>
         <target>Adres</target>
@@ -49,6 +45,14 @@
       <trans-unit id="7795e9237d6f67c70ccd967c0949388c">
         <source>BLIK POS is not available</source>
         <target>BLIK niedostępny</target>
+      </trans-unit>
+      <trans-unit id="9f233de11017582ab42e24e0dd2cea51">
+        <source>BLIK Pay Later</source>
+        <target>BLIK Płacę Później</target>
+      </trans-unit>
+      <trans-unit id="ed341ca3a6664c1ec39ed9d69a3569c9">
+        <source>BLIK Pay Later lets you defer payment for online purchases for 30 days, up to 4,000 PLN.</source>
+        <target>BLIK Płacę Później to usługa, która pozwala na odroczenie płatności za zakupy online do 30 dni, maksymalnie do 4000 PLN.</target>
       </trans-unit>
       <trans-unit id="00d48f57f46115ec0b1a114c336d452c">
         <source>BLIK insufficient funds / user authorization error</source>
@@ -78,9 +82,9 @@
         <source>Browse list of your</source>
         <target>Przeglądaj listę Twoich</target>
       </trans-unit>
-      <trans-unit id="5ea7f231296949070013bc43715aae01">
-        <source>CVC</source>
-        <target>CVC</target>
+      <trans-unit id="8a2fc40865be8bc578a24bc22901b687">
+        <source>CVV2/CVC2</source>
+        <target>CVV2/CVC2</target>
       </trans-unit>
       <trans-unit id="6c7a46afae7e3adec745b2b99711904a">
         <source>Calculate installment!</source>
@@ -214,6 +218,10 @@
         <source>Pay for your purchase with Tpay!</source>
         <target>Zapłać za zakupy z Tpay!</target>
       </trans-unit>
+      <trans-unit id="a8a99b6d77daaaa9872be789ce786fd2">
+        <source>Pay with a different card</source>
+        <target>Zapłać inną kartą</target>
+      </trans-unit>
       <trans-unit id="2f0653cd17fe715bac12b8e249989e93">
         <source>Paying,</source>
         <target>Płacąc,</target>
@@ -258,6 +266,14 @@
         <source>Please choose payment method</source>
         <target>Proszę wybrać metodę płatności</target>
       </trans-unit>
+      <trans-unit id="67bf5559478037682bed9a9905234649">
+        <source>Please enter your payment card details below</source>
+        <target>Proszę podać poniżej dane karty płatniczej</target>
+      </trans-unit>
+      <trans-unit id="dd60c45c1a47d0311ad5d64cd91fdeb6">
+        <source>Please select the card you wish to use for payment</source>
+        <target>Proszę wybrać kartę, której chcesz użyć do płatności</target>
+      </trans-unit>
       <trans-unit id="8de08f92a66449fe2e29fef18d752f68">
         <source>Please wait... In a moment you will be redirected to secure transaction panel.</source>
         <target>Proszę czekać, za chwilę zostaniesz przekierowany do bezpiecznego panelu transakcyjnego.</target>
@@ -290,14 +306,6 @@
         <source>Shipping cost: </source>
         <target>Koszt przesyłki</target>
       </trans-unit>
-      <trans-unit id="9f233de11017582ab42e24e0dd2cea51">
-        <source>BLIK Pay Later</source>
-        <target>BLIK Płacę Później</target>
-      </trans-unit>
-      <trans-unit id="4068268ab17153e64d70d43a5bafec00">
-        <source>BLIK Pay Later lets you defer payment for online purchases for 30 days, up to 4,000 PLN.</source>
-        <target>BLIK Płacę Później to usługa, która pozwala na odroczenie płatności za zakupy online do 30 dni, maksymalnie do 4000 PLN.</target>
-      </trans-unit>
       <trans-unit id="0203eced6da80c4f2458c91eee3fe223">
         <source>Summary of ordered products:</source>
         <target>Podsumowanie zamówionych produktów</target>
@@ -310,6 +318,10 @@
         <source>Thank you for your order and we invite you to further </source>
         <target>Dziękujemy za złożenie zamówienia i zachęcamy do dalszych</target>
       </trans-unit>
+      <trans-unit id="1e4b30b9ca26b70d621c7122223b730f">
+        <source>The CVV2/CVC2 code is a 3-digit number located on the back of Mastercard and Visa cards.</source>
+        <target>Kod CVV2/CVC2 to trzycyfrowy numer umieszczony na odwrocie kart Mastercard i Visa.</target>
+      </trans-unit>
       <trans-unit id="bf5a8c00d8d29b20e0488933df997fff">
         <source>The administrator of the personal data is Krajowy Integrator Płatności spółka akcyjna, based in Poznań.</source>
         <target>Administratorem danych osobowych jest Krajowy Integrator Płatności spółka akcyjna z siedzibą w Poznaniu.</target>
@@ -321,10 +333,6 @@
       <trans-unit id="5c9799c99b30ca7f3121d8e4fc48679a">
         <source>The code you entered is invalid or has expired.</source>
         <target>Podany kod jest nieprawidłowy, bądź utracił ważność.</target>
-      </trans-unit>
-      <trans-unit id="76530d778bad8c827dde4eece526deaa">
-        <source>The security number located on the back of the payment card.</source>
-        <target>Numer zabezpieczający, znajdujący się na odwrocie karty płatniczej.</target>
       </trans-unit>
       <trans-unit id="9bceca617a7b6591070c38f2fe3ffeb1">
         <source>Tpay payment</source>

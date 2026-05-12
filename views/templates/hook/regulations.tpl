@@ -24,4 +24,9 @@
 			{l s='Read the full content.' d='Modules.Tpay.Shop'}
 		</a>
 	</p>
+	<p class="tpay-regulations__content">
+		Powered by
+		<img width="50"
+		src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg" alt="TPAY">
+	</p>
 </div>
