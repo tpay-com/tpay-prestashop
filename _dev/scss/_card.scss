@@ -41,7 +41,6 @@
 			height: 20px;
 			margin-top: 14px;
 			display: block;
-			/* color #072653 */
 			filter: brightness(0) saturate(100%)
 			invert(12%) sepia(36%) saturate(1583%)
 			hue-rotate(181deg) brightness(93%) contrast(98%);
@@ -154,7 +153,6 @@
   &__save {
 	display: flex;
 	align-items: center;
-	//margin-bottom: 20px;
 	label {
 	  margin-left: 10px;
 	  margin-bottom:0;
