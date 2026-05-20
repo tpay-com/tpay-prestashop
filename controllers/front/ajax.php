@@ -93,7 +93,7 @@ class TpayAjaxModuleFrontController extends ModuleFrontController
             'type' => 'payment',
             'label' => $this->trans('Online payment fee', [], 'Shop.Theme.Checkout'),
             'amount' => 1,
-            'value' => Tools::displayPrice($surchargeService->getSurchargeValue($orderTotal)),
+            'value' => $this->context->getCurrentLocale()->formatPrice($surchargeService->getSurchargeValue($orderTotal), $this->context->currency->iso_code),
         ];
 
         $presenterCart['totals'] = [
@@ -101,21 +101,22 @@ class TpayAjaxModuleFrontController extends ModuleFrontController
                 'type' => 'total',
                 'label' => $this->trans('Total', [], 'Shop.Theme.Checkout'),
                 'amount' => $taxConfiguration->includeTaxes() ? $totalIncludingTax : $totalExcludingTax,
-                'value' => Tools::displayPrice(
-                    $taxConfiguration->includeTaxes() ? (float) $totalIncludingTax : (float) $totalExcludingTax
+                'value' => $this->context->getCurrentLocale()->formatPrice(
+                    $taxConfiguration->includeTaxes() ? (float) $totalIncludingTax : (float) $totalExcludingTax,
+                    $this->context->currency->iso_code
                 ),
             ],
             'total_including_tax' => [
                 'type' => 'total',
                 'label' => $this->trans('Total (tax incl.)', [], 'Shop.Theme.Checkout'),
                 'amount' => $totalIncludingTax,
-                'value' => Tools::displayPrice((float) $totalIncludingTax),
+                'value' => $this->context->getCurrentLocale()->formatPrice((float) $totalIncludingTax, $this->context->currency->iso_code),
             ],
             'total_excluding_tax' => [
                 'type' => 'total',
                 'label' => $this->trans('Total (tax excl.)', [], 'Shop.Theme.Checkout'),
                 'amount' => $totalExcludingTax,
-                'value' => Tools::displayPrice((float) $totalExcludingTax),
+                'value' => $this->context->getCurrentLocale()->formatPrice((float) $totalExcludingTax, $this->context->currency->iso_code),
             ],
         ];
 
