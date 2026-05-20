@@ -61,7 +61,7 @@ class Payment extends AbstractHook
                 $langData,
                 [
                     'tpay_path' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/tpay/views/',
-                    'surcharge' => $surcharge > 0 ? Tools::displayPrice($this->getSurchargeCost()) : false,
+                    'surcharge' => $surcharge > 0 ? $this->context->getCurrentLocale()->formatPrice($this->getSurchargeCost(), $this->context->currency->iso_code) : false,
                 ]
             )
         );
