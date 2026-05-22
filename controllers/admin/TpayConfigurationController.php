@@ -146,7 +146,7 @@ class TpayConfigurationController extends ModuleAdminController
 
     public function postProcess()
     {
-        if (Tools::isSubmit('submit'.$this->module->name)) {
+        if (Tools::isSubmit('submit' . $this->module->name)) {
             try {
                 if (!$this->validatePostProcess()) {
                     return false;
@@ -205,7 +205,7 @@ class TpayConfigurationController extends ModuleAdminController
         $helper->title = $this->module->displayName;
         $helper->show_toolbar = true;
         $helper->toolbar_scroll = true;
-        $helper->submit_action = 'submit'.$this->module->name;
+        $helper->submit_action = 'submit' . $this->module->name;
 
         return $helper->generateForm($fields_form);
     }
@@ -214,12 +214,12 @@ class TpayConfigurationController extends ModuleAdminController
     {
         if (Shop::CONTEXT_GROUP == Shop::getContext()) {
             return '<p class="alert alert-warning">'
-                .$this->trans(
+                . $this->trans(
                     'You cannot manage from a "Group Shop" context, select directly the shop you want to edit',
                     [],
                     'Modules.Tpay.Admin'
                 )
-                .'</p>';
+                . '</p>';
         }
 
         return '';

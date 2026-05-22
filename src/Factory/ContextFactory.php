@@ -15,7 +15,7 @@ use Smarty;
 
 class ContextFactory
 {
-    /** @return null|Context */
+    /** @return Context|null */
     public static function getContext()
     {
         return Context::getContext();
@@ -33,7 +33,7 @@ class ContextFactory
         return Context::getContext()->language;
     }
 
-    /** @return null|Currency */
+    /** @return Currency|null */
     public static function getCurrency()
     {
         return Context::getContext()->currency;

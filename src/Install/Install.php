@@ -68,7 +68,7 @@ class Install
     {
         $status = true;
         $database = Db::getInstance();
-        $sql = Tools::file_get_contents($this->module->getLocalPath().'src/Install/install.sql');
+        $sql = Tools::file_get_contents($this->module->getLocalPath() . 'src/Install/install.sql');
         $sql = str_replace(['_DB_PREFIX_', '_MYSQL_ENGINE_'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sql);
 
         $sqlQuery = explode(';', $sql);

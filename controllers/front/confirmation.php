@@ -21,7 +21,7 @@ class TpayConfirmationModuleFrontController extends ModuleFrontController
                 throw new PrestaShopException('Incorrect payment type');
         }
 
-        $this->setTemplate(Config::TPAY_PATH.'/redirect.tpl');
+        $this->setTemplate(Config::TPAY_PATH . '/redirect.tpl');
     }
 
     private function confirmPaymentBasic(): void
@@ -46,8 +46,8 @@ class TpayConfirmationModuleFrontController extends ModuleFrontController
         $customer = new Customer($order->id_customer);
 
         Tools::redirect(
-            'index.php?controller=order-confirmation&id_cart='.(int) $cart->id.'&id_module='
-            .(int) $this->module->id.'&id_order='.$order->id.'&key='.$customer->secure_key
+            'index.php?controller=order-confirmation&id_cart=' . (int) $cart->id . '&id_module='
+            . (int) $this->module->id . '&id_order=' . $order->id . '&key=' . $customer->secure_key
         );
     }
 }

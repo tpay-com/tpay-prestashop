@@ -60,7 +60,7 @@ class Payment extends AbstractHook
             array_merge(
                 $langData,
                 [
-                    'tpay_path' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/tpay/views/',
+                    'tpay_path' => Tools::getHttpHost(true) . __PS_BASE_URI__ . 'modules/tpay/views/',
                     'surcharge' => $surcharge > 0 ? $this->context->getCurrentLocale()->formatPrice($this->getSurchargeCost(), $this->context->currency->iso_code) : false,
                 ]
             )
@@ -97,7 +97,7 @@ class Payment extends AbstractHook
                 'historyLink' => 'index.php?controller=history',
                 'homeLink' => 'index.php',
                 'contactLink' => 'index.php?controller=contact',
-                'modulesDir' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/',
+                'modulesDir' => Tools::getHttpHost(true) . __PS_BASE_URI__ . 'modules/',
             ]
         );
 

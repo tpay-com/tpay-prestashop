@@ -57,7 +57,7 @@ class PaymentOptionsService
         try {
             $this->getPaymentGroups();
         } catch (PrestaShopException $e) {
-            PrestaShopLogger::addLog('Error getGroup '.$e->getMessage(), 4);
+            PrestaShopLogger::addLog('Error getGroup ' . $e->getMessage(), 4);
             throw new PrestaShopException($e->getMessage());
         }
     }
@@ -66,7 +66,7 @@ class PaymentOptionsService
     public function createTransferPaymentChannel(): void
     {
         $payment = [
-            'img' => Context::getContext()->shop->getBaseURL(true).'modules/tpay/views/img/tpay.svg',
+            'img' => Context::getContext()->shop->getBaseURL(true) . 'modules/tpay/views/img/tpay.svg',
             'gateways' => $this->getGroupTransfers(),
             'id' => Config::GATEWAY_TRANSFER,
             'mainChannel' => Config::GATEWAY_TRANSFER,

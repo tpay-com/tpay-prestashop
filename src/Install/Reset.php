@@ -65,7 +65,7 @@ class Reset
             'TPAY_PEKAO_INSTALLMENTS_ACTIVE',
             'TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE',
             'TPAY_PEKAO_INSTALLMENTS_SHOPPING_CART',
-            'TPAY_PEKAO_INSTALLMENTS_CHECKOUT'];
+            'TPAY_PEKAO_INSTALLMENTS_CHECKOUT', ];
 
         try {
             foreach ($configurations as $configName) {

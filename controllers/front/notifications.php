@@ -40,7 +40,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
             echo 'TRUE';
         } catch (TpayException $e) {
             PrestaShopLogger::addLog($e->getMessage(), 3);
-            echo 'FALSE - '.$e->getMessage();
+            echo 'FALSE - ' . $e->getMessage();
             $this->badRequestResponse();
         } catch (Exception $e) {
             PrestaShopLogger::addLog($e->getMessage(), 3);
@@ -64,7 +64,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                 $this->handleBlikUnregister($notification);
                 break;
             default:
-                throw new TpayException('Unsupported notification type: '.get_class($notification));
+                throw new TpayException('Unsupported notification type: ' . get_class($notification));
         }
     }
 
@@ -90,7 +90,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
     {
         if ($notification->isTestNotification()) {
             PrestaShopLogger::addLog(
-                'Odebrano testowe powiadomienie: '.print_r($notification->getNotificationAssociative(), 1)
+                'Odebrano testowe powiadomienie: ' . print_r($notification->getNotificationAssociative(), 1)
             );
 
             return;
@@ -116,9 +116,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                     $notificationData
                 );
             } else {
-                throw new NotificationHandlingException(
-                    'Transaction not found for CRC: '.$trCrc
-                );
+                throw new NotificationHandlingException('Transaction not found for CRC: ' . $trCrc);
             }
         }
 
@@ -166,7 +164,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                 $this->setConfirmed($transaction['order_id'], $transaction['transaction_id']);
             }
 
-            /// Charge
+            // / Charge
             if ('CHARGEBACK' === $status) {
                 $sqlTransaction = $transactionRepository->getTransactionByCrc($transaction['crc']);
                 $orderId = (int) $sqlTransaction['order_id'];
@@ -201,9 +199,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         } elseif ('order_id_and_rest' === $crcForm) {
             $orderId = (int) strstr($notificationData['tr_crc'], '-', true);
         } else {
-            throw new NotificationHandlingException(
-                'CRC mismatch and recovery disabled. CRC: '.$notificationData['tr_crc']
-            );
+            throw new NotificationHandlingException('CRC mismatch and recovery disabled. CRC: ' . $notificationData['tr_crc']);
         }
 
         $transactionRepository->processCreateTransaction(

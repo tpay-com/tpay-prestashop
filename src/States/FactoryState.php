@@ -97,7 +97,7 @@ class FactoryState
 
     public function assignConfiguration($state, $name)
     {
-        $nameUpper = 'TPAY_'.Tools::strtoupper($name);
+        $nameUpper = 'TPAY_' . Tools::strtoupper($name);
 
         if (Shop::isFeatureActive()) {
             $shops = Shop::getCompleteListOfShopsID();
@@ -158,12 +158,12 @@ class FactoryState
 
         return (bool) Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
             'SELECT COUNT(*) AS count'
-            .' FROM '._DB_PREFIX_.'order_state_lang osl'
-            .' INNER JOIN '._DB_PREFIX_.'order_state os ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.$idLang.')'
-            .' WHERE osl.id_lang = '.$idLang
-            .' AND osl.name =  \''.pSQL($name).'\''
-            .' AND os.deleted = 0'
-            .($excludeIdOrderState ? ' AND osl.id_order_state != '.$excludeIdOrderState : '')
+            . ' FROM ' . _DB_PREFIX_ . 'order_state_lang osl'
+            . ' INNER JOIN ' . _DB_PREFIX_ . 'order_state os ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = ' . $idLang . ')'
+            . ' WHERE osl.id_lang = ' . $idLang
+            . ' AND osl.name =  \'' . pSQL($name) . '\''
+            . ' AND os.deleted = 0'
+            . ($excludeIdOrderState ? ' AND osl.id_order_state != ' . $excludeIdOrderState : '')
         );
     }
 }

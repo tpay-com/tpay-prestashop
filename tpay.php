@@ -18,7 +18,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-$autoloadPath = __DIR__.'/vendor/autoload.php';
+$autoloadPath = __DIR__ . '/vendor/autoload.php';
 if (file_exists($autoloadPath)) {
     include_once $autoloadPath;
 }
@@ -188,7 +188,7 @@ class Tpay extends PaymentModule
     /**
      * @throws Exception
      *
-     * @return null|false|object
+     * @return false|object|null
      */
     public function getService(string $serviceName)
     {
@@ -197,7 +197,7 @@ class Tpay extends PaymentModule
             return $container->get($serviceName);
         }
 
-        throw new Exception('Cannot get service '.$serviceName);
+        throw new Exception('Cannot get service ' . $serviceName);
     }
 
     public function getPath(): string
@@ -217,7 +217,7 @@ class Tpay extends PaymentModule
             $this->_errors[] = $this->trans(
                 sprintf(
                     'Your PHP version is too old, please upgrade to a newer version. Your version is %s,'
-                    .' library requires %s',
+                    . ' library requires %s',
                     phpversion(),
                     '7.1'
                 ),
@@ -323,10 +323,10 @@ class Tpay extends PaymentModule
         if (version_compare(_PS_VERSION_, '1.7.6.0', '<')) {
             $isOldPresta = true;
             if (false === ($smarty->registered_resources['module'] instanceof Tpay\Util\LegacySmartyResourceModule)) {
-                $module_resources = ['theme' => _PS_THEME_DIR_.'modules/'];
+                $module_resources = ['theme' => _PS_THEME_DIR_ . 'modules/'];
 
                 if (_PS_PARENT_THEME_DIR_) {
-                    $module_resources['parent'] = _PS_PARENT_THEME_DIR_.'modules/';
+                    $module_resources['parent'] = _PS_PARENT_THEME_DIR_ . 'modules/';
                 }
 
                 $module_resources['modules'] = _PS_MODULE_DIR_;
@@ -482,7 +482,7 @@ class Tpay extends PaymentModule
 
     private function getPrestaVersion(): string
     {
-        $dir = realpath(__DIR__.'/../../config/settings.inc.php');
+        $dir = realpath(__DIR__ . '/../../config/settings.inc.php');
         if ($dir && file_exists($dir)) {
             include $dir;
         }
@@ -509,7 +509,7 @@ class Tpay extends PaymentModule
 
     private function getPackageVersion(): string
     {
-        $dir = __DIR__.'/composer.json';
+        $dir = __DIR__ . '/composer.json';
         if (file_exists($dir)) {
             $composerJson = json_decode(file_get_contents($dir), true)['require'] ?? [];
 

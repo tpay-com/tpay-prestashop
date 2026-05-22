@@ -21,8 +21,8 @@ class TpayOrderErrorModuleFrontController extends ModuleFrontController
         $customer = new Customer($order->id_customer);
 
         Tools::redirect(
-            'index.php?controller=order-confirmation&action=renew-payment&id_cart='.(int) $cart->id.'&id_module='
-            .(int) $this->module->id.'&id_order='.$order->id.'&key='.$customer->secure_key
+            'index.php?controller=order-confirmation&action=renew-payment&id_cart=' . (int) $cart->id . '&id_module='
+            . (int) $this->module->id . '&id_order=' . $order->id . '&key=' . $customer->secure_key
         );
     }
 }

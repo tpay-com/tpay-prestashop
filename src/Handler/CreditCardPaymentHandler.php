@@ -160,7 +160,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
                 Tools::redirect($response['transactionPaymentUrl']);
             }
         }
-        PrestaShopLogger::addLog('Unable to create new card payment. Response: '.json_encode($transaction), 3);
+        PrestaShopLogger::addLog('Unable to create new card payment. Response: ' . json_encode($transaction), 3);
         Tools::redirect(
             $this->context->link->getModuleLink(
                 'tpay',
@@ -238,7 +238,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         $cardHashInput = filter_input(INPUT_POST, 'card_hash', FILTER_SANITIZE_STRING);
         $cartHash = $this->module->getService('tpay.util.secret_hash')->getValue();
 
-        $cardHash = sha1($cardHashInput.$cartHash);
+        $cardHash = sha1($cardHashInput . $cartHash);
         $saveCard = false;
 
         if (isset($_POST['card_save'])) {

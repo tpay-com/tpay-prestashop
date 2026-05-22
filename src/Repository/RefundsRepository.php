@@ -79,7 +79,7 @@ class RefundsRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('*')
-            ->from($this->dbPrefix.self::TABLE, 'cc')
+            ->from($this->dbPrefix . self::TABLE, 'cc')
             ->andWhere('cc.order_id = :orderId')
             ->setParameter('orderId', (int) $orderId);
 

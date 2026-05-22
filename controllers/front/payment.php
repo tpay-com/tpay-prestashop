@@ -56,7 +56,7 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
             $cart
         );
 
-        $this->setTemplate(Config::TPAY_PATH.'/redirect.tpl');
+        $this->setTemplate(Config::TPAY_PATH . '/redirect.tpl');
     }
 
     private function handleRetry($orderId)
@@ -72,15 +72,15 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
             $paymentType = PaymentFactory::getPaymentMethod($type);
             $this->createTransaction($order, $paymentType);
         } catch (Exception $e) {
-            PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID '.$order->id.': '.$e->getMessage(), 3);
+            PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID ' . $order->id . ': ' . $e->getMessage(), 3);
             $this->context->cookie->tpay_errors = $this->trans(
                 'Failed to create the transaction. Please try again.',
                 [],
                 'Modules.Tpay.Shop'
             );
             Tools::redirect(
-                'index.php?controller=order-confirmation&action=renew-payment&id_cart='.$order->id_cart.'&id_module='
-                .(int) $this->module->id.'&id_order='.$order->id.'&key='.$customer->secure_key
+                'index.php?controller=order-confirmation&action=renew-payment&id_cart=' . $order->id_cart . '&id_module='
+                . (int) $this->module->id . '&id_order=' . $order->id . '&key=' . $customer->secure_key
             );
         }
     }
@@ -103,7 +103,7 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
             $this->module->getContext()->smarty->assign(['nbProducts' => $cart->nbProducts()]);
             $this->createTransaction($order, $paymentType);
         } catch (Exception $e) {
-            PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID '.$order->id.': '.$e->getMessage(), 3);
+            PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID ' . $order->id . ': ' . $e->getMessage(), 3);
 
             $order->setCurrentState(Cfg::get('TPAY_FAILED'));
             $this->context->cookie->tpay_errors = $this->trans(
@@ -113,8 +113,8 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
             );
 
             Tools::redirect(
-                'index.php?controller=order-confirmation&action=renew-payment&id_cart='.(int) $cart->id.'&id_module='
-                .(int) $this->module->id.'&id_order='.$order->id.'&key='.$customer->secure_key
+                'index.php?controller=order-confirmation&action=renew-payment&id_cart=' . (int) $cart->id . '&id_module='
+                . (int) $this->module->id . '&id_order=' . $order->id . '&key=' . $customer->secure_key
             );
         }
     }

@@ -290,7 +290,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
     private function getBlikAlias($cart, $blikCode = '')
     {
         // Use new blik token
-        $userAlias = 'user_'.$cart->id_customer.'_'.Helper::generateRandomString(5);
+        $userAlias = 'user_' . $cart->id_customer . '_' . Helper::generateRandomString(5);
 
         // Use alias
         if (empty($blikCode)) {
@@ -397,7 +397,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
             foreach ($result['payments']['attempts'] as $error) {
                 if ('' != $error['paymentErrorCode']) {
-                    $errors++;
+                    ++$errors;
                 }
             }
 
@@ -415,7 +415,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             }
 
             sleep(1);
-            $i++;
+            ++$i;
         } while (!$stop);
 
         return $result;

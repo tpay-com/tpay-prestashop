@@ -71,7 +71,7 @@ class CreditCardsRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('*')
-            ->from($this->dbPrefix.self::TABLE, 'cc')
+            ->from($this->dbPrefix . self::TABLE, 'cc')
             ->andWhere('cc.user_id = :userId')
             ->andWhere('cc.card_token != ""')
             ->andWhere('cc.card_token IS NOT NULL')
@@ -94,7 +94,7 @@ class CreditCardsRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('*')
-            ->from($this->dbPrefix.self::TABLE, 'cc')
+            ->from($this->dbPrefix . self::TABLE, 'cc')
             ->andWhere('cc.card_hash = :cardHash')
             ->andWhere('cc.crc = :crc');
         $qb->setParameter('cardHash', $cardHash);
@@ -116,7 +116,7 @@ class CreditCardsRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('card_token')
-            ->from($this->dbPrefix.self::TABLE, 'cc')
+            ->from($this->dbPrefix . self::TABLE, 'cc')
             ->andWhere('cc.crc = :crc');
 
         $qb->setParameter('crc', $crc);
@@ -133,7 +133,7 @@ class CreditCardsRepository
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->delete($this->dbPrefix.self::TABLE)
+            ->delete($this->dbPrefix . self::TABLE)
             ->where('id = :id')
             ->andWhere('user_id = :userId')
             ->setParameter('id', $id)
@@ -150,7 +150,7 @@ class CreditCardsRepository
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix.self::TABLE)
+            ->update($this->dbPrefix . self::TABLE)
             ->set('card_token', ':cardToken')
             ->andWhere('crc = :crc')
             ->setParameter('cardToken', $cardToken)
@@ -167,7 +167,7 @@ class CreditCardsRepository
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix.self::TABLE)
+            ->update($this->dbPrefix . self::TABLE)
             ->set('date_update', ':dateUpdate')
             ->set('crc', ':crc')
             ->andWhere('card_hash = :cardHash')

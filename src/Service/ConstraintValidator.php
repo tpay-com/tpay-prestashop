@@ -6,7 +6,7 @@ use Tpay;
 
 class ConstraintValidator
 {
-    /** @var null|SurchargeService */
+    /** @var SurchargeService|null */
     protected $surchargeService;
 
     public function __construct(Tpay $module)

@@ -65,9 +65,9 @@ class EmailOrder extends AbstractHook
             );
 
             $emailFooter = str_replace('{total_paid}', $total, (string) $emailFooter);
-            $params['template_html'] = $emailHeader.$this->renderExtraChargeDataInMail(
+            $params['template_html'] = $emailHeader . $this->renderExtraChargeDataInMail(
                 $this->getSurchargeCost()
-            ).$emailFooter;
+            ) . $emailFooter;
         }
 
         return $params;

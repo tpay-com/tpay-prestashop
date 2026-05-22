@@ -63,9 +63,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
 
         $this->initTransactionProcess($transaction, (int) $order->id);
 
-        throw new PaymentException(
-            'Unable to create payment method. Response: '.json_encode($transaction)
-        );
+        throw new PaymentException('Unable to create payment method. Response: ' . json_encode($transaction));
     }
 
     /**

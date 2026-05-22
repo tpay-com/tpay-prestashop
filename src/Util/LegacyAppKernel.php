@@ -2,12 +2,12 @@
 
 namespace Tpay\Util;
 
-$autoload = _PS_ROOT_DIR_.'/app/autoload.php';
+$autoload = _PS_ROOT_DIR_ . '/app/autoload.php';
 if (file_exists($autoload)) {
     include_once $autoload;
 }
 if (!class_exists('\AppKernel')) {
-    include_once _PS_ROOT_DIR_.'/app/AppKernel.php';
+    include_once _PS_ROOT_DIR_ . '/app/AppKernel.php';
 }
 
 use AppKernel;
@@ -18,7 +18,7 @@ class LegacyAppKernel extends AppKernel
 
     public function getRootDir()
     {
-        return _PS_ROOT_DIR_.'/app';
+        return _PS_ROOT_DIR_ . '/app';
     }
 
     public function getCacheDir(): string
@@ -27,19 +27,19 @@ class LegacyAppKernel extends AppKernel
             return _PS_CACHE_DIR_;
         }
 
-        return _PS_ROOT_DIR_.'/app/cache/'.$this->getEnvironment();
+        return _PS_ROOT_DIR_ . '/app/cache/' . $this->getEnvironment();
     }
 
     public function getLogDir(): string
     {
-        return _PS_ROOT_DIR_.'/app/logs';
+        return _PS_ROOT_DIR_ . '/app/logs';
     }
 
     public function registerContainerConfiguration(\Symfony\Component\Config\Loader\LoaderInterface $loader)
     {
         parent::registerContainerConfiguration($loader);
-        $loader->load(__DIR__.'/../../config/common.yml');
-        $loader->load(__DIR__.'/../../config/config.yml');
+        $loader->load(__DIR__ . '/../../config/common.yml');
+        $loader->load(__DIR__ . '/../../config/config.yml');
     }
 
     public function getAppId(): string
@@ -49,6 +49,6 @@ class LegacyAppKernel extends AppKernel
 
     protected function getContainerClass(): string
     {
-        return 'legacy'.ucfirst($this->name).ucfirst($this->environment).($this->debug ? 'Debug' : '').'ProjectContainer';
+        return 'legacy' . ucfirst($this->name) . ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
     }
 }

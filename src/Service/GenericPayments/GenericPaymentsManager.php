@@ -102,20 +102,20 @@ class GenericPaymentsManager
             Cfg::updateValue($configField, 0);
 
             $disabledHelp = '<details class="tpay-collapsible-desc" style="margin-top:6px;">'
-                .'<summary style="cursor: pointer;"><a>'.$this->translator->trans('Can\'t enable BLIK Pay Later?', [], 'Modules.Tpay.Admin').'</a></summary>'
-                .'<div style="margin-top:8px; padding:8px; border:1px solid #d6d4d4; background:#f8f8f8; border-radius:4px;">'
-                .$this->translator->trans('Log in to', [], 'Modules.Tpay.Admin').' '
-                .'<a href="https://panel.tpay.com" target="_blank">'.$this->translator->trans('Tpay Merchant Panel', [], 'Modules.Tpay.Admin').'</a> '
-                .$this->translator->trans('and check if BLIK Pay Later is active. If the payment option is not enabled, activate it and then re-enable it in your store.', [], 'Modules.Tpay.Admin')
-                .'</div></details>';
+                . '<summary style="cursor: pointer;"><a>' . $this->translator->trans('Can\'t enable BLIK Pay Later?', [], 'Modules.Tpay.Admin') . '</a></summary>'
+                . '<div style="margin-top:8px; padding:8px; border:1px solid #d6d4d4; background:#f8f8f8; border-radius:4px;">'
+                . $this->translator->trans('Log in to', [], 'Modules.Tpay.Admin') . ' '
+                . '<a href="https://panel.tpay.com" target="_blank">' . $this->translator->trans('Tpay Merchant Panel', [], 'Modules.Tpay.Admin') . '</a> '
+                . $this->translator->trans('and check if BLIK Pay Later is active. If the payment option is not enabled, activate it and then re-enable it in your store.', [], 'Modules.Tpay.Admin')
+                . '</div></details>';
         }
 
         $collapsible = '<details class="tpay-collapsible-desc" style="margin-top:6px;">'
-            .'<summary style="cursor: pointer;"><a>'.$this->translator->trans('What is BLIK Pay Later?', [], 'Modules.Tpay.Admin').'</a></summary>'
-            .'<div style="margin-top:8px; padding:8px; border:1px solid #d6d4d4; background:#f8f8f8; border-radius:4px;">'
-            .$this->translator->trans('BLIK Pay Later is a deferred payment service for transactions ranging from 30 PLN to 4,000 PLN. You will receive the money for the sold goods immediately, while the Customer will have 30 days to make the payment.', [], 'Modules.Tpay.Admin')
-            .'<a style="display: block;" target="_blank" href="https://www.blik.com/place-pozniej-dla-sklepow">'.$this->translator->trans('Learn more', [], 'Modules.Tpay.Admin').'</a>'
-            .'</div></details>';
+            . '<summary style="cursor: pointer;"><a>' . $this->translator->trans('What is BLIK Pay Later?', [], 'Modules.Tpay.Admin') . '</a></summary>'
+            . '<div style="margin-top:8px; padding:8px; border:1px solid #d6d4d4; background:#f8f8f8; border-radius:4px;">'
+            . $this->translator->trans('BLIK Pay Later is a deferred payment service for transactions ranging from 30 PLN to 4,000 PLN. You will receive the money for the sold goods immediately, while the Customer will have 30 days to make the payment.', [], 'Modules.Tpay.Admin')
+            . '<a style="display: block;" target="_blank" href="https://www.blik.com/place-pozniej-dla-sklepow">' . $this->translator->trans('Learn more', [], 'Modules.Tpay.Admin') . '</a>'
+            . '</div></details>';
 
         return [
             'type' => 'switch',
@@ -123,7 +123,7 @@ class GenericPaymentsManager
             'name' => $configField,
             'is_bool' => true,
             'disabled' => !$isActive,
-            'desc' => $disabledHelp.$collapsible,
+            'desc' => $disabledHelp . $collapsible,
             'values' => [
                 [
                     'id' => 'tpay_active_on',

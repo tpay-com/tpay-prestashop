@@ -18,4 +18,6 @@ namespace Tpay\Exception;
 
 use Exception;
 
-class NotificationHandlingException extends Exception {}
+class NotificationHandlingException extends Exception
+{
+}

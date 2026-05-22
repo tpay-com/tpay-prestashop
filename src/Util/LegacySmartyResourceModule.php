@@ -16,14 +16,14 @@ class LegacySmartyResourceModule extends SmartyResourceModule
     protected function fetch($name, &$source, &$mtime)
     {
         foreach ($this->paths as $path) {
-            if (Tools::file_exists_cache($file = $path.$name)) {
+            if (Tools::file_exists_cache($file = $path . $name)) {
                 if (_PS_MODE_DEV_) {
                     $source = implode(
                         '',
                         [
-                            '<!-- begin '.$file.' -->',
+                            '<!-- begin ' . $file . ' -->',
                             file_get_contents($file),
-                            '<!-- end '.$file.' -->',
+                            '<!-- end ' . $file . ' -->',
                         ]
                     );
                 } else {

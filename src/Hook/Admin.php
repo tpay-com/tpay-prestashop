@@ -34,7 +34,7 @@ class Admin extends AbstractHook
 
     private static $refundsRendered = false;
 
-    /** @var null|TranslatorComponent */
+    /** @var TranslatorComponent|null */
     private $translator;
 
     public function __construct(Tpay $module)

@@ -51,7 +51,7 @@ class TpayAjaxModuleFrontController extends ModuleFrontController
                 ]
             )
         );
-        exit();
+        exit;
     }
 
     /**

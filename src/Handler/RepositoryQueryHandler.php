@@ -71,7 +71,7 @@ class RepositoryQueryHandler
         if (method_exists(Statement::class, 'errorInfo')) {
             if ($statement instanceof Statement && !empty($statement->errorInfo())) {
                 PrestaShopLogger::addLog($errorPrefix, 3);
-                throw new RepositoryException($errorPrefix.': '.var_export($statement->errorInfo(), true));
+                throw new RepositoryException($errorPrefix . ': ' . var_export($statement->errorInfo(), true));
             }
         }
 

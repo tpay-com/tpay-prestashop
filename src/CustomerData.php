@@ -95,7 +95,7 @@ class CustomerData
         $context->cookie->customer_firstname = $firstName;
         $context->cookie->customer_lastname = $lastName;
 
-        $this->customerDetails['description'] = '#BLIK - '.$firstName.' '.$lastName;
+        $this->customerDetails['description'] = '#BLIK - ' . $firstName . ' ' . $lastName;
 
         if ($order) {
             $reference = $order->reference;
@@ -169,7 +169,7 @@ class CustomerData
 
     public function getCustomerTitle($reference, $context): string
     {
-        return '#'.$reference.' - '.$context->customer_firstname.' '.$context->customer_lastname;
+        return '#' . $reference . ' - ' . $context->customer_firstname . ' ' . $context->customer_lastname;
     }
 
     /**
@@ -189,7 +189,7 @@ class CustomerData
             ->set('email', $email)
             ->set('name', sprintf('%s %s', $customerFirstName, $customerLastName))
             ->add('phone', $phoneNumber)
-            ->add('address', trim($this->address->address1.' '.$this->address->address2))
+            ->add('address', trim($this->address->address1 . ' ' . $this->address->address2))
             ->add('code', $this->address->postcode)
             ->add('city', $this->address->city)
             ->set('country', 'PL')
@@ -233,12 +233,12 @@ class CustomerData
 
         switch (Cfg::get('TPAY_CRC_FORM')) {
             case 'order_id_and_rest':
-                return $order->id.'-'.md5($customer->secure_key.time());
+                return $order->id . '-' . md5($customer->secure_key . time());
             case 'order_id':
                 return (string) $order->id;
             case 'md5_all':
             default:
-                return md5($order->id.$customer->secure_key.time());
+                return md5($order->id . $customer->secure_key . time());
         }
     }
 }

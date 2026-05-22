@@ -33,6 +33,6 @@ class TpayRenewPaymentModuleFrontController extends ModuleFrontController
             ]
         );
 
-        $this->setTemplate(Config::TPAY_PATH.'/renewPayment.tpl');
+        $this->setTemplate(Config::TPAY_PATH . '/renewPayment.tpl');
     }
 }

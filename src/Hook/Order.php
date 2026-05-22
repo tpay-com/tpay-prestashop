@@ -142,7 +142,7 @@ class Order extends AbstractHook
                 $this->context->smarty->assign(
                     [
                         'surcharge_title' => $this->module->getTranslator()->trans('Online payment fee', [], 'Modules.Tpay.Shop'),
-                        'surcharge_cost' => Util::numberFormat($surchargeValue).' '.$currency->getSign(),
+                        'surcharge_cost' => Util::numberFormat($surchargeValue) . ' ' . $currency->getSign(),
                     ]
                 );
 

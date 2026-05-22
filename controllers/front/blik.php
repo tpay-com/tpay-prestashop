@@ -27,7 +27,7 @@ class TpayBlikModuleFrontController extends ModuleFrontController
         $customer = new Customer($order->id_customer);
 
         if (!Validate::isLoadedObject($customer)) {
-            Tools::redirect(__PS_BASE_URI__.'order.php?step=1');
+            Tools::redirect(__PS_BASE_URI__ . 'order.php?step=1');
         }
 
         if (!$this->module->active) {

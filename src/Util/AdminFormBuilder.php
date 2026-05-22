@@ -34,7 +34,7 @@ class AdminFormBuilder
     /** @var Context */
     public $context;
 
-    /** @var null|TranslatorComponent */
+    /** @var TranslatorComponent|null */
     private $translator;
 
     /** @var GenericPaymentsManager */
@@ -130,8 +130,8 @@ class AdminFormBuilder
                             'label' => $this->translator->trans('No', [], 'Modules.Tpay.Admin'),
                         ],
                     ],
-                    'desc' => '<b>'.$this->translator->trans('WARNING', [], 'Modules.Tpay.Admin').'</b> '
-                        .$this->translator->trans(
+                    'desc' => '<b>' . $this->translator->trans('WARNING', [], 'Modules.Tpay.Admin') . '</b> '
+                        . $this->translator->trans(
                             ' you will use sandbox mode - it is a different environment with mocked payment gateways - don\'t use it in production!',
                             [],
                             'Modules.Tpay.Admin'
@@ -357,7 +357,7 @@ class AdminFormBuilder
                 [
                     'type' => 'switch',
                     'label' => $this->translator->trans('Use frontend to run CRON jobs', [], 'Modules.Tpay.Admin'),
-                    'desc' => '<b>'.$this->translator->trans('WARNING', [], 'Modules.Tpay.Admin').'</b> '.$this->translator->trans('May cause some performance issues. Use this method if you cannot set cronjob to run CLI task once a day: `php modules/tpay/cron.php`', [], 'Modules.Tpay.Admin'),
+                    'desc' => '<b>' . $this->translator->trans('WARNING', [], 'Modules.Tpay.Admin') . '</b> ' . $this->translator->trans('May cause some performance issues. Use this method if you cannot set cronjob to run CLI task once a day: `php modules/tpay/cron.php`', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_AUTO_CANCEL_FRONTEND_RUN',
                     'is_bool' => true,
                     'class' => 't',

@@ -62,7 +62,7 @@ class BlikRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('alias')
-            ->from($this->dbPrefix.self::TABLE, 't')
+            ->from($this->dbPrefix . self::TABLE, 't')
             ->andWhere('t.user_id = :userId')
 
             ->setParameter('userId', (int) $userId);
@@ -93,7 +93,7 @@ class BlikRepository
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->delete($this->dbPrefix.self::TABLE)
+            ->delete($this->dbPrefix . self::TABLE)
             ->where('user_id = :userId')
             ->andWhere('alias = :alias')
             ->setParameter('userId', $userId)
