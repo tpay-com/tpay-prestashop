@@ -21,7 +21,12 @@
         "phpunit/phpunit": "^8",
         "prestashop/php-dev-tools": "^5.0",
         "stancer/php-stubs-prestashop": "^8.2",
-        "vimeo/psalm": "^4.30"
+        "vimeo/psalm": "^4.30",
+        "friendsofphp/php-cs-fixer": "^3.9",
+        "phpstan/phpstan": "^2.1",
+        "prestashop/header-stamp": "^3.1",
+        "prestashop/autoindex": "^2.1",
+        "squizlabs/php_codesniffer": "^4.0"
     },
     "minimum-stability": "stable",
     "autoload": {
