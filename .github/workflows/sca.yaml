@@ -98,4 +98,4 @@ jobs:
       - run: composer install
 
       - name: Run Header Stamp in Dry Run mode
-        run: php vendor/bin/header-stamp --license=license.txt --exclude=vendor,tests,_dev --dry-run
+        run: php vendor/bin/header-stamp --header-discrimination-string="MIT License" --license=license.txt --exclude=vendor,tests,_dev --dry-run
