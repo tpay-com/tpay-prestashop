@@ -74,7 +74,7 @@ jobs:
       # Run a container for PHPStan, having access to the module content and PrestaShop sources.
       # This tool is outside the composer.json because of the compatibility with PHP 5.6
       - name : Run PHPStan (Tag ${{ matrix.presta-versions }})
-        run: docker run --rm --volumes-from temp-ps -v $PWD:/web/module -e _PS_ROOT_DIR_=/var/www/html --workdir=/web/module phpstan/phpstan:2.1 analyse --configuration=/web/module/tests/phpstan/phpstan.neon
+        run: docker run --rm --volumes-from temp-ps -v $PWD:/web/module -e _PS_ROOT_DIR_=/var/www/html --workdir=/web/module ghcr.io/devgine/composer-php:v2-php8.2-alpine php vendor/bin/phpstan analyse --configuration=/web/module/tests/phpstan/phpstan.neon
 
   header-stamp:
     name: Check license headers
