@@ -11,4 +11,4 @@ parameters:
   # - ../../classes
   # - ../../controllers
   reportUnmatchedIgnoredErrors: false
-  level: 5
+  level: 1
