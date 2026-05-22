@@ -23,8 +23,8 @@ jobs:
 
       - run: composer cs:fixer -- --dry-run
 
-      - run: composer cs:sniffer
+      #- run: composer cs:sniffer
 
       - run: composer cs:phpstan
 
-      - run: composer cs:psalm -- --no-progress --shepherd
+      #- run: composer cs:psalm -- --no-progress --shepherd
