@@ -17,16 +17,16 @@
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.28",
-        "mockery/mockery": "^1.2",
-        "phpunit/phpunit": "^8",
-        "prestashop/php-dev-tools": "^5.0",
-        "stancer/php-stubs-prestashop": "^8.2",
-        "vimeo/psalm": "^4.30",
         "friendsofphp/php-cs-fixer": "^3.9",
+        "mockery/mockery": "^1.2",
         "phpstan/phpstan": "^2.1",
-        "prestashop/header-stamp": "^3.1",
+        "phpunit/phpunit": "^8",
         "prestashop/autoindex": "^2.1",
-        "squizlabs/php_codesniffer": "^4.0"
+        "prestashop/header-stamp": "^3.1",
+        "prestashop/php-dev-tools": "^5.0",
+        "squizlabs/php_codesniffer": "^4.0",
+        "stancer/php-stubs-prestashop": "^8.2",
+        "vimeo/psalm": "^4.30"
     },
     "minimum-stability": "stable",
     "autoload": {
