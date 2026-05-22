@@ -1,11 +1,12 @@
 {
     "name": "tpay/prestashop",
     "description": "Prestashop payment module",
-    "license": "MIT",
+    "license": "OSL-3.0",
     "type": "prestashop-module",
     "authors": [
         {
-            "name": "tpay.com"
+            "name": "PrestaShop SA",
+            "email": "contact@prestashop.com"
         }
     ],
     "require": {
