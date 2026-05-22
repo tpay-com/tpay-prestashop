@@ -7,4 +7,4 @@ parameters:
     - ../../tpay.php
 
   reportUnmatchedIgnoredErrors: false
-  level: 1
+  level: 5
