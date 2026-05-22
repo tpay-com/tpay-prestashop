@@ -49,6 +49,7 @@
         "build:prod": "composer install -v --no-dev",
         "cs:fixer": "./vendor/bin/php-cs-fixer fix -vvv --diff",
         "cs:phpstan": "./vendor/bin/phpstan",
+        "cs:sniffer": "./vendor/bin/phpcs --standard=.phpcs.xml -n",
         "test": [
             "@putenv XDEBUG_MODE=coverage",
             "@php -d date.timezone=UTC ./vendor/bin/phpunit -c tests/php/phpunit.xml"
