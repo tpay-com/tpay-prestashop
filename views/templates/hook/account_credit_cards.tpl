@@ -18,7 +18,9 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.*}
+SOFTWARE.
+
+@author Krajowy Integrator Płatności S.A.*}
 <a href="{$accountCreditCards}" class="col-lg-4 col-md-6 col-sm-6 col-xs-12" id="credit-cards">
     <span class="link-item">
       <i class="material-icons"></i>

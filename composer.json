@@ -51,6 +51,7 @@
         "cs:fixer": "./vendor/bin/php-cs-fixer fix -vvv --diff",
         "cs:phpstan": "./vendor/bin/phpstan",
         "cs:sniffer": "./vendor/bin/phpcs --standard=.phpcs.xml -n",
+        "license:update": "./vendor/bin/header-stamp --license=license.txt --exclude=vendor --header-discrimination-string=\"MIT License\"",
         "test": [
             "@putenv XDEBUG_MODE=coverage",
             "@php -d date.timezone=UTC ./vendor/bin/phpunit -c tests/php/phpunit.xml"

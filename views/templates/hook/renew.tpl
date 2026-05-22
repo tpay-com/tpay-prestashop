@@ -18,7 +18,9 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.*}
+SOFTWARE.
+
+@author Krajowy Integrator Płatności S.A.*}
 <div class="box" style="overflow: auto;">
     <p>{l s='Your payment was not yet confirmed by Tpay. If you break payment, you can try to pay again.' d='Modules.Tpay.Shop'}</p>
     <p class="cart_navigation">
