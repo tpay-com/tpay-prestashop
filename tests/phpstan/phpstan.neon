@@ -3,8 +3,8 @@ includes:
     
 parameters:
   paths:
-    - src
-    - tpay.php
+    - ../../src
+    - ../../tpay.php
 
   reportUnmatchedIgnoredErrors: false
   level: 1
