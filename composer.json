@@ -19,9 +19,9 @@
         "ergebnis/composer-normalize": "^2.28",
         "mockery/mockery": "^1.2",
         "phpunit/phpunit": "^8",
+        "prestashop/php-dev-tools": "^5.0",
         "stancer/php-stubs-prestashop": "^8.2",
-        "vimeo/psalm": "^4.30",
-        "prestashop/php-dev-tools": "^5.0"
+        "vimeo/psalm": "^4.30"
     },
     "minimum-stability": "stable",
     "autoload": {
