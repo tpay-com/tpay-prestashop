@@ -11,7 +11,7 @@ jobs:
 
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.1
           extensions: none, bcmath, curl, dom, fileinfo, gd, iconv, intl, mbstring, pdo_mysql, simplexml, soap, sockets, tokenizer, xsl, xml, xmlwriter, zip, fileinfo
           coverage: none
 
