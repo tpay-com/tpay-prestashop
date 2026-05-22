@@ -1,9 +1,9 @@
 <?php
-
-$config = new PrestaShop\CodingStandards\CsFixer\Config();
+require_once '_dev/TemporaryCsConfig.php';
+$config = new TemporaryCsConfig();
 
 /** @var \Symfony\Component\Finder\Finder $finder */
-$finder = $config->setUsingCache(true)->getFinder();
-$finder->in(__DIR__)->exclude('vendor');
+$finder = $config->setUsingCache(false)->getFinder();
+$finder->in(__DIR__)->exclude('vendor')->exclude('_dev');
 
 return $config;
