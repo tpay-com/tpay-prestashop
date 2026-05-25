@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Handler;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Exception;
 use PrestaShopException;
 use PrestaShopLogger;

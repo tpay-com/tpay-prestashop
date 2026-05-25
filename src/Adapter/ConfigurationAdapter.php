@@ -27,6 +27,10 @@
 
 namespace Tpay\Adapter;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Configuration as Cfg;
 use Shop;
 use Tools;

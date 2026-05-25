@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Hook;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Cart;
 use Currency;
 use Exception;

@@ -182,7 +182,7 @@ class Admin extends AbstractHook
                 );
             }
         }
-        $content = $this->module->fetch('module:tpay/views/templates/_admin/orderView.tpl');
+        $content = $this->module->fetch('module:tpay/views/templates/admin/orderView.tpl');
 
         // there is no displayAdminOrderMainBottom hook
         if (version_compare(_PS_VERSION_, '1.7.7.0', '<')) {

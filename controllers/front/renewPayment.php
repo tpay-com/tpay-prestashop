@@ -25,6 +25,10 @@
  * SOFTWARE.
  */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Tpay\Config\Config;
 
 /**

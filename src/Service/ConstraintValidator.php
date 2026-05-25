@@ -27,6 +27,10 @@
 
 namespace Tpay\Service;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Tpay;
 
 class ConstraintValidator

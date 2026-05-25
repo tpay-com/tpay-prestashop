@@ -84,11 +84,11 @@ class TpaySavedCardsModuleFrontController extends ModuleFrontController
             return;
         }
 
-        $delete = $this->repositoryCreditCard->deleteCard(
+        $this->repositoryCreditCard->deleteCard(
             $id,
             (int) $this->context->customer->id
         );
 
-        $this->ajaxRender(json_encode(['results' => $delete ? 'error' : 'success']));
+        $this->ajaxRender(json_encode(['results' => 'success']));
     }
 }

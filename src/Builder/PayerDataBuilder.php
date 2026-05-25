@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Builder;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use InvalidArgumentException;
 use Tpay\OpenApi\Model\Fields\Address\City;
 use Tpay\OpenApi\Model\Fields\Address\Phone;

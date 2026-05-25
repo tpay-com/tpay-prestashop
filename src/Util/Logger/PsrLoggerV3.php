@@ -27,6 +27,10 @@
 
 namespace Tpay\Util\Logger;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use PrestaShopLogger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;

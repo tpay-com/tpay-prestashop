@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Config;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class Config
 {
     public const TPAY_PAYMENT_BASIC = 'transfer';

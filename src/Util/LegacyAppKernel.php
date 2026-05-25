@@ -27,6 +27,10 @@
 
 namespace Tpay\Util;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 $autoload = _PS_ROOT_DIR_ . '/app/autoload.php';
 if (file_exists($autoload)) {
     // @phpstan-ignore-next-line

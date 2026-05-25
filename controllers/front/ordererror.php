@@ -24,6 +24,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 class TpayOrderErrorModuleFrontController extends ModuleFrontController
 {
     public function initContent()

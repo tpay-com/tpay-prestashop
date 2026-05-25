@@ -24,6 +24,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 $_GET['fc'] = 'module';
 $_GET['module'] = 'tpay';
 $_GET['controller'] = 'cron';

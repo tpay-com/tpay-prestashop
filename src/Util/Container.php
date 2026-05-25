@@ -27,6 +27,10 @@
 
 namespace Tpay\Util;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Exception;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Tpay\Entity\TpayRefund;

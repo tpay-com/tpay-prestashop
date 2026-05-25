@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Entity;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**

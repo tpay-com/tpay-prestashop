@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Service\PaymentOptions;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Configuration;
 use Context;
 use Exception;

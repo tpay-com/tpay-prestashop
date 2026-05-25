@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Hook;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use PrestaShop\PrestaShop\Core\Localization\Exception\LocalizationException;
 use PrestaShopException;
 use Tools;

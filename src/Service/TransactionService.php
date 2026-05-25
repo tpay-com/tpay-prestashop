@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Service;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Cart;
 use Context;
 use Exception;

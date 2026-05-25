@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Install;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Tpay;
 use Tpay\Exception\BaseException;
 use Tpay\Handler\InstallQueryHandler;

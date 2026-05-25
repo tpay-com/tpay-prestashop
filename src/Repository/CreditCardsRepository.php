@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Repository;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\ORM\EntityManager;

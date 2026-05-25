@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Tpay;
 
 class HookDispatcher

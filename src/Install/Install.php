@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Install;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Context;
 use Db;
 use PrestaShopBundle\Translation\TranslatorComponent;

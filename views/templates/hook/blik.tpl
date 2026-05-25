@@ -52,7 +52,7 @@
                                 </p>
                                 <div class="tpay-blik-response"></div>
                                 <div class="tpay-buttons-holder">
-                                    {include file="module:tpay/views/templates/_partials/preloader.tpl"}
+                                    {include file="module:tpay/views/templates/hook/preloader.tpl"}
                                 </div>
                             </div>
 
@@ -114,7 +114,7 @@
                                 <div class="tpay-blik-response"></div>
 
                                 <div class="tpay-buttons-holder">
-                                    {include file="module:tpay/views/templates/_partials/preloader.tpl"}
+                                    {include file="module:tpay/views/templates/hook/preloader.tpl"}
                                 </div>
 
                             </div>

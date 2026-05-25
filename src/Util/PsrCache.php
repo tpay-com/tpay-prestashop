@@ -27,6 +27,10 @@
 
 namespace Tpay\Util;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Psr\SimpleCache\CacheInterface;
 
 class PsrCache implements CacheInterface

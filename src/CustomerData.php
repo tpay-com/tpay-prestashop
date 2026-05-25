@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use AddressCore;
 use Cart;
 use Configuration as Cfg;

@@ -25,6 +25,10 @@
 * SOFTWARE.
 */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use PhpCsFixer\ConfigInterface;
 use PrestaShop\CodingStandards\CsFixer\Config;
 

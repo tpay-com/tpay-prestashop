@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\States;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Configuration as Cfg;
 use Db;
 use Exception;

@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Handler;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;

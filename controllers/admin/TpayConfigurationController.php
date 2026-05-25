@@ -92,7 +92,7 @@ class TpayConfigurationController extends ModuleAdminController
             $content .= $this->getWarningMultishopHtml();
         } else {
             $content .= $this->displayForm();
-            $content .= $this->context->smarty->fetch('module:tpay/views/templates/_admin/configuration.tpl');
+            $content .= $this->context->smarty->fetch('module:tpay/views/templates/admin/configuration.tpl');
         }
 
         $this->context->smarty->assign(['content' => $content]);

@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Service\PaymentOptions;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 use Tpay;

@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Factory;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Tpay\Config\Config;
 use Tpay\Service\PaymentOptions\Blik;
 use Tpay\Service\PaymentOptions\Card;

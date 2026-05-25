@@ -27,6 +27,10 @@
 
 namespace Tpay\Util;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 final class Cache
 {
     public static function set(string $key, string $value, int $ttl = 3600): bool

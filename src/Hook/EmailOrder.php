@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Hook;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Context;
 use Exception;
 use Order;
@@ -74,7 +78,7 @@ class EmailOrder extends AbstractHook
         if ($emailHeader) {
             $total = $cart->getOrderTotal();
             $total += $this->getSurchargeCost();
-            $total = Context::getContext()->getCurrentLocale()->formatPrice(
+            $total = $this->context->getCurrentLocale()->formatPrice(
                 $total,
                 $this->context->currency->iso_code
             );
@@ -113,7 +117,7 @@ class EmailOrder extends AbstractHook
                 ]
             );
 
-            return $this->module->fetch('module:tpay/views/templates/_admin/invoiceSurcharge.tpl');
+            return $this->module->fetch('module:tpay/views/templates/admin/invoiceSurcharge.tpl');
         }
 
         return '';

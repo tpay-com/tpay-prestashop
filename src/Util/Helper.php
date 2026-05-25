@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Tpay\Util;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Configuration;
 use Context;
 

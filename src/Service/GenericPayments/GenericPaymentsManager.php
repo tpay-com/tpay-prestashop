@@ -27,6 +27,10 @@
 
 namespace Tpay\Service\GenericPayments;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Configuration as Cfg;
 
 class GenericPaymentsManager

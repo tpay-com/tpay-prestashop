@@ -27,6 +27,10 @@
 
 namespace Tpay\Factory;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use AdminController;
 use Cart;
 use Context;
