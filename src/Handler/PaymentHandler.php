@@ -33,7 +33,6 @@ use Cart;
 use Context;
 use Customer;
 use Exception;
-use Module;
 use Order;
 use Tpay;
 use Tpay\CustomerData;
@@ -62,7 +61,7 @@ class PaymentHandler
     private $data;
 
     public function __construct(
-        Module $module,
+        Tpay $module,
         PaymentMethodHandler $paymentMethodHandler,
         Order $order,
         Customer $customer,

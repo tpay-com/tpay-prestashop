@@ -72,12 +72,12 @@ class CreditCardsRepository
      * @throws RepositoryException
      * @throws BaseException
      *
-     * @return int|Statement
+     * @return int|Statement|null
      */
     public function getAllCreditCardsByUserId($userId)
     {
         if (!$userId) {
-            return;
+            return null;
         }
 
         $qb = $this->connection->createQueryBuilder();

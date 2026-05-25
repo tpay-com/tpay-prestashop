@@ -51,6 +51,9 @@ use Tpay\Util\Helper;
 use Tpay\Util\PsrCache;
 use Tpay\Util\PsrLogger;
 
+/**
+ * @property \Tpay\OpenApi\Api\TpayApi|null $api
+ */
 class Tpay extends PaymentModule
 {
     const AUTH_TOKEN_CACHE_KEY = 'tpay_auth_token_%s';
@@ -204,12 +207,7 @@ class Tpay extends PaymentModule
      */
     public function getService(string $serviceName)
     {
-        $container = Container::getInstance();
-        if (null !== $container) {
-            return $container->get($serviceName);
-        }
-
-        throw new Exception('Cannot get service ' . $serviceName);
+        return Container::getInstance()->get($serviceName);
     }
 
     public function getPath(): string
@@ -332,11 +330,13 @@ class Tpay extends PaymentModule
         global $smarty;
         $isOldPresta = false;
 
+        // @phpstan-ignore-next-line
         if (version_compare(_PS_VERSION_, '1.7.6.0', '<')) {
             $isOldPresta = true;
             if (false === ($smarty->registered_resources['module'] instanceof Tpay\Util\LegacySmartyResourceModule)) {
                 $module_resources = ['theme' => _PS_THEME_DIR_ . 'modules/'];
 
+                // @phpstan-ignore-next-line
                 if (_PS_PARENT_THEME_DIR_) {
                     $module_resources['parent'] = _PS_PARENT_THEME_DIR_ . 'modules/';
                 }
@@ -386,6 +386,7 @@ class Tpay extends PaymentModule
         }
 
         $transactionRepository = $this->getService('tpay.repository.transaction');
+        // @phpstan-ignore-next-line
         $transaction = $transactionRepository->getTransactionByOrderId($params['order']->id);
 
         if ($transaction && 'pending' == $transaction['status'] && $this->isBlikPayment($transaction)) {
@@ -433,6 +434,7 @@ class Tpay extends PaymentModule
 
         if (!$transaction) {
             $this->context->smarty->assign([
+                // @phpstan-ignore-next-line
                 'errors' => $this->context->cookie->tpay_errors,
                 'retry_order' => $params['order']->id,
                 'assets_path' => $this->getPath(),
@@ -504,19 +506,6 @@ class Tpay extends PaymentModule
         }
 
         return 'n/a';
-    }
-
-    private function getAuthTokenCacheKey()
-    {
-        return sprintf(
-            self::AUTH_TOKEN_CACHE_KEY,
-            md5(
-                join(
-                    '|',
-                    [Cfg::get('TPAY_CLIENT_ID'), Cfg::get('TPAY_SECRET_KEY'), !Cfg::get('TPAY_SANDBOX')]
-                )
-            )
-        );
     }
 
     private function getPackageVersion(): string

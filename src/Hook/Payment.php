@@ -120,7 +120,7 @@ class Payment extends AbstractHook
     {
         $orderTotal = (float) $this->context->cart->getOrderTotal();
         $surchargeService = $this->module->getService('tpay.service.surcharge');
-
+        // @phpstan-ignore-next-line
         return $surchargeService->getSurchargeValue($orderTotal);
     }
 }

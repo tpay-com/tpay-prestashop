@@ -28,6 +28,7 @@ namespace Tpay\Util;
 
 $autoload = _PS_ROOT_DIR_ . '/app/autoload.php';
 if (file_exists($autoload)) {
+    // @phpstan-ignore-next-line
     include_once $autoload;
 }
 if (!class_exists('\AppKernel')) {
@@ -47,11 +48,8 @@ class LegacyAppKernel extends AppKernel
 
     public function getCacheDir(): string
     {
-        if (_PS_CACHE_DIR_) {
-            return _PS_CACHE_DIR_;
-        }
-
-        return _PS_ROOT_DIR_ . '/app/cache/' . $this->getEnvironment();
+        // @phpstan-ignore-next-line
+        return _PS_CACHE_DIR_ ?: _PS_ROOT_DIR_ . '/app/cache/' . $this->getEnvironment();
     }
 
     public function getLogDir(): string

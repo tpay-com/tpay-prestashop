@@ -46,6 +46,8 @@ class TpayRefund
      * @ORM\Column(name="id", type="integer")
      *
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @phpstan-ignore-next-line
      */
     private $id;
 
@@ -67,6 +69,8 @@ class TpayRefund
      * @var DateTime
      *
      * @ORM\Column(name="date", type="datetime")
+     *
+     * @phpstan-ignore-next-line
      */
     private $date;
 

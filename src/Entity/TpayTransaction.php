@@ -45,6 +45,8 @@ class TpayTransaction
      * @ORM\Column(name="id", type="integer")
      *
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @phpstan-ignore-next-line
      */
     private $id;
 

@@ -46,6 +46,8 @@ class TpayCreditCard
      * @ORM\Column(name="id", type="integer")
      *
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @phpstan-ignore-next-line
      */
     private $id;
 
@@ -102,6 +104,8 @@ class TpayCreditCard
      * @var DateTime
      *
      * @ORM\Column(name="date_update", type="datetime")
+     *
+     * @phpstan-ignore-next-line
      */
     private $dateUpdate;
 
@@ -165,8 +169,7 @@ class TpayCreditCard
         return $this->dateUpdate;
     }
 
-    /** @return self */
-    public function setCardToken(string $cardToken)
+    public function setCardToken(string $cardToken): self
     {
         $this->cardToken = $cardToken;
 

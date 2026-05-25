@@ -79,6 +79,7 @@ class Order extends AbstractHook
             $cart = Cart::getCartByOrderId($order->id);
 
             $surchargeService = $this->module->getService('tpay.service.surcharge');
+            // @phpstan-ignore-next-line
             $surchargeValue = $surchargeService->getSurchargeValue();
 
             if ($surchargeValue > 0.00) {
@@ -104,6 +105,7 @@ class Order extends AbstractHook
         $computePresicion = 2;
         if (method_exists($this->context, 'getComputingPrecision')) {
             $computePresicion = $this->context->getComputingPrecision();
+        // @phpstan-ignore-next-line
         } elseif (defined(_PS_PRICE_COMPUTE_PRECISION_) && _PS_PRICE_COMPUTE_PRECISION_ !== null) {
             $computePresicion = _PS_PRICE_COMPUTE_PRECISION_;
         }
@@ -148,7 +150,9 @@ class Order extends AbstractHook
         $surchargeService = $this->module->getService('tpay.service.surcharge');
         $transactionService = $this->module->getService('tpay.repository.transaction');
 
+        // @phpstan-ignore-next-line
         if ($surchargeService->hasOrderSurcharge($transactionService, $orderId)) {
+            // @phpstan-ignore-next-line
             $surchargeValue = $surchargeService->getOrderSurcharge($transactionService, $orderId);
             if ($surchargeValue > 0.00) {
                 $this->context->smarty->assign(

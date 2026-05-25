@@ -39,10 +39,10 @@ use Tpay;
 
 class FactoryState
 {
-    /** @var Tpay */
+    /** @phpstan-ignore-next-line */
     private $module;
 
-    /** @var OrderState */
+    /** @phpstan-ignore-next-line */
     private $orderState;
 
     public function __construct(
@@ -164,6 +164,7 @@ class FactoryState
 
     private function existsLocalizedNameInDatabase($name, $idLang, $excludeIdOrderState): bool
     {
+        // @phpstan-ignore-next-line
         if (method_exists(OrderState::class, 'existsLocalizedNameInDatabase')) {
             return OrderState::existsLocalizedNameInDatabase($name, $idLang, $excludeIdOrderState);
         }

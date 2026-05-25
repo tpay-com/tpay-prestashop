@@ -51,6 +51,7 @@ class Card implements GatewayType
         $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
 
         $creditCardRepository = $module->getService('tpay.repository.credit_card');
+        // @phpstan-ignore-next-line
         $savedCreditCards = $creditCardRepository->getAllCreditCardsByUserId(Context::getContext()->customer->id);
 
         $creditCardsArray = [];

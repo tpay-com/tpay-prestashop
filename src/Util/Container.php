@@ -32,15 +32,15 @@ use Tpay\Entity\TpayRefund;
 
 final class Container
 {
-    /** @var self */
+    /** @var \Symfony\Component\DependencyInjection\ContainerInterface|null */
     private static $instance;
 
     /**
      * Get a singleton instance of SymfonyContainer
      *
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface;
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
      */
-    public static function getInstance()
+    public static function getInstance(): \Symfony\Component\DependencyInjection\ContainerInterface
     {
         if (null === self::$instance) {
             if (false === self::isContainerBuiltWithModules()) {

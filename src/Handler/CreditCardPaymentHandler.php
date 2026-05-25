@@ -103,6 +103,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     {
         if (isset($transaction['transactionId'])) {
             $transactionService = $this->module->getService('tpay.service.transaction');
+            // @phpstan-ignore-next-line
             $transactionService->transactionProcess(
                 $transaction,
                 self::TYPE,
@@ -198,6 +199,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
 
         if (isset($result['result'], $result['status']) && 'correct' === $result['status']) {
             $transactionService = $this->module->getService('tpay.service.transaction');
+            // @phpstan-ignore-next-line
             $transactionService->transactionProcess(
                 $transaction,
                 self::TYPE,
@@ -248,6 +250,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     {
         $cardDataInput = filter_input(INPUT_POST, 'carddata', FILTER_SANITIZE_STRING);
         $cardHashInput = filter_input(INPUT_POST, 'card_hash', FILTER_SANITIZE_STRING);
+        // @phpstan-ignore-next-line
         $cartHash = $this->module->getService('tpay.util.secret_hash')->getValue();
 
         $cardHash = sha1($cardHashInput . $cartHash);

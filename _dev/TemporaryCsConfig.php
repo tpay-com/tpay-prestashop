@@ -2,6 +2,7 @@
 
 use PhpCsFixer\ConfigInterface;
 use PrestaShop\CodingStandards\CsFixer\Config;
+
 class TemporaryCsConfig extends Config
 {
     public function __construct($name = 'default')

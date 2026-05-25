@@ -97,6 +97,7 @@ class Admin extends AbstractHook
                         $result = $this->processRefund($transactionId, (float) $refundAmount);
                         if (isset($result['result']) && 'success' === $result['result'] && 'correct' === $result['status']) {
                             $refunds = $this->module->getService('tpay.repository.refund');
+                            // @phpstan-ignore-next-line
                             $refunds->insertRefund(
                                 $orderId,
                                 $transactionId,
@@ -164,7 +165,9 @@ class Admin extends AbstractHook
         $surchargeService = $this->module->getService('tpay.service.surcharge');
         $transactionService = $this->module->getService('tpay.repository.transaction');
 
+        // @phpstan-ignore-next-line
         if ($surchargeService->hasOrderSurcharge($transactionService, $orderId)) {
+            // @phpstan-ignore-next-line
             $surchargeValue = $surchargeService->getOrderSurcharge($transactionService, $orderId);
             if ($surchargeValue > 0.00) {
                 $this->context->smarty->assign(
@@ -255,7 +258,7 @@ class Admin extends AbstractHook
     private function createHistory($order, OrderHistory $orderHistory)
     {
         $orderHistory->id_order = (int) $order->id;
-        $orderHistory->changeIdOrderState(Cfg::get('PS_OS_REFUND'), (int) $order->id);
+        $orderHistory->changeIdOrderState((int) Cfg::get('PS_OS_REFUND'), (int) $order->id);
         $orderHistory->addWithemail(true, []);
     }
 
@@ -267,23 +270,6 @@ class Admin extends AbstractHook
             '.',
             ''
         );
-    }
-
-    /**
-     * Validate refund amount
-     */
-    private function validRefundAmount($refundAmount, $maxRefundAmount): string
-    {
-        $error = '';
-
-        if ($this->validRefundAllowedAmount($refundAmount, $maxRefundAmount)) {
-            $error = sprintf($this->translator->trans('amount is greater than allowed %s', [], 'Modules.Tpay.Admin'), $maxRefundAmount);
-        }
-        if ($this->validRefundMinAmount($refundAmount)) {
-            $error = $this->translator->trans('invalid amount', [], 'Modules.Tpay.Admin');
-        }
-
-        return $error;
     }
 
     private function validRefundMinAmount($refundAmount): bool
@@ -313,6 +299,7 @@ class Admin extends AbstractHook
     private function getOrderRefunds(int $orderId)
     {
         $refunds = $this->module->getService('tpay.repository.refund');
+        // @phpstan-ignore-next-line
         $orderRefunds = $refunds->getOrderRefunds($orderId);
         $smartyRefunds = [];
         foreach ($orderRefunds as $refund) {

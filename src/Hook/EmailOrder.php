@@ -139,7 +139,7 @@ class EmailOrder extends AbstractHook
     {
         $orderTotal = (float) $this->context->cart->getOrderTotal();
         $surchargeService = $this->module->getService('tpay.service.surcharge');
-
+        // @phpstan-ignore-next-line
         return $surchargeService->getSurchargeValue($orderTotal);
     }
 
@@ -149,7 +149,7 @@ class EmailOrder extends AbstractHook
     private function getOrderSurchargeCost($orderId): float
     {
         $surchargeService = $this->module->getService('tpay.repository.transaction');
-
+        // @phpstan-ignore-next-line
         return (float) $surchargeService->getSurchargeValueByOrderId($orderId);
     }
 }

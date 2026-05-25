@@ -58,6 +58,7 @@ class RepositoryQueryHandler
                         $statement = $qb->executeQuery()->fetchAssociative();
                         break;
                     default:
+                        // @phpstan-ignore-next-line
                         $statement = $qb->executeStatement();
                 }
             } else {
@@ -80,6 +81,7 @@ class RepositoryQueryHandler
             throw new BaseException($exception->getMessage());
         }
 
+        // @phpstan-ignore-next-line
         if (method_exists(Statement::class, 'errorInfo')) {
             if ($statement instanceof Statement && !empty($statement->errorInfo())) {
                 PrestaShopLogger::addLog($errorPrefix, 3);

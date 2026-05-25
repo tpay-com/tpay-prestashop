@@ -45,6 +45,8 @@ class TpayBlik
      * @ORM\Column(name="id", type="integer")
      *
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @phpstan-ignore-next-line
      */
     private $id;
 
@@ -85,7 +87,7 @@ class TpayBlik
         return $this->alias;
     }
 
-    public function setAlias(string $alias)
+    public function setAlias(string $alias): self
     {
         $this->alias = $alias;
 

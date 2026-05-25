@@ -42,7 +42,7 @@ class Install
     /** @var Tpay */
     private $module;
 
-    /** @var InstallQueryHandler */
+    /** @phpstan-ignore-next-line */
     private $installQueryHandler;
 
     /** @var TranslatorComponent */

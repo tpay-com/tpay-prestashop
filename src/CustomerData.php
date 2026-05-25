@@ -55,7 +55,8 @@ class CustomerData
     /** @var Cart */
     private $cart;
 
-    private $customerDetails;
+    /** @var array<string, mixed> */
+    private $customerDetails = [];
 
     /** @var Order */
     private $order;
@@ -77,7 +78,7 @@ class CustomerData
         $this->setBasicClient();
     }
 
-    public function getData()
+    public function getData(): array
     {
         return $this->customerDetails;
     }
@@ -104,7 +105,9 @@ class CustomerData
         $firstName = $customer->firstname;
         $lastName = $customer->lastname;
 
+        // @phpstan-ignore-next-line
         $context->cookie->customer_firstname = $firstName;
+        // @phpstan-ignore-next-line
         $context->cookie->customer_lastname = $lastName;
 
         $this->customerDetails['description'] = '#BLIK - ' . $firstName . ' ' . $lastName;
@@ -192,7 +195,7 @@ class CustomerData
     private function setBasicClient(): void
     {
         $orderTotal = $this->getOrderTotalAmount();
-        $phoneNumber = (isset($this->address->phone_mobile) && strlen($this->address->phone_mobile) > 3) ? $this->address->phone_mobile : ($this->address->phone ?: '000');
+        $phoneNumber = (!empty($this->address->phone_mobile) && strlen($this->address->phone_mobile) > 3) ? $this->address->phone_mobile : ($this->address->phone ?: '000');
         $email = $this->context->cookie->email ?? $this->customer->email;
         $customerFirstName = !empty($this->context->cookie->customer_firstname) ? $this->context->cookie->customer_firstname : $this->customer->firstname;
         $customerLastName = !empty($this->context->cookie->customer_lastname) ? $this->context->cookie->customer_lastname : $this->customer->lastname;
@@ -224,7 +227,7 @@ class CustomerData
             'payer' => $payer,
         ];
 
-        if (isset($this->address->vat_number) && strlen($this->address->vat_number) > 1) {
+        if (!empty($this->address->vat_number) && strlen($this->address->vat_number) > 1) {
             $data['payer']['taxId'] = $this->address->vat_number;
         }
 

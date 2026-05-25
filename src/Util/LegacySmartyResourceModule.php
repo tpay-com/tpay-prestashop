@@ -46,14 +46,14 @@ class LegacySmartyResourceModule extends SmartyResourceModule
                         '',
                         [
                             '<!-- begin ' . $file . ' -->',
-                            file_get_contents($file),
+                            ((string)file_get_contents($file)),
                             '<!-- end ' . $file . ' -->',
                         ]
                     );
                 } else {
-                    $source = file_get_contents($file);
+                    $source = (string)file_get_contents($file);
                 }
-                $mtime = filemtime($file);
+                $mtime = (int)filemtime($file);
 
                 return;
             }

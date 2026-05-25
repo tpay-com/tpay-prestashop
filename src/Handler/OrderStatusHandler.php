@@ -68,7 +68,7 @@ class OrderStatusHandler
         $orderStatusesHistory = $this->transactionsRepository->getOrderStatusHistory($order->id);
         if (!in_array($orderStateId, $orderStatusesHistory)) {
             if (!$error) {
-                $order->addOrderPayment($order->getOrdersTotalPaid(), 'Tpay', $tpayPaymentId);
+                $order->addOrderPayment((string) $order->getOrdersTotalPaid(), 'Tpay', $tpayPaymentId);
             }
             $this->orderHistory->id_order = $order->id;
             $this->orderHistory->changeIdOrderState(

@@ -39,11 +39,9 @@ class SurchargeService
     /**
      * Return surcharge value.
      *
-     * @param null $orderTotal
-     *
      * @throws Exception
      */
-    public function getSurchargeValue($orderTotal = null): float
+    public function getSurchargeValue(?float $orderTotal = null): float
     {
         if (!$this->activeSurcharge()) {
             return 0.00;
@@ -67,7 +65,7 @@ class SurchargeService
     }
 
     /** @throws Exception */
-    public function getTotalOrderAndSurchargeCost()
+    public function getTotalOrderAndSurchargeCost(): float
     {
         $cart = Context::getContext()->cart;
         $orderTotal = (float) $cart->getOrderTotal(true, Cart::BOTH);
@@ -95,7 +93,7 @@ class SurchargeService
         return (bool) $repository->getSurchargeValueByOrderId($orderId);
     }
 
-    private function parseSurchargeValue()
+    private function parseSurchargeValue(): float
     {
         return (float) number_format(
             (float) str_replace(
