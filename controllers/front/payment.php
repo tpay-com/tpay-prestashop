@@ -184,14 +184,14 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
             null,
             [],
             (int) $this->module->getContext()->currency->id,
-            $customer->isGuest() ? 0 : 1,
+            !$customer->isGuest(),
             $customer->secure_key
         );
     }
 
     private function getOrderTotal($cart): float
     {
-        $surcharge = new SurchargeService();
+        $surcharge = new SurchargeService($cart);
         $orderTotal = $cart->getOrderTotal();
         $surchargeTotal = $surcharge->getSurchargeValue($orderTotal);
 

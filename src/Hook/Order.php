@@ -34,7 +34,6 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Order as PrestaOrder;
-use Tpay\OpenApi\Utilities\Util;
 use Tpay\Repository\TransactionsRepository;
 use Tpay\Service\SurchargeService;
 
@@ -160,7 +159,7 @@ class Order extends AbstractHook
                 $this->context->smarty->assign(
                     [
                         'surcharge_title' => $this->module->getTranslator()->trans('Online payment fee', [], 'Modules.Tpay.Shop'),
-                        'surcharge_cost' => Util::numberFormat($surchargeValue) . ' ' . $currency->getSign(),
+                        'surcharge_cost' => number_format($surchargeValue, 2, '.', '') . ' ' . $currency->getSign(),
                     ]
                 );
 

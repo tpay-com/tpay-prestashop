@@ -172,6 +172,11 @@ class Tpay extends PaymentModule
         );
     }
 
+    public function hookPaymentOptions(array $params)
+    {
+        return $this->getHookDispatcher()->dispatch('hookPaymentOptions', $params);
+    }
+
     public function api()
     {
         if (null === $this->api) {
@@ -239,7 +244,9 @@ class Tpay extends PaymentModule
             );
         }
 
-        if (!parent::install() || false === (new Install($this, new InstallQueryHandler(), $this->getContext()))->install()) {
+        if (!parent::install() || false === (new Install(
+                $this, new InstallQueryHandler(), $this->getContext()
+            ))->install()) {
             $this->_errors[] = $this->trans('Installation error', [], 'Modules.Tpay.Admin');
         }
 
@@ -330,7 +337,7 @@ class Tpay extends PaymentModule
     {
         $currency_order = new Currency($cart->id_currency);
 
-        return (bool) ('PLN' == $currency_order->iso_code);
+        return (bool)('PLN' == $currency_order->iso_code);
     }
 
     public function fetch($templatePath, $cache_id = null, $compile_id = null)
@@ -470,7 +477,7 @@ class Tpay extends PaymentModule
     {
         $clientId = Cfg::get('TPAY_CLIENT_ID');
         $secretKey = Cfg::get('TPAY_SECRET_KEY');
-        $isProduction = true !== (bool) Cfg::get('TPAY_SANDBOX');
+        $isProduction = true !== (bool)Cfg::get('TPAY_SANDBOX');
 
         if ($clientId && $secretKey) {
             try {

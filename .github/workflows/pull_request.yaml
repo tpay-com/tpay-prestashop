@@ -29,6 +29,8 @@ jobs:
       - run: zip -ur tpay-prestashop.zip tpay/
       - run: zip -d tpay-prestashop.zip "tpay/_dev/*"
       - run: zip -d tpay-prestashop.zip "tpay/.github/*"
+      - run: zip -d tpay-prestashop.zip "tpay/.php*"
+      - run: zip -d tpay-prestashop.zip "tpay/.gitignore"
 
       - run: mkdir plugin && unzip tpay-prestashop.zip -d plugin
 

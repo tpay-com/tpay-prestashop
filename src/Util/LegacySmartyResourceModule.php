@@ -31,12 +31,14 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-/**
- * @property array $paths
- * @property bool $isAdmin
- */
 class LegacySmartyResourceModule extends \SmartyResourceModule
 {
+    /** @var array<string> */
+    public $paths;
+
+    /** @var bool */
+    public $isAdmin;
+
     public function __construct(array $paths, $isAdmin = false)
     {
         $this->paths = $paths;

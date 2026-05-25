@@ -79,10 +79,10 @@ class CreditCardsRepository
      * @throws RepositoryException
      * @throws BaseException
      */
-    public function getAllCreditCardsByUserId($userId)
+    public function getAllCreditCardsByUserId($userId): array
     {
         if (!$userId) {
-            return null;
+            return [];
         }
 
         $qb = $this->connection->createQueryBuilder();
@@ -95,7 +95,9 @@ class CreditCardsRepository
             ->addOrderBy('cc.date_update', 'DESC');
         $qb->setParameter('userId', $userId);
 
-        return $this->repositoryQueryHandler->execute($qb, 'Get credit card by user id', 'fetchAll');
+        $result = $this->repositoryQueryHandler->execute($qb, 'Get credit card by user id', 'fetchAll');
+
+        return is_array($result) ? $result : [];
     }
 
     /**
