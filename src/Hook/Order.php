@@ -82,7 +82,7 @@ class Order extends AbstractHook
 
             /** @var SurchargeService $surchargeService */
             $surchargeService = $this->module->getService('tpay.service.surcharge');
-            $surchargeValue = $surchargeService->getSurchargeValue();
+            $surchargeValue = $surchargeService->getSurchargeValue($cart->getOrderTotal(true, \Cart::BOTH));
 
             if ($surchargeValue > 0.00) {
                 $this->addSurchargeToOrderCreated(

@@ -43,7 +43,7 @@ class SurchargeService
      *
      * @throws \Exception
      */
-    public function getSurchargeValue(?float $orderTotal = null): float
+    public function getSurchargeValue(?float $orderTotal): float
     {
         if (!$this->activeSurcharge()) {
             return 0.00;
@@ -71,7 +71,7 @@ class SurchargeService
     {
         $cart = \Context::getContext()->cart;
         $orderTotal = (float) $cart->getOrderTotal(true, \Cart::BOTH);
-        $surcharge = $this->getSurchargeValue();
+        $surcharge = $this->getSurchargeValue($orderTotal);
 
         return (float) ($orderTotal + $surcharge);
     }
