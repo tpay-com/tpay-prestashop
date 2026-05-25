@@ -35,6 +35,9 @@ use Tpay\OpenApi\Utilities\TpayException;
 use Tpay\OpenApi\Webhook\JWSVerifiedPaymentNotification;
 use Tpay\Util\PsrCache;
 
+/**
+ * @property $module Tpay
+ */
 class TpayNotificationsModuleFrontController extends ModuleFrontController
 {
     private $statusHandler;
