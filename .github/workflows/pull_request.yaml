@@ -27,6 +27,7 @@ jobs:
 
       - run: mkdir tpay && mv vendor tpay/
       - run: zip -ur tpay-prestashop.zip tpay/
+      - run: zip -ur tpay-prestashop.zip tpay/.htaccess
       - run: zip -d tpay-prestashop.zip "tpay/_dev/*"
 
       - run: mkdir plugin && unzip tpay-prestashop.zip -d plugin
