@@ -35,7 +35,7 @@
                         {l s='Online payment fee' d='Modules.Tpay.Admin'}
 					</td>
 					<td class="white" width="50%">
-                        {$surchargeCost|escape:'html'}
+                        {$surchargeCost|escape:'html':'UTF-8'}
 					</td>
 				</tr>
 			</table>

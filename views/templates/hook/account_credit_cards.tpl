@@ -23,7 +23,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 *}
-<a href="{$accountCreditCards|escape:'html'}" class="col-lg-4 col-md-6 col-sm-6 col-xs-12" id="credit-cards">
+<a href="{$accountCreditCards|escape:'html':'UTF-8'}" class="col-lg-4 col-md-6 col-sm-6 col-xs-12" id="credit-cards">
     <span class="link-item">
       <i class="material-icons"></i>
       {l s='My credit cards' d='Modules.Tpay.Shop'}

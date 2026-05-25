@@ -31,12 +31,12 @@
 		</h2>
         {if isset($error) && !empty($error)}
 			<h2 style="margin-top: 20px;">
-                {$error|escape:'html'}
+                {$error|escape:'html':'UTF-8'}
 			</h2>
         {/if}
 
 		<div style="margin-top: 20px;">
-			<a href="{$urls.pages.history|escape:'html'}" class="btn btn-primary">
+			<a href="{$urls.pages.history|escape:'html':'UTF-8'}" class="btn btn-primary">
 	            {l s='Order history' d='Modules.Tpay.Shop'}
 			</a>
 		</div>

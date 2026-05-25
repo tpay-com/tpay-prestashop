@@ -109,9 +109,7 @@ class Admin extends AbstractHook
 
                             $this->context->smarty->assign(
                                 [
-                                    'tpay_refund_status' => $this->module->displayConfirmation(
-                                        $this->translator->trans('Refund successful. Return option is being processed please wait.', [], 'Modules.Tpay.Admin')
-                                    ),
+                                    'tpay_refund_success' => $this->translator->trans('Refund successful. Return option is being processed please wait.', [], 'Modules.Tpay.Admin'),
                                 ]
                             );
                         }
@@ -122,7 +120,7 @@ class Admin extends AbstractHook
                             if (null !== $errorMessage) {
                                 $this->context->smarty->assign(
                                     [
-                                        'tpay_refund_status' => $this->module->displayError($errorMessage),
+                                        'tpay_refund_error' => $errorMessage,
                                     ]
                                 );
                             }
@@ -130,7 +128,7 @@ class Admin extends AbstractHook
                     } catch (Exception $TException) {
                         $this->context->smarty->assign(
                             [
-                                'tpay_refund_status' => $this->module->displayError($TException->getMessage()),
+                                'tpay_refund_error' => $TException->getMessage(),
                             ]
                         );
                     }
@@ -140,7 +138,7 @@ class Admin extends AbstractHook
             if (!empty($errors)) {
                 $this->context->smarty->assign(
                     [
-                        'tpay_refund_status' => $this->module->displayError($errors),
+                        'tpay_refund_error' => $errors,
                     ]
                 );
             }

@@ -44,7 +44,7 @@
 				<td width="5">&nbsp;</td>
 				<td align="left">
 					<font size="2" face="Open-sans, sans-serif" color="#555454">
-                        {$surchargeCost|escape:'html'}
+                        {$surchargeCost|escape:'html':'UTF-8'}
 					</font>
 				</td>
 				<td width="10">&nbsp;</td>

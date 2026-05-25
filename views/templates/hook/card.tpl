@@ -44,8 +44,8 @@
 								</div>
 
 								<label for="cardN{$card['id']|intval}" style="text-align:left; margin: 0;">
-									**** {$card['card_shortcode']|escape:'html'}
-									<p>{$card['card_vendor']|escape:'html'}</p>
+									**** {$card['card_shortcode']|escape:'html':'UTF-8'}
+									<p>{$card['card_vendor']|escape:'html':'UTF-8'}</p>
 								</label>
 
 								<div class="" style="margin-left: auto;">
@@ -155,7 +155,7 @@
 						{l s='Please accept the store rules' d='Modules.Tpay.Shop'}
 					</span>
 			</div>
-			<input type="hidden" name="redirect_type" id="redirect_type" value="{$card_type|escape:'html'}"/>
+			<input type="hidden" name="redirect_type" id="redirect_type" value="{$card_type|escape:'html':'UTF-8'}"/>
 		</div>
 
 		{if $card_type === 'widget'}

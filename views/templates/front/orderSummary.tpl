@@ -37,15 +37,15 @@
                     <table>
                         <tr>
                             <td>{l s=' Product' d='Modules.Tpay.Shop'}</td>
-                            <td>{l s=" Unit price " d='Modules.Tpay.Shop'} ({$currencySign|escape:'html'})</td>
+                            <td>{l s=" Unit price " d='Modules.Tpay.Shop'} ({$currencySign|escape:'html':'UTF-8'})</td>
                             <td>{l s=' Quantity' d='Modules.Tpay.Shop'}</td>
-                            <td>{l s=" Total price " d='Modules.Tpay.Shop'} ({$currencySign|escape:'html'})</td>
+                            <td>{l s=" Total price " d='Modules.Tpay.Shop'} ({$currencySign|escape:'html':'UTF-8'})</td>
                         </tr>
                         {foreach from=$productsT key=name item=value}
                             <tr>
                                 {foreach from=$value key=name1 item=value1}
                                     <td>
-                                        {$value1|escape:'html'}
+                                        {$value1|escape:'html':'UTF-8'}
                                     </td>
                                 {/foreach}
                             </tr>
@@ -78,35 +78,35 @@
                             </tr>
                             <tr>
                                 <td>{l s='Alias' d='Modules.Tpay.Shop'}</td>
-                                <td>{$deliveryAddressT->alias|escape:'html'}</td>
+                                <td>{$deliveryAddressT->alias|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='Company' d='Modules.Tpay.Shop'}</td>
-                                <td>{$deliveryAddressT->company|escape:'html'}</td>
+                                <td>{$deliveryAddressT->company|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='Name and surname' d='Modules.Tpay.Shop'}</td>
-                                <td>{$deliveryAddressT->firstname|escape:'html'} {$deliveryAddressT->lastname|escape:'html'}</td>
+                                <td>{$deliveryAddressT->firstname|escape:'html':'UTF-8'} {$deliveryAddressT->lastname|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='Phone' d='Modules.Tpay.Shop'}</td>
-                                <td>{$deliveryAddressT->phone|escape:'html'}</td>
+                                <td>{$deliveryAddressT->phone|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='Address' d='Modules.Tpay.Shop'}</td>
-                                <td>{$deliveryAddressT->address1|escape:'html'} {$deliveryAddressT->address2|escape:'html'}</td>
+                                <td>{$deliveryAddressT->address1|escape:'html':'UTF-8'} {$deliveryAddressT->address2|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='Postal code' d='Modules.Tpay.Shop'}</td>
-                                <td>{$deliveryAddressT->postcode|escape:'html'}</td>
+                                <td>{$deliveryAddressT->postcode|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='City' d='Modules.Tpay.Shop'}</td>
-                                <td>{$deliveryAddressT->city|escape:'html'}</td>
+                                <td>{$deliveryAddressT->city|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='Country' d='Modules.Tpay.Shop'}</td>
-                                <td>{$invAddressT->country|escape:'html'}</td>
+                                <td>{$invAddressT->country|escape:'html':'UTF-8'}</td>
                             </tr>
                         </table>
 
@@ -116,35 +116,35 @@
                             </tr>
                             <tr>
                                 <td>{l s='Alias' d='Modules.Tpay.Shop'}</td>
-                                <td>{$invAddressT->alias|escape:'html'}</td>
+                                <td>{$invAddressT->alias|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='Company' d='Modules.Tpay.Shop'}</td>
-                                <td>{$invAddressT->company|escape:'html'}</td>
+                                <td>{$invAddressT->company|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='Name and surname' d='Modules.Tpay.Shop'}</td>
-                                <td>{$invAddressT->firstname|escape:'html'} {$invAddressT->lastname|escape:'html'}</td>
+                                <td>{$invAddressT->firstname|escape:'html':'UTF-8'} {$invAddressT->lastname|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='Phone' d='Modules.Tpay.Shop'}</td>
-                                <td>{$invAddressT->phone|escape:'html'}</td>
+                                <td>{$invAddressT->phone|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='Address' d='Modules.Tpay.Shop'}</td>
-                                <td>{$invAddressT->address1|escape:'html'} {$invAddressT->address2|escape:'html'}</td>
+                                <td>{$invAddressT->address1|escape:'html':'UTF-8'} {$invAddressT->address2|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='Postal code' d='Modules.Tpay.Shop'}</td>
-                                <td>{$invAddressT->postcode|escape:'html'}</td>
+                                <td>{$invAddressT->postcode|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='City' d='Modules.Tpay.Shop'}</td>
-                                <td>{$invAddressT->city|escape:'html'}</td>
+                                <td>{$invAddressT->city|escape:'html':'UTF-8'}</td>
                             </tr>
                             <tr>
                                 <td>{l s='Country' d='Modules.Tpay.Shop'}</td>
-                                <td>{$invAddressT->country|escape:'html'}</td>
+                                <td>{$invAddressT->country|escape:'html':'UTF-8'}</td>
                             </tr>
                         </table>
                     </div>

@@ -33,8 +33,11 @@
 
 		<div class="card-body">
 
-            {if isset($tpay_refund_status)}
-                {$tpay_refund_status nofilter}
+            {if isset($tpay_refund_success)}
+                <div class="alert alert-success">{$tpay_refund_success|escape:'html':'UTF-8'}</div>
+            {/if}
+            {if isset($tpay_refund_error)}
+                <div class="alert alert-danger">{$tpay_refund_error|escape:'html':'UTF-8'}</div>
             {/if}
 
 			<form id="formAddTpayRefund" method="post" action="">
@@ -52,9 +55,9 @@
 						<tbody>
                         {foreach $tpayRefunds as $tpayRefund}
 							<tr>
-								<td>{$tpayRefund.tpay_refund_date|escape:'html'}</td>
-								<td>{$tpayRefund.tpay_transaction_id|escape:'html'}</td>
-								<td>{$tpayRefund.tpay_refund_amount|escape:'html'}</td>
+								<td>{$tpayRefund.tpay_refund_date|escape:'html':'UTF-8'}</td>
+								<td>{$tpayRefund.tpay_transaction_id|escape:'html':'UTF-8'}</td>
+								<td>{$tpayRefund.tpay_refund_amount|escape:'html':'UTF-8'}</td>
 							</tr>
                         {/foreach}
 						<tr>

@@ -53,7 +53,7 @@
                 img.className = "icon";
                 installmentsButton.appendChild(img);
 
-                const text = document.createTextNode('{$installmentText|escape:'javascript'}');
+                const text = document.createTextNode('{$installmentText|escape:'javascript':'UTF-8'}');
                 installmentsButton.appendChild(text);
 
                 installmentsButton.addEventListener('click', function () {

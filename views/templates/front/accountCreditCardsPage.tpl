@@ -42,13 +42,13 @@
 						<article class="tpay-account-cards">
 
 							<div class="tpay-account-cards__body">
-								<h4>**** {$card['card_shortcode']|escape:'html'}</h4>
-								<p>{$card['card_vendor']|escape:'html'}</p>
+								<h4>**** {$card['card_shortcode']|escape:'html':'UTF-8'}</h4>
+								<p>{$card['card_vendor']|escape:'html':'UTF-8'}</p>
 							</div>
 
 							<div class="tpay-account-cards__footer">
 								<a href="{url entity='module' name='tpay' controller='savedCards' params=['action' => 'deleteCard','ajax' => true]}"
-								   data-link-action="delete-credit-card" data-id="{$card['id']}" data-token="{Tools::getToken()}">
+								   data-link-action="delete-credit-card" data-id="{$card['id']|intval}" data-token="{Tools::getToken()}">
 									<i class="material-icons"></i>
 									<span>{l s='Delete' d='Modules.Tpay.Shop'}</span>
 								</a>

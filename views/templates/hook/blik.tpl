@@ -27,7 +27,7 @@
     {if $blik_type === 'redirect'}
         {l s='You will be redirected to the payment gateway.' d='Modules.Tpay.Shop'}
     {else}
-        <form action="{$blik_moduleLink|escape:'html'}" method="POST" id="tpay-blik-form" name="tpay-blik-form">
+        <form action="{$blik_moduleLink|escape:'html':'UTF-8'}" method="POST" id="tpay-blik-form" name="tpay-blik-form">
             <input type="hidden" name="cart_id" class="blikId" value="{$blik_order_id|intval}"/>
 
             <div class="tpay-radio-payments tpay-radio-payments--blik">

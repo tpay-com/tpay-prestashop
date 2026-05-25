@@ -24,9 +24,9 @@
 * SOFTWARE.
 *}
 <div class="tpay-wrapper" style="width: 100%;" data-payment-type="transfer">
-    <form action="{$action|escape:'html'}" id="payment-form" class="transferForm" method="post">
-        <input type="hidden" name="tpay" value="{$tpay|escape:'html'}">
-        <input type="hidden" name="type" value="{$type|escape:'html'}">
+    <form action="{$action|escape:'html':'UTF-8'}" id="payment-form" class="transferForm" method="post">
+        <input type="hidden" name="tpay" value="{$tpay|escape:'html':'UTF-8'}">
+        <input type="hidden" name="type" value="{$type|escape:'html':'UTF-8'}">
         <input
                 id="transfer_{$channelId|intval}"
                 type="radio" name="tpay_channel_id"

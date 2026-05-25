@@ -33,11 +33,11 @@
     <div class="message">
         <p class="title">{l s='Payment error' d='Modules.Tpay.Shop'}</p>
         {if isset($errors)}
-            <p>{$errors|escape:'html'}</p>
+            <p>{$errors|escape:'html':'UTF-8'}</p>
         {/if}
     </div>
     <div class="text-center mt-3">
-        <a href="{$link->getModuleLink('tpay', 'payment', ['retry_order' => $retry_order], true)|escape:'html'}"
+        <a href="{$link->getModuleLink('tpay', 'payment', ['retry_order' => $retry_order], true)|escape:'html':'UTF-8'}"
            class="btn btn-primary small">
             {l s='Retry payment' d='Modules.Tpay.Shop'}
         </a>
