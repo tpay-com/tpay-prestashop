@@ -33,8 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Tpay;
-
 class HookDispatcher
 {
     public const CLASSES = [
@@ -63,12 +61,12 @@ class HookDispatcher
     /**
      * Module
      *
-     * @var Tpay
+     * @var \Tpay
      */
     private $module;
 
     /** Init hooks */
-    public function __construct(Tpay $module)
+    public function __construct(\Tpay $module)
     {
         $this->module = $module;
         foreach (self::CLASSES as $hookClass) {

@@ -33,10 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Context;
-use Exception;
-use Order;
-use OrderInvoice;
 use PrestaShop\PrestaShop\Core\Localization\Exception\LocalizationException;
 use Tpay\Repository\TransactionsRepository;
 use Tpay\Service\SurchargeService;
@@ -51,12 +47,12 @@ class EmailOrder extends AbstractHook
 
     /**
      * @throws LocalizationException
-     * @throws Exception
+     * @throws \Exception
      */
     public function actionEmailAddAfterContent($params)
     {
         $cart = $this->context->cart;
-        $order = $cart ? Order::getByCartId($cart->id) : null;
+        $order = $cart ? \Order::getByCartId($cart->id) : null;
 
         if (!$this->module->active
             || !$order
@@ -94,14 +90,14 @@ class EmailOrder extends AbstractHook
 
     /**
      * @throws LocalizationException
-     * @throws Exception
+     * @throws \Exception
      */
     public function displayPDFInvoice($params): string
     {
         if (!isset($params['object'])) {
             return '';
         }
-        if (!$params['object'] instanceof OrderInvoice) {
+        if (!$params['object'] instanceof \OrderInvoice) {
             return '';
         }
 
@@ -110,7 +106,7 @@ class EmailOrder extends AbstractHook
         if ($surchargeValue > 0.00) {
             $this->context->smarty->assign(
                 [
-                    'surchargeCost' => Context::getContext()->getCurrentLocale()->formatPrice(
+                    'surchargeCost' => \Context::getContext()->getCurrentLocale()->formatPrice(
                         $surchargeValue,
                         $this->context->currency->iso_code
                     ),
@@ -131,7 +127,7 @@ class EmailOrder extends AbstractHook
 
         $this->context->smarty->assign(
             [
-                'surchargeCost' => Context::getContext()->getCurrentLocale()->formatPrice(
+                'surchargeCost' => \Context::getContext()->getCurrentLocale()->formatPrice(
                     $surchargeCost,
                     $this->context->currency->iso_code
                 ),
@@ -141,7 +137,7 @@ class EmailOrder extends AbstractHook
         return $this->module->fetch('module:tpay/views/templates/hook/emailSurcharge.tpl');
     }
 
-    /** @throws Exception */
+    /** @throws \Exception */
     private function getSurchargeCost()
     {
         $orderTotal = (float) $this->context->cart->getOrderTotal();
@@ -152,7 +148,7 @@ class EmailOrder extends AbstractHook
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     private function getOrderSurchargeCost($orderId): float
     {

@@ -33,7 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use PrestaShopLogger;
 use Tpay\Config\Config;
 use Tpay\Exception\PaymentException;
 use Tpay\Handler\BasicPaymentHandler;
@@ -62,7 +61,7 @@ class PaymentFactory
             case Config::TPAY_PAYMENT_CARDS:
                 return new CreditCardPaymentHandler();
             default:
-                PrestaShopLogger::addLog('Unknown Payment Method', 3);
+                \PrestaShopLogger::addLog('Unknown Payment Method', 3);
                 throw new PaymentException('Unknown Payment Method');
         }
     }

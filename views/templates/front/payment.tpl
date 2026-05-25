@@ -24,7 +24,7 @@
 * SOFTWARE.
 *}
 {if $showSummary}{include file="$orderSummaryPath"}{/if}
-{$paymentForm nofilter}
+{if isset($paymentFormTemplate)}{include file=$paymentFormTemplate}{/if}
 <p class="cart_navigation clearfix" id="cart_navigation">
     <a class="button-exclusive btn btn-default"
        href="{$link->getPageLink('order', true)|escape:'htmlall':'UTF-8'}">

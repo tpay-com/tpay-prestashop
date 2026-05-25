@@ -33,12 +33,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Cart;
 use Configuration as Cfg;
-use Context;
-use Exception;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
-use Tpay;
 use Tpay\Config\Config;
 use Tpay\Repository\CreditCardsRepository;
 use Tpay\Service\SurchargeService;
@@ -48,17 +44,17 @@ class Card implements GatewayType
 {
     private $method = 'payment';
 
-    /** @throws Exception */
+    /** @throws \Exception */
     public function getPaymentOption(
-        Tpay $module,
+        \Tpay $module,
         PaymentOption $paymentOption,
         array $data = []
     ): PaymentOption {
-        $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
+        $moduleLink = \Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
 
         /** @var CreditCardsRepository $creditCardRepository */
         $creditCardRepository = $module->getService('tpay.repository.credit_card');
-        $savedCreditCards = $creditCardRepository->getAllCreditCardsByUserId(Context::getContext()->customer->id);
+        $savedCreditCards = $creditCardRepository->getAllCreditCardsByUserId(\Context::getContext()->customer->id);
 
         $creditCardsArray = [];
         if ($savedCreditCards) {
@@ -67,7 +63,7 @@ class Card implements GatewayType
             }
         }
 
-        Context::getContext()->smarty->assign(
+        \Context::getContext()->smarty->assign(
             [
                 'card_type' => Helper::getMultistoreConfigurationValue('TPAY_CARD_WIDGET') ? 'widget' : 'redirect',
                 'cards_moduleLink' => $moduleLink,
@@ -100,7 +96,7 @@ class Card implements GatewayType
         return $paymentOption;
     }
 
-    public function isActive(Cart $cart, SurchargeService $surchargeService): bool
+    public function isActive(\Cart $cart, SurchargeService $surchargeService): bool
     {
         return Cfg::get('TPAY_CARD_ACTIVE') && !empty(Cfg::get('TPAY_CARD_RSA'));
     }

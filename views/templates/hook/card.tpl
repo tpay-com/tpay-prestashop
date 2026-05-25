@@ -51,7 +51,7 @@
 								<div class="" style="margin-left: auto;">
 									<a href="{url entity='module' name='tpay' controller='savedCards' params=['action' => 'deleteCard','ajax' => true]}"
 									   data-link-action="delete-credit-card" data-id="{$card['id']|intval}"
-									   data-token="{Tools::getToken()}">
+									   data-token="{Tools::getToken()|escape:'html':'UTF-8'}">
 										<i class="material-icons"></i>
 									</a>
 								</div>

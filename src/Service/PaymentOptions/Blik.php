@@ -33,9 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
-use Tpay;
 use Tpay\Config\Config;
 use Tpay\Repository\BlikRepository;
 use Tpay\Util\Helper;
@@ -45,7 +43,7 @@ class Blik implements GatewayType
     private $method;
 
     public function getPaymentOption(
-        Tpay $module,
+        \Tpay $module,
         PaymentOption $paymentOption,
         array $data = []
     ): PaymentOption {
@@ -53,17 +51,17 @@ class Blik implements GatewayType
 
         $blikSavedAliases = $this->getSavedBlikAliases(
             $module,
-            Context::getContext()->customer->id
+            \Context::getContext()->customer->id
         );
 
-        $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
-        Context::getContext()->smarty->assign(
+        $moduleLink = \Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
+        \Context::getContext()->smarty->assign(
             [
                 'blik_type' => Helper::getMultistoreConfigurationValue('TPAY_BLIK_WIDGET') ? 'widget' : 'redirect',
                 'blik_gateway' => $data['id'],
                 'blik_moduleLink' => $moduleLink,
                 'blik_saved_aliases' => $blikSavedAliases,
-                'blik_order_id' => Context::getContext()->cart->id,
+                'blik_order_id' => \Context::getContext()->cart->id,
                 'assets_path' => $module->getPath(),
             ]
         );

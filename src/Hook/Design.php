@@ -34,7 +34,6 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Configuration as Cfg;
-use Media;
 use Tpay\Config\Config;
 
 class Design extends AbstractHook
@@ -66,7 +65,7 @@ class Design extends AbstractHook
             ]
         );
         $translator = $this->module->getTranslator();
-        Media::addJsDef(
+        \Media::addJsDef(
             [
                 'messages' => [
                     'payment_error' => $translator->trans('Payment error', [], 'Modules.Tpay.Shop'),
@@ -125,7 +124,7 @@ class Design extends AbstractHook
         );
 
         if (Cfg::get('TPAY_CARD_ACTIVE') && Cfg::get('TPAY_CARD_RSA')) {
-            Media::addJsDef(
+            \Media::addJsDef(
                 [
                     'redirect_path' => $this->context->link->getModuleLink(
                         'tpay',

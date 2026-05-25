@@ -33,7 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Cart;
 use Tpay\Config\Config;
 use Tpay\Util\Helper;
 
@@ -67,7 +66,7 @@ class Installment extends AbstractHook
     {
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE') && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_CHECKOUT')) {
             $cart = $params['cart'];
-            $totalAmount = $cart->getOrderTotal(true, Cart::BOTH);
+            $totalAmount = $cart->getOrderTotal(true, \Cart::BOTH);
 
             if ($totalAmount >= Config::PEKAO_INSTALLMENT_MIN && $totalAmount <= Config::PEKAO_INSTALLMENT_MAX) {
                 $this->context->smarty->assign(

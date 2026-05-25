@@ -33,7 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use DateTime;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
@@ -106,7 +105,7 @@ class TransactionsRepository
      */
     public function getTransactionsQualifiedToCancel($timegapInDays)
     {
-        $date = new DateTime('now -' . ((int) $timegapInDays) . ' days');
+        $date = new \DateTime('now -' . ((int) $timegapInDays) . ' days');
         $dateMin = clone $date;
         $dateMin->modify('-1 day');
         $qb = $this->connection->createQueryBuilder();

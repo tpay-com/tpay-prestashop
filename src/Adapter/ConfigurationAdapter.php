@@ -32,12 +32,10 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Configuration as Cfg;
-use Shop;
-use Tools;
 
 class ConfigurationAdapter
 {
-    /** @var Shop */
+    /** @var \Shop */
     private $shopId;
 
     public function __construct($shopId)
@@ -61,7 +59,7 @@ class ConfigurationAdapter
         }
 
         if ('TPAY_MERCHANT_SECRET' == $key) {
-            $value = Tools::safeOutput($value, true);
+            $value = \Tools::safeOutput($value, true);
         }
 
         if (is_array($value)) {

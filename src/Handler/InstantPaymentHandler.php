@@ -33,20 +33,16 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Context;
-use Customer;
-use Order;
-use Tpay;
 use Tpay\Exception\PaymentException;
 use Tpay\Exception\TransactionException;
 
 class InstantPaymentHandler extends BasicPaymentHandler
 {
     public function createPayment(
-        Tpay $module,
-        Order $order,
-        Customer $customer,
-        Context $context,
+        \Tpay $module,
+        \Order $order,
+        \Customer $customer,
+        \Context $context,
         array $clientData,
         array $data
     ): void {

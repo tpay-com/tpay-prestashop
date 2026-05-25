@@ -33,20 +33,15 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Context;
-use Customer;
-use Order;
-use Tpay;
-
 interface PaymentMethodHandler
 {
     public function getName(): string;
 
     public function createPayment(
-        Tpay $module,
-        Order $order,
-        Customer $customer,
-        Context $context,
+        \Tpay $module,
+        \Order $order,
+        \Customer $customer,
+        \Context $context,
         array $clientData,
         array $data
     );

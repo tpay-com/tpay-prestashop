@@ -33,20 +33,19 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Tpay;
 use Tpay\Exception\BaseException;
 use Tpay\Handler\InstallQueryHandler;
 
 class Uninstall
 {
-    /** @var Tpay */
+    /** @var \Tpay */
     private $module;
 
     /** @var InstallQueryHandler */
     private $installQueryHandler;
 
     public function __construct(
-        Tpay $module,
+        \Tpay $module,
         InstallQueryHandler $installQueryHandler
     ) {
         $this->module = $module;

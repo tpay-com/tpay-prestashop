@@ -48,7 +48,7 @@
 
 							<div class="tpay-account-cards__footer">
 								<a href="{url entity='module' name='tpay' controller='savedCards' params=['action' => 'deleteCard','ajax' => true]}"
-								   data-link-action="delete-credit-card" data-id="{$card['id']|intval}" data-token="{Tools::getToken()}">
+								   data-link-action="delete-credit-card" data-id="{$card['id']|intval}" data-token="{Tools::getToken()|escape:'html':'UTF-8'}">
 									<i class="material-icons"></i>
 									<span>{l s='Delete' d='Modules.Tpay.Shop'}</span>
 								</a>

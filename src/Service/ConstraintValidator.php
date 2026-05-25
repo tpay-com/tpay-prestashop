@@ -31,14 +31,12 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Tpay;
-
 class ConstraintValidator
 {
     /** @var SurchargeService|null */
     protected $surchargeService;
 
-    public function __construct(Tpay $module)
+    public function __construct(\Tpay $module)
     {
         /** @var SurchargeService $surchargeService */
         $surchargeService = $module->getService('tpay.service.surcharge');

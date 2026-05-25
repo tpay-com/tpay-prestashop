@@ -33,11 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Context;
-use OrderState;
 use PrestaShopBundle\Translation\TranslatorComponent;
-use Shop;
-use Tpay;
 use Tpay\Config\Config;
 use Tpay\Service\GenericPayments\GenericPaymentsManager;
 
@@ -45,10 +41,10 @@ class AdminFormBuilder
 {
     public $channels = [];
 
-    /** @var Tpay */
+    /** @var \Tpay */
     public $module;
 
-    /** @var Context */
+    /** @var \Context */
     public $context;
 
     /** @var TranslatorComponent|null */
@@ -57,7 +53,7 @@ class AdminFormBuilder
     /** @var GenericPaymentsManager */
     private $genericPaymentsManager;
 
-    public function __construct(Tpay $module, Context $context, array $channels)
+    public function __construct(\Tpay $module, \Context $context, array $channels)
     {
         $this->module = $module;
         $this->context = $context;
@@ -427,7 +423,7 @@ class AdminFormBuilder
             ],
         ];
 
-        if (Shop::CONTEXT_SHOP == Shop::getContext()) {
+        if (\Shop::CONTEXT_SHOP == \Shop::getContext()) {
             array_unshift($form['form']['input'], $this->globalSettingsForm());
         }
 
@@ -560,7 +556,7 @@ class AdminFormBuilder
 
     private function getOrderStates(): array
     {
-        return OrderState::getOrderStates(Context::getContext()->language->id);
+        return \OrderState::getOrderStates(\Context::getContext()->language->id);
     }
 
     private function globalSettingsForm(): array

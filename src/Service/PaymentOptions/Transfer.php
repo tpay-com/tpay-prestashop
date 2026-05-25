@@ -33,10 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Configuration;
-use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
-use Tpay;
 use Tpay\Config\Config;
 use Tpay\Service\GenericPayments\GenericPaymentsManager;
 use Tpay\Util\Helper;
@@ -46,18 +43,18 @@ class Transfer implements GatewayType
     private $method = 'payment';
 
     public function getPaymentOption(
-        Tpay $module,
+        \Tpay $module,
         PaymentOption $paymentOption,
         array $data = []
     ): PaymentOption {
-        $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
-        Context::getContext()->smarty->assign(
+        $moduleLink = \Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
+        \Context::getContext()->smarty->assign(
             [
                 'transfer_type' => Helper::getMultistoreConfigurationValue('TPAY_TRANSFER_WIDGET') ? 'widget' : 'redirect',
                 'transfer_gateway' => $data['id'],
                 'transfer_moduleLink' => $moduleLink,
                 'gateways' => $this->sortGateways($data['gateways']),
-                'isDirect' => (bool) Configuration::get('TPAY_REDIRECT_TO_CHANNEL'),
+                'isDirect' => (bool) \Configuration::get('TPAY_REDIRECT_TO_CHANNEL'),
             ]
         );
 
@@ -71,16 +68,16 @@ class Transfer implements GatewayType
 
     protected function generateForm()
     {
-        Context::getContext()->smarty->assign(
+        \Context::getContext()->smarty->assign(
             [
-                'action' => Context::getContext()->link->getModuleLink('tpay', $this->method, [], true),
+                'action' => \Context::getContext()->link->getModuleLink('tpay', $this->method, [], true),
                 'tpay' => true,
                 'type' => Config::TPAY_PAYMENT_BASIC,
                 'tpay_transfer_id' => 0,
             ]
         );
 
-        return Context::getContext()->smarty->fetch('module:tpay/views/templates/hook/payment.tpl');
+        return \Context::getContext()->smarty->fetch('module:tpay/views/templates/hook/payment.tpl');
     }
 
     private function sortGateways(array $gateways)
@@ -92,9 +89,9 @@ class Transfer implements GatewayType
             }
         );
 
-        if ((bool) Configuration::get('TPAY_REDIRECT_TO_CHANNEL') && !empty(Configuration::get('TPAY_CUSTOM_ORDER'))) {
+        if ((bool) \Configuration::get('TPAY_REDIRECT_TO_CHANNEL') && !empty(\Configuration::get('TPAY_CUSTOM_ORDER'))) {
             $orderedList = [];
-            $customOrder = json_decode(Configuration::get('TPAY_CUSTOM_ORDER'), true);
+            $customOrder = json_decode(\Configuration::get('TPAY_CUSTOM_ORDER'), true);
 
             foreach ($customOrder as $orderNumber) {
                 foreach ($gateways as $gateway) {

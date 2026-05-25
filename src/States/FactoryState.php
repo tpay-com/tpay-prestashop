@@ -34,13 +34,6 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Configuration as Cfg;
-use Db;
-use Exception;
-use Language;
-use OrderState;
-use Shop;
-use Tools;
-use Tpay;
 
 class FactoryState
 {
@@ -51,8 +44,8 @@ class FactoryState
     private $orderState;
 
     public function __construct(
-        Tpay $module,
-        OrderState $orderState
+        \Tpay $module,
+        \OrderState $orderState
     ) {
         $this->module = $module;
         $this->orderState = $orderState;
@@ -92,7 +85,7 @@ class FactoryState
     /**
      * Create states
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function execute(): void
     {
@@ -100,7 +93,7 @@ class FactoryState
             foreach ($this->getStatusTypes() as $type) {
                 $status = $this->statusBuilder(
                     $type,
-                    new OrderState()
+                    new \OrderState()
                 );
 
                 if (!$this->statusAvailable($status)) {
@@ -114,10 +107,10 @@ class FactoryState
 
     public function assignConfiguration($state, $name)
     {
-        $nameUpper = 'TPAY_' . Tools::strtoupper($name);
+        $nameUpper = 'TPAY_' . \Tools::strtoupper($name);
 
-        if (Shop::isFeatureActive()) {
-            $shops = Shop::getCompleteListOfShopsID();
+        if (\Shop::isFeatureActive()) {
+            $shops = \Shop::getCompleteListOfShopsID();
 
             foreach ($shops as $shop) {
                 Cfg::updateValue($nameUpper, $state->id, false, null, (int) $shop);
@@ -128,9 +121,9 @@ class FactoryState
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    public function statusBuilder(string $type, OrderState $orderState, $moduleName = 'tpay')
+    public function statusBuilder(string $type, \OrderState $orderState, $moduleName = 'tpay')
     {
         switch ($type) {
             case 'pending':
@@ -143,7 +136,7 @@ class FactoryState
                 $state = new ConfirmedState($orderState, $moduleName);
                 break;
             default:
-                throw new Exception('Incorrect type when creating status for orders');
+                throw new \Exception('Incorrect type when creating status for orders');
         }
 
         return $state;
@@ -155,11 +148,11 @@ class FactoryState
     public function statusAvailable($names): bool
     {
         if (!empty($names->stateLanguage)) {
-            foreach (Language::getLanguages() as $lang) {
+            foreach (\Language::getLanguages() as $lang) {
                 return $this->existsLocalizedNameInDatabase(
                     $names->stateLanguage[$lang['iso_code']] ?? $names->stateLanguage['en'],
                     (int) $lang['id_lang'],
-                    Tools::getIsset('id_order_state') ? (int) Tools::getValue('id_order_state') : null
+                    \Tools::getIsset('id_order_state') ? (int) \Tools::getValue('id_order_state') : null
                 );
             }
         }
@@ -170,11 +163,11 @@ class FactoryState
     private function existsLocalizedNameInDatabase($name, $idLang, $excludeIdOrderState): bool
     {
         // @phpstan-ignore-next-line
-        if (method_exists(OrderState::class, 'existsLocalizedNameInDatabase')) {
-            return OrderState::existsLocalizedNameInDatabase($name, $idLang, $excludeIdOrderState);
+        if (method_exists(\OrderState::class, 'existsLocalizedNameInDatabase')) {
+            return \OrderState::existsLocalizedNameInDatabase($name, $idLang, $excludeIdOrderState);
         }
 
-        return (bool) Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
+        return (bool) \Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
             'SELECT COUNT(*) AS count'
             . ' FROM ' . _DB_PREFIX_ . 'order_state_lang osl'
             . ' INNER JOIN ' . _DB_PREFIX_ . 'order_state os ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = ' . $idLang . ')'

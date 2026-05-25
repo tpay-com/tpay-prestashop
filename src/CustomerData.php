@@ -33,46 +33,37 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use AddressCore;
-use Cart;
 use Configuration as Cfg;
-use Context;
-use Customer;
-use Exception;
-use Order;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-use Tools;
 use Tpay\Builder\PayerDataBuilder;
 use Tpay\Service\SurchargeService;
 
 class CustomerData
 {
-    /** @var AddressCore */
+    /** @var \AddressCore */
     private $address;
 
-    /** @var Customer */
+    /** @var \Customer */
     private $customer;
 
-    /** @var Context */
+    /** @var \Context */
     private $context;
 
-    /** @var Cart */
+    /** @var \Cart */
     private $cart;
 
     /** @var array<string, mixed> */
     private $customerDetails = [];
 
-    /** @var Order */
+    /** @var \Order */
     private $order;
 
-    /** @throws Exception */
+    /** @throws \Exception */
     public function __construct(
-        AddressCore $address,
-        Customer $customer,
-        Context $context,
-        Cart $cart,
-        Order $order
+        \AddressCore $address,
+        \Customer $customer,
+        \Context $context,
+        \Cart $cart,
+        \Order $order
     ) {
         $this->address = $address;
         $this->customer = $customer;
@@ -89,9 +80,9 @@ class CustomerData
     }
 
     /**
-     * @throws PrestaShopDatabaseException
-     * @throws PrestaShopException
-     * @throws Exception
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \Exception
      */
     public function getOrderTotalAmount(): string
     {
@@ -195,7 +186,7 @@ class CustomerData
     /**
      * Create basic client data
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function setBasicClient(): void
     {
@@ -213,7 +204,7 @@ class CustomerData
             ->add('code', $this->address->postcode)
             ->add('city', $this->address->city)
             ->set('country', 'PL')
-            ->set('ip', Tools::getRemoteAddr())
+            ->set('ip', \Tools::getRemoteAddr())
             ->set('userAgent', substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255))
             ->get();
 

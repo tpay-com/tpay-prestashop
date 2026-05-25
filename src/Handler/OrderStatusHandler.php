@@ -35,19 +35,18 @@ if (!defined('_PS_VERSION_')) {
 
 use Configuration as Cfg;
 use Order;
-use OrderHistory;
 use Tpay\Repository\TransactionsRepository;
 
 class OrderStatusHandler
 {
-    /** @var OrderHistory */
+    /** @var \OrderHistory */
     public $orderHistory;
 
     /** @var TransactionsRepository */
     private $transactionsRepository;
 
     public function __construct(
-        OrderHistory $orderHistory,
+        \OrderHistory $orderHistory,
         TransactionsRepository $transactionsRepository
     ) {
         $this->orderHistory = $orderHistory;
@@ -55,10 +54,10 @@ class OrderStatusHandler
     }
 
     /** Update orders statuses. */
-    public function setOrdersAsConfirmed(Order $order, string $tpayPaymentId, bool $error = false): void
+    public function setOrdersAsConfirmed(\Order $order, string $tpayPaymentId, bool $error = false): void
     {
         $reference = $order->reference;
-        $referencedOrders = Order::getByReference($reference)->getResults();
+        $referencedOrders = \Order::getByReference($reference)->getResults();
         foreach ($referencedOrders as $orderObject) {
             if (!is_null($orderObject->id)) {
                 $this->changeOrderStatus($orderObject, $tpayPaymentId, $error);
@@ -67,7 +66,7 @@ class OrderStatusHandler
     }
 
     /** Update order status. */
-    private function changeOrderStatus(Order $order, string $tpayPaymentId, bool $error = false): void
+    private function changeOrderStatus(\Order $order, string $tpayPaymentId, bool $error = false): void
     {
         $orderStateId = $this->getOrderStatus($order, $error);
         $orderStatusesHistory = $this->transactionsRepository->getOrderStatusHistory($order->id);
@@ -85,7 +84,7 @@ class OrderStatusHandler
         }
     }
 
-    private function getOrderStatus(Order $order, bool $error = false): string
+    private function getOrderStatus(\Order $order, bool $error = false): string
     {
         $isVirtual = true;
         foreach ($order->getProducts() as $product) {

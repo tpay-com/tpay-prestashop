@@ -33,9 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Exception;
-
-class TransactionException extends Exception
+class TransactionException extends \Exception
 {
     public static function unableToCreateTransaction(array $data): self
     {

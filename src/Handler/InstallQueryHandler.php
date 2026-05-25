@@ -33,10 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Db;
-use Exception;
-use PrestaShopLogger;
-use Tools;
 use Tpay\Exception\BaseException;
 
 class InstallQueryHandler
@@ -48,16 +44,16 @@ class InstallQueryHandler
      */
     public function execute(string $path): bool
     {
-        $db = Db::getInstance();
-        $sql = Tools::file_get_contents($path);
+        $db = \Db::getInstance();
+        $sql = \Tools::file_get_contents($path);
         $sql = str_replace(['_DB_PREFIX_', '_MYSQL_ENGINE_'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sql);
 
         try {
             $db->execute($sql);
 
             return true;
-        } catch (Exception $exception) {
-            PrestaShopLogger::addLog($exception->getMessage(), 3);
+        } catch (\Exception $exception) {
+            \PrestaShopLogger::addLog($exception->getMessage(), 3);
             throw new BaseException($exception->getMessage());
         }
     }

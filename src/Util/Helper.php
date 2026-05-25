@@ -33,9 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Configuration;
-use Context;
-
 class Helper
 {
     /** Generate string */
@@ -121,10 +118,10 @@ class Helper
 
     public static function getMultistoreConfigurationValue($name)
     {
-        if ('1' === Configuration::get('TPAY_GLOBAL_SETTINGS', null, Context::getContext()->shop->id_shop_group, Context::getContext()->shop->id)) {
-            return Configuration::getGlobalValue($name);
+        if ('1' === \Configuration::get('TPAY_GLOBAL_SETTINGS', null, \Context::getContext()->shop->id_shop_group, \Context::getContext()->shop->id)) {
+            return \Configuration::getGlobalValue($name);
         }
 
-        return Configuration::get($name);
+        return \Configuration::get($name);
     }
 }

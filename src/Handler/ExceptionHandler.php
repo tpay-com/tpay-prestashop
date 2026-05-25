@@ -33,16 +33,12 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Exception;
-use PrestaShopException;
-use PrestaShopLogger;
-
 class ExceptionHandler
 {
-    /** @throws PrestaShopException */
-    public static function handle(Exception $e): void
+    /** @throws \PrestaShopException */
+    public static function handle(\Exception $e): void
     {
-        PrestaShopLogger::addLog($e->getMessage(), 3);
-        throw new PrestaShopException($e->getMessage());
+        \PrestaShopLogger::addLog($e->getMessage(), 3);
+        throw new \PrestaShopException($e->getMessage());
     }
 }

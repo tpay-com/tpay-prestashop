@@ -99,14 +99,14 @@ class TpayCreditCard
     private $crc;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="date_add", type="datetime")
      */
     private $dateAdd;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="date_update", type="datetime")
      *
@@ -126,7 +126,7 @@ class TpayCreditCard
         $this->cardHash = $cardHash;
         $this->userId = $userId;
         $this->crc = $crc;
-        $this->dateAdd = new DateTime();
+        $this->dateAdd = new \DateTime();
     }
 
     public function getId(): int
@@ -164,12 +164,12 @@ class TpayCreditCard
         return $this->crc;
     }
 
-    public function getDateAdd(): DateTime
+    public function getDateAdd(): \DateTime
     {
         return $this->dateAdd;
     }
 
-    public function getDateUpdate(): DateTime
+    public function getDateUpdate(): \DateTime
     {
         return $this->dateUpdate;
     }

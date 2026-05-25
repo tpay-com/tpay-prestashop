@@ -33,15 +33,11 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Cart;
-use Context;
-use Exception;
-use Tools;
 use Tpay\Repository\TransactionsRepository;
 
 class TransactionService
 {
-    /** @var Cart */
+    /** @var \Cart */
     private $cart;
 
     /** @var TransactionsRepository */
@@ -50,14 +46,14 @@ class TransactionService
     /** @var SurchargeService */
     private $surchargeService;
 
-    /** @var Context */
+    /** @var \Context */
     private $context;
 
     public function __construct(
-        Cart $cart,
+        \Cart $cart,
         TransactionsRepository $repository,
         SurchargeService $surchargeService,
-        Context $context
+        \Context $context
     ) {
         $this->cart = $cart;
         $this->repository = $repository;
@@ -68,12 +64,12 @@ class TransactionService
     /**
      * @param bool $redirect (redirect use new card/payment basic)
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function transactionProcess($transaction, $type, $orderId, bool $redirect = true): void
     {
         if ('blik' !== $type && 'success' !== $transaction['result']) {
-            Tools::redirect(
+            \Tools::redirect(
                 $this->context->link->getModuleLink(
                     'tpay',
                     'ordererror'
@@ -95,12 +91,12 @@ class TransactionService
         );
 
         if ($redirect) {
-            Tools::redirect($transaction['transactionPaymentUrl']);
+            \Tools::redirect($transaction['transactionPaymentUrl']);
         }
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function updateTransaction($transaction, $oldTransactionId, $type, $orderId): void
     {

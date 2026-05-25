@@ -33,10 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Context;
-use PrestaShopLogger;
-use Shop;
-use Tools;
 use Tpay\Adapter\ConfigurationAdapter;
 use Tpay\Util\Helper;
 
@@ -55,9 +51,9 @@ class ConfigurationSaveForm
     public function execute($save = false): bool
     {
         $res = true;
-        $shops = Shop::getContextListShopID();
-        $shopId = (int) Context::getContext()->shop->id;
-        $this->shopGroupsList[] = Shop::getGroupFromShop($shopId);
+        $shops = \Shop::getContextListShopID();
+        $shopId = (int) \Context::getContext()->shop->id;
+        $this->shopGroupsList[] = \Shop::getGroupFromShop($shopId);
 
         if ($save) {
             $defaultValue = false;
@@ -67,19 +63,19 @@ class ConfigurationSaveForm
             $fields = Helper::getFieldsDefaultValues();
         }
 
-        if (Shop::CONTEXT_SHOP == Shop::getContext()) {
+        if (\Shop::CONTEXT_SHOP == \Shop::getContext()) {
             if (!$this->saveConfigurationShops($shops, $fields, $defaultValue)) {
-                PrestaShopLogger::addLog('Error configure all shop context', 3);
+                \PrestaShopLogger::addLog('Error configure all shop context', 3);
                 $res = false;
             }
-        } elseif (Shop::CONTEXT_GROUP == Shop::getContext()) {
+        } elseif (\Shop::CONTEXT_GROUP == \Shop::getContext()) {
             if (!$this->saveConfigurationGroups($this->shopGroupsList, $fields, $defaultValue)) {
-                PrestaShopLogger::addLog('Error configure shop group context', 3);
+                \PrestaShopLogger::addLog('Error configure shop group context', 3);
                 $res = false;
             }
         } else {
             if (!$this->saveConfigurationGlobal($fields, $defaultValue)) {
-                PrestaShopLogger::addLog('Error configure global context', 3);
+                \PrestaShopLogger::addLog('Error configure global context', 3);
                 $res = false;
             }
         }
@@ -91,7 +87,7 @@ class ConfigurationSaveForm
     {
         $res = true;
         foreach ($shops as $shop_id) {
-            $shop_group_id = (int) Shop::getGroupFromShop($shop_id, true);
+            $shop_group_id = (int) \Shop::getGroupFromShop($shop_id, true);
 
             if (!in_array($shop_group_id, $this->shopGroupsList)) {
                 $this->shopGroupsList[] = $shop_group_id;
@@ -109,9 +105,9 @@ class ConfigurationSaveForm
                 } else {
                     if (strpos($value, '[]')) {
                         $value = substr($value, 0, -2);
-                        $getValue = Tools::getValue($value, '[]');
+                        $getValue = \Tools::getValue($value, '[]');
                     } else {
-                        $getValue = Tools::getValue(
+                        $getValue = \Tools::getValue(
                             $value,
                             $this->configuration->get(
                                 $value,
@@ -150,7 +146,7 @@ class ConfigurationSaveForm
                             $shop_group_id
                         );
                     } else {
-                        $getValue = Tools::getValue(
+                        $getValue = \Tools::getValue(
                             $value,
                             $this->configuration->get(
                                 $value,
@@ -183,7 +179,7 @@ class ConfigurationSaveForm
                     $value
                 );
             } else {
-                $getValue = Tools::getValue($value, $this->configuration->get($value));
+                $getValue = \Tools::getValue($value, $this->configuration->get($value));
 
                 $res &= $this->configuration->updateValue(
                     $value,

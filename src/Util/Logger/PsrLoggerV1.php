@@ -31,7 +31,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use PrestaShopLogger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
@@ -39,47 +38,47 @@ class PsrLoggerV1 implements LoggerInterface
 {
     public function emergency($message, array $context = [])
     {
-        PrestaShopLogger::addLog($message, 4);
+        \PrestaShopLogger::addLog($message, 4);
     }
 
     public function alert($message, array $context = [])
     {
-        PrestaShopLogger::addLog($message, 4);
+        \PrestaShopLogger::addLog($message, 4);
     }
 
     public function critical($message, array $context = [])
     {
-        PrestaShopLogger::addLog($message, 4);
+        \PrestaShopLogger::addLog($message, 4);
     }
 
     public function error($message, array $context = [])
     {
-        PrestaShopLogger::addLog($message, 3);
+        \PrestaShopLogger::addLog($message, 3);
     }
 
     public function warning($message, array $context = [])
     {
-        PrestaShopLogger::addLog($message, 2);
+        \PrestaShopLogger::addLog($message, 2);
     }
 
     public function notice($message, array $context = [])
     {
         if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_) {
-            PrestaShopLogger::addLog($message, 1);
+            \PrestaShopLogger::addLog($message, 1);
         }
     }
 
     public function info($message, array $context = [])
     {
         if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_) {
-            PrestaShopLogger::addLog($message, 1);
+            \PrestaShopLogger::addLog($message, 1);
         }
     }
 
     public function debug($message, array $context = [])
     {
         if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_) {
-            PrestaShopLogger::addLog($message, 1);
+            \PrestaShopLogger::addLog($message, 1);
         }
     }
 
@@ -109,6 +108,6 @@ class PsrLoggerV1 implements LoggerInterface
             return;
         }
 
-        PrestaShopLogger::addLog($message, $legacyLevel);
+        \PrestaShopLogger::addLog($message, $legacyLevel);
     }
 }

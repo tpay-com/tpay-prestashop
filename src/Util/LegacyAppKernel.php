@@ -40,9 +40,7 @@ if (!class_exists('\AppKernel')) {
     include_once _PS_ROOT_DIR_ . '/app/AppKernel.php';
 }
 
-use AppKernel;
-
-class LegacyAppKernel extends AppKernel
+class LegacyAppKernel extends \AppKernel
 {
     protected $name = 'tpay';
 

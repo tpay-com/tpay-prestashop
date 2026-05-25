@@ -33,9 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Language;
-use OrderState;
-
 class ErrorState implements StateType
 {
     public $stateLanguage = [
@@ -51,22 +48,22 @@ class ErrorState implements StateType
     /** @var string */
     private $moduleName;
 
-    /** @var OrderState */
+    /** @var \OrderState */
     private $orderState;
 
     public function __construct(
-        OrderState $orderState,
+        \OrderState $orderState,
         string $moduleName
     ) {
         $this->moduleName = $moduleName;
         $this->orderState = $orderState;
     }
 
-    public function create(): OrderState
+    public function create(): \OrderState
     {
         $name = [];
 
-        foreach (Language::getLanguages() as $lang) {
+        foreach (\Language::getLanguages() as $lang) {
             $name[$lang['id_lang']] = $this->stateLanguage[$lang['iso_code']]
                 ?? $this->stateLanguage['pl'];
         }

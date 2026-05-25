@@ -33,10 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Cart;
 use Configuration as Cfg;
-use Context;
-use Exception;
 use Tpay\Config\Config;
 
 class SurchargeService
@@ -44,7 +41,7 @@ class SurchargeService
     /**
      * Return surcharge value.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getSurchargeValue(?float $orderTotal = null): float
     {
@@ -53,8 +50,8 @@ class SurchargeService
         }
 
         if (!$orderTotal) {
-            $cart = Context::getContext()->cart;
-            $orderTotal = (float) $cart->getOrderTotal(true, Cart::BOTH);
+            $cart = \Context::getContext()->cart;
+            $orderTotal = (float) $cart->getOrderTotal(true, \Cart::BOTH);
         }
 
         $surchargeValue = $this->parseSurchargeValue();
@@ -69,11 +66,11 @@ class SurchargeService
         return $surcharge;
     }
 
-    /** @throws Exception */
+    /** @throws \Exception */
     public function getTotalOrderAndSurchargeCost(): float
     {
-        $cart = Context::getContext()->cart;
-        $orderTotal = (float) $cart->getOrderTotal(true, Cart::BOTH);
+        $cart = \Context::getContext()->cart;
+        $orderTotal = (float) $cart->getOrderTotal(true, \Cart::BOTH);
         $surcharge = $this->getSurchargeValue();
 
         return (float) ($orderTotal + $surcharge);

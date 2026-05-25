@@ -33,13 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Context;
-use Customer;
-use Exception;
-use Order;
-use PrestaShopLogger;
-use Tools;
-use Tpay;
 use Tpay\Config\Config;
 use Tpay\Exception\PaymentException;
 use Tpay\Exception\TransactionException;
@@ -59,16 +52,16 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     private $cardService;
     private $clientData;
 
-    /** @var Tpay */
+    /** @var \Tpay */
     private $module;
 
-    /** @var Order */
+    /** @var \Order */
     private $order;
 
-    /** @var Customer */
+    /** @var \Customer */
     private $customer;
 
-    /** @var Context */
+    /** @var \Context */
     private $context;
 
     public function getName(): string
@@ -81,10 +74,10 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
      * @throws PaymentException
      */
     public function createPayment(
-        Tpay $module,
-        Order $order,
-        Customer $customer,
-        Context $context,
+        \Tpay $module,
+        \Order $order,
+        \Customer $customer,
+        \Context $context,
         array $clientData,
         array $data
     ) {
@@ -113,7 +106,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     /**
      * Process of saving the transaction
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function initTransactionProcess($transaction, $orderId): void
     {
@@ -145,8 +138,8 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         $savedCard = $this->cardService->transactionSavedCard($savedCardId, $this->customer->id);
 
         if (empty($savedCard)) {
-            PrestaShopLogger::addLog('Unauthorized payment try (empty token)', 3);
-            Tools::redirect($transaction['transactionPaymentUrl']);
+            \PrestaShopLogger::addLog('Unauthorized payment try (empty token)', 3);
+            \Tools::redirect($transaction['transactionPaymentUrl']);
         }
 
         $this->payBySavedCard($savedCard, $transaction);
@@ -156,7 +149,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
      * Create new card
      *
      * @throws PaymentException|TransactionException
-     * @throws Exception
+     * @throws \Exception
      */
     private function processPaymentNewCard(): void
     {
@@ -167,11 +160,11 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
             $response = $this->makeCardPayment($transaction);
 
             if ('failure' === $response['result']) {
-                Tools::redirect($response['transactionPaymentUrl']);
+                \Tools::redirect($response['transactionPaymentUrl']);
             }
 
             if (isset($response['status']) && 'correct' === $response['status']) {
-                Tools::redirect(
+                \Tools::redirect(
                     $this->context->link->getModuleLink(
                         'tpay',
                         'confirmation',
@@ -186,11 +179,11 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
             if (isset($response['transactionPaymentUrl'])) {
                 $this->initTransactionProcess($transaction, $this->order->id);
 
-                Tools::redirect($response['transactionPaymentUrl']);
+                \Tools::redirect($response['transactionPaymentUrl']);
             }
         }
-        PrestaShopLogger::addLog('Unable to create new card payment. Response: ' . json_encode($transaction), 3);
-        Tools::redirect(
+        \PrestaShopLogger::addLog('Unable to create new card payment. Response: ' . json_encode($transaction), 3);
+        \Tools::redirect(
             $this->context->link->getModuleLink(
                 'tpay',
                 'ordererror'
@@ -223,7 +216,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
                 false
             );
 
-            Tools::redirect(
+            \Tools::redirect(
                 $this->context->link->getModuleLink(
                     'tpay',
                     'confirmation',
@@ -235,7 +228,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
             );
         }
 
-        Tools::redirect($transaction['transactionPaymentUrl']);
+        \Tools::redirect($transaction['transactionPaymentUrl']);
     }
 
     /**
@@ -260,7 +253,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     private function makeCardPayment($transaction)
     {

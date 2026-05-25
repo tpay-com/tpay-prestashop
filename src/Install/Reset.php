@@ -33,9 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Configuration;
-use Exception;
-use PrestaShopLogger;
 use Tpay\Exception\BaseException;
 
 class Reset
@@ -86,12 +83,12 @@ class Reset
 
         try {
             foreach ($configurations as $configName) {
-                Configuration::deleteByName($configName);
+                \Configuration::deleteByName($configName);
             }
 
             return true;
-        } catch (Exception $exception) {
-            PrestaShopLogger::addLog($exception->getMessage(), 3);
+        } catch (\Exception $exception) {
+            \PrestaShopLogger::addLog($exception->getMessage(), 3);
             throw new BaseException($exception->getMessage());
         }
     }

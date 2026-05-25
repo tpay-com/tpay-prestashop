@@ -34,13 +34,8 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Configuration as Cfg;
-use Currency;
-use Exception;
 use Order;
-use OrderHistory;
 use PrestaShopBundle\Translation\TranslatorComponent;
-use Tools;
-use Tpay;
 use Tpay\Repository\RefundsRepository;
 use Tpay\Repository\TransactionsRepository;
 use Tpay\Service\SurchargeService;
@@ -57,7 +52,7 @@ class Admin extends AbstractHook
     /** @var TranslatorComponent|null */
     private $translator;
 
-    public function __construct(Tpay $module)
+    public function __construct(\Tpay $module)
     {
         $this->translator = $module->getTranslator();
         parent::__construct($module);
@@ -79,15 +74,15 @@ class Admin extends AbstractHook
         self::$refundsRendered = true;
 
         $orderId = (int) $params['id_order'];
-        $order = new Order($orderId);
+        $order = new \Order($orderId);
         $orderPayments = $order->getOrderPayments()[0] ?? false;
-        $refundSubmit = (bool) Tools::getValue('tpay-refund');
+        $refundSubmit = (bool) \Tools::getValue('tpay-refund');
         $errors = [];
         if ($orderPayments && 'Tpay' === $orderPayments->payment_method) {
             $this->getOrderRefunds($orderId);
 
             $transactionId = $orderPayments->transaction_id;
-            $refundAmount = $this->parseRefundAmount(Tools::getValue('tpay_refund_amount'));
+            $refundAmount = $this->parseRefundAmount(\Tools::getValue('tpay_refund_amount'));
             $maxRefundAmount = (float) $orderPayments->amount;
             if ($refundSubmit) {
                 if ($this->validRefundAllowedAmount($refundAmount, $maxRefundAmount)) {
@@ -112,7 +107,7 @@ class Admin extends AbstractHook
                                 $refundAmount
                             );
 
-                            $this->createHistory($order, new OrderHistory());
+                            $this->createHistory($order, new \OrderHistory());
 
                             $this->context->smarty->assign(
                                 [
@@ -132,7 +127,7 @@ class Admin extends AbstractHook
                                 );
                             }
                         }
-                    } catch (Exception $TException) {
+                    } catch (\Exception $TException) {
                         $this->context->smarty->assign(
                             [
                                 'tpay_refund_error' => $TException->getMessage(),
@@ -161,13 +156,13 @@ class Admin extends AbstractHook
     public function displayAdminOrder($params): string
     {
         $orderId = $params['id_order'];
-        $order = new Order($orderId);
+        $order = new \Order($orderId);
 
         if ('tpay' !== $order->module) {
             return '';
         }
 
-        $currency = new Currency($order->id_currency);
+        $currency = new \Currency($order->id_currency);
         /** @var SurchargeService $surchargeService */
         $surchargeService = $this->module->getService('tpay.service.surcharge');
         /** @var TransactionsRepository $transactionService */
@@ -261,7 +256,7 @@ class Admin extends AbstractHook
         ];
     }
 
-    private function createHistory($order, OrderHistory $orderHistory)
+    private function createHistory($order, \OrderHistory $orderHistory)
     {
         $orderHistory->id_order = (int) $order->id;
         $orderHistory->changeIdOrderState((int) Cfg::get('PS_OS_REFUND'), (int) $order->id);
@@ -300,7 +295,7 @@ class Admin extends AbstractHook
     /**
      * Show refunds in order
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function getOrderRefunds(int $orderId)
     {

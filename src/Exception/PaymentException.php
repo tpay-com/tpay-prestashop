@@ -33,8 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Exception;
-
-class PaymentException extends Exception
+class PaymentException extends \Exception
 {
 }

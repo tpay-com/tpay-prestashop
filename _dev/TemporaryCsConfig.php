@@ -50,7 +50,7 @@ class TemporaryCsConfig extends Config
         $parent['no_extra_blank_lines'] = [
             'tokens' => ['extra', 'use'],
         ];
-        $parent['global_namespace_import'] = ['import_classes' => true];
+        $parent['global_namespace_import'] = ['import_classes' => false, 'import_constants' => false, 'import_functions' => false];
 
 
         return $parent;

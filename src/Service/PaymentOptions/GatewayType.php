@@ -34,12 +34,11 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
-use Tpay;
 
 interface GatewayType
 {
     public function getPaymentOption(
-        Tpay $module,
+        \Tpay $module,
         PaymentOption $paymentOption,
         array $data = []
     ): PaymentOption;

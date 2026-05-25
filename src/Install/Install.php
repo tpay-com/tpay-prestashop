@@ -34,17 +34,13 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Context;
-use Db;
 use PrestaShopBundle\Translation\TranslatorComponent;
-use Shop;
-use Tools;
-use Tpay;
 use Tpay\Exception\BaseException;
 use Tpay\Handler\InstallQueryHandler;
 
 class Install
 {
-    /** @var Tpay */
+    /** @var \Tpay */
     private $module;
 
     /** @phpstan-ignore-next-line */
@@ -54,7 +50,7 @@ class Install
     private $translator;
 
     public function __construct(
-        Tpay $module,
+        \Tpay $module,
         InstallQueryHandler $installQueryHandler
     ) {
         $this->module = $module;
@@ -84,8 +80,8 @@ class Install
     private function installDb(): bool
     {
         $status = true;
-        $database = Db::getInstance();
-        $sql = Tools::file_get_contents($this->module->getLocalPath() . 'src/Install/install.sql');
+        $database = \Db::getInstance();
+        $sql = \Tools::file_get_contents($this->module->getLocalPath() . 'src/Install/install.sql');
         $sql = str_replace(['_DB_PREFIX_', '_MYSQL_ENGINE_'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sql);
 
         $sqlQuery = explode(';', $sql);
@@ -105,8 +101,8 @@ class Install
     /** Starts context if there is a store running multistore option */
     private function installContext(): bool
     {
-        if (Shop::isFeatureActive()) {
-            Shop::setContext(Shop::CONTEXT_SHOP, Context::getContext()->shop->id);
+        if (\Shop::isFeatureActive()) {
+            \Shop::setContext(\Shop::CONTEXT_SHOP, \Context::getContext()->shop->id);
         }
 
         return true;

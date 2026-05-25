@@ -31,10 +31,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use SmartyResourceModule;
-use Tools;
-
-class LegacySmartyResourceModule extends SmartyResourceModule
+class LegacySmartyResourceModule extends \SmartyResourceModule
 {
     public function __construct(array $paths, $isAdmin = false)
     {
@@ -45,7 +42,7 @@ class LegacySmartyResourceModule extends SmartyResourceModule
     protected function fetch($name, &$source, &$mtime)
     {
         foreach ($this->paths as $path) {
-            if (Tools::file_exists_cache($file = $path . $name)) {
+            if (\Tools::file_exists_cache($file = $path . $name)) {
                 if (_PS_MODE_DEV_) {
                     $source = implode(
                         '',

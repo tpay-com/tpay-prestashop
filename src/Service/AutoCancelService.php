@@ -34,8 +34,6 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Configuration as Cfg;
-use PrestaShopLogger;
-use Tpay;
 use Tpay\Repository\TransactionsRepository;
 
 class AutoCancelService
@@ -43,12 +41,12 @@ class AutoCancelService
     /** @var TransactionsRepository */
     private $repository;
 
-    /** @var Tpay */
+    /** @var \Tpay */
     private $tpay;
 
     public function __construct(
         TransactionsRepository $repository,
-        Tpay $tpay
+        \Tpay $tpay
     ) {
         $this->repository = $repository;
         $this->tpay = $tpay;
@@ -99,7 +97,7 @@ class AutoCancelService
                     new $commandName($orderIds, (int) Cfg::get('PS_OS_CANCELED'))
                 );
             } else {
-                PrestaShopLogger::addLog('Class for handling order cancellation not found', 3);
+                \PrestaShopLogger::addLog('Class for handling order cancellation not found', 3);
             }
         }
     }

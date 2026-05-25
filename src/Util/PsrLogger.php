@@ -32,11 +32,10 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Psr\Log\LoggerInterface;
-use ReflectionParameter;
 use Tpay\Util\Logger\PsrLoggerV1;
 use Tpay\Util\Logger\PsrLoggerV3;
 
-$parameter = new ReflectionParameter([LoggerInterface::class, 'log'], 'message');
+$parameter = new \ReflectionParameter([LoggerInterface::class, 'log'], 'message');
 if ($parameter->hasType()) {
     /* @phpstan-ignore-next-line */
     class_alias(PsrLoggerV3::class, PsrLogger::class);

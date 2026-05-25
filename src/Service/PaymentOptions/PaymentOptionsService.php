@@ -33,13 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Configuration;
-use Context;
-use Exception;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
-use PrestaShopException;
-use PrestaShopLogger;
-use Tpay;
 use Tpay\Config\Config;
 use Tpay\Factory\PaymentOptionsFactory;
 use Tpay\Service\ConstraintValidator;
@@ -58,24 +52,24 @@ class PaymentOptionsService
     private $constraintValidator;
 
     /**
-     * @throws PrestaShopException
-     * @throws Exception
+     * @throws \PrestaShopException
+     * @throws \Exception
      */
-    public function __construct(Tpay $module)
+    public function __construct(\Tpay $module)
     {
         $this->module = $module;
         $this->constraintValidator = new ConstraintValidator($module);
         $this->getGroup();
     }
 
-    /** @throws PrestaShopException */
+    /** @throws \PrestaShopException */
     public function getGroup(): void
     {
         try {
             $this->getPaymentGroups();
-        } catch (PrestaShopException $e) {
-            PrestaShopLogger::addLog('Error getGroup ' . $e->getMessage(), 4);
-            throw new PrestaShopException($e->getMessage());
+        } catch (\PrestaShopException $e) {
+            \PrestaShopLogger::addLog('Error getGroup ' . $e->getMessage(), 4);
+            throw new \PrestaShopException($e->getMessage());
         }
     }
 
@@ -83,7 +77,7 @@ class PaymentOptionsService
     public function createTransferPaymentChannel(): void
     {
         $payment = [
-            'img' => Context::getContext()->shop->getBaseURL(true) . 'modules/tpay/views/img/tpay.svg',
+            'img' => \Context::getContext()->shop->getBaseURL(true) . 'modules/tpay/views/img/tpay.svg',
             'gateways' => $this->getGroupTransfers(),
             'id' => Config::GATEWAY_TRANSFER,
             'mainChannel' => Config::GATEWAY_TRANSFER,
@@ -164,7 +158,7 @@ class PaymentOptionsService
         $this->channels[] = $array;
     }
 
-    /** @throws Exception */
+    /** @throws \Exception */
     private function getSeparatePayments(array $channels): array
     {
         $paymentsMethods = [
@@ -189,13 +183,13 @@ class PaymentOptionsService
 
     private function hasActiveCard(): bool
     {
-        return Configuration::get('TPAY_CARD_ACTIVE') || !empty(Configuration::get('TPAY_CARD_RSA'));
+        return \Configuration::get('TPAY_CARD_ACTIVE') || !empty(\Configuration::get('TPAY_CARD_RSA'));
     }
 
     /**
      * Grouping of payments delivered from api
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function getPaymentGroups(): void
     {
@@ -264,7 +258,7 @@ class PaymentOptionsService
     /**
      * Downloading payment gateways to the online money transfer group
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function groupTransfer(array $channels, array $compareArray): array
     {

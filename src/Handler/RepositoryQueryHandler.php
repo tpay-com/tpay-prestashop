@@ -35,8 +35,6 @@ if (!defined('_PS_VERSION_')) {
 
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Exception;
-use PrestaShopLogger;
 use Tpay\Exception\BaseException;
 use Tpay\Exception\RepositoryException;
 
@@ -82,8 +80,8 @@ class RepositoryQueryHandler
                         $statement = $qb->execute();
                 }
             }
-        } catch (Exception $exception) {
-            PrestaShopLogger::addLog($exception->getMessage(), 3);
+        } catch (\Exception $exception) {
+            \PrestaShopLogger::addLog($exception->getMessage(), 3);
             throw new BaseException($exception->getMessage());
         }
 
@@ -91,7 +89,7 @@ class RepositoryQueryHandler
         if (method_exists(Statement::class, 'errorInfo')) {
             // @phpstan-ignore-next-line
             if ($statement instanceof Statement && !empty($statement->errorInfo())) {
-                PrestaShopLogger::addLog($errorPrefix, 3);
+                \PrestaShopLogger::addLog($errorPrefix, 3);
                 // @phpstan-ignore-next-line
                 throw new RepositoryException($errorPrefix . ': ' . var_export($statement->errorInfo(), true));
             }

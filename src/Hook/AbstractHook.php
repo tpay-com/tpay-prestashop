@@ -33,20 +33,17 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Context;
-use Tpay;
-
 abstract class AbstractHook
 {
     public const AVAILABLE_HOOKS = [];
 
-    /** @var Tpay */
+    /** @var \Tpay */
     protected $module;
 
-    /** @var Context */
+    /** @var \Context */
     protected $context;
 
-    public function __construct(Tpay $module)
+    public function __construct(\Tpay $module)
     {
         $this->module = $module;
         $this->context = $module->getContext();

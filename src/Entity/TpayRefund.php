@@ -71,7 +71,7 @@ class TpayRefund
     private $transactionId;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime")
      *
@@ -94,7 +94,7 @@ class TpayRefund
         $this->orderId = $orderId;
         $this->transactionId = $transactionId;
         $this->amount = $amount;
-        $this->date = new DateTime();
+        $this->date = new \DateTime();
     }
 
     public function getId(): int

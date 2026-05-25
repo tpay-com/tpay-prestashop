@@ -33,44 +33,37 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use AddressCore;
-use Cart;
-use Context;
-use Customer;
-use Exception;
-use Order;
-use Tpay;
 use Tpay\CustomerData;
 
 class PaymentHandler
 {
-    /** @var Tpay */
+    /** @var \Tpay */
     private $module;
 
-    /** @var Context */
+    /** @var \Context */
     private $context;
 
     /** @var PaymentMethodHandler */
     private $paymentMethodHandler;
 
-    /** @var Customer */
+    /** @var \Customer */
     private $customer;
 
-    /** @var Order */
+    /** @var \Order */
     private $order;
 
-    /** @var AddressCore */
+    /** @var \AddressCore */
     private $address;
 
     /** @var array */
     private $data;
 
     public function __construct(
-        Tpay $module,
+        \Tpay $module,
         PaymentMethodHandler $paymentMethodHandler,
-        Order $order,
-        Customer $customer,
-        AddressCore $address,
+        \Order $order,
+        \Customer $customer,
+        \AddressCore $address,
         array $data = []
     ) {
         $this->module = $module;
@@ -82,10 +75,10 @@ class PaymentHandler
         $this->context = $this->module->getContext();
     }
 
-    /** @throws Exception */
+    /** @throws \Exception */
     public function getCustomerDetails(): array
     {
-        $cart = new Cart($this->order->id_cart);
+        $cart = new \Cart($this->order->id_cart);
 
         $customer = new CustomerData(
             $this->address,
@@ -100,7 +93,7 @@ class PaymentHandler
         return $customer->getData();
     }
 
-    /** @throws Exception */
+    /** @throws \Exception */
     public function get(): void
     {
         $this->paymentMethodHandler->createPayment(

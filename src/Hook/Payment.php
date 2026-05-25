@@ -34,8 +34,6 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use PrestaShop\PrestaShop\Core\Localization\Exception\LocalizationException;
-use PrestaShopException;
-use Tools;
 use Tpay\Service\PaymentOptions\PaymentOptionsService;
 use Tpay\Service\SurchargeService;
 
@@ -49,7 +47,7 @@ class Payment extends AbstractHook
     /**
      * Create payment methods
      *
-     * @throws LocalizationException|PrestaShopException
+     * @throws LocalizationException|\PrestaShopException
      */
     public function paymentOptions($params)
     {
@@ -78,7 +76,7 @@ class Payment extends AbstractHook
             array_merge(
                 $langData,
                 [
-                    'tpay_path' => Tools::getHttpHost(true) . __PS_BASE_URI__ . 'modules/tpay/views/',
+                    'tpay_path' => \Tools::getHttpHost(true) . __PS_BASE_URI__ . 'modules/tpay/views/',
                     'surcharge' => $surcharge > 0 ? $this->context->getCurrentLocale()->formatPrice($this->getSurchargeCost(), $this->context->currency->iso_code) : false,
                 ]
             )
@@ -111,11 +109,11 @@ class Payment extends AbstractHook
         }
         $this->context->smarty->assign(
             [
-                'status' => Tools::getValue('status'),
+                'status' => \Tools::getValue('status'),
                 'historyLink' => 'index.php?controller=history',
                 'homeLink' => 'index.php',
                 'contactLink' => 'index.php?controller=contact',
-                'modulesDir' => Tools::getHttpHost(true) . __PS_BASE_URI__ . 'modules/',
+                'modulesDir' => \Tools::getHttpHost(true) . __PS_BASE_URI__ . 'modules/',
             ]
         );
 

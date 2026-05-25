@@ -33,8 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Exception;
-
-class NotificationHandlingException extends Exception
+class NotificationHandlingException extends \Exception
 {
 }

@@ -33,7 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use InvalidArgumentException;
 use Tpay\OpenApi\Model\Fields\Address\City;
 use Tpay\OpenApi\Model\Fields\Address\Phone;
 use Tpay\OpenApi\Model\Fields\Address\PostalCode;
@@ -82,7 +81,7 @@ class PayerDataBuilder
         try {
             $field->setValue($value);
             $this->payer[$key] = $value;
-        } catch (InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException $e) {
         }
 
         return $this;

@@ -33,12 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Cart;
-use Currency;
-use Exception;
 use Order as PrestaOrder;
-use PrestaShopException;
-use Tools;
 use Tpay\OpenApi\Utilities\Util;
 use Tpay\Repository\TransactionsRepository;
 use Tpay\Service\SurchargeService;
@@ -54,7 +49,7 @@ class Order extends AbstractHook
     /**
      * Hook display order detail.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function displayOrderDetail($params): string
     {
@@ -64,7 +59,7 @@ class Order extends AbstractHook
     /**
      * Hook display order confirmation.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function displayOrderConfirmation($params): string
     {
@@ -72,8 +67,8 @@ class Order extends AbstractHook
     }
 
     /**
-     * @throws PrestaShopException
-     * @throws Exception
+     * @throws \PrestaShopException
+     * @throws \Exception
      */
     public function actionValidateOrder($params)
     {
@@ -83,7 +78,7 @@ class Order extends AbstractHook
 
         if (isset($params['order'], $params['order']->id)) {
             $order = $params['order'];
-            $cart = Cart::getCartByOrderId($order->id);
+            $cart = \Cart::getCartByOrderId($order->id);
 
             /** @var SurchargeService $surchargeService */
             $surchargeService = $this->module->getService('tpay.service.surcharge');
@@ -102,7 +97,7 @@ class Order extends AbstractHook
     /**
      * Add a surcharge to a created order
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function addSurchargeToOrderCreated($surchargeValue, $order, $cart)
     {
@@ -117,24 +112,24 @@ class Order extends AbstractHook
             $computePresicion = _PS_PRICE_COMPUTE_PRECISION_;
         }
 
-        $amountWithTax = $cart->getOrderTotal(true, Cart::BOTH);
-        $amountWithoutTax = $cart->getOrderTotal(false, Cart::BOTH);
+        $amountWithTax = $cart->getOrderTotal(true, \Cart::BOTH);
+        $amountWithoutTax = $cart->getOrderTotal(false, \Cart::BOTH);
 
-        $order->total_paid_tax_excl = Tools::ps_round(
+        $order->total_paid_tax_excl = \Tools::ps_round(
             $amountWithoutTax + $surchargeValue,
             $computePresicion
         );
-        $order->total_paid_tax_incl = Tools::ps_round(
+        $order->total_paid_tax_incl = \Tools::ps_round(
             $amountWithTax + $surchargeValue,
             $computePresicion
         );
 
-        $order->total_paid = Tools::ps_round(
+        $order->total_paid = \Tools::ps_round(
             $order->total_paid + $surchargeValue,
             $computePresicion
         );
 
-        $order->total_paid_real = Tools::ps_round(
+        $order->total_paid_real = \Tools::ps_round(
             $order->total_paid_real + $surchargeValue,
             $computePresicion
         );
@@ -143,7 +138,7 @@ class Order extends AbstractHook
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     private function getSurchargeSmartyTemplate($params = []): string
     {
@@ -153,7 +148,7 @@ class Order extends AbstractHook
 
         $orderId = $params['order']->id;
         $order = new PrestaOrder($orderId);
-        $currency = new Currency($order->id_currency);
+        $currency = new \Currency($order->id_currency);
         /** @var SurchargeService $surchargeService */
         $surchargeService = $this->module->getService('tpay.service.surcharge');
         /** @var TransactionsRepository $transactionService */

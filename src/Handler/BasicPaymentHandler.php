@@ -33,11 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Context;
-use Customer;
-use Exception;
-use Order;
-use Tpay;
 use Tpay\Exception\PaymentException;
 use Tpay\Exception\TransactionException;
 use Tpay\Service\TransactionService;
@@ -50,7 +45,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
     /** @var array */
     protected $clientData;
 
-    /** @var Tpay */
+    /** @var \Tpay */
     protected $module;
 
     public function getName(): string
@@ -60,13 +55,13 @@ class BasicPaymentHandler implements PaymentMethodHandler
 
     /**
      * @throws PaymentException|TransactionException
-     * @throws Exception
+     * @throws \Exception
      */
     public function createPayment(
-        Tpay $module,
-        Order $order,
-        Customer $customer,
-        Context $context,
+        \Tpay $module,
+        \Order $order,
+        \Customer $customer,
+        \Context $context,
         array $clientData,
         array $data
     ): void {
@@ -86,7 +81,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
     /**
      * @param array|string $transaction
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function initTransactionProcess($transaction, int $orderId, bool $redirect = true): void
     {

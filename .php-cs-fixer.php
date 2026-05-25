@@ -7,4 +7,8 @@ $config = new TemporaryCsConfig();
 $finder = $config->setUsingCache(false)->getFinder();
 $finder->in(__DIR__)->exclude('vendor')->exclude('_dev');
 
+$config->setRules(array_merge($config->getRules(), [
+    'global_namespace_import' => ['import_classes' => false, 'import_constants' => false, 'import_functions' => false],
+]));
+
 return $config;
