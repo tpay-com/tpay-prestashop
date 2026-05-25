@@ -1,4 +1,5 @@
 <?php
+define('_PS_VERSION_', '8.1.7');
 require_once '_dev/TemporaryCsConfig.php';
 $config = new TemporaryCsConfig();
 
