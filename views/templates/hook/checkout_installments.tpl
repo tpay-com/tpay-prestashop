@@ -27,7 +27,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         function createInstallmentContainer() {
             let url = 'https://secure.tpay.com/Installment/Pekao/page?merchantId=__merchantId__&amount=__amount__';
-            url = url.replace('__merchantId__', {$merchantId}).replace('__amount__', {$amount});
+            url = url.replace('__merchantId__', {$merchantId|intval}).replace('__amount__', {$amount|floatval});
 
             let summaryTotalElement = document.querySelector('.cart-summary-products');
 
@@ -43,7 +43,7 @@
                 img.style.maxWidth = '200px';
                 installmentsButton.appendChild(img);
 
-                const text = document.createTextNode('{$installmentText}');
+                const text = document.createTextNode('{$installmentText|escape:'javascript'}');
                 installmentsButton.appendChild(text);
 
                 installmentsButton.addEventListener('click', function () {

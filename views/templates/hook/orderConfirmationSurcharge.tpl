@@ -26,8 +26,8 @@
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function (event) {
     $(document).ready(function () {
-        {literal}const surchargeTitle = "{/literal}{$surcharge_title}";
-        {literal}const surchargeCost = "{/literal}{$surcharge_cost}"
+        {literal}const surchargeTitle = "{/literal}{$surcharge_title|escape:'javascript'}";
+        {literal}const surchargeCost = "{/literal}{$surcharge_cost|escape:'javascript'}"
 
       createBackOfficeSurchargeCost(surchargeTitle, surchargeCost);
       createFrontOfficeSurchargeCost(surchargeTitle, surchargeCost);

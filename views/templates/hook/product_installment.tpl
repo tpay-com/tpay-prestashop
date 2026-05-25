@@ -27,8 +27,8 @@
     document.addEventListener('DOMContentLoaded', function () {
         function createInstallmentsButton() {
             let amount = $('#quantity_wanted').val() * $('.current-price span').attr('content');
-            let minAmount = {$minAmount};
-            let maxAmount = {$maxAmount};
+            let minAmount = {$minAmount|floatval};
+            let maxAmount = {$maxAmount|floatval};
 
             let oldButton = document.querySelector('.installments-button');
 
@@ -53,13 +53,13 @@
                 img.className = "icon";
                 installmentsButton.appendChild(img);
 
-                const text = document.createTextNode('{$installmentText}');
+                const text = document.createTextNode('{$installmentText|escape:'javascript'}');
                 installmentsButton.appendChild(text);
 
                 installmentsButton.addEventListener('click', function () {
                     let currentAmount = $('#quantity_wanted').val() * $('.current-price span').attr('content');
                     let url = 'https://secure.tpay.com/Installment/Pekao/page?merchantId=__merchantId__&amount=__amount__';
-                    url = url.replace('__merchantId__', {$merchantId}).replace('__amount__', currentAmount);
+                    url = url.replace('__merchantId__', {$merchantId|intval}).replace('__amount__', currentAmount);
 
                     let iframe = document.createElement('iframe');
                     iframe.classList.add('installments-iframe');

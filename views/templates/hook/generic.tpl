@@ -24,13 +24,13 @@
 * SOFTWARE.
 *}
 <div class="tpay-wrapper" style="width: 100%;" data-payment-type="transfer">
-    <form action="{$action}" id="payment-form" class="transferForm" method="post">
-        <input type="hidden" name="tpay" value="{$tpay}">
-        <input type="hidden" name="type" value="{$type}">
+    <form action="{$action|escape:'html'}" id="payment-form" class="transferForm" method="post">
+        <input type="hidden" name="tpay" value="{$tpay|escape:'html'}">
+        <input type="hidden" name="type" value="{$type|escape:'html'}">
         <input
-                id="transfer_{$channelId}"
+                id="transfer_{$channelId|intval}"
                 type="radio" name="tpay_channel_id"
-                checked value="{$channelId}" required="required" style="display: none"/>
+                checked value="{$channelId|intval}" required="required" style="display: none"/>
     </form>
     {if isset($channelId) && $channelId == $blikBnplId}
         <div class="blik-info">

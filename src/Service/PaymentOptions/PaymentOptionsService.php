@@ -279,7 +279,7 @@ class PaymentOptionsService
     private function genericPayments(): array
     {
         $generics = Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS') ? json_decode(Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS')) : [];
-        $channels = unserialize(Cache::get('channels', 'N;'));
+        $channels = json_decode(Cache::get('channels', 'null'), true);
 
         if (null === $channels) {
             $channels = array_filter(
@@ -292,7 +292,7 @@ class PaymentOptionsService
                 $channels[$channel['id']] = $channel;
             }
 
-            Cache::set('channels', serialize($channels));
+            Cache::set('channels', json_encode($channels));
         }
 
         return array_filter(

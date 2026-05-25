@@ -74,10 +74,10 @@
                         </p>
                         <p class="info-text">
                             {l s="Paying, you accept the" d='Modules.Tpay.Shop'} <a
-                                    href="{$regulationUrl}"
+                                    href="{$regulationUrl|escape:'html'}"
                                     target="_blank">{l s="terms and conditions." d='Modules.Tpay.Shop'}</a> {l s="The administrator of the personal data is Krajowy Integrator Płatności spółka akcyjna, based in Poznań." d='Modules.Tpay.Shop'}
                             <a
-                                    href="{$clauseUrl}"
+                                    href="{$clauseUrl|escape:'html'}"
                                     target="_blank">{l s="Read the full content." d='Modules.Tpay.Shop'}</a>
                         </p>
                     </div>
@@ -145,9 +145,9 @@
             const paymentButton = document.getElementById('payment-button');
             const blikCodeInput = document.getElementById('blik-code');
             const paymentsInputs = document.getElementsByName('payment');
-            const action = '{$action}';
+            const action = '{$action|escape:'javascript'}';
 
-            let currentTransactionId = "{$transactionId}";
+            let currentTransactionId = "{$transactionId|escape:'javascript'}";
 
             if (parseInt(parseInt(localStorage.getItem('tpay_transaction_counter'))) === 3) {
                 document.querySelector('.payment-section').style.display = 'block';
@@ -177,12 +177,12 @@
             function checkOrder() {
                 let paymentData = {
                     action: 'blik0Status',
-                    cartId: "{$cartId}",
+                    cartId: "{$cartId|escape:'javascript'}",
                     transactionId: currentTransactionId
                 };
                 const data = (new URLSearchParams(paymentData)).toString();
 
-                fetch("{$blikUrl nofilter}", {
+                fetch("{$blikUrl|escape:'javascript'}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -269,7 +269,7 @@
             function pay() {
                 let paymentData = {
                     action: 'blik0Status',
-                    cartId: "{$cartId}",
+                    cartId: "{$cartId|escape:'javascript'}",
                     transactionId: currentTransactionId
                 };
 
@@ -295,7 +295,7 @@
                 const data = (new URLSearchParams(paymentData)).toString();
                 localStorage.setItem('tpay_transaction_counter', parseInt(localStorage.getItem('tpay_transaction_counter')) + 1);
 
-                fetch("{$blikUrl nofilter}", {
+                fetch("{$blikUrl|escape:'javascript'}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -349,11 +349,11 @@
             function payTransfer(paymentData) {
                 setFormState(true);
                 paymentData.action = 'payByTransfer';
-                paymentData.orderIdForTransfer = "{$orderId}";
+                paymentData.orderIdForTransfer = "{$orderId|escape:'javascript'}";
 
                 const data = (new URLSearchParams(paymentData)).toString();
 
-                fetch("{$blikUrl nofilter}", {
+                fetch("{$blikUrl|escape:'javascript'}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',

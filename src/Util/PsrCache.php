@@ -33,12 +33,12 @@ class PsrCache implements CacheInterface
 {
     public function get($key, $default = null)
     {
-        return unserialize(Cache::get($key, $default));
+        return json_decode(Cache::get($key, $default), true);
     }
 
     public function set($key, $value, $ttl = null)
     {
-        return Cache::set($key, serialize($value), (int) $ttl);
+        return Cache::set($key, json_encode($value), (int) $ttl);
     }
 
     public function delete($key)

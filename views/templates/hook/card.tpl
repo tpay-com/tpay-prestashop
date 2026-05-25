@@ -35,22 +35,22 @@
 					</div>
 
 					{foreach from=$saved_cards item=card}
-						<div class="tpay-cards__item" data-card-id="{$card['id']}">
+						<div class="tpay-cards__item" data-card-id="{$card['id']|intval}">
 							<div class="tpay-cards__item-inner">
 
 								<div class="custom-radio">
-									<input type="radio" name="savedId" id="cardN{$card['id']}" value="{$card['id']}"/>
+									<input type="radio" name="savedId" id="cardN{$card['id']|intval}" value="{$card['id']|intval}"/>
 									<span></span>
 								</div>
 
-								<label for="cardN{$card['id']}" style="text-align:left; margin: 0;">
-									**** {$card['card_shortcode']}
-									<p>{$card['card_vendor']}</p>
+								<label for="cardN{$card['id']|intval}" style="text-align:left; margin: 0;">
+									**** {$card['card_shortcode']|escape:'html'}
+									<p>{$card['card_vendor']|escape:'html'}</p>
 								</label>
 
 								<div class="" style="margin-left: auto;">
 									<a href="{url entity='module' name='tpay' controller='savedCards' params=['action' => 'deleteCard','ajax' => true]}"
-									   data-link-action="delete-credit-card" data-id="{$card['id']}"
+									   data-link-action="delete-credit-card" data-id="{$card['id']|intval}"
 									   data-token="{Tools::getToken()}">
 										<i class="material-icons"></i>
 									</a>
@@ -155,7 +155,7 @@
 						{l s='Please accept the store rules' d='Modules.Tpay.Shop'}
 					</span>
 			</div>
-			<input type="hidden" name="redirect_type" id="redirect_type" value="{$card_type}"/>
+			<input type="hidden" name="redirect_type" id="redirect_type" value="{$card_type|escape:'html'}"/>
 		</div>
 
 		{if $card_type === 'widget'}

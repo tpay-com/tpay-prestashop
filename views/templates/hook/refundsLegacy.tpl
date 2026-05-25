@@ -35,7 +35,7 @@
       <div class="card-body">
 
           {if isset($tpay_refund_status)}
-              {$tpay_refund_status}
+              {$tpay_refund_status nofilter}
           {/if}
 
         <form id="formAddTpayRefund" method="post" action="" class="container-command-top-spacing">
@@ -53,9 +53,9 @@
             <tbody>
             {foreach $tpayRefunds as $tpayRefund}
               <tr>
-                <td>{$tpayRefund.tpay_refund_date}</td>
-                <td>{$tpayRefund.tpay_transaction_id}</td>
-                <td>{$tpayRefund.tpay_refund_amount}</td>
+                <td>{$tpayRefund.tpay_refund_date|escape:'html'}</td>
+                <td>{$tpayRefund.tpay_transaction_id|escape:'html'}</td>
+                <td>{$tpayRefund.tpay_refund_amount|escape:'html'}</td>
               </tr>
             {/foreach}
             <tr>

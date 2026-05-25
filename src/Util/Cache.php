@@ -33,7 +33,7 @@ final class Cache
     {
         $file = self::getCacheDir() . md5($key);
         $ttl += time();
-        $data = base64_encode(serialize(['ttl' => $ttl, 'data' => $value]));
+        $data = base64_encode(json_encode(['ttl' => $ttl, 'data' => $value]));
 
         return (bool) file_put_contents($file, $data);
     }
@@ -43,7 +43,7 @@ final class Cache
         $file = self::getCacheDir() . md5($key);
 
         if (file_exists($file)) {
-            $data = unserialize(base64_decode(file_get_contents($file)));
+            $data = json_decode(base64_decode(file_get_contents($file)), true);
 
             if ($data['ttl'] > time()) {
                 return $data['data'];

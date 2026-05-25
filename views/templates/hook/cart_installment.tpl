@@ -31,8 +31,8 @@
             valueText = valueText.replace(/[^0-9,\.]/g, '');
             valueText = valueText.replace(',', '.');
             let cartValue = parseFloat(valueText);
-            let minAmount = {$minAmount};
-            let maxAmount = {$maxAmount};
+            let minAmount = {$minAmount|floatval};
+            let maxAmount = {$maxAmount|floatval};
 
             if (cartValue >= minAmount && cartValue <= maxAmount) {
                 createInstallmentContainer(cartValue);
@@ -41,7 +41,7 @@
 
         function createInstallmentContainer(amount) {
             let url = 'https://secure.tpay.com/Installment/Pekao/page?merchantId=__merchantId__&amount=__amount__';
-            url = url.replace('__merchantId__', {$merchantId}).replace('__amount__', amount);
+            url = url.replace('__merchantId__', {$merchantId|intval}).replace('__amount__', amount);
 
             let checkoutButton = document.querySelector('.checkout .btn-primary');
 
@@ -55,7 +55,7 @@
                 img.className = "icon";
                 installmentsButton.appendChild(img);
 
-                const text = document.createTextNode('{$installmentText}');
+                const text = document.createTextNode('{$installmentText|escape:'javascript'}');
                 installmentsButton.appendChild(text);
 
                 installmentsButton.addEventListener('click', function () {

@@ -38,12 +38,12 @@
 					<p>{l s='List of saved credit cards.' d='Modules.Tpay.Shop'}</p>
 				</div>
                 {foreach from=$customer_credit_cards item=card}
-					<div class="col-lg-4 col-md-6 col-sm-6" data-card-id="{$card['id']}">
+					<div class="col-lg-4 col-md-6 col-sm-6" data-card-id="{$card['id']|intval}">
 						<article class="tpay-account-cards">
 
 							<div class="tpay-account-cards__body">
-								<h4>**** {$card['card_shortcode']}</h4>
-								<p>{$card['card_vendor']}</p>
+								<h4>**** {$card['card_shortcode']|escape:'html'}</h4>
+								<p>{$card['card_vendor']|escape:'html'}</p>
 							</div>
 
 							<div class="tpay-account-cards__footer">

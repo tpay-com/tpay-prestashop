@@ -26,9 +26,9 @@
 
 <div class="tpay-wrapper" style="width: 100%;" data-payment-type="transfer">
     {if isset($gateways) && $gateways}
-        <form action="{$action}" id="payment-form" class="transferForm" method="post">
-            <input type="hidden" name="tpay" value="{$tpay}">
-            <input type="hidden" name="type" value="{$type}">
+        <form action="{$action|escape:'html'}" id="payment-form" class="transferForm" method="post">
+            <input type="hidden" name="tpay" value="{$tpay|escape:'html'}">
+            <input type="hidden" name="type" value="{$type|escape:'html'}">
             {if $transfer_type === 'widget'}
                 <ul class="tpay-payment-gateways tpay-payment-gateways--grid">
                     {foreach $gateways as $p}

@@ -26,7 +26,7 @@
 {if isset($surcharge_title)}
     <script>
         $(document).ready(function () {
-            {literal}const surchargeTitle = "{/literal}{$surcharge_title}"
+            {literal}const surchargeTitle = "{/literal}{$surcharge_title|escape:'javascript'}"
             {literal}const surchargeCost = "{/literal}{displayPrice price=$surcharge_cost currency=$currency->id}"
 
             {if $tpay_is_old_presta}

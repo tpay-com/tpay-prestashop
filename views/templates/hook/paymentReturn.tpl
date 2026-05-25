@@ -25,6 +25,6 @@
 *}
 <div id="tpay-success">
     <h4>{l s='Thank you for your order and we invite you to further ' d='Modules.Tpay.Shop'} <a
-            href="{$homeLink}">{l s='shopping' d='Modules.Tpay.Shop'}</a>.</h4>
-    <h4>{l s='Browse list of your' d='Modules.Tpay.Shop'} <a href="{$historyLink}">{l s='orders' d='Modules.Tpay.Shop'}</a>.</h4>
+            href="{$homeLink|escape:'html'}">{l s='shopping' d='Modules.Tpay.Shop'}</a>.</h4>
+    <h4>{l s='Browse list of your' d='Modules.Tpay.Shop'} <a href="{$historyLink|escape:'html'}">{l s='orders' d='Modules.Tpay.Shop'}</a>.</h4>
 </div>

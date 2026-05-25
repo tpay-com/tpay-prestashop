@@ -26,7 +26,7 @@
 <div class="box" style="overflow: auto;">
     <p>{l s='Your payment was not yet confirmed by Tpay. If you break payment, you can try to pay again.' d='Modules.Tpay.Shop'}</p>
     <p class="cart_navigation">
-        <a class="btn btn-primary" href="{$tpayUrl}">
+        <a class="btn btn-primary" href="{$tpayUrl|escape:'html'}">
             <span id="proceedPaymentLink">
                 {l s='Retry payment' d='Modules.Tpay.Shop'}
             </span>
