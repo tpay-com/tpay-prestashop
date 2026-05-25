@@ -30,11 +30,9 @@ use PrestaShop\CodingStandards\CsFixer\Config;
 
 class TemporaryCsConfig extends Config
 {
-    private $name;
-    public function __construct($name = 'default')
+    public function __construct()
     {
         parent::__construct('');
-        $this->name = "DUPA";
         $this->setUsingCache(false);
     }
     public function getRules(): array {

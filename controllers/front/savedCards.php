@@ -28,6 +28,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+/**
+ * @property Tpay $module
+ */
 class TpaySavedCardsModuleFrontController extends ModuleFrontController
 {
     public $ssl = true;
@@ -54,6 +57,14 @@ class TpaySavedCardsModuleFrontController extends ModuleFrontController
 
         $this->context->smarty->assign(['customer_credit_cards' => $creditCards]);
         $this->setTemplate('module:tpay/views/templates/front/accountCreditCardsPage.tpl');
+    }
+
+    private function deleteCard(int $id): void
+    {
+        $customerId = (int) $this->context->customer->id;
+        if ($id && $customerId) {
+            $this->repositoryCreditCard->deleteCard($id, $customerId);
+        }
     }
 
     /** @throws PrestaShopException */

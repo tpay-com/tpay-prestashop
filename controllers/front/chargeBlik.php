@@ -36,6 +36,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+/**
+ * @property Tpay $module
+ */
 class TpayChargeBlikModuleFrontController extends ModuleFrontController
 {
     public const TYPE = 'blik';
@@ -377,7 +380,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             );
         }
 
-        if (empty($transactionParams['payer']['email']) || !$transactionParams['payer']['email']) {
+        if (empty($transactionParams['payer']['email'])) {
             $transactionParams['payer']['email'] = $customer->email;
         }
 

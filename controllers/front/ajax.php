@@ -28,6 +28,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+/**
+ * @property Tpay $module
+ */
 class TpayAjaxModuleFrontController extends ModuleFrontController
 {
     public $ajax;

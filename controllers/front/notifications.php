@@ -101,7 +101,9 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         $aliasValue = $notification->value->getValue();
         $userId = explode('_', $aliasValue)[1];
 
+        // @phpstan-ignore-next-line
         $blikRepository = $this->module->getService('tpay.repository.blik');
+        // @phpstan-ignore-next-line
         $blikRepository->saveBlikAlias((int) $userId, $aliasValue);
     }
 
@@ -110,7 +112,9 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         $aliasValue = $notification->value->getValue();
         $userId = explode('_', $aliasValue)[1];
 
+        // @phpstan-ignore-next-line
         $blikRepository = $this->module->getService('tpay.repository.blik');
+        // @phpstan-ignore-next-line
         $blikRepository->removeBlikAlias((int) $userId, $aliasValue);
     }
 
@@ -118,7 +122,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
     {
         if ($notification->isTestNotification()) {
             PrestaShopLogger::addLog(
-                'Odebrano testowe powiadomienie: ' . print_r($notification->getNotificationAssociative(), 1)
+                'Odebrano testowe powiadomienie: ' . print_r($notification->getNotificationAssociative(), true)
             );
 
             return;
@@ -132,7 +136,9 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
             return;
         }
 
+        // @phpstan-ignore-next-line
         $transactionRepository = $this->module->getService('tpay.repository.transaction');
+        // @phpstan-ignore-next-line
         $transaction = $transactionRepository->getTransactionByCrc($trCrc);
 
         if (!$transaction) {
@@ -169,10 +175,13 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         );
 
         if ($notification->card_token && $notification->card_token->getValue()) {
+            // @phpstan-ignore-next-line
             $cardsRepository = $this->module->getService('tpay.repository.credit_card');
+            // @phpstan-ignore-next-line
             $hasToken = (bool) $cardsRepository->getCreditCardTokenByCardCrc($trCrc);
 
             if (!$hasToken) {
+                // @phpstan-ignore-next-line
                 $cardsRepository->updateToken(
                     $trCrc,
                     $notification->card_token->getValue()
@@ -199,7 +208,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
 
                 $orderHistory = new OrderHistory();
                 $orderHistory->id_order = $orderId;
-                $orderHistory->changeIdOrderState(Cfg::get('PS_OS_REFUND'), $orderId);
+                $orderHistory->changeIdOrderState((int) Cfg::get('PS_OS_REFUND'), $orderId);
                 $orderHistory->addWithemail(true, []);
             }
         } catch (Exception $exception) {

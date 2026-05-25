@@ -5,3 +5,4 @@ node_modules
 **/cache/**
 .php-cs-fixer.cache
 CLAUDE.md
+_report.txt

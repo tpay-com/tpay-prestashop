@@ -34,7 +34,7 @@ class TpayCronModuleFrontController extends ModuleFrontController
     public $auth = false;
 
     /** @var bool */
-    public $ajax = 1;
+    public $ajax = true;
 
     public function display()
     {
@@ -49,7 +49,7 @@ class TpayCronModuleFrontController extends ModuleFrontController
             if (Tpay\Util\Cache::get('auto-cancel-' . $tokenPart)) {
                 return;
             }
-            Tpay\Util\Cache::set('auto-cancel-' . $tokenPart, 1, 1800);
+            Tpay\Util\Cache::set('auto-cancel-' . $tokenPart, '1', 1800);
         }
 
         $autoCancel = Container::getInstance()->get('tpay.services.auto_cancel');

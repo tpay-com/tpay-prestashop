@@ -47,6 +47,7 @@ use Tpay\Install\Uninstall;
 use Tpay\OpenApi\Api\TpayApi;
 use Tpay\OpenApi\Utilities\Logger;
 use Tpay\States\FactoryState;
+use Tpay\Util\Cache;
 use Tpay\Util\Container;
 use Tpay\Util\Helper;
 use Tpay\Util\PsrCache;
@@ -311,6 +312,11 @@ class Tpay extends PaymentModule
     public function getContext(): Context
     {
         return $this->context;
+    }
+
+    public function clearCache(): void
+    {
+        Cache::erase();
     }
 
     /** Admin config settings check an render form. */

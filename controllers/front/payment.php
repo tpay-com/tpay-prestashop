@@ -31,6 +31,9 @@ use Tpay\Factory\PaymentFactory;
 use Tpay\Handler\PaymentHandler;
 use Tpay\Service\SurchargeService;
 
+/**
+ * @property Tpay $module
+ */
 class TpayPaymentModuleFrontController extends ModuleFrontController
 {
     public $ssl = true;
@@ -93,11 +96,13 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
         $customer = new Customer($order->id_customer);
 
         try {
+            // @phpstan-ignore-next-line
             $type = $this->context->cookie->tpay_payment_type;
             $paymentType = PaymentFactory::getPaymentMethod($type);
             $this->createTransaction($order, $paymentType);
         } catch (Exception $e) {
             PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID ' . $order->id . ': ' . $e->getMessage(), 3);
+            // @phpstan-ignore-next-line
             $this->context->cookie->tpay_errors = $this->trans(
                 'Failed to create the transaction. Please try again.',
                 [],
@@ -124,13 +129,15 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
 
         try {
             $paymentType = PaymentFactory::getPaymentMethod(Tools::getValue('type'));
+            // @phpstan-ignore-next-line
             $this->context->cookie->tpay_payment_type = $paymentType->getName();
             $this->module->getContext()->smarty->assign(['nbProducts' => $cart->nbProducts()]);
             $this->createTransaction($order, $paymentType);
         } catch (Exception $e) {
             PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID ' . $order->id . ': ' . $e->getMessage(), 3);
 
-            $order->setCurrentState(Cfg::get('TPAY_FAILED'));
+            $order->setCurrentState((int) Cfg::get('TPAY_FAILED'));
+            // @phpstan-ignore-next-line
             $this->context->cookie->tpay_errors = $this->trans(
                 'Failed to create the transaction. Please try again.',
                 [],

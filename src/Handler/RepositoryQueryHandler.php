@@ -65,7 +65,8 @@ class RepositoryQueryHandler
             } else {
                 switch ($type) {
                     case 'fetchColumn':
-                        $statement = $qb->execute()->fetchColumn();
+                        // @phpstan-ignore-next-line
+                    $statement = $qb->execute()->fetchColumn();
                         break;
                     case 'fetchAll':
                         $statement = $qb->execute()->fetchAll();
@@ -84,8 +85,10 @@ class RepositoryQueryHandler
 
         // @phpstan-ignore-next-line
         if (method_exists(Statement::class, 'errorInfo')) {
+            // @phpstan-ignore-next-line
             if ($statement instanceof Statement && !empty($statement->errorInfo())) {
                 PrestaShopLogger::addLog($errorPrefix, 3);
+                // @phpstan-ignore-next-line
                 throw new RepositoryException($errorPrefix . ': ' . var_export($statement->errorInfo(), true));
             }
         }

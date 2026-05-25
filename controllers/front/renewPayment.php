@@ -27,6 +27,9 @@
 
 use Tpay\Config\Config;
 
+/**
+ * @property Tpay $module
+ */
 class TpayRenewPaymentModuleFrontController extends ModuleFrontController
 {
     /** @throws PrestaShopException */
