@@ -22,12 +22,12 @@ jobs:
           coverage: none
 
       - run: composer install --no-dev
-      - run: rm _dev/ -Rf
 
       - run: git archive --output=tpay-prestashop.zip HEAD --prefix=tpay/
 
       - run: mkdir tpay && mv vendor tpay/
       - run: zip -ur tpay-prestashop.zip tpay/
+      - run: zip -d tpay-prestashop.zip archiwum.zip "_dev/*"
 
       - run: mkdir plugin && unzip tpay-prestashop.zip -d plugin
 
