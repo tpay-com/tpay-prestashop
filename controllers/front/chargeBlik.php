@@ -286,7 +286,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             null,
             [],
             (int) $this->context->currency->id,
-            $customer->isGuest() ? 0 : 1,
+            !$customer->isGuest(),
             $customer->secure_key
         );
     }
@@ -296,7 +296,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
      */
     private function getOrderTotal($cart): float
     {
-        $surcharge = new SurchargeService();
+        $surcharge = new SurchargeService($this->context->cart);
         $orderTotal = $cart->getOrderTotal();
         $surchargeTotal = $surcharge->getSurchargeValue($orderTotal);
 
