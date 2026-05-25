@@ -20,7 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-@author Krajowy Integrator Płatności S.A.*/
+@author Krajowy Integrator Płatności S.A.
+@copyright Krajowy Integrator Płatności S.A.*/
 var Base64 = {};
 Base64.code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 Base64.encode = function (e, t) {

@@ -20,7 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-@author Krajowy Integrator Płatności S.A.*}
+@author Krajowy Integrator Płatności S.A.
+@copyright Krajowy Integrator Płatności S.A.*}
 <div class="tpay-wrapper" style="width: 100%;" data-payment-type="transfer">
     <form action="{$action}" id="payment-form" class="transferForm" method="post">
         <input type="hidden" name="tpay" value="{$tpay}">

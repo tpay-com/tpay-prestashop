@@ -20,7 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-@author Krajowy Integrator Płatności S.A.*}
+@author Krajowy Integrator Płatności S.A.
+@copyright Krajowy Integrator Płatności S.A.*}
 <div class="box-security" style="padding-top: 6px">
         <a href="https://tpay.com/jak-to-dziala" target="_blank">
         <img src="{$banner_img|escape:'htmlall':'UTF-8'}" alt="{l s='tpay payment' d='Modules.Tpay.Shop'}" class="img-responsive" style="margin: 5px auto">
