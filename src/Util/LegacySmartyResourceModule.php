@@ -31,6 +31,10 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+/**
+ * @property array $paths
+ * @property bool $isAdmin
+ */
 class LegacySmartyResourceModule extends \SmartyResourceModule
 {
     public function __construct(array $paths, $isAdmin = false)

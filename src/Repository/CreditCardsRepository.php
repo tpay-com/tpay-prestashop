@@ -74,7 +74,7 @@ class CreditCardsRepository
     /**
      * Get all credit cards by user id
      *
-     * @return int|Statement|null
+     * @return array
      *
      * @throws RepositoryException
      * @throws BaseException

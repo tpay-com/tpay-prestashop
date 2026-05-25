@@ -28,7 +28,7 @@
     {if $surcharge }
       <p>
           {l s=' Fee charged for this payment method: ' d='Modules.Tpay.Admin'}
-          {l s=$surcharge}
+          {$surcharge|escape:'html':'UTF-8'}
       </p>
     {/if}
 
