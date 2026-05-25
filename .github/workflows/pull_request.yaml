@@ -27,7 +27,7 @@ jobs:
 
       - run: mkdir tpay && mv vendor tpay/
       - run: zip -ur tpay-prestashop.zip tpay/
-      - run: zip -d tpay-prestashop.zip "_dev/*"
+      #- run: zip -d tpay-prestashop.zip "_dev/*"
 
       - run: mkdir plugin && unzip tpay-prestashop.zip -d plugin
 
