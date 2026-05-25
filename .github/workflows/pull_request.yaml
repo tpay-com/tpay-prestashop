@@ -22,6 +22,7 @@ jobs:
           coverage: none
 
       - run: composer install --no-dev
+      - run: rm _dev/ -Rf
 
       - run: git archive --output=tpay-prestashop.zip HEAD --prefix=tpay/
 
