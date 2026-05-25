@@ -47,7 +47,7 @@
     },
     "scripts": {
         "build:prod": "composer install -v --no-dev",
-        "cs:fixer": "./vendor/bin/php-cs-fixer fix -vvv --diff",
+        "cs:fixer": "./vendor/bin/php-cs-fixer fix --diff",
         "cs:phpstan": [
             "@putenv _PS_ROOT_DIR_=/var/www/html",
             "./vendor/bin/phpstan --memory-limit=1G --configuration=tests/phpstan/phpstan.neon"

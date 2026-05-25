@@ -44,6 +44,10 @@ class TemporaryCsConfig extends Config
         $parent['no_blank_lines_after_phpdoc'] = true;
         $parent['align_multiline_comment'] = true;
         $parent['no_unused_imports'] = true;
+        $parent['trailing_comma_in_multiline'] = ['elements' => ['arrays']];
+        $parent['no_extra_blank_lines'] = [
+            'tokens' => ['extra', 'use'],
+        ];
         $parent['global_namespace_import'] = ['import_classes' => true];
 
 
