@@ -38,9 +38,17 @@ use Tpay\Service\GenericPayments\GenericPaymentsManager;
 
 class Generic implements GatewayType
 {
+    /** @var \Context */
+    private $context;
+
+    public function __construct(\Context $context)
+    {
+        $this->context = $context;
+    }
+
     public function getPaymentOption(\Tpay $module, PaymentOption $paymentOption, array $data = []): PaymentOption
     {
-        $moduleLink = \Context::getContext()->link->getModuleLink('tpay', 'payment', [], true);
+        $moduleLink = $this->context->link->getModuleLink('tpay', 'payment', [], true);
         $paymentOption->setCallToActionText($this->getActionText($module, $data))
             ->setAction($moduleLink)
             ->setLogo($data['image']['url'])
@@ -60,7 +68,7 @@ class Generic implements GatewayType
 
     private function generateForm(string $moduleLink, $channelId): string
     {
-        \Context::getContext()->smarty->assign(
+        $this->context->smarty->assign(
             [
                 'action' => $moduleLink,
                 'tpay' => 'true',
@@ -71,6 +79,6 @@ class Generic implements GatewayType
             ]
         );
 
-        return \Context::getContext()->smarty->fetch('module:tpay/views/templates/hook/generic.tpl');
+        return $this->context->smarty->fetch('module:tpay/views/templates/hook/generic.tpl');
     }
 }

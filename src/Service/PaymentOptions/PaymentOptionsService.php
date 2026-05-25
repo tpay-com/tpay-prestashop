@@ -48,6 +48,9 @@ class PaymentOptionsService
     private $transfers;
     private $bankChannels;
 
+    /** @var \Context */
+    private $context;
+
     /** @var ConstraintValidator */
     private $constraintValidator;
 
@@ -55,9 +58,10 @@ class PaymentOptionsService
      * @throws \PrestaShopException
      * @throws \Exception
      */
-    public function __construct(\Tpay $module)
+    public function __construct(\Tpay $module, \Context $context)
     {
         $this->module = $module;
+        $this->context = $context;
         $this->constraintValidator = new ConstraintValidator($module);
         $this->getGroup();
     }
@@ -77,7 +81,7 @@ class PaymentOptionsService
     public function createTransferPaymentChannel(): void
     {
         $payment = [
-            'img' => \Context::getContext()->shop->getBaseURL(true) . 'modules/tpay/views/img/tpay.svg',
+            'img' => $this->context->shop->getBaseURL(true) . 'modules/tpay/views/img/tpay.svg',
             'gateways' => $this->getGroupTransfers(),
             'id' => Config::GATEWAY_TRANSFER,
             'mainChannel' => Config::GATEWAY_TRANSFER,
@@ -94,7 +98,7 @@ class PaymentOptionsService
         $payments = array_filter(
             array_map(
                 function (array $paymentData) {
-                    $optionClass = PaymentOptionsFactory::getOptionById((int) $paymentData['mainChannel']);
+                    $optionClass = PaymentOptionsFactory::getOptionById((int) $paymentData['mainChannel'], $this->context);
 
                     if (is_object($optionClass)) {
                         $gateway = new PaymentType($optionClass);
@@ -146,7 +150,7 @@ class PaymentOptionsService
                 continue;
             }
 
-            $gateway = new PaymentType(new Generic());
+            $gateway = new PaymentType(new Generic($this->context));
             $result[] = $gateway->getPaymentOption($this->module, new PaymentOption(), $channel);
         }
 
@@ -305,7 +309,7 @@ class PaymentOptionsService
                         return;
                     }
 
-                    $gateway = new PaymentType(new Generic());
+                    $gateway = new PaymentType(new Generic($this->context));
 
                     return $gateway->getPaymentOption($this->module, new PaymentOption(), $channel);
                 },

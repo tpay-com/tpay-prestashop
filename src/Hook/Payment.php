@@ -82,7 +82,7 @@ class Payment extends AbstractHook
             )
         );
 
-        $paymentService = new PaymentOptionsService($this->module);
+        $paymentService = new PaymentOptionsService($this->module, $this->context);
 
         $payments = $paymentService->getActivePayments();
         if ($surcharge > 0) {

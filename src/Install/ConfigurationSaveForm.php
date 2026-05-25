@@ -41,18 +41,22 @@ class ConfigurationSaveForm
     /** @var ConfigurationAdapter */
     private $configuration;
 
+    /** @var \Shop */
+    private $shop;
+
     private $shopGroupsList = [];
 
-    public function __construct(ConfigurationAdapter $configuration)
+    public function __construct(ConfigurationAdapter $configuration, \Shop $shop)
     {
         $this->configuration = $configuration;
+        $this->shop = $shop;
     }
 
     public function execute($save = false): bool
     {
         $res = true;
         $shops = \Shop::getContextListShopID();
-        $shopId = (int) \Context::getContext()->shop->id;
+        $shopId = (int) $this->shop->id;
         $this->shopGroupsList[] = \Shop::getGroupFromShop($shopId);
 
         if ($save) {

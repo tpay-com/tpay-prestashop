@@ -42,6 +42,14 @@ class Blik implements GatewayType
 {
     private $method;
 
+    /** @var \Context */
+    private $context;
+
+    public function __construct(\Context $context)
+    {
+        $this->context = $context;
+    }
+
     public function getPaymentOption(
         \Tpay $module,
         PaymentOption $paymentOption,
@@ -51,17 +59,17 @@ class Blik implements GatewayType
 
         $blikSavedAliases = $this->getSavedBlikAliases(
             $module,
-            \Context::getContext()->customer->id
+            $this->context->customer->id
         );
 
-        $moduleLink = \Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
-        \Context::getContext()->smarty->assign(
+        $moduleLink = $this->context->link->getModuleLink('tpay', $this->method, [], true);
+        $this->context->smarty->assign(
             [
                 'blik_type' => Helper::getMultistoreConfigurationValue('TPAY_BLIK_WIDGET') ? 'widget' : 'redirect',
                 'blik_gateway' => $data['id'],
                 'blik_moduleLink' => $moduleLink,
                 'blik_saved_aliases' => $blikSavedAliases,
-                'blik_order_id' => \Context::getContext()->cart->id,
+                'blik_order_id' => $this->context->cart->id,
                 'assets_path' => $module->getPath(),
             ]
         );

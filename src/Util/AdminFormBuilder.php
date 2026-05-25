@@ -556,7 +556,7 @@ class AdminFormBuilder
 
     private function getOrderStates(): array
     {
-        return \OrderState::getOrderStates(\Context::getContext()->language->id);
+        return \OrderState::getOrderStates($this->context->language->id);
     }
 
     private function globalSettingsForm(): array

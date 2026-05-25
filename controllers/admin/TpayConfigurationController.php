@@ -178,7 +178,7 @@ class TpayConfigurationController extends ModuleAdminController
 
                 $output = '';
 
-                $settings = new ConfigurationSaveForm(new ConfigurationAdapter(0));
+                $settings = new ConfigurationSaveForm(new ConfigurationAdapter(0), $this->context->shop);
                 $settings->execute(true);
                 $authorization = $this->module->authorization();
 

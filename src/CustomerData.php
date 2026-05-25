@@ -86,7 +86,7 @@ class CustomerData
      */
     public function getOrderTotalAmount(): string
     {
-        $surcharge = new SurchargeService();
+        $surcharge = new SurchargeService($this->cart);
         $orderTotal = $this->cart->getOrderTotal();
         $surchargeTotal = $surcharge->getSurchargeValue($orderTotal);
         $total = $orderTotal + $surchargeTotal;

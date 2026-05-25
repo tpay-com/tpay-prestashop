@@ -38,6 +38,14 @@ use Tpay\Config\Config;
 
 class SurchargeService
 {
+    /** @var \Cart */
+    private $cart;
+
+    public function __construct(\Cart $cart)
+    {
+        $this->cart = $cart;
+    }
+
     /**
      * Return surcharge value.
      *
@@ -50,8 +58,7 @@ class SurchargeService
         }
 
         if (!$orderTotal) {
-            $cart = \Context::getContext()->cart;
-            $orderTotal = (float) $cart->getOrderTotal(true, \Cart::BOTH);
+            $orderTotal = (float) $this->cart->getOrderTotal(true, \Cart::BOTH);
         }
 
         $surchargeValue = $this->parseSurchargeValue();
@@ -69,8 +76,7 @@ class SurchargeService
     /** @throws \Exception */
     public function getTotalOrderAndSurchargeCost(): float
     {
-        $cart = \Context::getContext()->cart;
-        $orderTotal = (float) $cart->getOrderTotal(true, \Cart::BOTH);
+        $orderTotal = (float) $this->cart->getOrderTotal(true, \Cart::BOTH);
         $surcharge = $this->getSurchargeValue($orderTotal);
 
         return (float) ($orderTotal + $surcharge);

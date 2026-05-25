@@ -42,13 +42,21 @@ class Transfer implements GatewayType
 {
     private $method = 'payment';
 
+    /** @var \Context */
+    private $context;
+
+    public function __construct(\Context $context)
+    {
+        $this->context = $context;
+    }
+
     public function getPaymentOption(
         \Tpay $module,
         PaymentOption $paymentOption,
         array $data = []
     ): PaymentOption {
-        $moduleLink = \Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
-        \Context::getContext()->smarty->assign(
+        $moduleLink = $this->context->link->getModuleLink('tpay', $this->method, [], true);
+        $this->context->smarty->assign(
             [
                 'transfer_type' => Helper::getMultistoreConfigurationValue('TPAY_TRANSFER_WIDGET') ? 'widget' : 'redirect',
                 'transfer_gateway' => $data['id'],
@@ -68,16 +76,16 @@ class Transfer implements GatewayType
 
     protected function generateForm()
     {
-        \Context::getContext()->smarty->assign(
+        $this->context->smarty->assign(
             [
-                'action' => \Context::getContext()->link->getModuleLink('tpay', $this->method, [], true),
+                'action' => $this->context->link->getModuleLink('tpay', $this->method, [], true),
                 'tpay' => true,
                 'type' => Config::TPAY_PAYMENT_BASIC,
                 'tpay_transfer_id' => 0,
             ]
         );
 
-        return \Context::getContext()->smarty->fetch('module:tpay/views/templates/hook/payment.tpl');
+        return $this->context->smarty->fetch('module:tpay/views/templates/hook/payment.tpl');
     }
 
     private function sortGateways(array $gateways)

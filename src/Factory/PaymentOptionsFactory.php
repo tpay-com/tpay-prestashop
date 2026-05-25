@@ -46,17 +46,17 @@ class PaymentOptionsFactory
      *
      * @return GatewayType|string
      */
-    public static function getOptionById(int $id)
+    public static function getOptionById(int $id, \Context $context)
     {
         switch ($id) {
             case Config::GATEWAY_TRANSFER:
-                $paymentMethod = new Transfer();
+                $paymentMethod = new Transfer($context);
                 break;
             case Config::GATEWAY_CARD:
-                $paymentMethod = new Card();
+                $paymentMethod = new Card($context);
                 break;
             case Config::GATEWAY_BLIK:
-                $paymentMethod = new Blik();
+                $paymentMethod = new Blik($context);
                 break;
             default:
                 $paymentMethod = '';

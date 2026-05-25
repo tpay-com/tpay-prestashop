@@ -118,7 +118,7 @@ class Helper
 
     public static function getMultistoreConfigurationValue($name)
     {
-        if ('1' === \Configuration::get('TPAY_GLOBAL_SETTINGS', null, \Context::getContext()->shop->id_shop_group, \Context::getContext()->shop->id)) {
+        if ('1' === \Configuration::get('TPAY_GLOBAL_SETTINGS', null, \Shop::getContextShopGroupID(), \Shop::getContextShopID())) {
             return \Configuration::getGlobalValue($name);
         }
 

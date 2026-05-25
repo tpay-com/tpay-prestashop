@@ -106,7 +106,7 @@ class EmailOrder extends AbstractHook
         if ($surchargeValue > 0.00) {
             $this->context->smarty->assign(
                 [
-                    'surchargeCost' => \Context::getContext()->getCurrentLocale()->formatPrice(
+                    'surchargeCost' => $this->context->getCurrentLocale()->formatPrice(
                         $surchargeValue,
                         $this->context->currency->iso_code
                     ),
@@ -127,7 +127,7 @@ class EmailOrder extends AbstractHook
 
         $this->context->smarty->assign(
             [
-                'surchargeCost' => \Context::getContext()->getCurrentLocale()->formatPrice(
+                'surchargeCost' => $this->context->getCurrentLocale()->formatPrice(
                     $surchargeCost,
                     $this->context->currency->iso_code
                 ),

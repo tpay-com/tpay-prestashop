@@ -239,7 +239,7 @@ class Tpay extends PaymentModule
             );
         }
 
-        if (!parent::install() || false === (new Install($this, new InstallQueryHandler()))->install()) {
+        if (!parent::install() || false === (new Install($this, new InstallQueryHandler(), $this->getContext()))->install()) {
             $this->_errors[] = $this->trans('Installation error', [], 'Modules.Tpay.Admin');
         }
 

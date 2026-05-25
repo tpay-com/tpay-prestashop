@@ -44,17 +44,25 @@ class Card implements GatewayType
 {
     private $method = 'payment';
 
+    /** @var \Context */
+    private $context;
+
+    public function __construct(\Context $context)
+    {
+        $this->context = $context;
+    }
+
     /** @throws \Exception */
     public function getPaymentOption(
         \Tpay $module,
         PaymentOption $paymentOption,
         array $data = []
     ): PaymentOption {
-        $moduleLink = \Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
+        $moduleLink = $this->context->link->getModuleLink('tpay', $this->method, [], true);
 
         /** @var CreditCardsRepository $creditCardRepository */
         $creditCardRepository = $module->getService('tpay.repository.credit_card');
-        $savedCreditCards = $creditCardRepository->getAllCreditCardsByUserId(\Context::getContext()->customer->id);
+        $savedCreditCards = $creditCardRepository->getAllCreditCardsByUserId($this->context->customer->id);
 
         $creditCardsArray = [];
         if ($savedCreditCards) {
@@ -63,7 +71,7 @@ class Card implements GatewayType
             }
         }
 
-        \Context::getContext()->smarty->assign(
+        $this->context->smarty->assign(
             [
                 'card_type' => Helper::getMultistoreConfigurationValue('TPAY_CARD_WIDGET') ? 'widget' : 'redirect',
                 'cards_moduleLink' => $moduleLink,

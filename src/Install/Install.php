@@ -49,13 +49,18 @@ class Install
     /** @var TranslatorComponent */
     private $translator;
 
+    /** @var \Context */
+    private $context;
+
     public function __construct(
         \Tpay $module,
-        InstallQueryHandler $installQueryHandler
+        InstallQueryHandler $installQueryHandler,
+        \Context $context
     ) {
         $this->module = $module;
         $this->installQueryHandler = $installQueryHandler;
         $this->translator = $module->getTranslator();
+        $this->context = $context;
     }
 
     /** @throws BaseException */
@@ -102,7 +107,7 @@ class Install
     private function installContext(): bool
     {
         if (\Shop::isFeatureActive()) {
-            \Shop::setContext(\Shop::CONTEXT_SHOP, \Context::getContext()->shop->id);
+            \Shop::setContext(\Shop::CONTEXT_SHOP, $this->context->shop->id);
         }
 
         return true;
