@@ -33,6 +33,7 @@ use PrestaShop\PrestaShop\Core\Localization\Exception\LocalizationException;
 use PrestaShopException;
 use Tools;
 use Tpay\Service\PaymentOptions\PaymentOptionsService;
+use Tpay\Service\SurchargeService;
 
 class Payment extends AbstractHook
 {
@@ -120,9 +121,9 @@ class Payment extends AbstractHook
     private function getSurchargeCost()
     {
         $orderTotal = (float) $this->context->cart->getOrderTotal();
+        /** @var SurchargeService $surchargeService */
         $surchargeService = $this->module->getService('tpay.service.surcharge');
 
-        // @phpstan-ignore-next-line
         return $surchargeService->getSurchargeValue($orderTotal);
     }
 }

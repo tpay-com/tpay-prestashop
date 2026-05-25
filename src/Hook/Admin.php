@@ -37,6 +37,9 @@ use OrderHistory;
 use PrestaShopBundle\Translation\TranslatorComponent;
 use Tools;
 use Tpay;
+use Tpay\Repository\RefundsRepository;
+use Tpay\Repository\TransactionsRepository;
+use Tpay\Service\SurchargeService;
 
 class Admin extends AbstractHook
 {
@@ -97,8 +100,8 @@ class Admin extends AbstractHook
                     try {
                         $result = $this->processRefund($transactionId, (float) $refundAmount);
                         if (isset($result['result']) && 'success' === $result['result'] && 'correct' === $result['status']) {
+                            /** @var RefundsRepository $refunds */
                             $refunds = $this->module->getService('tpay.repository.refund');
-                            // @phpstan-ignore-next-line
                             $refunds->insertRefund(
                                 $orderId,
                                 $transactionId,
@@ -161,12 +164,12 @@ class Admin extends AbstractHook
         }
 
         $currency = new Currency($order->id_currency);
+        /** @var SurchargeService $surchargeService */
         $surchargeService = $this->module->getService('tpay.service.surcharge');
+        /** @var TransactionsRepository $transactionService */
         $transactionService = $this->module->getService('tpay.repository.transaction');
 
-        // @phpstan-ignore-next-line
         if ($surchargeService->hasOrderSurcharge($transactionService, $orderId)) {
-            // @phpstan-ignore-next-line
             $surchargeValue = $surchargeService->getOrderSurcharge($transactionService, $orderId);
             if ($surchargeValue > 0.00) {
                 $this->context->smarty->assign(
@@ -297,8 +300,8 @@ class Admin extends AbstractHook
      */
     private function getOrderRefunds(int $orderId)
     {
+        /** @var RefundsRepository $refunds */
         $refunds = $this->module->getService('tpay.repository.refund');
-        // @phpstan-ignore-next-line
         $orderRefunds = $refunds->getOrderRefunds($orderId);
         $smartyRefunds = [];
         foreach ($orderRefunds as $refund) {

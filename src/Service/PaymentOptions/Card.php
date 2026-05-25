@@ -36,6 +36,7 @@ use Exception;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 use Tpay;
 use Tpay\Config\Config;
+use Tpay\Repository\CreditCardsRepository;
 use Tpay\Service\SurchargeService;
 use Tpay\Util\Helper;
 
@@ -51,8 +52,8 @@ class Card implements GatewayType
     ): PaymentOption {
         $moduleLink = Context::getContext()->link->getModuleLink('tpay', $this->method, [], true);
 
+        /** @var CreditCardsRepository $creditCardRepository */
         $creditCardRepository = $module->getService('tpay.repository.credit_card');
-        // @phpstan-ignore-next-line
         $savedCreditCards = $creditCardRepository->getAllCreditCardsByUserId(Context::getContext()->customer->id);
 
         $creditCardsArray = [];

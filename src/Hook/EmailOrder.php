@@ -34,6 +34,8 @@ use Exception;
 use Order;
 use OrderInvoice;
 use PrestaShop\PrestaShop\Core\Localization\Exception\LocalizationException;
+use Tpay\Repository\TransactionsRepository;
+use Tpay\Service\SurchargeService;
 
 class EmailOrder extends AbstractHook
 {
@@ -139,9 +141,9 @@ class EmailOrder extends AbstractHook
     private function getSurchargeCost()
     {
         $orderTotal = (float) $this->context->cart->getOrderTotal();
+        /** @var SurchargeService $surchargeService */
         $surchargeService = $this->module->getService('tpay.service.surcharge');
 
-        // @phpstan-ignore-next-line
         return $surchargeService->getSurchargeValue($orderTotal);
     }
 
@@ -150,9 +152,9 @@ class EmailOrder extends AbstractHook
      */
     private function getOrderSurchargeCost($orderId): float
     {
-        $surchargeService = $this->module->getService('tpay.repository.transaction');
+        /** @var TransactionsRepository $transactionRepository */
+        $transactionRepository = $this->module->getService('tpay.repository.transaction');
 
-        // @phpstan-ignore-next-line
-        return (float) $surchargeService->getSurchargeValueByOrderId($orderId);
+        return (float) $transactionRepository->getSurchargeValueByOrderId($orderId);
     }
 }

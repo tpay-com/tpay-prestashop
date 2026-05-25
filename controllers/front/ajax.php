@@ -24,6 +24,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+use Tpay\Service\SurchargeService;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -87,6 +89,7 @@ class TpayAjaxModuleFrontController extends ModuleFrontController
      */
     private function surcharge($state)
     {
+        /** @var SurchargeService $surchargeService */
         $surchargeService = $this->module->getService('tpay.service.surcharge');
         $cart = $this->context->cart;
         $orderTotal = (float) $cart->getOrderTotal();

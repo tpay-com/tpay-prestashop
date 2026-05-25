@@ -36,7 +36,9 @@ class ConstraintValidator
 
     public function __construct(Tpay $module)
     {
-        $this->surchargeService = $module->getService('tpay.service.surcharge');
+        /** @var SurchargeService $surchargeService */
+        $surchargeService = $module->getService('tpay.service.surcharge');
+        $this->surchargeService = $surchargeService;
     }
 
     public function validate(array $constraints, string $browser): bool

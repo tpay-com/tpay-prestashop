@@ -39,12 +39,19 @@ use Tpay;
 use Tpay\Config\Config;
 use Tpay\Exception\PaymentException;
 use Tpay\Exception\TransactionException;
+use Tpay\Repository\CreditCardsRepository;
+use Tpay\Service\CardService;
+use Tpay\Service\TransactionService;
+use Tpay\Util\SecretHash;
 
 class CreditCardPaymentHandler implements PaymentMethodHandler
 {
     public const TYPE = 'cards';
 
+    /** @var CreditCardsRepository */
     private $cardRepository;
+
+    /** @var CardService */
     private $cardService;
     private $clientData;
 
@@ -84,8 +91,12 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         $this->context = $context;
 
         $savedId = $data['savedId'] ?? null;
-        $this->cardRepository = $module->getService('tpay.repository.credit_card');
-        $this->cardService = $module->getService('tpay.service.card_service');
+        /** @var CreditCardsRepository $cardRepository */
+        $cardRepository = $module->getService('tpay.repository.credit_card');
+        $this->cardRepository = $cardRepository;
+        /** @var CardService $cardService */
+        $cardService = $module->getService('tpay.service.card_service');
+        $this->cardService = $cardService;
         $this->updateLang($data);
 
         if ($savedId) {
@@ -103,8 +114,8 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     public function initTransactionProcess($transaction, $orderId): void
     {
         if (isset($transaction['transactionId'])) {
+            /** @var TransactionService $transactionService */
             $transactionService = $this->module->getService('tpay.service.transaction');
-            // @phpstan-ignore-next-line
             $transactionService->transactionProcess(
                 $transaction,
                 self::TYPE,
@@ -199,8 +210,8 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         );
 
         if (isset($result['result'], $result['status']) && 'correct' === $result['status']) {
+            /** @var TransactionService $transactionService */
             $transactionService = $this->module->getService('tpay.service.transaction');
-            // @phpstan-ignore-next-line
             $transactionService->transactionProcess(
                 $transaction,
                 self::TYPE,
@@ -251,8 +262,9 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     {
         $cardDataInput = filter_input(INPUT_POST, 'carddata', FILTER_SANITIZE_STRING);
         $cardHashInput = filter_input(INPUT_POST, 'card_hash', FILTER_SANITIZE_STRING);
-        // @phpstan-ignore-next-line
-        $cartHash = $this->module->getService('tpay.util.secret_hash')->getValue();
+        /** @var SecretHash $secretHash */
+        $secretHash = $this->module->getService('tpay.util.secret_hash');
+        $cartHash = $secretHash->getValue();
 
         $cardHash = sha1($cardHashInput . $cartHash);
         $saveCard = false;

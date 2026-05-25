@@ -47,6 +47,7 @@ use Tpay\Install\Uninstall;
 use Tpay\OpenApi\Api\TpayApi;
 use Tpay\OpenApi\Utilities\Logger;
 use Tpay\States\FactoryState;
+use Tpay\Repository\TransactionsRepository;
 use Tpay\Util\Cache;
 use Tpay\Util\Container;
 use Tpay\Util\Helper;
@@ -392,8 +393,8 @@ class Tpay extends PaymentModule
             return '';
         }
 
+        /** @var TransactionsRepository $transactionRepository */
         $transactionRepository = $this->getService('tpay.repository.transaction');
-        // @phpstan-ignore-next-line
         $transaction = $transactionRepository->getTransactionByOrderId($params['order']->id);
 
         if ($transaction && 'pending' == $transaction['status'] && $this->isBlikPayment($transaction)) {

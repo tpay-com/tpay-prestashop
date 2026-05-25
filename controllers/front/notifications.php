@@ -27,12 +27,16 @@
 
 use Configuration as Cfg;
 use Tpay\Exception\NotificationHandlingException;
+use Tpay\Handler\OrderStatusHandler;
 use Tpay\OpenApi\Model\Objects\NotificationBody\BasicPayment;
 use Tpay\OpenApi\Model\Objects\NotificationBody\BlikAliasRegister;
 use Tpay\OpenApi\Model\Objects\NotificationBody\BlikAliasUnregister;
 use Tpay\OpenApi\Utilities\CacheCertificateProvider;
 use Tpay\OpenApi\Utilities\TpayException;
 use Tpay\OpenApi\Webhook\JWSVerifiedPaymentNotification;
+use Tpay\Repository\BlikRepository;
+use Tpay\Repository\CreditCardsRepository;
+use Tpay\Repository\TransactionsRepository;
 use Tpay\Util\PsrCache;
 
 /**
@@ -40,6 +44,7 @@ use Tpay\Util\PsrCache;
  */
 class TpayNotificationsModuleFrontController extends ModuleFrontController
 {
+    /** @var OrderStatusHandler */
     private $statusHandler;
 
     public function initContent()
@@ -49,7 +54,9 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         }
 
         try {
-            $this->statusHandler = $this->module->getService('tpay.handler.order_status_handler');
+            /** @var OrderStatusHandler $statusHandler */
+            $statusHandler = $this->module->getService('tpay.handler.order_status_handler');
+            $this->statusHandler = $statusHandler;
 
             $isProduction = true !== (bool) Cfg::get('TPAY_SANDBOX');
 
@@ -101,9 +108,8 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         $aliasValue = $notification->value->getValue();
         $userId = explode('_', $aliasValue)[1];
 
-        // @phpstan-ignore-next-line
+        /** @var BlikRepository $blikRepository */
         $blikRepository = $this->module->getService('tpay.repository.blik');
-        // @phpstan-ignore-next-line
         $blikRepository->saveBlikAlias((int) $userId, $aliasValue);
     }
 
@@ -112,9 +118,8 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         $aliasValue = $notification->value->getValue();
         $userId = explode('_', $aliasValue)[1];
 
-        // @phpstan-ignore-next-line
+        /** @var BlikRepository $blikRepository */
         $blikRepository = $this->module->getService('tpay.repository.blik');
-        // @phpstan-ignore-next-line
         $blikRepository->removeBlikAlias((int) $userId, $aliasValue);
     }
 
@@ -136,9 +141,8 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
             return;
         }
 
-        // @phpstan-ignore-next-line
+        /** @var TransactionsRepository $transactionRepository */
         $transactionRepository = $this->module->getService('tpay.repository.transaction');
-        // @phpstan-ignore-next-line
         $transaction = $transactionRepository->getTransactionByCrc($trCrc);
 
         if (!$transaction) {
@@ -175,13 +179,11 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         );
 
         if ($notification->card_token && $notification->card_token->getValue()) {
-            // @phpstan-ignore-next-line
+            /** @var CreditCardsRepository $cardsRepository */
             $cardsRepository = $this->module->getService('tpay.repository.credit_card');
-            // @phpstan-ignore-next-line
             $hasToken = (bool) $cardsRepository->getCreditCardTokenByCardCrc($trCrc);
 
             if (!$hasToken) {
-                // @phpstan-ignore-next-line
                 $cardsRepository->updateToken(
                     $trCrc,
                     $notification->card_token->getValue()

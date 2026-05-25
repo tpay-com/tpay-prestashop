@@ -52,7 +52,4 @@ class TemporaryCsConfig extends Config
         return $parent;
     }
 
-    public function getName(): string {
-        return $this->name;
-    }
 }

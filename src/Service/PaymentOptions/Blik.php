@@ -33,6 +33,7 @@ use Context;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 use Tpay;
 use Tpay\Config\Config;
+use Tpay\Repository\BlikRepository;
 use Tpay\Util\Helper;
 
 class Blik implements GatewayType
@@ -94,6 +95,7 @@ class Blik implements GatewayType
 
     public function getSavedBlikAliases($module, $userId)
     {
+        /** @var BlikRepository $blikRepository */
         $blikRepository = $module->getService('tpay.repository.blik');
 
         return $blikRepository->getBlikAliasIdByUserId($userId);

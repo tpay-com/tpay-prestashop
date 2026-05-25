@@ -28,6 +28,8 @@
 use Configuration as Cfg;
 use Tpay\CustomerData;
 use Tpay\Handler\BasicPaymentHandler;
+use Tpay\Repository\BlikRepository;
+use Tpay\Repository\TransactionsRepository;
 use Tpay\Service\SurchargeService;
 use Tpay\Service\TransactionService;
 use Tpay\Util\Helper;
@@ -134,6 +136,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $transaction = $this->createBlikZero($transactionParams, $blikCode, $customer->isGuest() ? null : $cart);
         $transactionId = $transaction['transactionId'];
 
+        /** @var TransactionsRepository $transactionRepository */
         $transactionRepository = $this->module->getService('tpay.repository.transaction');
         $transactionExists = $transactionRepository->getTransactionByTransactionId($transactionId);
 
@@ -176,6 +179,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $transactionId = $transaction['transactionId'];
 
         $this->cancelTransaction($oldTransactionId);
+        /** @var TransactionsRepository $transactionRepository */
         $transactionRepository = $this->module->getService('tpay.repository.transaction');
         $transactionExists = $transactionRepository->getTransactionByTransactionId($oldTransactionId);
 
@@ -322,9 +326,9 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
         // Use alias
         if (empty($blikCode)) {
-            $userAlias = $this->module->getService('tpay.repository.blik')->getBlikAliasIdByUserId(
-                $cart->id_customer
-            );
+            /** @var BlikRepository $blikRepository */
+            $blikRepository = $this->module->getService('tpay.repository.blik');
+            $userAlias = $blikRepository->getBlikAliasIdByUserId($cart->id_customer);
         }
 
         return $userAlias;
@@ -397,6 +401,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         }
 
         $this->cancelTransaction($oldTransactionId);
+        /** @var TransactionsRepository $transactionRepository */
         $transactionRepository = $this->module->getService('tpay.repository.transaction');
         $transactionExists = $transactionRepository->getTransactionByTransactionId($oldTransactionId);
 

@@ -24,6 +24,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+use Tpay\Repository\CreditCardsRepository;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -35,13 +37,16 @@ class TpaySavedCardsModuleFrontController extends ModuleFrontController
 {
     public $ssl = true;
     public $auth = true;
+    /** @var CreditCardsRepository|null */
     private $repositoryCreditCard;
 
     /** @throws PrestaShopException */
     public function initContent()
     {
         parent::initContent();
-        $this->repositoryCreditCard = $this->module->getService('tpay.repository.credit_card');
+        /** @var CreditCardsRepository $repositoryCreditCard */
+        $repositoryCreditCard = $this->module->getService('tpay.repository.credit_card');
+        $this->repositoryCreditCard = $repositoryCreditCard;
         $customerId = (int) $this->context->customer->id;
 
         if (empty($customerId)) {

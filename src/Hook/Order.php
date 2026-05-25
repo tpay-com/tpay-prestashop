@@ -36,6 +36,8 @@ use Order as PrestaOrder;
 use PrestaShopException;
 use Tools;
 use Tpay\OpenApi\Utilities\Util;
+use Tpay\Repository\TransactionsRepository;
+use Tpay\Service\SurchargeService;
 
 class Order extends AbstractHook
 {
@@ -79,8 +81,8 @@ class Order extends AbstractHook
             $order = $params['order'];
             $cart = Cart::getCartByOrderId($order->id);
 
+            /** @var SurchargeService $surchargeService */
             $surchargeService = $this->module->getService('tpay.service.surcharge');
-            // @phpstan-ignore-next-line
             $surchargeValue = $surchargeService->getSurchargeValue();
 
             if ($surchargeValue > 0.00) {
@@ -148,12 +150,12 @@ class Order extends AbstractHook
         $orderId = $params['order']->id;
         $order = new PrestaOrder($orderId);
         $currency = new Currency($order->id_currency);
+        /** @var SurchargeService $surchargeService */
         $surchargeService = $this->module->getService('tpay.service.surcharge');
+        /** @var TransactionsRepository $transactionService */
         $transactionService = $this->module->getService('tpay.repository.transaction');
 
-        // @phpstan-ignore-next-line
         if ($surchargeService->hasOrderSurcharge($transactionService, $orderId)) {
-            // @phpstan-ignore-next-line
             $surchargeValue = $surchargeService->getOrderSurcharge($transactionService, $orderId);
             if ($surchargeValue > 0.00) {
                 $this->context->smarty->assign(
