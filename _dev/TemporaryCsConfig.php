@@ -30,9 +30,12 @@ use PrestaShop\CodingStandards\CsFixer\Config;
 
 class TemporaryCsConfig extends Config
 {
+    private $name;
     public function __construct($name = 'default')
     {
         parent::__construct('');
+        $this->name = "DUPA";
+        $this->setUsingCache(false);
     }
     public function getRules(): array {
         $parent = parent::getRules();
@@ -43,6 +46,11 @@ class TemporaryCsConfig extends Config
         $parent['no_unused_imports'] = true;
         $parent['global_namespace_import'] = ['import_classes' => true];
 
+
         return $parent;
+    }
+
+    public function getName(): string {
+        return $this->name;
     }
 }
