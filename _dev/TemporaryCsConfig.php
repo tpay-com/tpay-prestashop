@@ -38,8 +38,9 @@ class TemporaryCsConfig extends Config
         $parent = parent::getRules();
         $parent['blank_line_after_opening_tag'] = false;
         $parent['linebreak_after_opening_tag'] = false;
+        $parent['no_blank_lines_after_phpdoc'] = true;
+        $parent['align_multiline_comment'] = true;
         $parent['no_unused_imports'] = true;
-
         $parent['global_namespace_import'] = ['import_classes' => true];
 
         return $parent;
