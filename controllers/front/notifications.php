@@ -36,7 +36,7 @@ use Tpay\OpenApi\Webhook\JWSVerifiedPaymentNotification;
 use Tpay\Util\PsrCache;
 
 /**
- * @property $module Tpay
+ * @property Tpay $module
  */
 class TpayNotificationsModuleFrontController extends ModuleFrontController
 {
