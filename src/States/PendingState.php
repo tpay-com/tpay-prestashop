@@ -1,5 +1,6 @@
 <?php
 /**MIT License
+@license MIT
 
 Copyright (c) 2026 Krajowy Integrator Płatności S.A.
 
