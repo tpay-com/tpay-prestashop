@@ -1,4 +1,6 @@
-{**MIT License
+{**
+@author Krajowy Integrator Płatności S.A.
+@copyright Krajowy Integrator Płatności S.A.
 @license MIT
 
 Copyright (c) 2026 Krajowy Integrator Płatności S.A.
@@ -19,10 +21,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-@author Krajowy Integrator Płatności S.A.
-@copyright Krajowy Integrator Płatności S.A.*}
+SOFTWARE.*}
 <div class="box-security" style="padding-top: 6px">
         <a href="https://tpay.com/jak-to-dziala" target="_blank">
         <img src="{$banner_img|escape:'htmlall':'UTF-8'}" alt="{l s='tpay payment' d='Modules.Tpay.Shop'}" class="img-responsive" style="margin: 5px auto">

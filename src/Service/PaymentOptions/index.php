@@ -1,5 +1,7 @@
 <?php
-/**MIT License
+/**
+@author Krajowy Integrator Płatności S.A.
+@copyright Krajowy Integrator Płatności S.A.
 @license MIT
 
 Copyright (c) 2026 Krajowy Integrator Płatności S.A.
@@ -20,10 +22,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-@author Krajowy Integrator Płatności S.A.
-@copyright Krajowy Integrator Płatności S.A.*/
+SOFTWARE.*/
 
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
