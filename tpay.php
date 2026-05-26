@@ -32,9 +32,10 @@ if (!defined('_PS_VERSION_')) {
 }
 
 $autoloadPath = __DIR__ . '/vendor/autoload.php';
-if (file_exists($autoloadPath)) {
-    include_once $autoloadPath;
+if (!file_exists($autoloadPath)) {
+    exit('You should install release package of Tpay module or run composer install in module directory');
 }
+require_once $autoloadPath;
 
 use Configuration as Cfg;
 use Psr\Log\LoggerInterface;
