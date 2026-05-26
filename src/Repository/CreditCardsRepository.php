@@ -95,9 +95,7 @@ class CreditCardsRepository
             ->addOrderBy('cc.date_update', 'DESC');
         $qb->setParameter('userId', $userId);
 
-        $result = $this->repositoryQueryHandler->execute($qb, 'Get credit card by user id', 'fetchAll');
-
-        return is_array($result) ? $result : [];
+        return (array)$this->repositoryQueryHandler->execute($qb, 'Get credit card by user id', 'fetchAll');
     }
 
     /**
