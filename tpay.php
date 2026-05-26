@@ -37,6 +37,7 @@ if (file_exists($autoloadPath)) {
 }
 
 use Configuration as Cfg;
+use Psr\Log\LoggerInterface;
 use Tpay\Config\Config;
 use Tpay\Exception\BaseException;
 use Tpay\Handler\InstallQueryHandler;
@@ -51,8 +52,9 @@ use Tpay\States\FactoryState;
 use Tpay\Util\Cache;
 use Tpay\Util\Container;
 use Tpay\Util\Helper;
+use Tpay\Util\Logger\PsrLoggerV1;
+use Tpay\Util\Logger\PsrLoggerV3;
 use Tpay\Util\PsrCache;
-use Tpay\Util\PsrLogger;
 
 /**
  * @property TpayApi|null $api
@@ -481,8 +483,11 @@ class Tpay extends PaymentModule
 
         if ($clientId && $secretKey) {
             try {
-                if (method_exists(Logger::class, 'setLogger')) {
-                    Logger::setLogger(new PsrLogger());
+                $parameter = new ReflectionParameter([LoggerInterface::class, 'log'], 'message');
+                if ($parameter->hasType()) {
+                    Logger::setLogger(new PsrLoggerV3());
+                } else {
+                    Logger::setLogger(new PsrLoggerV1());
                 }
                 $this->api = new TpayApi(
                     new Tpay\OpenApi\Utilities\Cache(null, new PsrCache()),
