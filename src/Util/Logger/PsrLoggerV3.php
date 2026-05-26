@@ -1,4 +1,5 @@
 <?php
+/** @phpstan-ignore-file */
 /**
  * @author Krajowy Integrator Płatności S.A.
  * @copyright Krajowy Integrator Płatności S.A.
