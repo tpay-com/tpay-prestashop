@@ -1,5 +1,4 @@
 <?php
-/** @phpstan-ignore-file */
 /**
  * @author Krajowy Integrator Płatności S.A.
  * @copyright Krajowy Integrator Płatności S.A.
@@ -28,6 +27,11 @@
 
 namespace Tpay\Util\Logger;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Stringable;
@@ -35,53 +39,53 @@ use Stringable;
 class PsrLoggerV3 implements LoggerInterface
 {
 
-    public function emergency(Stringable|string $message, array $context = array()): void
+    public function emergency(Stringable|string $message, array $context = []): void
     {
         \PrestaShopLogger::addLog($message, 4);
     }
 
-    public function alert(Stringable|string $message, array $context = array()): void
+    public function alert(Stringable|string $message, array $context = []): void
     {
         \PrestaShopLogger::addLog($message, 4);
     }
 
-    public function critical(Stringable|string $message, array $context = array()): void
+    public function critical(Stringable|string $message, array $context = []): void
     {
         \PrestaShopLogger::addLog($message, 4);
     }
 
-    public function error(Stringable|string $message, array $context = array()): void
+    public function error(Stringable|string $message, array $context = []): void
     {
         \PrestaShopLogger::addLog($message, 3);
     }
 
-    public function warning(Stringable|string $message, array $context = array()): void
+    public function warning(Stringable|string $message, array $context = []): void
     {
         \PrestaShopLogger::addLog($message, 2);
     }
 
-    public function notice(Stringable|string $message, array $context = array()): void
+    public function notice(Stringable|string $message, array $context = []): void
     {
         if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_) {
             \PrestaShopLogger::addLog($message, 1);
         }
     }
 
-    public function info(Stringable|string $message, array $context = array()): void
+    public function info(Stringable|string $message, array $context = []): void
     {
         if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_) {
             \PrestaShopLogger::addLog($message, 1);
         }
     }
 
-    public function debug(Stringable|string $message, array $context = array()): void
+    public function debug(Stringable|string $message, array $context = []): void
     {
         if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_) {
             \PrestaShopLogger::addLog($message, 1);
         }
     }
 
-    public function log($level, Stringable|string $message, array $context = array()): void
+    public function log($level, Stringable|string $message, array $context = []): void
     {
         switch ($level) {
             case LogLevel::EMERGENCY:
