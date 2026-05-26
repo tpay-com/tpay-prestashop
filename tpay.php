@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
 
 $autoloadPath = __DIR__ . '/vendor/autoload.php';
 if (!file_exists($autoloadPath)) {
-    exit('You should install release package of Tpay module or run composer install in module directory');
+    exit('You should install the release package of the Tpay module or run composer install in the module directory');
 }
 require_once $autoloadPath;
 
