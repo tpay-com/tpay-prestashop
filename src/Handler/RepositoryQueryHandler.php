@@ -49,7 +49,7 @@ class RepositoryQueryHandler
     public function execute(QueryBuilder $qb, string $errorPrefix = 'SQL error', string $type = '')
     {
         try {
-            if (version_compare(_PS_VERSION_, '9.0.0', '>=') || method_exists($qb, 'executeQuery')) {
+            if (method_exists($qb, 'executeQuery') || version_compare(_PS_VERSION_, '9.0.0', '>=')) {
                 switch ($type) {
                     case 'fetchColumn':
                         $statement = $qb->executeQuery()->fetchOne();
