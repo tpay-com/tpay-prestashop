@@ -68,6 +68,10 @@ class PendingState implements StateType
                 ?? $this->stateLanguage['pl'];
         }
 
+        if (version_compare(_PS_VERSION_, '8.0.0', '<')) {
+            $name = reset($name);
+        }
+
         $this->orderState->name = $name;
         $this->orderState->color = '#5bc0de';
         $this->orderState->send_email = false;

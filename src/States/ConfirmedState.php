@@ -67,6 +67,9 @@ class ConfirmedState implements StateType
             $name[$lang['id_lang']] = $this->stateLanguage[$lang['iso_code']]
                 ?? $this->stateLanguage['pl'];
         }
+        if (version_compare(_PS_VERSION_, '8.0.0', '<')) {
+            $name = reset($name);
+        }
 
         $this->orderState->name = $name;
         $this->orderState->send_email = true;
