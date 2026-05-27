@@ -72,7 +72,12 @@ class OrderStatusHandler
         $orderStatusesHistory = $this->transactionsRepository->getOrderStatusHistory($order->id);
         if (!in_array($orderStateId, $orderStatusesHistory)) {
             if (!$error) {
-                $order->addOrderPayment((string) $order->getOrdersTotalPaid(), 'Tpay', $tpayPaymentId);
+                if (version_compare(_PS_VERSION_, '8.0.0', '>=')) {
+                    $order->addOrderPayment((string)$order->getOrdersTotalPaid(), 'Tpay', $tpayPaymentId);
+                } else {
+                    /** @phpstan-ignore-next-line */
+                    $order->addOrderPayment((float)$order->getOrdersTotalPaid(), 'Tpay', $tpayPaymentId);
+                }
             }
             $this->orderHistory->id_order = $order->id;
             $this->orderHistory->changeIdOrderState(
