@@ -41,7 +41,6 @@ use Configuration as Cfg;
 use Psr\Log\LoggerInterface;
 use Tpay\Config\Config;
 use Tpay\Exception\BaseException;
-use Tpay\Factory\ContextFactory;
 use Tpay\Handler\InstallQueryHandler;
 use Tpay\HookDispatcher;
 use Tpay\Install\Install;
