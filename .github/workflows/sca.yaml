@@ -48,7 +48,9 @@ jobs:
   phpstan:
     name: PHPStan
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - presta-version: '1.7.7.8'
