@@ -36,7 +36,6 @@ use Psr\Log\LogLevel;
 
 class PsrLoggerV3 implements LoggerInterface
 {
-
     public function emergency(\Stringable|string $message, array $context = []): void
     {
         \PrestaShopLogger::addLog($message, 4);
