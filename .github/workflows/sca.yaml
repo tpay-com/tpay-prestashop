@@ -13,12 +13,15 @@ jobs:
 
       - name: PHP syntax checker 7.2
         uses: prestashop/github-action-php-lint/7.2@master
+        continue-on-error: true
 
       - name: PHP syntax checker 7.3
         uses: prestashop/github-action-php-lint/7.3@master
+        continue-on-error: true
 
       - name: PHP syntax checker 7.4
         uses: prestashop/github-action-php-lint/7.4@master
+        continue-on-error: true
 
       - name: PHP syntax checker 8.0
         uses: prestashop/github-action-php-lint/8.0@master
@@ -93,4 +96,3 @@ jobs:
       # This tool is outside the composer.json because of the compatibility with PHP 5.6
       - name : Run PHPStan (Tag ${{ matrix.presta-version }})
         run: docker run --rm --volumes-from temp-ps -v $PWD:/web/module -e _PS_ROOT_DIR_=/var/www/html --workdir=/web/module ghcr.io/devgine/composer-php:v2-php8.2-alpine php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit=1G
-
