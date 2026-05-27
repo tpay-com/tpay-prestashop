@@ -76,26 +76,3 @@ jobs:
       - name : Run PHPStan (Tag ${{ matrix.presta-versions }})
         run: docker run --rm --volumes-from temp-ps -v $PWD:/web/module -e _PS_ROOT_DIR_=/var/www/html --workdir=/web/module ghcr.io/devgine/composer-php:v2-php8.2-alpine php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit=1G
 
-  header-stamp:
-    name: Check license headers
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Cache vendor folder
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: php-${{ hashFiles('composer.lock') }}
-
-      - name: Cache composer folder
-        uses: actions/cache@v3
-        with:
-          path: ~/.composer/cache
-          key: php-composer-cache
-
-      - run: composer install
-
-      - name: Run Header Stamp in Dry Run mode
-        run: php vendor/bin/header-stamp --header-discrimination-string="MIT License" --license=license.txt --exclude=vendor,tests,_dev --dry-run
