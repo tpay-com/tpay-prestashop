@@ -1,17 +1,53 @@
 <?php
+/**
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
+ *
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 use Configuration as Cfg;
 use Tpay\Exception\NotificationHandlingException;
+use Tpay\Handler\OrderStatusHandler;
 use Tpay\OpenApi\Model\Objects\NotificationBody\BasicPayment;
 use Tpay\OpenApi\Model\Objects\NotificationBody\BlikAliasRegister;
 use Tpay\OpenApi\Model\Objects\NotificationBody\BlikAliasUnregister;
 use Tpay\OpenApi\Utilities\CacheCertificateProvider;
 use Tpay\OpenApi\Utilities\TpayException;
 use Tpay\OpenApi\Webhook\JWSVerifiedPaymentNotification;
+use Tpay\Repository\BlikRepository;
+use Tpay\Repository\CreditCardsRepository;
+use Tpay\Repository\TransactionsRepository;
 use Tpay\Util\PsrCache;
 
+/**
+ * @property Tpay $module
+ */
 class TpayNotificationsModuleFrontController extends ModuleFrontController
 {
+    /** @var OrderStatusHandler */
     private $statusHandler;
 
     public function initContent()
@@ -21,7 +57,9 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         }
 
         try {
-            $this->statusHandler = $this->module->getService('tpay.handler.order_status_handler');
+            /** @var OrderStatusHandler $statusHandler */
+            $statusHandler = $this->module->getService('tpay.handler.order_status_handler');
+            $this->statusHandler = $statusHandler;
 
             $isProduction = true !== (bool) Cfg::get('TPAY_SANDBOX');
 
@@ -40,7 +78,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
             echo 'TRUE';
         } catch (TpayException $e) {
             PrestaShopLogger::addLog($e->getMessage(), 3);
-            echo 'FALSE - '.$e->getMessage();
+            echo 'FALSE - ' . $e->getMessage();
             $this->badRequestResponse();
         } catch (Exception $e) {
             PrestaShopLogger::addLog($e->getMessage(), 3);
@@ -64,7 +102,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                 $this->handleBlikUnregister($notification);
                 break;
             default:
-                throw new TpayException('Unsupported notification type: '.get_class($notification));
+                throw new TpayException('Unsupported notification type: ' . get_class($notification));
         }
     }
 
@@ -73,6 +111,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         $aliasValue = $notification->value->getValue();
         $userId = explode('_', $aliasValue)[1];
 
+        /** @var BlikRepository $blikRepository */
         $blikRepository = $this->module->getService('tpay.repository.blik');
         $blikRepository->saveBlikAlias((int) $userId, $aliasValue);
     }
@@ -82,6 +121,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         $aliasValue = $notification->value->getValue();
         $userId = explode('_', $aliasValue)[1];
 
+        /** @var BlikRepository $blikRepository */
         $blikRepository = $this->module->getService('tpay.repository.blik');
         $blikRepository->removeBlikAlias((int) $userId, $aliasValue);
     }
@@ -90,7 +130,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
     {
         if ($notification->isTestNotification()) {
             PrestaShopLogger::addLog(
-                'Odebrano testowe powiadomienie: '.print_r($notification->getNotificationAssociative(), 1)
+                'Odebrano testowe powiadomienie: ' . print_r($notification->getNotificationAssociative(), true)
             );
 
             return;
@@ -104,6 +144,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
             return;
         }
 
+        /** @var TransactionsRepository $transactionRepository */
         $transactionRepository = $this->module->getService('tpay.repository.transaction');
         $transaction = $transactionRepository->getTransactionByCrc($trCrc);
 
@@ -116,9 +157,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                     $notificationData
                 );
             } else {
-                throw new NotificationHandlingException(
-                    'Transaction not found for CRC: '.$trCrc
-                );
+                throw new NotificationHandlingException('Transaction not found for CRC: ' . $trCrc);
             }
         }
 
@@ -143,6 +182,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         );
 
         if ($notification->card_token && $notification->card_token->getValue()) {
+            /** @var CreditCardsRepository $cardsRepository */
             $cardsRepository = $this->module->getService('tpay.repository.credit_card');
             $hasToken = (bool) $cardsRepository->getCreditCardTokenByCardCrc($trCrc);
 
@@ -166,14 +206,14 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
                 $this->setConfirmed($transaction['order_id'], $transaction['transaction_id']);
             }
 
-            /// Charge
+            // / Charge
             if ('CHARGEBACK' === $status) {
                 $sqlTransaction = $transactionRepository->getTransactionByCrc($transaction['crc']);
                 $orderId = (int) $sqlTransaction['order_id'];
 
                 $orderHistory = new OrderHistory();
                 $orderHistory->id_order = $orderId;
-                $orderHistory->changeIdOrderState(Cfg::get('PS_OS_REFUND'), $orderId);
+                $orderHistory->changeIdOrderState((int) Cfg::get('PS_OS_REFUND'), $orderId);
                 $orderHistory->addWithemail(true, []);
             }
         } catch (Exception $exception) {
@@ -201,9 +241,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         } elseif ('order_id_and_rest' === $crcForm) {
             $orderId = (int) strstr($notificationData['tr_crc'], '-', true);
         } else {
-            throw new NotificationHandlingException(
-                'CRC mismatch and recovery disabled. CRC: '.$notificationData['tr_crc']
-            );
+            throw new NotificationHandlingException('CRC mismatch and recovery disabled. CRC: ' . $notificationData['tr_crc']);
         }
 
         $transactionRepository->processCreateTransaction(

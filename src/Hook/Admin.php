@@ -1,43 +1,58 @@
 <?php
-
 /**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
  *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 declare(strict_types=1);
 
 namespace Tpay\Hook;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Configuration as Cfg;
-use Currency;
-use Exception;
 use Order;
-use OrderHistory;
 use PrestaShopBundle\Translation\TranslatorComponent;
-use Tools;
-use Tpay;
+use Tpay\Repository\RefundsRepository;
+use Tpay\Repository\TransactionsRepository;
+use Tpay\Service\SurchargeService;
 
 class Admin extends AbstractHook
 {
-    const AVAILABLE_HOOKS = [
+    public const AVAILABLE_HOOKS = [
         'displayAdminOrderMainBottom',
         'displayAdminOrder',
     ];
 
     private static $refundsRendered = false;
 
-    /** @var null|TranslatorComponent */
+    /** @var TranslatorComponent|null */
     private $translator;
 
-    public function __construct(Tpay $module)
+    public function __construct(\Tpay $module)
     {
         $this->translator = $module->getTranslator();
         parent::__construct($module);
@@ -59,15 +74,15 @@ class Admin extends AbstractHook
         self::$refundsRendered = true;
 
         $orderId = (int) $params['id_order'];
-        $order = new Order($orderId);
+        $order = new \Order($orderId);
         $orderPayments = $order->getOrderPayments()[0] ?? false;
-        $refundSubmit = (bool) Tools::getValue('tpay-refund');
+        $refundSubmit = (bool) \Tools::getValue('tpay-refund');
         $errors = [];
         if ($orderPayments && 'Tpay' === $orderPayments->payment_method) {
             $this->getOrderRefunds($orderId);
 
             $transactionId = $orderPayments->transaction_id;
-            $refundAmount = $this->parseRefundAmount(Tools::getValue('tpay_refund_amount'));
+            $refundAmount = $this->parseRefundAmount(\Tools::getValue('tpay_refund_amount'));
             $maxRefundAmount = (float) $orderPayments->amount;
             if ($refundSubmit) {
                 if ($this->validRefundAllowedAmount($refundAmount, $maxRefundAmount)) {
@@ -84,6 +99,7 @@ class Admin extends AbstractHook
                     try {
                         $result = $this->processRefund($transactionId, (float) $refundAmount);
                         if (isset($result['result']) && 'success' === $result['result'] && 'correct' === $result['status']) {
+                            /** @var RefundsRepository $refunds */
                             $refunds = $this->module->getService('tpay.repository.refund');
                             $refunds->insertRefund(
                                 $orderId,
@@ -91,13 +107,11 @@ class Admin extends AbstractHook
                                 $refundAmount
                             );
 
-                            $this->createHistory($order, new OrderHistory());
+                            $this->createHistory($order, new \OrderHistory());
 
                             $this->context->smarty->assign(
                                 [
-                                    'tpay_refund_status' => $this->module->displayConfirmation(
-                                        $this->translator->trans('Refund successful. Return option is being processed please wait.', [], 'Modules.Tpay.Admin')
-                                    ),
+                                    'tpay_refund_success' => $this->translator->trans('Refund successful. Return option is being processed please wait.', [], 'Modules.Tpay.Admin'),
                                 ]
                             );
                         }
@@ -108,15 +122,15 @@ class Admin extends AbstractHook
                             if (null !== $errorMessage) {
                                 $this->context->smarty->assign(
                                     [
-                                        'tpay_refund_status' => $this->module->displayError($errorMessage),
+                                        'tpay_refund_error' => $errorMessage,
                                     ]
                                 );
                             }
                         }
-                    } catch (Exception $TException) {
+                    } catch (\Exception $TException) {
                         $this->context->smarty->assign(
                             [
-                                'tpay_refund_status' => $this->module->displayError($TException->getMessage()),
+                                'tpay_refund_error' => $TException->getMessage(),
                             ]
                         );
                     }
@@ -126,7 +140,7 @@ class Admin extends AbstractHook
             if (!empty($errors)) {
                 $this->context->smarty->assign(
                     [
-                        'tpay_refund_status' => $this->module->displayError($errors),
+                        'tpay_refund_error' => $errors,
                     ]
                 );
             }
@@ -142,14 +156,16 @@ class Admin extends AbstractHook
     public function displayAdminOrder($params): string
     {
         $orderId = $params['id_order'];
-        $order = new Order($orderId);
+        $order = new \Order($orderId);
 
         if ('tpay' !== $order->module) {
             return '';
         }
 
-        $currency = new Currency($order->id_currency);
+        $currency = new \Currency($order->id_currency);
+        /** @var SurchargeService $surchargeService */
         $surchargeService = $this->module->getService('tpay.service.surcharge');
+        /** @var TransactionsRepository $transactionService */
         $transactionService = $this->module->getService('tpay.repository.transaction');
 
         if ($surchargeService->hasOrderSurcharge($transactionService, $orderId)) {
@@ -165,7 +181,7 @@ class Admin extends AbstractHook
                 );
             }
         }
-        $content = $this->module->fetch('module:tpay/views/templates/_admin/orderView.tpl');
+        $content = $this->module->fetch('module:tpay/views/templates/admin/orderView.tpl');
 
         // there is no displayAdminOrderMainBottom hook
         if (version_compare(_PS_VERSION_, '1.7.7.0', '<')) {
@@ -240,10 +256,10 @@ class Admin extends AbstractHook
         ];
     }
 
-    private function createHistory($order, OrderHistory $orderHistory)
+    private function createHistory($order, \OrderHistory $orderHistory)
     {
         $orderHistory->id_order = (int) $order->id;
-        $orderHistory->changeIdOrderState(Cfg::get('PS_OS_REFUND'), (int) $order->id);
+        $orderHistory->changeIdOrderState((int) Cfg::get('PS_OS_REFUND'), (int) $order->id);
         $orderHistory->addWithemail(true, []);
     }
 
@@ -255,23 +271,6 @@ class Admin extends AbstractHook
             '.',
             ''
         );
-    }
-
-    /**
-     * Validate refund amount
-     */
-    private function validRefundAmount($refundAmount, $maxRefundAmount): string
-    {
-        $error = '';
-
-        if ($this->validRefundAllowedAmount($refundAmount, $maxRefundAmount)) {
-            $error = sprintf($this->translator->trans('amount is greater than allowed %s', [], 'Modules.Tpay.Admin'), $maxRefundAmount);
-        }
-        if ($this->validRefundMinAmount($refundAmount)) {
-            $error = $this->translator->trans('invalid amount', [], 'Modules.Tpay.Admin');
-        }
-
-        return $error;
     }
 
     private function validRefundMinAmount($refundAmount): bool
@@ -296,10 +295,11 @@ class Admin extends AbstractHook
     /**
      * Show refunds in order
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function getOrderRefunds(int $orderId)
     {
+        /** @var RefundsRepository $refunds */
         $refunds = $this->module->getService('tpay.repository.refund');
         $orderRefunds = $refunds->getOrderRefunds($orderId);
         $smartyRefunds = [];

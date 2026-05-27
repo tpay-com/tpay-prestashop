@@ -1,20 +1,37 @@
 <?php
-
 /**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
  *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 declare(strict_types=1);
 
 namespace Tpay\Repository;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
@@ -57,44 +74,44 @@ class CreditCardsRepository
     /**
      * Get all credit cards by user id
      *
+     * @return array
+     *
      * @throws RepositoryException
      * @throws BaseException
-     *
-     * @return int|Statement
      */
-    public function getAllCreditCardsByUserId($userId)
+    public function getAllCreditCardsByUserId($userId): array
     {
         if (!$userId) {
-            return;
+            return [];
         }
 
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('*')
-            ->from($this->dbPrefix.self::TABLE, 'cc')
+            ->from($this->dbPrefix . self::TABLE, 'cc')
             ->andWhere('cc.user_id = :userId')
             ->andWhere('cc.card_token != ""')
             ->andWhere('cc.card_token IS NOT NULL')
             ->addOrderBy('cc.date_update', 'DESC');
         $qb->setParameter('userId', $userId);
 
-        return $this->repositoryQueryHandler->execute($qb, 'Get credit card by user id', 'fetchAll');
+        return (array) $this->repositoryQueryHandler->execute($qb, 'Get credit card by user id', 'fetchAll');
     }
 
     /**
      * Get credit card by card_hash
      *
+     * @return int|Statement
+     *
      * @throws BaseException
      * @throws RepositoryException
-     *
-     * @return int|Statement
      */
     public function getCreditCardByCardHashAndCrc(string $cardHash, string $crc)
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('*')
-            ->from($this->dbPrefix.self::TABLE, 'cc')
+            ->from($this->dbPrefix . self::TABLE, 'cc')
             ->andWhere('cc.card_hash = :cardHash')
             ->andWhere('cc.crc = :crc');
         $qb->setParameter('cardHash', $cardHash);
@@ -106,17 +123,17 @@ class CreditCardsRepository
     /**
      * Get credit card by crc
      *
+     * @return int|Statement
+     *
      * @throws BaseException
      * @throws RepositoryException
-     *
-     * @return int|Statement
      */
     public function getCreditCardTokenByCardCrc(string $crc)
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('card_token')
-            ->from($this->dbPrefix.self::TABLE, 'cc')
+            ->from($this->dbPrefix . self::TABLE, 'cc')
             ->andWhere('cc.crc = :crc');
 
         $qb->setParameter('crc', $crc);
@@ -133,7 +150,7 @@ class CreditCardsRepository
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->delete($this->dbPrefix.self::TABLE)
+            ->delete($this->dbPrefix . self::TABLE)
             ->where('id = :id')
             ->andWhere('user_id = :userId')
             ->setParameter('id', $id)
@@ -150,7 +167,7 @@ class CreditCardsRepository
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix.self::TABLE)
+            ->update($this->dbPrefix . self::TABLE)
             ->set('card_token', ':cardToken')
             ->andWhere('crc = :crc')
             ->setParameter('cardToken', $cardToken)
@@ -167,7 +184,7 @@ class CreditCardsRepository
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix.self::TABLE)
+            ->update($this->dbPrefix . self::TABLE)
             ->set('date_update', ':dateUpdate')
             ->set('crc', ':crc')
             ->andWhere('card_hash = :cardHash')

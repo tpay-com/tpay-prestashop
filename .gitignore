@@ -3,3 +3,6 @@
 node_modules
 .DS_Store
 **/cache/**
+.php-cs-fixer.cache
+CLAUDE.md
+_report.txt

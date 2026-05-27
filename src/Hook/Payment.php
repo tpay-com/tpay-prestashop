@@ -1,25 +1,41 @@
 <?php
-
 /**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
  *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 declare(strict_types=1);
 
 namespace Tpay\Hook;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use PrestaShop\PrestaShop\Core\Localization\Exception\LocalizationException;
-use PrestaShopException;
-use Tools;
 use Tpay\Service\PaymentOptions\PaymentOptionsService;
+use Tpay\Service\SurchargeService;
 
 class Payment extends AbstractHook
 {
@@ -31,7 +47,7 @@ class Payment extends AbstractHook
     /**
      * Create payment methods
      *
-     * @throws LocalizationException|PrestaShopException
+     * @throws LocalizationException|\PrestaShopException
      */
     public function paymentOptions($params)
     {
@@ -60,13 +76,13 @@ class Payment extends AbstractHook
             array_merge(
                 $langData,
                 [
-                    'tpay_path' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/tpay/views/',
+                    'tpay_path' => \Tools::getHttpHost(true) . __PS_BASE_URI__ . 'modules/tpay/views/',
                     'surcharge' => $surcharge > 0 ? $this->context->getCurrentLocale()->formatPrice($this->getSurchargeCost(), $this->context->currency->iso_code) : false,
                 ]
             )
         );
 
-        $paymentService = new PaymentOptionsService($this->module);
+        $paymentService = new PaymentOptionsService($this->module, $this->context);
 
         $payments = $paymentService->getActivePayments();
         if ($surcharge > 0) {
@@ -93,11 +109,11 @@ class Payment extends AbstractHook
         }
         $this->context->smarty->assign(
             [
-                'status' => Tools::getValue('status'),
+                'status' => \Tools::getValue('status'),
                 'historyLink' => 'index.php?controller=history',
                 'homeLink' => 'index.php',
                 'contactLink' => 'index.php?controller=contact',
-                'modulesDir' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/',
+                'modulesDir' => \Tools::getHttpHost(true) . __PS_BASE_URI__ . 'modules/',
             ]
         );
 
@@ -107,6 +123,7 @@ class Payment extends AbstractHook
     private function getSurchargeCost()
     {
         $orderTotal = (float) $this->context->cart->getOrderTotal();
+        /** @var SurchargeService $surchargeService */
         $surchargeService = $this->module->getService('tpay.service.surcharge');
 
         return $surchargeService->getSurchargeValue($orderTotal);

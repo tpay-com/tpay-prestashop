@@ -1,22 +1,34 @@
-{*
-* NOTICE OF LICENSE
-*
-* This file is licenced under the Software License Agreement.
-* With the purchase or the installation of the software in your application
-* you accept the licence agreement.
-*
-* You must not modify, adapt or create derivative works of this source code
-*
-*  @author    tpay.com
-*  @copyright 2010-2020 tpay.com
-*  @license   LICENSE.txt
+{**
+* @author Krajowy Integrator Płatności S.A.
+* @copyright Krajowy Integrator Płatności S.A.
+* @license MIT
+* 
+* Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+* 
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
 *}
 <div class="tpay-wrapper tpay-blik-wrapper" data-payment-type="blik">
     {if $blik_type === 'redirect'}
         {l s='You will be redirected to the payment gateway.' d='Modules.Tpay.Shop'}
     {else}
-        <form action="{$blik_moduleLink}" method="POST" id="tpay-blik-form" name="tpay-blik-form">
-            <input type="hidden" name="cart_id" class="blikId" value="{$blik_order_id}"/>
+        <form action="{$blik_moduleLink|escape:'html':'UTF-8'}" method="POST" id="tpay-blik-form" name="tpay-blik-form">
+            <input type="hidden" name="cart_id" class="blikId" value="{$blik_order_id|intval}"/>
 
             <div class="tpay-radio-payments tpay-radio-payments--blik">
                 {if isset($blik_saved_aliases) && !empty($blik_saved_aliases)}
@@ -40,7 +52,7 @@
                                 </p>
                                 <div class="tpay-blik-response"></div>
                                 <div class="tpay-buttons-holder">
-                                    {include file="module:tpay/views/templates/_partials/preloader.tpl"}
+                                    {include file="module:tpay/views/templates/hook/preloader.tpl"}
                                 </div>
                             </div>
 
@@ -102,7 +114,7 @@
                                 <div class="tpay-blik-response"></div>
 
                                 <div class="tpay-buttons-holder">
-                                    {include file="module:tpay/views/templates/_partials/preloader.tpl"}
+                                    {include file="module:tpay/views/templates/hook/preloader.tpl"}
                                 </div>
 
                             </div>

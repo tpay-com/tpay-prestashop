@@ -1,28 +1,41 @@
 <?php
-
 /**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
  *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 declare(strict_types=1);
 
 namespace Tpay\Hook;
 
-use Cart;
-use Currency;
-use Exception;
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Order as PrestaOrder;
-use PrestaShopException;
-use Tools;
-use Tpay\OpenApi\Utilities\Util;
+use Tpay\Repository\TransactionsRepository;
+use Tpay\Service\SurchargeService;
 
 class Order extends AbstractHook
 {
@@ -35,7 +48,7 @@ class Order extends AbstractHook
     /**
      * Hook display order detail.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function displayOrderDetail($params): string
     {
@@ -45,7 +58,7 @@ class Order extends AbstractHook
     /**
      * Hook display order confirmation.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function displayOrderConfirmation($params): string
     {
@@ -53,8 +66,8 @@ class Order extends AbstractHook
     }
 
     /**
-     * @throws PrestaShopException
-     * @throws Exception
+     * @throws \PrestaShopException
+     * @throws \Exception
      */
     public function actionValidateOrder($params)
     {
@@ -64,10 +77,11 @@ class Order extends AbstractHook
 
         if (isset($params['order'], $params['order']->id)) {
             $order = $params['order'];
-            $cart = Cart::getCartByOrderId($order->id);
+            $cart = \Cart::getCartByOrderId($order->id);
 
+            /** @var SurchargeService $surchargeService */
             $surchargeService = $this->module->getService('tpay.service.surcharge');
-            $surchargeValue = $surchargeService->getSurchargeValue();
+            $surchargeValue = $surchargeService->getSurchargeValue($cart->getOrderTotal(true, \Cart::BOTH));
 
             if ($surchargeValue > 0.00) {
                 $this->addSurchargeToOrderCreated(
@@ -82,7 +96,7 @@ class Order extends AbstractHook
     /**
      * Add a surcharge to a created order
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function addSurchargeToOrderCreated($surchargeValue, $order, $cart)
     {
@@ -92,28 +106,29 @@ class Order extends AbstractHook
         $computePresicion = 2;
         if (method_exists($this->context, 'getComputingPrecision')) {
             $computePresicion = $this->context->getComputingPrecision();
+        // @phpstan-ignore-next-line
         } elseif (defined(_PS_PRICE_COMPUTE_PRECISION_) && _PS_PRICE_COMPUTE_PRECISION_ !== null) {
             $computePresicion = _PS_PRICE_COMPUTE_PRECISION_;
         }
 
-        $amountWithTax = $cart->getOrderTotal(true, Cart::BOTH);
-        $amountWithoutTax = $cart->getOrderTotal(false, Cart::BOTH);
+        $amountWithTax = $cart->getOrderTotal(true, \Cart::BOTH);
+        $amountWithoutTax = $cart->getOrderTotal(false, \Cart::BOTH);
 
-        $order->total_paid_tax_excl = Tools::ps_round(
+        $order->total_paid_tax_excl = \Tools::ps_round(
             $amountWithoutTax + $surchargeValue,
             $computePresicion
         );
-        $order->total_paid_tax_incl = Tools::ps_round(
+        $order->total_paid_tax_incl = \Tools::ps_round(
             $amountWithTax + $surchargeValue,
             $computePresicion
         );
 
-        $order->total_paid = Tools::ps_round(
+        $order->total_paid = \Tools::ps_round(
             $order->total_paid + $surchargeValue,
             $computePresicion
         );
 
-        $order->total_paid_real = Tools::ps_round(
+        $order->total_paid_real = \Tools::ps_round(
             $order->total_paid_real + $surchargeValue,
             $computePresicion
         );
@@ -122,7 +137,7 @@ class Order extends AbstractHook
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     private function getSurchargeSmartyTemplate($params = []): string
     {
@@ -132,8 +147,10 @@ class Order extends AbstractHook
 
         $orderId = $params['order']->id;
         $order = new PrestaOrder($orderId);
-        $currency = new Currency($order->id_currency);
+        $currency = new \Currency($order->id_currency);
+        /** @var SurchargeService $surchargeService */
         $surchargeService = $this->module->getService('tpay.service.surcharge');
+        /** @var TransactionsRepository $transactionService */
         $transactionService = $this->module->getService('tpay.repository.transaction');
 
         if ($surchargeService->hasOrderSurcharge($transactionService, $orderId)) {
@@ -142,7 +159,7 @@ class Order extends AbstractHook
                 $this->context->smarty->assign(
                     [
                         'surcharge_title' => $this->module->getTranslator()->trans('Online payment fee', [], 'Modules.Tpay.Shop'),
-                        'surcharge_cost' => Util::numberFormat($surchargeValue).' '.$currency->getSign(),
+                        'surcharge_cost' => number_format($surchargeValue, 2, '.', '') . ' ' . $currency->getSign(),
                     ]
                 );
 

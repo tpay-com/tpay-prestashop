@@ -1,22 +1,38 @@
 <?php
-
 /**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
  *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 declare(strict_types=1);
 
 namespace Tpay\Repository;
 
-use DateTime;
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
@@ -62,7 +78,7 @@ class TransactionsRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('transaction_id')
-            ->from($this->dbPrefix.self::TABLE, 't')
+            ->from($this->dbPrefix . self::TABLE, 't')
             ->andWhere('t.order_id = :orderId')
             ->setParameter('orderId', (int) $orderId);
 
@@ -77,7 +93,7 @@ class TransactionsRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('*')
-            ->from($this->dbPrefix.self::TABLE, 't')
+            ->from($this->dbPrefix . self::TABLE, 't')
             ->andWhere('t.order_id = :orderId')
             ->setParameter('orderId', (int) $orderId);
 
@@ -89,15 +105,15 @@ class TransactionsRepository
      */
     public function getTransactionsQualifiedToCancel($timegapInDays)
     {
-        $date = new DateTime('now -'.((int) $timegapInDays).' days');
+        $date = new \DateTime('now -' . ((int) $timegapInDays) . ' days');
         $dateMin = clone $date;
         $dateMin->modify('-1 day');
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('distinct o.id_order, o.valid, t.transaction_id')
-            ->from($this->dbPrefix.self::TABLE, 't')
-            ->join('t', $this->dbPrefix.'orders', 'o', 't.order_id = o.id_order')
-            ->join('t', $this->dbPrefix.'order_state', 'os', 't.order_id = o.id_order')
+            ->from($this->dbPrefix . self::TABLE, 't')
+            ->join('t', $this->dbPrefix . 'orders', 'o', 't.order_id = o.id_order')
+            ->join('t', $this->dbPrefix . 'order_state', 'os', 't.order_id = o.id_order')
             ->andWhere('o.date_add >= :dateMin')
             ->andWhere('o.date_add <= :dateMax')
             ->andWhere('t.status = "pending"')
@@ -114,7 +130,7 @@ class TransactionsRepository
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix.self::TABLE)
+            ->update($this->dbPrefix . self::TABLE)
             ->set('crc', ':crc')
             ->set('transaction_id', ':transactionId')
             ->set('payment_type', ':paymentType')
@@ -137,7 +153,7 @@ class TransactionsRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('surcharge')
-            ->from($this->dbPrefix.self::TABLE, 't')
+            ->from($this->dbPrefix . self::TABLE, 't')
             ->andWhere('t.order_id = :orderId')
             ->setParameter('orderId', (int) $orderId);
 
@@ -152,7 +168,7 @@ class TransactionsRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('*')
-            ->from($this->dbPrefix.self::TABLE, 't')
+            ->from($this->dbPrefix . self::TABLE, 't')
             ->andWhere('t.crc = :crc')
             ->setParameter('crc', $crc);
 
@@ -167,7 +183,7 @@ class TransactionsRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('*')
-            ->from($this->dbPrefix.self::TABLE, 't')
+            ->from($this->dbPrefix . self::TABLE, 't')
             ->andWhere('t.transaction_id = :transactionId')
             ->setParameter('transactionId', $transactionId);
 
@@ -182,7 +198,7 @@ class TransactionsRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('payment_type')
-            ->from($this->dbPrefix.self::TABLE, 'r')
+            ->from($this->dbPrefix . self::TABLE, 'r')
             ->andWhere('r.order_id = :orderId')
             ->setParameter('orderId', (int) $orderId);
 
@@ -194,7 +210,7 @@ class TransactionsRepository
         $qb = $this->connection->createQueryBuilder();
         $qb
             ->addSelect('id_order_state')
-            ->from($this->dbPrefix.'order_history', 'cc')
+            ->from($this->dbPrefix . 'order_history', 'cc')
             ->andWhere('cc.id_order = :orderId')
             ->setParameter('orderId', $orderId);
 
@@ -247,7 +263,7 @@ class TransactionsRepository
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix.self::TABLE)
+            ->update($this->dbPrefix . self::TABLE)
             ->set('status', ':status')
             ->andWhere('crc = :crc')
             ->setParameter('status', $status)
@@ -265,7 +281,7 @@ class TransactionsRepository
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix.self::TABLE)
+            ->update($this->dbPrefix . self::TABLE)
             ->set('status', ':status')
             ->andWhere('transaction_id = :transaction_id')
             ->setParameter('status', $status)
@@ -281,7 +297,7 @@ class TransactionsRepository
     {
         $qb = $this->connection->createQueryBuilder();
         $qb
-            ->update($this->dbPrefix.self::TABLE)
+            ->update($this->dbPrefix . self::TABLE)
             ->set('order_id', ':orderId')
             ->andWhere('transaction_id = :transactionId')
             ->setParameter('orderId', $orderId)

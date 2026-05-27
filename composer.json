@@ -1,11 +1,12 @@
 {
     "name": "tpay/prestashop",
     "description": "Prestashop payment module",
-    "license": "MIT",
+    "license": "OSL-3.0",
     "type": "prestashop-module",
     "authors": [
         {
-            "name": "tpay.com"
+            "name": "PrestaShop SA",
+            "email": "contact@prestashop.com"
         }
     ],
     "require": {
@@ -16,16 +17,15 @@
         "tpay-com/tpay-openapi-php": "^2"
     },
     "require-dev": {
-        "ergebnis/composer-normalize": "^2.35",
-        "kubawerlos/php-cs-fixer-custom-fixers": "^3.16.2",
+        "ergebnis/composer-normalize": "^2.28",
+        "friendsofphp/php-cs-fixer": "^3.90",
         "mockery/mockery": "^1.2",
-        "php-cs-fixer/shim": "^3.23",
-        "phpmd/phpmd": "@stable",
-        "phpstan/phpstan": "^1.10.30",
-        "phpunit/phpunit": "^8",
-        "squizlabs/php_codesniffer": "*",
+        "phpstan/phpstan": "^2.1",
+        "prestashop/autoindex": "^2.1",
+        "prestashop/header-stamp": "^3.1",
+        "prestashop/php-dev-tools": "^5.0",
+        "squizlabs/php_codesniffer": "^4.0",
         "stancer/php-stubs-prestashop": "^8.2",
-        "tpay-com/coding-standards": "^1.0.1",
         "vimeo/psalm": "^4.30"
     },
     "minimum-stability": "stable",
@@ -47,10 +47,13 @@
     },
     "scripts": {
         "build:prod": "composer install -v --no-dev",
-        "cs:fixer": "./vendor/bin/php-cs-fixer fix -vvv --diff",
-        "cs:phpstan": "./vendor/bin/phpstan",
-        "cs:psalm": "./vendor/bin/psalm",
+        "cs:fixer": "./vendor/bin/php-cs-fixer fix --diff",
+        "cs:phpstan": [
+            "@putenv _PS_ROOT_DIR_=/var/www/html",
+            "./vendor/bin/phpstan --memory-limit=1G --configuration=tests/phpstan/phpstan.neon"
+        ],
         "cs:sniffer": "./vendor/bin/phpcs --standard=.phpcs.xml -n",
+        "license:update": "./vendor/bin/header-stamp --license=license.txt --exclude=vendor --header-discrimination-string=\"MIT License\"",
         "test": [
             "@putenv XDEBUG_MODE=coverage",
             "@php -d date.timezone=UTC ./vendor/bin/phpunit -c tests/php/phpunit.xml"
