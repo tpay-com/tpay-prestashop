@@ -41,6 +41,7 @@ use Configuration as Cfg;
 use Psr\Log\LoggerInterface;
 use Tpay\Config\Config;
 use Tpay\Exception\BaseException;
+use Tpay\Factory\ContextFactory;
 use Tpay\Handler\InstallQueryHandler;
 use Tpay\HookDispatcher;
 use Tpay\Install\Install;
@@ -146,6 +147,7 @@ class Tpay extends PaymentModule
         $this->is_eu_compatible = 1;
         $this->module_key = 'f2eb0ce26233d0b517ba41e81f2e62fe';
 
+        ContextFactory::setContext($this->getContext());
         parent::__construct();
 
         $this->displayName = $this->trans('Tpay', [], 'Modules.Tpay.Admin');
@@ -333,7 +335,7 @@ class Tpay extends PaymentModule
     /** Admin config settings check an render form. */
     public function getContent(): void
     {
-        Tools::redirectAdmin($this->context->link->getAdminLink('TpayConfiguration'));
+        Tools::redirectAdmin($this->getContext()->link->getAdminLink('TpayConfiguration'));
     }
 
     public function checkCurrency($cart): bool
@@ -380,7 +382,7 @@ class Tpay extends PaymentModule
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE')
             && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')
         ) {
-            $this->context->smarty->assign([
+            $this->getContext()->smarty->assign([
                 'installmentText' => $this->trans('Calculate installment!', [], 'Modules.Tpay.Admin'),
                 'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
                 'minAmount' => Config::PEKAO_INSTALLMENT_MIN,
@@ -408,12 +410,12 @@ class Tpay extends PaymentModule
         $transaction = $transactionRepository->getTransactionByOrderId($params['order']->id);
 
         if ($transaction && 'pending' == $transaction['status'] && $this->isBlikPayment($transaction)) {
-            $moduleLink = Context::getContext()->link->getModuleLink('tpay', 'chargeBlik', [], true);
+            $moduleLink = $this->getContext()->link->getModuleLink('tpay', 'chargeBlik', [], true);
 
             $regulationUrl = 'https://tpay.com/user/assets/files_for_download/payment-terms-and-conditions.pdf';
             $clauseUrl = 'https://tpay.com/user/assets/files_for_download/information-clause-payer.pdf';
 
-            if ('pl' == $this->context->language->iso_code) {
+            if ('pl' == $this->getContext()->language->iso_code) {
                 $regulationUrl = 'https://tpay.com/user/assets/files_for_download/regulamin.pdf';
                 $clauseUrl = 'https://tpay.com/user/assets/files_for_download/klauzula-informacyjna-platnik.pdf';
             }
@@ -429,7 +431,7 @@ class Tpay extends PaymentModule
                 'clauseUrl' => $clauseUrl,
                 'action' => Tools::getValue('action', ''),
             ];
-            $this->context->smarty->assign($blikData);
+            $this->getContext()->smarty->assign($blikData);
 
             return $this->fetch('module:tpay/views/templates/hook/thank_you_page.tpl');
         }
@@ -441,7 +443,7 @@ class Tpay extends PaymentModule
                 'assets_path' => $this->getPath(),
             ];
 
-            $this->context->smarty->assign($thankYouData);
+            $this->getContext()->smarty->assign($thankYouData);
 
             if (isset($result['status']) && in_array($result['status'], ['correct', 'success'])) {
                 return $this->fetch('module:tpay/views/templates/hook/thank_you_page_success.tpl');
@@ -451,13 +453,13 @@ class Tpay extends PaymentModule
         }
 
         if (!$transaction) {
-            $this->context->smarty->assign([
+            $this->getContext()->smarty->assign([
                 // @phpstan-ignore-next-line
-                'errors' => $this->context->cookie->tpay_errors,
+                'errors' => $this->getContext()->cookie->tpay_errors,
                 'retry_order' => $params['order']->id,
                 'assets_path' => $this->getPath(),
             ]);
-            unset($this->context->cookie->tpay_errors);
+            unset($this->getContext()->cookie->tpay_errors);
 
             return $this->fetch('module:tpay/views/templates/hook/thank_you_page_error.tpl');
         }
