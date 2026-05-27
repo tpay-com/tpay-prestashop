@@ -484,7 +484,6 @@ class Tpay extends PaymentModule
 
         if ($clientId && $secretKey) {
             try {
-
                 $parameter = new ReflectionParameter([LoggerInterface::class, 'log'], 'message');
                 if ($parameter->hasType()) {
                     Logger::setLogger(new PsrLoggerV3());

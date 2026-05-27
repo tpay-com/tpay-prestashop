@@ -54,10 +54,10 @@ class OrderStatusHandler
     }
 
     /** Update orders statuses. */
-    public function setOrdersAsConfirmed(\Order $order, string $tpayPaymentId, bool $error = false): void
+    public function setOrdersAsConfirmed(Order $order, string $tpayPaymentId, bool $error = false): void
     {
         $reference = $order->reference;
-        $referencedOrders = \Order::getByReference($reference)->getResults();
+        $referencedOrders = Order::getByReference($reference)->getResults();
         foreach ($referencedOrders as $orderObject) {
             if (!is_null($orderObject->id)) {
                 $this->changeOrderStatus($orderObject, $tpayPaymentId, $error);
@@ -66,17 +66,17 @@ class OrderStatusHandler
     }
 
     /** Update order status. */
-    private function changeOrderStatus(\Order $order, string $tpayPaymentId, bool $error = false): void
+    private function changeOrderStatus(Order $order, string $tpayPaymentId, bool $error = false): void
     {
         $orderStateId = $this->getOrderStatus($order, $error);
         $orderStatusesHistory = $this->transactionsRepository->getOrderStatusHistory($order->id);
         if (!in_array($orderStateId, $orderStatusesHistory)) {
             if (!$error) {
                 if (version_compare(_PS_VERSION_, '8.0.0', '>=')) {
-                    $order->addOrderPayment((string)$order->getOrdersTotalPaid(), 'Tpay', $tpayPaymentId);
+                    $order->addOrderPayment((string) $order->getOrdersTotalPaid(), 'Tpay', $tpayPaymentId);
                 } else {
-                    /** @phpstan-ignore-next-line */
-                    $order->addOrderPayment((float)$order->getOrdersTotalPaid(), 'Tpay', $tpayPaymentId);
+                    // @phpstan-ignore-next-line
+                    $order->addOrderPayment((float) $order->getOrdersTotalPaid(), 'Tpay', $tpayPaymentId);
                 }
             }
             $this->orderHistory->id_order = $order->id;
@@ -89,7 +89,7 @@ class OrderStatusHandler
         }
     }
 
-    private function getOrderStatus(\Order $order, bool $error = false): string
+    private function getOrderStatus(Order $order, bool $error = false): string
     {
         $isVirtual = true;
         foreach ($order->getProducts() as $product) {

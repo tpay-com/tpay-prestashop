@@ -68,6 +68,7 @@ class RepositoryQueryHandler
             } else {
                 switch ($type) {
                     case 'fetchColumn':
+                        // @phpstan-ignore-next-line
                         $statement = $qb->execute()->fetchColumn();
                         break;
                     case 'fetchAll':
