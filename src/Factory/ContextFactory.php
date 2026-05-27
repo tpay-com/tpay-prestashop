@@ -85,14 +85,6 @@ class ContextFactory
 
     public static function getContext(): \Context
     {
-        if (self::$context) {
-            return self::$context;
-        }
-        throw new \Exception('Context not set!');
-    }
-
-    public static function setContext(\Context $context)
-    {
-        self::$context = $context;
+        return \Context::getContext();
     }
 }
