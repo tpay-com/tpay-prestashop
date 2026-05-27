@@ -49,9 +49,11 @@ class RepositoryQueryHandler
     public function execute(QueryBuilder $qb, string $errorPrefix = 'SQL error', string $type = '')
     {
         try {
-            if (method_exists($qb, 'executeQuery') || version_compare(_PS_VERSION_, '9.0.0', '>=')) {
+            // @phpstan-ignore-next-line
+            if (method_exists($qb, 'executeQuery')) {
                 switch ($type) {
                     case 'fetchColumn':
+                        // @phpstan-ignore-next-line
                         $statement = $qb->executeQuery()->fetchOne();
                         break;
                     case 'fetchAll':
@@ -61,7 +63,6 @@ class RepositoryQueryHandler
                         $statement = $qb->executeQuery()->fetchAssociative();
                         break;
                     default:
-                        // @phpstan-ignore-next-line
                         $statement = $qb->executeStatement();
                 }
             } else {
