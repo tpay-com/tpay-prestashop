@@ -482,7 +482,8 @@ class Tpay extends PaymentModule
 
         if ($clientId && $secretKey) {
             try {
-                $temporaryLogger = new class extends Logger {
+                $temporaryLogger = new class extends Logger
+                {
                     public static function setLogger(LoggerInterface $logger)
                     {
                         parent::setLogger($logger);
