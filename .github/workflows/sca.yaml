@@ -86,9 +86,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.composer/cache
-          key: php-composer-cache
+          key: php-composer-cache-${{ hashFiles('composer.lock') }}
 
-      - run: composer install --no-interaction --prefer-dist
+      - run: composer install --no-interaction --prefer-dist --no-dev
 
       # Docker images prestashop/prestashop may be used, even if the shop remains uninstalled
       - name: Pull PrestaShop files (Tag ${{ matrix.presta-version }})
