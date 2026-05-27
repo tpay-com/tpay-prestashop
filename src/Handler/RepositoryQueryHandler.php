@@ -63,12 +63,11 @@ class RepositoryQueryHandler
                         $statement = $qb->executeQuery()->fetchAssociative();
                         break;
                     default:
-                        $statement = $qb->executeStatement();
+                        $statement = $qb->executeQuery();
                 }
             } else {
                 switch ($type) {
                     case 'fetchColumn':
-                        // @phpstan-ignore-next-line
                         $statement = $qb->execute()->fetchColumn();
                         break;
                     case 'fetchAll':
