@@ -5,29 +5,19 @@ on: [push]
 jobs:
   # Check that there are no syntax errors in the project
   php-linter:
-    name: PHP Syntax check 7.2-8.2
+    name: PHP Syntax check
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2']
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.0.0
+        uses: actions/checkout@v4
 
-      - name: PHP syntax checker 7.2
-        uses: prestashop/github-action-php-lint/7.2@master
-
-      - name: PHP syntax checker 7.3
-        uses: prestashop/github-action-php-lint/7.3@master
-
-      - name: PHP syntax checker 7.4
-        uses: prestashop/github-action-php-lint/7.4@master
-
-      - name: PHP syntax checker 8.0
-        uses: prestashop/github-action-php-lint/8.0@master
-
-      - name: PHP syntax checker 8.1
-        uses: prestashop/github-action-php-lint/8.1@master
-
-      - name: PHP syntax checker 8.2
-        uses: prestashop/github-action-php-lint/8.2@master
+      - name: PHP syntax checker
+        uses: prestashop/github-action-php-lint/${{ matrix.php }}@master
 
   # Check that the PHP code follows the coding standards
 #  php-cs-fixer:
@@ -46,7 +36,24 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        presta-versions: ['1.7.7.8', '1.7.8.11', '8.1.7', '8.2.6']
+        include:
+          - presta-version: '1.7.7.8'
+            experimental: true
+
+          - presta-version: '1.7.8.11'
+            experimental: true
+
+          - presta-version: '8.1.7'
+            experimental: false
+
+          - presta-version: '8.2.6'
+            experimental: false
+
+          - presta-version: '9.0.3'
+            experimental: true
+
+          - presta-version: '9.1.3'
+            experimental: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2.0.0
@@ -65,7 +72,7 @@ jobs:
           path: ~/.composer/cache
           key: php-composer-cache
 
-      - run: composer install
+      - run: composer install --no-interaction --prefer-dist
 
       # Docker images prestashop/prestashop may be used, even if the shop remains uninstalled
       - name: Pull PrestaShop files (Tag ${{ matrix.presta-versions }})
