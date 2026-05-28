@@ -25,6 +25,41 @@
   width: 50%;
 }
 
+.tooltip-container {
+  display: flex;
+  gap: 4px;
+
+	.show-tooltip {
+		position: relative;
+		cursor: default;
+		display: inline-block;
+		color: #072653;
+		font-weight: 400;
+		text-decoration: underline;
+		img {
+			width: 20px;
+			height: 20px;
+			margin-top: 14px;
+			display: block;
+			filter: brightness(0) saturate(100%)
+			invert(12%) sepia(36%) saturate(1583%)
+			hue-rotate(181deg) brightness(93%) contrast(98%);
+		}
+	}
+}
+
+.show-tooltip:hover .tooltip-text {
+	visibility: visible;
+	opacity: 1;
+}
+
+.tpay-card-wrapper {
+	.tpay-regulations {
+		padding-left: 24px;
+		padding-top: 8px;
+	}
+}
+
 #card-exp {
   width: 150px;
 }
@@ -33,18 +68,42 @@
   width: 100px;
 }
 
+
+.tpay-card-new {
+	padding: 0 26px;
+	p {
+		font-size: 14px;
+		color: #072653;
+		font-weight: 500;
+	}
+	.separator-line {
+		padding-bottom: 0;
+	}
+}
+
+.other-cards {
+	padding: 0 52px;
+}
+
+.tpay-info-label {
+	color: #072653;
+}
+
 .tpay-card {
   position: relative;
-  background: #f6f6f6;
-  width: 390px;
-  height: 210px;
+  width: 100%;
+  height: 180px;
   border-radius: 6px;
-  padding: 25px 20px 0;
+  padding: 0 24px;
   box-sizing: border-box;
   font-size: 10px;
   letter-spacing: 1px;
   font-weight: 300;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
+
+	&.other-cards {
+		margin-bottom: 0;
+	}
 
   &__wrap {
 	display: flex;
@@ -56,29 +115,33 @@
   label {
 	display: block;
 	margin: 0 auto 7px;
-	font-size: 11px;
+	font-size: 14px;
 	font-weight: 600;
-	color: #2c2c2c;
+    color: #072653;
   }
 
   input::placeholder {
-	color: #3c3c3c;
+	color: #B9B9BB;
+  }
+  input:focus {
+  	border: 1px solid #072653;
   }
 
   input {
 	outline: none;
 	background-color: #ffffff;
-	line-height: 30px;
-	padding: 3px 12px;
+	line-height: normal;
+	padding: 8px 16px;
 	margin: 0 0 25px;
-	color: #2c2c2c;
-	font-size: 15px;
+    color: #072653;
+	font-size: 14px;
 	font-weight: 400;
+    height: 48px;
 	box-sizing: border-box;
 	font-family: lato, 'helvetica-light', 'sans-serif';
 	letter-spacing: .7px;
 	border: 1px solid #e4e4e4;
-	border-radius: 6px;
+	border-radius: 8px;
 	width: 100%;
 
 	&.wrong {
@@ -90,40 +153,74 @@
   &__save {
 	display: flex;
 	align-items: center;
-	//margin-bottom: 20px;
 	label {
 	  margin-left: 10px;
 	  margin-bottom:0;
 	}
   }
 
+  &__new-card {
+	  label {
+		  font-size: 14px;
+		  font-weight: 600;
+		  color: #072653;
+	  }
+	  margin-bottom: 6px;
+  }
+
 }
 
+.tpay-card__save {
+	padding: 0 0 16px 40px;
+}
 
 .tpay-cards {
+
+	padding: 0 40px;
+	p {
+		font-size: 14px;
+		color: #072653;
+		font-weight: 500;
+	}
+	.separator-line {
+		padding-bottom: 0;
+		:last-child {
+			padding-bottom: 16px;
+		}
+	}
+
+	.delete-card {
+		margin: auto 0
+	}
+
 	&__item {
-	  padding-bottom: 12px;
-	  padding-right: 15px;
-	  padding-left: 15px;
 
 	  &-inner {
 		display: flex;
 		align-content: center;
 		margin:0;
 
-		padding: 12px 15px;
+		padding: 6px 0 24px 0;
 		height: 100%;
-		border: 1px solid #DDDDDD;
-		border-radius: 3px;
 		cursor: pointer;
+		.added-card {
+			color: #072653;
+			font-size: 18px;
+			font-weight: 700;
+			flex-direction: row !important;
+			gap: 16px;
+			justify-content: start;
+			align-items: center;
+			justify-items: center;
 
-		&:hover {
-		  box-shadow: 0 0 20px #C9CCE7;
-		  transition: box-shadow 125ms ease-out;
-		  -webkit-transition: box-shadow 125ms ease-out;
-		  -moz-transition: box-shadow 125ms ease-out;
-		  -o-transition: box-shadow 125ms ease-out;
+			img {
+				width: 95px;
+				height: 60px;
+			}
 		}
+		  .custom-radio {
+			  margin: auto 0
+		  }
 
 	  }
 

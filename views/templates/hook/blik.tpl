@@ -21,6 +21,7 @@
             <div class="tpay-radio-payments tpay-radio-payments--blik">
                 {if isset($blik_saved_aliases) && !empty($blik_saved_aliases)}
                     <div class="tpay-radio-payments__item tpay-blik--use">
+                        <hr class="separator-line blik-code">
                         <div class="tpay-radio-payments__radio tpay-radio-payments__radio--active">
 
                             <div class="custom-radio">
@@ -29,8 +30,6 @@
                             </div>
 
                             <div class="tpay-radio-payments__content">
-                                <img width="40"
-                                     src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg" alt="TPAY">
                                 <label for="blikUse">
                                     {l s='Use saved blik code' d='Modules.Tpay.Shop'}
                                 </label>
@@ -49,6 +48,7 @@
                 {/if}
 
                 <div class="tpay-radio-payments__item tpay-blik--new">
+                    <hr class="separator-line blik-code">
                     <div class="tpay-radio-payments__radio
 					{if empty($blik_saved_aliases)} tpay-radio-payments__radio--active{/if}">
 
@@ -59,17 +59,12 @@
                             <span></span>
                         </div>
                         {/if}
-
                         <div class="tpay-radio-payments__content">
-                            {if empty($blik_saved_aliases)}
-                                <img width="40"
-                                     src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/tpay--small.svg" alt="TPAY">
+                            {if isset($blik_saved_aliases) && !empty($blik_saved_aliases)}
+                                <label for="blikNew">
+                                    {l s='Use BLIK code' d='Modules.Tpay.Shop'}
+                                </label>
                             {/if}
-                            <label for="blikNew">
-                                {l s='Use BLIK code' d='Modules.Tpay.Shop'}
-                            </label>
-
-
                             <div class="tpay-radio-payments__description">
                                 <p>
                                     {l s='Enter BLIK code' d='Modules.Tpay.Shop'}
@@ -107,10 +102,10 @@
 
                             </div>
                         </div>
-
                         <div id="responseMessages"></div>
-
                     </div>
+                    <hr class="separator-line">
+
                 </div>
 
                 <div id="blik-rr" style="display: none">

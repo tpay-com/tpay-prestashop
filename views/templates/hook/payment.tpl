@@ -13,6 +13,10 @@
 *}
 
 <div class="tpay-wrapper" style="width: 100%;" data-payment-type="transfer">
+    <p>
+        {l s='Please choose payment method' d='Modules.Tpay.Shop'}
+    </p>
+    <hr class="separator-line">
     {if isset($gateways) && $gateways}
         <form action="{$action}" id="payment-form" class="transferForm" method="post">
             <input type="hidden" name="tpay" value="{$tpay}">
@@ -45,11 +49,7 @@
                 {l s='You will be redirected to the payment gateway.' d='Modules.Tpay.Shop'}
             {/if}
         </form>
-        <div class="transfer-error" style="display: none">
-		<span class="tpay-error">
-			{l s='Please choose payment method' d='Modules.Tpay.Shop'}
-		</span>
-        </div>
+        <hr class="separator-line">
         {if $transfer_type === 'widget'}
             {include file="module:tpay/views/templates/hook/regulations.tpl"}
         {/if}

@@ -254,12 +254,14 @@ document.addEventListener("DOMContentLoaded", function (e) {
 function handleCardForm(newCardForm)
 {
     const savedCards = document.querySelectorAll('input[name=savedId]');
+    const separatorLine = document.querySelector('.separator-line');
 
     if (savedCards) {
         for (const card of savedCards) {
             card.addEventListener('click', (e) => {
                 newCardForm.classList.remove('tpay-fadeIn');
                 newCardForm.classList.add('tpay-fadeOut');
+                separatorLine.style.display = 'none';
             }, false)
         }
     }
