@@ -75,10 +75,16 @@
 
 					<div class="tpay-input-credit-card-number">
 						<label for="card-number" class="tpay-label-info">{l s='Card number' d='Modules.Tpay.Shop'}</label>
-						<input id="card_number" pattern="[0-9\s]*" autocompletetype="cc-number" size="30"
-							   type="tel" autocomplete="off" maxlength="23"
-							   placeholder="0000 0000 0000 0000" tabindex="1"
-							   class="tpay-input-value"/>
+						<input
+							id="card_number"
+							class="tpay-input-value"
+							type="text"
+							tabindex="1"
+							inputmode="numeric"
+							autocomplete="cc-number"
+							maxlength="19"
+							placeholder="0000 0000 0000 0000"
+						/>
 						<div class="tpay-card-icon "></div>
 					</div>
 
@@ -88,8 +94,9 @@
 							<input
 									id="expiry_date"
 									type="text"
-									placeholder="00/00"
+									placeholder="MM/RR"
 									maxlength="9"
+									tabindex="2"
 									inputmode="numeric"
 									oninput="
                                         let v = this.value.replace(/\D/g, '').slice(0,4);
@@ -106,9 +113,18 @@
 								{l s='CVV2/CVC2' d='Modules.Tpay.Shop'}
 							</label>
 							<div class="tooltip-container">
-								<input id="cvc" maxlength="3" type="tel" autocomplete="off" autocompletetype="cc-cvc"
-									   placeholder="000" tabindex="3" value=""
-									   class="tpay-input-value tpay-card__input-small"/>
+								<input
+									id="cvc"
+									maxlength="3"
+									type="text"
+									inputmode="numeric"
+									pattern="[0-9]*"
+									autocomplete="cc-csc"
+									placeholder="123"
+									tabindex="3"
+									class="tpay-input-value tpay-card__input-small"
+									oninput="this.value = this.value.replace(/\D/g, '')"
+								/>
 								<p class="show-tooltip">
 									<img src="{$tpay_path|escape:'htmlall':'UTF-8'}/img/info.svg"
 										 alt="{l s='Preload' d='Modules.Tpay.Shop'}"/>

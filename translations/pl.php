@@ -202,6 +202,6 @@ $_MODULE['<{tpay}prestashop>shop_a5c8678e9c1b744aef522eabe1e68350'] = 'Tpay';
 $_MODULE['<{tpay}prestashop>shop_2ff79200db441562e7d86856650838a5'] = 'akceptujesz regulamin.';
 $_MODULE['<{tpay}prestashop>shop_da3a88788547e05a4ae0466e45d2c4f4'] = 'Nie udało się utworzyć transakcji. Spróbuj ponownie.';
 $_MODULE['<{tpay}prestashop>shop_dd60c45c1a47d0311ad5d64cd91fdeb6'] = 'Proszę wybrać kartę, której chcesz użyć do płatności';
-$_MODULE['<{tpay}prestashop>shop_67bf5559478037682bed9a9905234649'] = 'Proszę podać poniżej dane karty płatniczej';
+$_MODULE['<{tpay}prestashop>shop_67bf5559478037682bed9a9905234649'] = 'Wpisz poniżej dane swojej karty płatniczej';
 $_MODULE['<{tpay}prestashop>shop_a8a99b6d77daaaa9872be789ce786fd2'] = 'Zapłać inną kartą';
 $_MODULE['<{tpay}prestashop>shop_1e4b30b9ca26b70d621c7122223b730f'] = 'Kod CVV2/CVC2 to trzycyfrowy numer umieszczony na odwrocie kart Mastercard i Visa.';

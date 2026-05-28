@@ -603,27 +603,9 @@
     };
 
     $.payment.formatCardNumber = function(num) {
-        var card, groups, upperLength, _ref;
         num = num.replace(/\D/g, '');
-        card = cardFromNumber(num);
-        if (!card) {
-            return num;
-        }
-        upperLength = card.length[card.length.length - 1];
-        num = num.slice(0, upperLength);
-        if (card.format.global) {
-            return (_ref = num.match(card.format)) != null ? _ref.join(' ') : void 0;
-        } else {
-            groups = card.format.exec(num);
-            if (groups == null) {
-                return;
-            }
-            groups.shift();
-            groups = $.grep(groups, function(n) {
-                return n;
-            });
-            return groups.join(' ');
-        }
+        num = num.substring(0, 16);
+        return num.replace(/(.{4})/g, '$1 ').trim();
     };
 
     $.payment.formatExpiry = function(expiry) {
