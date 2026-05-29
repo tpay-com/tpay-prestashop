@@ -5,11 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.14.4]
+## [1.14.7]
 
 ### Added
 
 - Currency to notification
+
+## [1.14.6]
+
+### Fixed
+
+- Issue with additional payment surcharge on Prestashop 9+ (use of removed price formater)
+
+## [1.14.5]
+
+### Added
+
+- ClientId in userAgent suffix
+
+## [1.14.4]
+
+### Changed
+
+- Reduced response size for BLIK status check
 
 ## [1.14.3]
 
