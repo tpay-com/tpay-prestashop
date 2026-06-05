@@ -74,7 +74,7 @@
 					<input type="hidden" name="card_short_code" id="card_short_code" value=""/>
 
 					<div class="tpay-input-credit-card-number">
-						<label for="card-number" class="tpay-label-info">{l s='Card number' d='Modules.Tpay.Shop'}</label>
+						<label for="card_number" class="tpay-label-info">{l s='Card number' d='Modules.Tpay.Shop'}</label>
 						<input
 							id="card_number"
 							class="tpay-input-value"
@@ -90,7 +90,7 @@
 
 					<div class="tpay-card__wrap">
 						<div id="exp-container">
-							<label for="card-exp" class="tpay-label-info">{l s='Expiration date' d='Modules.Tpay.Shop'}</label>
+							<label for="expiry_date" class="tpay-label-info">{l s='Expiration date' d='Modules.Tpay.Shop'}</label>
 							<input
 									id="expiry_date"
 									type="text"
@@ -109,7 +109,7 @@
 						</div>
 
 						<div id="exp-container">
-							<label for="card-cvc" class="tpay-label-info">
+							<label for="cvc" class="tpay-label-info">
 								{l s='CVV2/CVC2' d='Modules.Tpay.Shop'}
 							</label>
 							<div class="tooltip-container">

@@ -23,6 +23,12 @@
   padding-left: 10px;
   padding-right: 10px;
   width: 50%;
+  @media (max-width: 640px) {
+	  padding: 0 6px;
+  }
+  label {
+	  white-space: nowrap;
+  }
 }
 
 .tooltip-container {
@@ -71,6 +77,11 @@
 
 .tpay-card-new {
 	padding: 0 26px;
+
+	@media (max-width: 640px) {
+		padding: 0 16px;
+	}
+
 	p {
 		font-size: 14px;
 		color: #072653;
@@ -101,6 +112,10 @@
   font-weight: 300;
   margin-bottom: 16px;
 
+	@media (max-width: 640px) {
+		padding: 0;
+	}
+
 	&.other-cards {
 		margin-bottom: 0;
 	}
@@ -116,7 +131,7 @@
 	display: block;
 	margin: 0 auto 7px;
 	font-size: 14px;
-	font-weight: 600;
+	font-weight: 500;
     color: #072653;
   }
 

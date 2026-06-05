@@ -11,6 +11,19 @@
     padding-left: 0.6rem;
     padding-right: 0.6rem;
     margin-bottom: 1.2rem;
+    position: relative;
+
+    input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+    }
+    input[type="radio"]:checked + .tpay-payment-gateways__item-inner {
+      border: 2px solid #2953C6;
+      box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.10);
+    }
+    input[type="radio"]:focus-visible + .tpay-payment-gateways__item-inner {
+      border: 4px solid #2953C6;
+    }
 
     img {
       width: auto;
@@ -38,8 +51,7 @@
       color: #1B2257;
     }
 
-    &:hover .tpay-payment-gateways__item-inner,
-    &--active .tpay-payment-gateways__item-inner {
+    &:hover .tpay-payment-gateways__item-inner {
       border: 2px solid #2953C6;
       box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.10);
     }
