@@ -249,23 +249,21 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
 
     private function validateCurrency(Order $order, BasicPayment $notification): bool
     {
-        $notificationCurrency = null;
+        $value = null;
 
         if (isset($notification->tr_currency) && $notification->tr_currency) {
-            $notificationCurrency = strtoupper(trim($notification->tr_currency->getValue()));
-
-            if ('' === $notificationCurrency) {
-                $notificationCurrency = null;
-            }
+            $value = $notification->tr_currency->getValue();
         }
 
-        if (null === $notificationCurrency) {
+        if (!is_string($value) || '' === trim($value)) {
             return true;
         }
 
-        $currency = new Currency((int) $order->id_currency);
-        $orderCurrency = strtoupper(trim($currency->iso_code));
+        $notificationCurrency = strtoupper(trim($value));
 
-        return $orderCurrency === $notificationCurrency;
+        $currency = new Currency((int) $order->id_currency);
+        $orderCurrency = $currency->iso_code;
+
+        return strtoupper(trim($orderCurrency)) === $notificationCurrency;
     }
 }
