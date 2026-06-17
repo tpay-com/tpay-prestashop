@@ -125,11 +125,13 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         $order = new Order((int) $transaction['order_id']);
 
         if (!$this->validateCurrency($order, $notification)) {
+            $notificationCurrency = $notification->tr_currency ? $notification->tr_currency->getValue() : null;
+
             PrestaShopLogger::addLog(
                 sprintf(
                     'Currency mismatch: order=%s, notification=%s',
                     (new Currency((int) $order->id_currency))->iso_code,
-                    $notification->tr_currency ? $notification->tr_currency->getValue() : 'null'
+                    var_export($notificationCurrency, true)
                 ),
                 3
             );
