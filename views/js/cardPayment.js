@@ -173,12 +173,12 @@ function CardPayment(url, pubkey)
 
     function checkForm()
     {
-        const savedCards = document.querySelector('input[name=savedId]');
+        const savedCards = document.querySelectorAll('input[name=savedId]');
         let cardRedirectType = document.querySelector('input[name=redirect_type]');
         if (cardRedirectType.value === 'redirect'){
             return validateClause(termsOfServiceInput)
         }
-
+        const selectedSavedCard = [...savedCards].find(card => card.checked);
         let isValidForm = false;
         if (
 	        (
@@ -189,7 +189,7 @@ function CardPayment(url, pubkey)
 	        ) ||
 	        (
 		        validateClause(termsOfServiceInput) &&
-		        (savedCards && savedCards.checked === true)
+                selectedSavedCard
 	        )
         ) {
             isValidForm = true;

@@ -31,7 +31,7 @@
 								</div>
 
 								<label class="added-card" for="cardN{$card['id']}" style="text-align:left; margin: 0;">
-									<img src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/{$card.card_vendor|lower}-card-icon.svg"/>
+									<img src="{$assets_path|escape:'htmlall':'UTF-8'}views/img/{$card.card_vendor|lower}-card-icon.png"/>
 									**** {$card['card_shortcode']}
 								</label>
 
