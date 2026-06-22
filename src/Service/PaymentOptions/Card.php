@@ -53,11 +53,8 @@ class Card implements GatewayType
     }
 
     /** @throws \Exception */
-    public function getPaymentOption(
-        \Tpay $module,
-        PaymentOption $paymentOption,
-        array $data = []
-    ): PaymentOption {
+    public function getPaymentOption(\Tpay $module, PaymentOption $paymentOption, array $data = []): PaymentOption
+    {
         $moduleLink = $this->context->link->getModuleLink('tpay', $this->method, [], true);
 
         /** @var CreditCardsRepository $creditCardRepository */
