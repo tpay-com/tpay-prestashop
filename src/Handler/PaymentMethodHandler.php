@@ -37,12 +37,5 @@ interface PaymentMethodHandler
 {
     public function getName(): string;
 
-    public function createPayment(
-        \Tpay $module,
-        \Order $order,
-        \Customer $customer,
-        \Context $context,
-        array $clientData,
-        array $data
-    );
+    public function createPayment(\Tpay $module, \Order $order, \Customer $customer, \Context $context, array $clientData, array $data);
 }

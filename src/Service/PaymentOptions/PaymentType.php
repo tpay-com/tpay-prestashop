@@ -45,11 +45,8 @@ class PaymentType
         $this->gateway = $gateway;
     }
 
-    public function getPaymentOption(
-        \Tpay $module,
-        PaymentOption $paymentOption,
-        array $data = []
-    ): PaymentOption {
+    public function getPaymentOption(\Tpay $module, PaymentOption $paymentOption, array $data = []): PaymentOption
+    {
         return $this->gateway->getPaymentOption(
             $module,
             $paymentOption,

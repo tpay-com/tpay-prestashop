@@ -197,13 +197,8 @@ class CreditCardsRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function createCard(
-        string $cardVendor,
-        string $cardShortCode,
-        string $cardHash,
-        int $userId,
-        string $crc
-    ): void {
+    public function createCard(string $cardVendor, string $cardShortCode, string $cardHash, int $userId, string $crc): void
+    {
         $transaction = new TpayCreditCard(
             $cardVendor,
             $cardShortCode,

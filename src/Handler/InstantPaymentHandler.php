@@ -38,14 +38,8 @@ use Tpay\Exception\TransactionException;
 
 class InstantPaymentHandler extends BasicPaymentHandler
 {
-    public function createPayment(
-        \Tpay $module,
-        \Order $order,
-        \Customer $customer,
-        \Context $context,
-        array $clientData,
-        array $data
-    ): void {
+    public function createPayment(\Tpay $module, \Order $order, \Customer $customer, \Context $context, array $clientData, array $data): void
+    {
         $this->module = $module;
         $this->clientData = $clientData;
 

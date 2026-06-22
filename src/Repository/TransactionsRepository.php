@@ -226,15 +226,8 @@ class TransactionsRepository
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    public function processCreateTransaction(
-        $orderId,
-        $crc,
-        $transactionId,
-        $type,
-        $registerUser,
-        $surcharge,
-        $status
-    ): void {
+    public function processCreateTransaction($orderId, $crc, $transactionId, $type, $registerUser, $surcharge, $status): void
+    {
         $transaction = new TpayTransaction(
             $orderId,
             $crc,

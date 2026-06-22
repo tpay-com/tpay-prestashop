@@ -73,14 +73,8 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
      * @throws TransactionException
      * @throws PaymentException
      */
-    public function createPayment(
-        \Tpay $module,
-        \Order $order,
-        \Customer $customer,
-        \Context $context,
-        array $clientData,
-        array $data
-    ) {
+    public function createPayment(\Tpay $module, \Order $order, \Customer $customer, \Context $context, array $clientData, array $data)
+    {
         $this->module = $module;
         $this->order = $order;
         $this->customer = $customer;

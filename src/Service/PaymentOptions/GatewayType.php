@@ -37,9 +37,5 @@ use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
 interface GatewayType
 {
-    public function getPaymentOption(
-        \Tpay $module,
-        PaymentOption $paymentOption,
-        array $data = []
-    ): PaymentOption;
+    public function getPaymentOption(\Tpay $module, PaymentOption $paymentOption, array $data = []): PaymentOption;
 }

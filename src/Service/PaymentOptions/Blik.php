@@ -50,11 +50,8 @@ class Blik implements GatewayType
         $this->context = $context;
     }
 
-    public function getPaymentOption(
-        \Tpay $module,
-        PaymentOption $paymentOption,
-        array $data = []
-    ): PaymentOption {
+    public function getPaymentOption(\Tpay $module, PaymentOption $paymentOption, array $data = []): PaymentOption
+    {
         $this->typeMethod();
 
         $blikSavedAliases = $this->getSavedBlikAliases(
