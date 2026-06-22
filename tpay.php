@@ -153,12 +153,11 @@ class Tpay extends PaymentModule
         $this->hookDispatcher = new HookDispatcher($this);
 
         $mboInstaller = new DependencyBuilder($this);
-        if(!$mboInstaller->areDependenciesMet())
-        {
+        if (!$mboInstaller->areDependenciesMet()) {
             $dependencies = $mboInstaller->handleDependencies();
             $this->smarty->assign('dependencies', $dependencies);
             $this->display(__FILE__, 'views/templates/admin/dependency_builder.tpl');
-            die();
+            exit;
         }
     }
 
@@ -492,7 +491,7 @@ class Tpay extends PaymentModule
 
         if ($clientId && $secretKey) {
             try {
-                $temporaryLogger = new class() extends Logger {
+                $temporaryLogger = new class extends Logger {
                     public static function setLogger(LoggerInterface $logger)
                     {
                         parent::setLogger($logger);
