@@ -44,7 +44,8 @@ class Uninstall
     /** @var InstallQueryHandler */
     private $installQueryHandler;
 
-    public function __construct(\Tpay $module, InstallQueryHandler $installQueryHandler) {
+    public function __construct(\Tpay $module, InstallQueryHandler $installQueryHandler)
+    {
         $this->module = $module;
         $this->installQueryHandler = $installQueryHandler;
     }

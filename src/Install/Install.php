@@ -52,7 +52,8 @@ class Install
     /** @var \Context */
     private $context;
 
-    public function __construct(\Tpay $module, InstallQueryHandler $installQueryHandler, \Context $context) {
+    public function __construct(\Tpay $module, InstallQueryHandler $installQueryHandler, \Context $context)
+    {
         $this->module = $module;
         $this->installQueryHandler = $installQueryHandler;
         $this->translator = $module->getTranslator();

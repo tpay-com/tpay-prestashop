@@ -58,7 +58,8 @@ class PaymentHandler
     /** @var array */
     private $data;
 
-    public function __construct(\Tpay $module, PaymentMethodHandler $paymentMethodHandler, \Order $order, \Customer $customer, \AddressCore $address, array $data = []) {
+    public function __construct(\Tpay $module, PaymentMethodHandler $paymentMethodHandler, \Order $order, \Customer $customer, \AddressCore $address, array $data = [])
+    {
         $this->module = $module;
         $this->paymentMethodHandler = $paymentMethodHandler;
         $this->order = $order;

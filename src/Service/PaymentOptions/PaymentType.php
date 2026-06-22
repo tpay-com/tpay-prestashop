@@ -40,7 +40,8 @@ class PaymentType
     /** @var GatewayType */
     private $gateway;
 
-    public function __construct(GatewayType $gateway) {
+    public function __construct(GatewayType $gateway)
+    {
         $this->gateway = $gateway;
     }
 

@@ -51,7 +51,8 @@ class PendingState implements StateType
     /** @var \OrderState */
     private $orderState;
 
-    public function __construct(\OrderState $orderState, string $moduleName) {
+    public function __construct(\OrderState $orderState, string $moduleName)
+    {
         $this->moduleName = $moduleName;
         $this->orderState = $orderState;
     }

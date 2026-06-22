@@ -69,7 +69,8 @@ class TpayBlik
      */
     private $alias;
 
-    public function __construct(int $userId, string $alias) {
+    public function __construct(int $userId, string $alias)
+    {
         $this->userId = $userId;
         $this->alias = $alias;
     }

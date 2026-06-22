@@ -114,7 +114,8 @@ class TpayCreditCard
      */
     private $dateUpdate;
 
-    public function __construct(string $cardVendor, string $cardShortcode, string $cardHash, int $userId, string $crc) {
+    public function __construct(string $cardVendor, string $cardShortcode, string $cardHash, int $userId, string $crc)
+    {
         $this->cardVendor = $cardVendor;
         $this->cardShortcode = $cardShortcode;
         $this->cardHash = $cardHash;

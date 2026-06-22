@@ -58,7 +58,8 @@ class CustomerData
     private $order;
 
     /** @throws \Exception */
-    public function __construct(\AddressCore $address, \Customer $customer, \Context $context, \Cart $cart, \Order $order) {
+    public function __construct(\AddressCore $address, \Customer $customer, \Context $context, \Cart $cart, \Order $order)
+    {
         $this->address = $address;
         $this->customer = $customer;
         $this->context = $context;

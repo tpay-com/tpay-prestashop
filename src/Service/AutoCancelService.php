@@ -44,7 +44,8 @@ class AutoCancelService
     /** @var \Tpay */
     private $tpay;
 
-    public function __construct(TransactionsRepository $repository, \Tpay $tpay) {
+    public function __construct(TransactionsRepository $repository, \Tpay $tpay)
+    {
         $this->repository = $repository;
         $this->tpay = $tpay;
     }

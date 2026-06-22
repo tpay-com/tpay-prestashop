@@ -49,7 +49,8 @@ class TransactionService
     /** @var \Context */
     private $context;
 
-    public function __construct(\Cart $cart, TransactionsRepository $repository, SurchargeService $surchargeService, \Context $context) {
+    public function __construct(\Cart $cart, TransactionsRepository $repository, SurchargeService $surchargeService, \Context $context)
+    {
         $this->cart = $cart;
         $this->repository = $repository;
         $this->surchargeService = $surchargeService;

@@ -59,7 +59,8 @@ class CreditCardsRepository
     /** @var string the Database prefix */
     private $dbPrefix;
 
-    public function __construct(Connection $connection, EntityManager $entityManager, RepositoryQueryHandler $repositoryQueryHandler, string $dbPrefix) {
+    public function __construct(Connection $connection, EntityManager $entityManager, RepositoryQueryHandler $repositoryQueryHandler, string $dbPrefix)
+    {
         $this->connection = $connection;
         $this->entityManager = $entityManager;
         $this->repositoryQueryHandler = $repositoryQueryHandler;
