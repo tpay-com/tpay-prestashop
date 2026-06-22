@@ -86,11 +86,7 @@ class TpayRefund
      */
     private $amount;
 
-    public function __construct(
-        int $orderId,
-        string $transactionId,
-        float $amount
-    ) {
+    public function __construct(int $orderId, string $transactionId, float $amount) {
         $this->orderId = $orderId;
         $this->transactionId = $transactionId;
         $this->amount = $amount;

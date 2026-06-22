@@ -104,15 +104,7 @@ class TpayTransaction
      */
     private $status;
 
-    public function __construct(
-        int $orderId,
-        string $crc,
-        string $transactionId,
-        string $paymentType,
-        int $registerUser,
-        float $surcharge,
-        string $status
-    ) {
+    public function __construct(int $orderId, string $crc, string $transactionId, string $paymentType, int $registerUser, float $surcharge, string $status) {
         $this->orderId = $orderId;
         $this->crc = $crc;
         $this->transactionId = $transactionId;

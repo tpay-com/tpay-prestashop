@@ -45,10 +45,7 @@ class OrderStatusHandler
     /** @var TransactionsRepository */
     private $transactionsRepository;
 
-    public function __construct(
-        \OrderHistory $orderHistory,
-        TransactionsRepository $transactionsRepository
-    ) {
+    public function __construct(\OrderHistory $orderHistory, TransactionsRepository $transactionsRepository) {
         $this->orderHistory = $orderHistory;
         $this->transactionsRepository = $transactionsRepository;
     }

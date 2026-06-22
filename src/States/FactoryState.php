@@ -43,10 +43,7 @@ class FactoryState
     /** @phpstan-ignore-next-line */
     private $orderState;
 
-    public function __construct(
-        \Tpay $module,
-        \OrderState $orderState
-    ) {
+    public function __construct(\Tpay $module, \OrderState $orderState) {
         $this->module = $module;
         $this->orderState = $orderState;
     }

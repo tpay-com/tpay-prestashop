@@ -41,9 +41,7 @@ class CardService
     /** @var CreditCardsRepository */
     private $repository;
 
-    public function __construct(
-        CreditCardsRepository $repository
-    ) {
+    public function __construct(CreditCardsRepository $repository) {
         $this->repository = $repository;
     }
 
