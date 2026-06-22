@@ -107,7 +107,7 @@ class Order extends AbstractHook
         if (method_exists($this->context, 'getComputingPrecision')) {
             $computePresicion = $this->context->getComputingPrecision();
         // @phpstan-ignore-next-line
-        } elseif (defined(_PS_PRICE_COMPUTE_PRECISION_) && _PS_PRICE_COMPUTE_PRECISION_ !== null) {
+        } elseif (defined('_PS_PRICE_COMPUTE_PRECISION_') && _PS_PRICE_COMPUTE_PRECISION_ !== null) {
             $computePresicion = _PS_PRICE_COMPUTE_PRECISION_;
         }
 

@@ -37,7 +37,16 @@ if (!file_exists($autoloadPath)) {
 }
 require_once $autoloadPath;
 
+$mboInstaller = new DependencyBuilder($this);
+if(!$mboInstaller->areDependenciesMet())
+{
+    $dependencies = $mboInstaller->handleDependencies();
+    $this->smarty->assign('dependencies', $dependencies);
+    return $this->display(__FILE__, 'views/templates/admin/dependency_builder.tpl');
+}
+
 use Configuration as Cfg;
+use Prestashop\ModuleLibMboInstaller\DependencyBuilder;
 use Psr\Log\LoggerInterface;
 use Tpay\Config\Config;
 use Tpay\Exception\BaseException;
