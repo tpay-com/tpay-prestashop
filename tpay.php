@@ -57,14 +57,6 @@ if (!file_exists($autoloadPath)) {
 }
 require_once $autoloadPath;
 
-$mboInstaller = new DependencyBuilder($this);
-if(!$mboInstaller->areDependenciesMet())
-{
-    $dependencies = $mboInstaller->handleDependencies();
-    $this->smarty->assign('dependencies', $dependencies);
-    return $this->display(__FILE__, 'views/templates/admin/dependency_builder.tpl');
-}
-
 /**
  * @property TpayApi|null $api
  */
@@ -159,6 +151,15 @@ class Tpay extends PaymentModule
         $this->description = $this->trans('Accepting online payments', [], 'Modules.Tpay.Admin');
         $this->confirmUninstall = $this->trans('Delete this module?', [], 'Modules.Tpay.Admin');
         $this->hookDispatcher = new HookDispatcher($this);
+
+        $mboInstaller = new DependencyBuilder($this);
+        if(!$mboInstaller->areDependenciesMet())
+        {
+            $dependencies = $mboInstaller->handleDependencies();
+            $this->smarty->assign('dependencies', $dependencies);
+            $this->display(__FILE__, 'views/templates/admin/dependency_builder.tpl');
+            die();
+        }
     }
 
     /** Boot API when it's needed */
