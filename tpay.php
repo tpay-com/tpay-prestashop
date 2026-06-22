@@ -31,20 +31,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-$autoloadPath = __DIR__ . '/vendor/autoload.php';
-if (!file_exists($autoloadPath)) {
-    exit('You should install the release package of the Tpay module or run composer install in the module directory');
-}
-require_once $autoloadPath;
-
-$mboInstaller = new DependencyBuilder($this);
-if(!$mboInstaller->areDependenciesMet())
-{
-    $dependencies = $mboInstaller->handleDependencies();
-    $this->smarty->assign('dependencies', $dependencies);
-    return $this->display(__FILE__, 'views/templates/admin/dependency_builder.tpl');
-}
-
 use Configuration as Cfg;
 use Prestashop\ModuleLibMboInstaller\DependencyBuilder;
 use Psr\Log\LoggerInterface;
@@ -64,6 +50,20 @@ use Tpay\Util\Container;
 use Tpay\Util\Helper;
 use Tpay\Util\Logger\PsrLogger;
 use Tpay\Util\PsrCache;
+
+$autoloadPath = __DIR__ . '/vendor/autoload.php';
+if (!file_exists($autoloadPath)) {
+    exit('You should install the release package of the Tpay module or run composer install in the module directory');
+}
+require_once $autoloadPath;
+
+$mboInstaller = new DependencyBuilder($this);
+if(!$mboInstaller->areDependenciesMet())
+{
+    $dependencies = $mboInstaller->handleDependencies();
+    $this->smarty->assign('dependencies', $dependencies);
+    return $this->display(__FILE__, 'views/templates/admin/dependency_builder.tpl');
+}
 
 /**
  * @property TpayApi|null $api

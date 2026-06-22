@@ -21,7 +21,7 @@ jobs:
           extensions: none, curl, dom, mbstring, simplexml, tokenizer, xml, xmlwriter, json, fileinfo
           coverage: none
 
-      - run: composer install --no-dev
+      - run: composer install --no-dev -o
 
       - run: git archive --output=tpay-prestashop.zip HEAD --prefix=tpay/
 
