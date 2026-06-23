@@ -154,7 +154,9 @@ class Tpay extends PaymentModule
         $this->confirmUninstall = $this->trans('Delete this module?', [], 'Modules.Tpay.Admin');
         $this->hookDispatcher = new HookDispatcher($this);
 
-        if(_TPAY_MARKETPLACE_RELEASE) {
+        // @phpstan-ignore-next-line
+        if (_TPAY_MARKETPLACE_RELEASE)
+        {
             $mboInstaller = new DependencyBuilder($this);
             if (!$mboInstaller->areDependenciesMet()) {
                 $dependencies = $mboInstaller->handleDependencies();
