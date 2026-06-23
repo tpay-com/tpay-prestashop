@@ -1,15 +1,28 @@
 <?php
-
 /**
- * NOTICE OF LICENSE
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
  *
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
  *
- * You must not modify, adapt or create derivative works of this source code
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * @license LICENSE.txt
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 declare(strict_types=1);
@@ -18,12 +31,11 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-$autoloadPath = __DIR__.'/vendor/autoload.php';
-if (file_exists($autoloadPath)) {
-    include_once $autoloadPath;
-}
+define('_TPAY_MARKETPLACE_RELEASE', false);
 
 use Configuration as Cfg;
+use Prestashop\ModuleLibMboInstaller\DependencyBuilder;
+use Psr\Log\LoggerInterface;
 use Tpay\Config\Config;
 use Tpay\Exception\BaseException;
 use Tpay\Handler\InstallQueryHandler;
@@ -33,15 +45,26 @@ use Tpay\Install\Reset;
 use Tpay\Install\Uninstall;
 use Tpay\OpenApi\Api\TpayApi;
 use Tpay\OpenApi\Utilities\Logger;
+use Tpay\Repository\TransactionsRepository;
 use Tpay\States\FactoryState;
+use Tpay\Util\Cache;
 use Tpay\Util\Container;
 use Tpay\Util\Helper;
+use Tpay\Util\Logger\PsrLogger;
 use Tpay\Util\PsrCache;
-use Tpay\Util\PsrLogger;
 
+$autoloadPath = __DIR__ . '/vendor/autoload.php';
+if (!file_exists($autoloadPath)) {
+    exit('You should install the release package of the Tpay module or run composer install in the module directory');
+}
+require_once $autoloadPath;
+
+/**
+ * @property TpayApi|null $api
+ */
 class Tpay extends PaymentModule
 {
-    const AUTH_TOKEN_CACHE_KEY = 'tpay_auth_token_%s';
+    public const AUTH_TOKEN_CACHE_KEY = 'tpay_auth_token_%s';
 
     // phpcs:ignore
     public $_errors;
@@ -124,13 +147,22 @@ class Tpay extends PaymentModule
         $this->currencies_mode = 'checkbox';
         $this->is_eu_compatible = 1;
         $this->module_key = 'f2eb0ce26233d0b517ba41e81f2e62fe';
-
         parent::__construct();
 
         $this->displayName = $this->trans('Tpay', [], 'Modules.Tpay.Admin');
         $this->description = $this->trans('Accepting online payments', [], 'Modules.Tpay.Admin');
         $this->confirmUninstall = $this->trans('Delete this module?', [], 'Modules.Tpay.Admin');
         $this->hookDispatcher = new HookDispatcher($this);
+
+        // @phpstan-ignore-next-line
+        if (_TPAY_MARKETPLACE_RELEASE) {
+            $mboInstaller = new DependencyBuilder($this);
+            if (!$mboInstaller->areDependenciesMet()) {
+                $dependencies = $mboInstaller->handleDependencies();
+                $this->smarty->assign('dependencies', $dependencies);
+                exit($this->fetch('module:tpay/views/templates/admin/dependency_builder.tpl'));
+            }
+        }
     }
 
     /** Boot API when it's needed */
@@ -152,6 +184,11 @@ class Tpay extends PaymentModule
             $methodName,
             !empty($arguments[0]) ? $arguments[0] : []
         );
+    }
+
+    public function hookPaymentOptions(array $params)
+    {
+        return $this->getHookDispatcher()->dispatch('hookPaymentOptions', $params);
     }
 
     public function api()
@@ -186,18 +223,13 @@ class Tpay extends PaymentModule
     }
 
     /**
-     * @throws Exception
+     * @return false|object|null
      *
-     * @return null|false|object
+     * @throws Exception
      */
     public function getService(string $serviceName)
     {
-        $container = Container::getInstance();
-        if (null !== $container) {
-            return $container->get($serviceName);
-        }
-
-        throw new Exception('Cannot get service '.$serviceName);
+        return Container::getInstance()->get($serviceName);
     }
 
     public function getPath(): string
@@ -217,7 +249,7 @@ class Tpay extends PaymentModule
             $this->_errors[] = $this->trans(
                 sprintf(
                     'Your PHP version is too old, please upgrade to a newer version. Your version is %s,'
-                    .' library requires %s',
+                    . ' library requires %s',
                     phpversion(),
                     '7.1'
                 ),
@@ -226,7 +258,9 @@ class Tpay extends PaymentModule
             );
         }
 
-        if (!parent::install() || false === (new Install($this, new InstallQueryHandler()))->install()) {
+        if (!parent::install() || false === (new Install(
+            $this, new InstallQueryHandler(), $this->getContext()
+        ))->install()) {
             $this->_errors[] = $this->trans('Installation error', [], 'Modules.Tpay.Admin');
         }
 
@@ -302,10 +336,15 @@ class Tpay extends PaymentModule
         return $this->context;
     }
 
+    public function clearCache(): void
+    {
+        Cache::erase();
+    }
+
     /** Admin config settings check an render form. */
     public function getContent(): void
     {
-        Tools::redirectAdmin($this->context->link->getAdminLink('TpayConfiguration'));
+        Tools::redirectAdmin($this->getContext()->link->getAdminLink('TpayConfiguration'));
     }
 
     public function checkCurrency($cart): bool
@@ -320,13 +359,15 @@ class Tpay extends PaymentModule
         global $smarty;
         $isOldPresta = false;
 
+        // @phpstan-ignore-next-line
         if (version_compare(_PS_VERSION_, '1.7.6.0', '<')) {
             $isOldPresta = true;
             if (false === ($smarty->registered_resources['module'] instanceof Tpay\Util\LegacySmartyResourceModule)) {
-                $module_resources = ['theme' => _PS_THEME_DIR_.'modules/'];
+                $module_resources = ['theme' => _PS_THEME_DIR_ . 'modules/'];
 
+                // @phpstan-ignore-next-line
                 if (_PS_PARENT_THEME_DIR_) {
-                    $module_resources['parent'] = _PS_PARENT_THEME_DIR_.'modules/';
+                    $module_resources['parent'] = _PS_PARENT_THEME_DIR_ . 'modules/';
                 }
 
                 $module_resources['modules'] = _PS_MODULE_DIR_;
@@ -350,7 +391,7 @@ class Tpay extends PaymentModule
         if (Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_ACTIVE')
             && Helper::getMultistoreConfigurationValue('TPAY_PEKAO_INSTALLMENTS_PRODUCT_PAGE')
         ) {
-            $this->context->smarty->assign([
+            $this->getContext()->smarty->assign([
                 'installmentText' => $this->trans('Calculate installment!', [], 'Modules.Tpay.Admin'),
                 'merchantId' => Helper::getMultistoreConfigurationValue('TPAY_MERCHANT_ID'),
                 'minAmount' => Config::PEKAO_INSTALLMENT_MIN,
@@ -373,16 +414,17 @@ class Tpay extends PaymentModule
             return '';
         }
 
+        /** @var TransactionsRepository $transactionRepository */
         $transactionRepository = $this->getService('tpay.repository.transaction');
         $transaction = $transactionRepository->getTransactionByOrderId($params['order']->id);
 
         if ($transaction && 'pending' == $transaction['status'] && $this->isBlikPayment($transaction)) {
-            $moduleLink = Context::getContext()->link->getModuleLink('tpay', 'chargeBlik', [], true);
+            $moduleLink = $this->getContext()->link->getModuleLink('tpay', 'chargeBlik', [], true);
 
             $regulationUrl = 'https://tpay.com/user/assets/files_for_download/payment-terms-and-conditions.pdf';
             $clauseUrl = 'https://tpay.com/user/assets/files_for_download/information-clause-payer.pdf';
 
-            if ('pl' == $this->context->language->iso_code) {
+            if ('pl' == $this->getContext()->language->iso_code) {
                 $regulationUrl = 'https://tpay.com/user/assets/files_for_download/regulamin.pdf';
                 $clauseUrl = 'https://tpay.com/user/assets/files_for_download/klauzula-informacyjna-platnik.pdf';
             }
@@ -398,7 +440,7 @@ class Tpay extends PaymentModule
                 'clauseUrl' => $clauseUrl,
                 'action' => Tools::getValue('action', ''),
             ];
-            $this->context->smarty->assign($blikData);
+            $this->getContext()->smarty->assign($blikData);
 
             return $this->fetch('module:tpay/views/templates/hook/thank_you_page.tpl');
         }
@@ -410,7 +452,7 @@ class Tpay extends PaymentModule
                 'assets_path' => $this->getPath(),
             ];
 
-            $this->context->smarty->assign($thankYouData);
+            $this->getContext()->smarty->assign($thankYouData);
 
             if (isset($result['status']) && in_array($result['status'], ['correct', 'success'])) {
                 return $this->fetch('module:tpay/views/templates/hook/thank_you_page_success.tpl');
@@ -420,12 +462,13 @@ class Tpay extends PaymentModule
         }
 
         if (!$transaction) {
-            $this->context->smarty->assign([
-                'errors' => $this->context->cookie->tpay_errors,
+            $this->getContext()->smarty->assign([
+                // @phpstan-ignore-next-line
+                'errors' => $this->getContext()->cookie->tpay_errors,
                 'retry_order' => $params['order']->id,
                 'assets_path' => $this->getPath(),
             ]);
-            unset($this->context->cookie->tpay_errors);
+            unset($this->getContext()->cookie->tpay_errors);
 
             return $this->fetch('module:tpay/views/templates/hook/thank_you_page_error.tpl');
         }
@@ -452,8 +495,14 @@ class Tpay extends PaymentModule
 
         if ($clientId && $secretKey) {
             try {
-                /* @phpstan-ignore-next-line */
-                Logger::setLogger(new PsrLogger());
+                $temporaryLogger = new class extends Logger {
+                    public static function setLogger(LoggerInterface $logger)
+                    {
+                        parent::setLogger($logger);
+                    }
+                };
+                $temporaryLogger::setLogger(new PsrLogger());
+
                 $this->api = new TpayApi(
                     new Tpay\OpenApi\Utilities\Cache(null, new PsrCache()),
                     $clientId,
@@ -482,7 +531,7 @@ class Tpay extends PaymentModule
 
     private function getPrestaVersion(): string
     {
-        $dir = realpath(__DIR__.'/../../config/settings.inc.php');
+        $dir = realpath(__DIR__ . '/../../config/settings.inc.php');
         if ($dir && file_exists($dir)) {
             include $dir;
         }
@@ -494,22 +543,9 @@ class Tpay extends PaymentModule
         return 'n/a';
     }
 
-    private function getAuthTokenCacheKey()
-    {
-        return sprintf(
-            self::AUTH_TOKEN_CACHE_KEY,
-            md5(
-                join(
-                    '|',
-                    [Cfg::get('TPAY_CLIENT_ID'), Cfg::get('TPAY_SECRET_KEY'), !Cfg::get('TPAY_SANDBOX')]
-                )
-            )
-        );
-    }
-
     private function getPackageVersion(): string
     {
-        $dir = __DIR__.'/composer.json';
+        $dir = __DIR__ . '/composer.json';
         if (file_exists($dir)) {
             $composerJson = json_decode(file_get_contents($dir), true)['require'] ?? [];
 

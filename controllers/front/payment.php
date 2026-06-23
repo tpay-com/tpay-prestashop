@@ -1,4 +1,32 @@
 <?php
+/**
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
+ *
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 use Configuration as Cfg;
 use Tpay\Config\Config;
@@ -6,6 +34,9 @@ use Tpay\Factory\PaymentFactory;
 use Tpay\Handler\PaymentHandler;
 use Tpay\Service\SurchargeService;
 
+/**
+ * @property Tpay $module
+ */
 class TpayPaymentModuleFrontController extends ModuleFrontController
 {
     public $ssl = true;
@@ -56,7 +87,7 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
             $cart
         );
 
-        $this->setTemplate(Config::TPAY_PATH.'/redirect.tpl');
+        $this->setTemplate(Config::TPAY_PATH . '/redirect.tpl');
     }
 
     private function handleRetry($orderId)
@@ -68,19 +99,21 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
         $customer = new Customer($order->id_customer);
 
         try {
+            // @phpstan-ignore-next-line
             $type = $this->context->cookie->tpay_payment_type;
             $paymentType = PaymentFactory::getPaymentMethod($type);
             $this->createTransaction($order, $paymentType);
         } catch (Exception $e) {
-            PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID '.$order->id.': '.$e->getMessage(), 3);
+            PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID ' . $order->id . ': ' . $e->getMessage(), 3);
+            // @phpstan-ignore-next-line
             $this->context->cookie->tpay_errors = $this->trans(
                 'Failed to create the transaction. Please try again.',
                 [],
                 'Modules.Tpay.Shop'
             );
             Tools::redirect(
-                'index.php?controller=order-confirmation&action=renew-payment&id_cart='.$order->id_cart.'&id_module='
-                .(int) $this->module->id.'&id_order='.$order->id.'&key='.$customer->secure_key
+                'index.php?controller=order-confirmation&action=renew-payment&id_cart=' . $order->id_cart . '&id_module='
+                . (int) $this->module->id . '&id_order=' . $order->id . '&key=' . $customer->secure_key
             );
         }
     }
@@ -99,13 +132,15 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
 
         try {
             $paymentType = PaymentFactory::getPaymentMethod(Tools::getValue('type'));
+            // @phpstan-ignore-next-line
             $this->context->cookie->tpay_payment_type = $paymentType->getName();
             $this->module->getContext()->smarty->assign(['nbProducts' => $cart->nbProducts()]);
             $this->createTransaction($order, $paymentType);
         } catch (Exception $e) {
-            PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID '.$order->id.': '.$e->getMessage(), 3);
+            PrestaShopLogger::addLog('Błąd Tpay przy zamówieniu ID ' . $order->id . ': ' . $e->getMessage(), 3);
 
-            $order->setCurrentState(Cfg::get('TPAY_FAILED'));
+            $order->setCurrentState((int) Cfg::get('TPAY_FAILED'));
+            // @phpstan-ignore-next-line
             $this->context->cookie->tpay_errors = $this->trans(
                 'Failed to create the transaction. Please try again.',
                 [],
@@ -113,8 +148,8 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
             );
 
             Tools::redirect(
-                'index.php?controller=order-confirmation&action=renew-payment&id_cart='.(int) $cart->id.'&id_module='
-                .(int) $this->module->id.'&id_order='.$order->id.'&key='.$customer->secure_key
+                'index.php?controller=order-confirmation&action=renew-payment&id_cart=' . (int) $cart->id . '&id_module='
+                . (int) $this->module->id . '&id_order=' . $order->id . '&key=' . $customer->secure_key
             );
         }
     }
@@ -149,14 +184,14 @@ class TpayPaymentModuleFrontController extends ModuleFrontController
             null,
             [],
             (int) $this->module->getContext()->currency->id,
-            $customer->isGuest() ? 0 : 1,
+            !$customer->isGuest(),
             $customer->secure_key
         );
     }
 
     private function getOrderTotal($cart): float
     {
-        $surcharge = new SurchargeService();
+        $surcharge = new SurchargeService($cart);
         $orderTotal = $cart->getOrderTotal();
         $surchargeTotal = $surcharge->getSurchargeValue($orderTotal);
 

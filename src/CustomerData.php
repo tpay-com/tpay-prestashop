@@ -1,61 +1,65 @@
 <?php
-
 /**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
  *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 declare(strict_types=1);
 
 namespace Tpay;
 
-use AddressCore;
-use Cart;
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Configuration as Cfg;
-use Context;
-use Customer;
-use Exception;
-use Order;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-use Tools;
 use Tpay\Builder\PayerDataBuilder;
 use Tpay\Service\SurchargeService;
 
 class CustomerData
 {
-    /** @var AddressCore */
+    /** @var \AddressCore */
     private $address;
 
-    /** @var Customer */
+    /** @var \Customer */
     private $customer;
 
-    /** @var Context */
+    /** @var \Context */
     private $context;
 
-    /** @var Cart */
+    /** @var \Cart */
     private $cart;
 
-    private $customerDetails;
+    /** @var array<string, mixed> */
+    private $customerDetails = [];
 
-    /** @var Order */
+    /** @var \Order */
     private $order;
 
-    /** @throws Exception */
-    public function __construct(
-        AddressCore $address,
-        Customer $customer,
-        Context $context,
-        Cart $cart,
-        Order $order
-    ) {
+    /** @throws \Exception */
+    public function __construct(\AddressCore $address, \Customer $customer, \Context $context, \Cart $cart, \Order $order)
+    {
         $this->address = $address;
         $this->customer = $customer;
         $this->context = $context;
@@ -65,19 +69,19 @@ class CustomerData
         $this->setBasicClient();
     }
 
-    public function getData()
+    public function getData(): array
     {
         return $this->customerDetails;
     }
 
     /**
-     * @throws PrestaShopDatabaseException
-     * @throws PrestaShopException
-     * @throws Exception
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \Exception
      */
     public function getOrderTotalAmount(): string
     {
-        $surcharge = new SurchargeService();
+        $surcharge = new SurchargeService($this->cart);
         $orderTotal = $this->cart->getOrderTotal();
         $surchargeTotal = $surcharge->getSurchargeValue($orderTotal);
         $total = $orderTotal + $surchargeTotal;
@@ -92,10 +96,12 @@ class CustomerData
         $firstName = $customer->firstname;
         $lastName = $customer->lastname;
 
+        // @phpstan-ignore-next-line
         $context->cookie->customer_firstname = $firstName;
+        // @phpstan-ignore-next-line
         $context->cookie->customer_lastname = $lastName;
 
-        $this->customerDetails['description'] = '#BLIK - '.$firstName.' '.$lastName;
+        $this->customerDetails['description'] = '#BLIK - ' . $firstName . ' ' . $lastName;
 
         if ($order) {
             $reference = $order->reference;
@@ -169,18 +175,18 @@ class CustomerData
 
     public function getCustomerTitle($reference, $context): string
     {
-        return '#'.$reference.' - '.$context->customer_firstname.' '.$context->customer_lastname;
+        return '#' . $reference . ' - ' . $context->customer_firstname . ' ' . $context->customer_lastname;
     }
 
     /**
      * Create basic client data
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function setBasicClient(): void
     {
         $orderTotal = $this->getOrderTotalAmount();
-        $phoneNumber = (isset($this->address->phone_mobile) && strlen($this->address->phone_mobile) > 3) ? $this->address->phone_mobile : ($this->address->phone ?: '000');
+        $phoneNumber = (!empty($this->address->phone_mobile) && strlen($this->address->phone_mobile) > 3) ? $this->address->phone_mobile : ($this->address->phone ?: '000');
         $email = $this->context->cookie->email ?? $this->customer->email;
         $customerFirstName = !empty($this->context->cookie->customer_firstname) ? $this->context->cookie->customer_firstname : $this->customer->firstname;
         $customerLastName = !empty($this->context->cookie->customer_lastname) ? $this->context->cookie->customer_lastname : $this->customer->lastname;
@@ -189,11 +195,11 @@ class CustomerData
             ->set('email', $email)
             ->set('name', sprintf('%s %s', $customerFirstName, $customerLastName))
             ->add('phone', $phoneNumber)
-            ->add('address', trim($this->address->address1.' '.$this->address->address2))
+            ->add('address', trim($this->address->address1 . ' ' . $this->address->address2))
             ->add('code', $this->address->postcode)
             ->add('city', $this->address->city)
             ->set('country', 'PL')
-            ->set('ip', Tools::getRemoteAddr())
+            ->set('ip', \Tools::getRemoteAddr())
             ->set('userAgent', substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255))
             ->get();
 
@@ -212,7 +218,7 @@ class CustomerData
             'payer' => $payer,
         ];
 
-        if (isset($this->address->vat_number) && strlen($this->address->vat_number) > 1) {
+        if (!empty($this->address->vat_number) && strlen($this->address->vat_number) > 1) {
             $data['payer']['taxId'] = $this->address->vat_number;
         }
 
@@ -233,12 +239,12 @@ class CustomerData
 
         switch (Cfg::get('TPAY_CRC_FORM')) {
             case 'order_id_and_rest':
-                return $order->id.'-'.md5($customer->secure_key.time());
+                return $order->id . '-' . md5($customer->secure_key . time());
             case 'order_id':
                 return (string) $order->id;
             case 'md5_all':
             default:
-                return md5($order->id.$customer->secure_key.time());
+                return md5($order->id . $customer->secure_key . time());
         }
     }
 }

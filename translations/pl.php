@@ -1,5 +1,29 @@
 <?php
-
+/**
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
+ *
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 global $_MODULE;
 $_MODULE = [];
 $_MODULE['<{tpay}prestashop>admin_3f984e2e893f87bc9b60d5b3f6867255'] = 'Opłata za płatność online:';
@@ -41,7 +65,7 @@ $_MODULE['<{tpay}prestashop>admin_a2436f156896e30797fae5cb4625ff06'] = 'Kod bezp
 $_MODULE['<{tpay}prestashop>admin_bafd7322c6e97d25b6299b5d6fe8920b'] = 'Nie';
 $_MODULE['<{tpay}prestashop>admin_d5b501407738a0f21e63ea67ed1d64bf'] = 'Email powiadomień';
 $_MODULE['<{tpay}prestashop>admin_bb8278c756e2855300ee104481ad7d27'] = 'Opłata za płatność online';
-$_MODULE['<{tpay}prestashop>admin_9d34f4ec2ae75a549eec01e2f6868a52'] = 'Płatność kartą';
+$_MODULE['<{tpay}prestashop>admin_9d34f4ec2ae75a549eec01e2f6868a52'] = "Płatność\u{a0}kartą";
 $_MODULE['<{tpay}prestashop>admin_0af709feff4fe0f53053a235f7678645'] = 'Status transakcji zakończonej błędem';
 $_MODULE['<{tpay}prestashop>admin_ce2b77424d52bfd70d71304f5c0ec39c'] = 'Ustawienia symulatora rat Pekao';
 $_MODULE['<{tpay}prestashop>admin_37be07209f53a5d636d5c904ca9ae64c'] = 'Procent';
@@ -54,8 +78,8 @@ $_MODULE['<{tpay}prestashop>admin_ed49333351d1fde4bcdb1faa5c33677d'] = 'Klucz RS
 $_MODULE['<{tpay}prestashop>admin_d8061fcea5d39a9ff0f6c054a90fa9d1'] = 'Bezpośrednie przekierowanie do banku';
 $_MODULE['<{tpay}prestashop>admin_2b56754cc77ff1052b95dcdfbf491ad8'] = 'Kwota zwrotu';
 $_MODULE['<{tpay}prestashop>admin_9a49152f05f1c38bc892d4c3530c0d18'] = 'Data zwrotu';
-$_MODULE['<{tpay}prestashop>admin_bdfbd27201a382ded201f75ddca04ba0'] = 'Błąd podczas wykonywania zwrotu.
-                                   Sprawdź czy wartość zwrotu nie przekracza wartości zamówienia.';
+$_MODULE['<{tpay}prestashop>admin_bdfbd27201a382ded201f75ddca04ba0'] = "Błąd podczas wykonywania zwrotu.
+                                   Sprawdź czy wartość\u{a0}zwrotu nie przekracza wartości zamówienia.";
 $_MODULE['<{tpay}prestashop>admin_e13ae084c076802ae1b4ce8d01ec33bd'] = 'Błąd podczas wykonywania zwrotu. Wartość kwoty jest poza zadeklarowaną precyzją.';
 $_MODULE['<{tpay}prestashop>admin_392c5733b9355eda0b5e81ac9cb31d2d'] = 'Błąd podczas wykonywania zwrotu. Podany identyfikator transakcji nie istnieje, jest niedostępny lub transakcja została opłacona.';
 $_MODULE['<{tpay}prestashop>admin_2f5f589b85e66cd6d6f2c3372665a369'] = 'Błąd podczas wykonywania zwrotu. Okres zwrotu dla tej transakcji wygasł.';
@@ -72,7 +96,7 @@ $_MODULE['<{tpay}prestashop>admin_fd33960436cea4dd9f47db03e0079280'] = 'Ustaw w�
 $_MODULE['<{tpay}prestashop>admin_4e1a6c6363bef7f956fd2c4cb21f18fb'] = 'Ustawienia do płatności standardowych';
 $_MODULE['<{tpay}prestashop>admin_79cb16d72eec21caeb9dfa09dd9acf15'] = 'Ustawienia nie zostały zapisane';
 $_MODULE['<{tpay}prestashop>admin_96d4dadd096605d5813d2c6bdf82e82c'] = 'Ustawienia zapisane';
-$_MODULE['<{tpay}prestashop>admin_ac794f27a2403fc70aa3b05954b56bca'] = 'Pokaż metodę jako osobną płatność';
+$_MODULE['<{tpay}prestashop>admin_ac794f27a2403fc70aa3b05954b56bca'] = "Pokaż metodę jako osobną\u{a0}płatność";
 $_MODULE['<{tpay}prestashop>admin_f69d7a9f87546d78e76e0ee400dabeac'] = 'Status opłaconej transakcji, wyłącznie z produktami wirtualnymi';
 $_MODULE['<{tpay}prestashop>admin_0bca037451ac432ae9fae53a78387a6e'] = 'Status transakcji opłaconej';
 $_MODULE['<{tpay}prestashop>admin_267e2ea73e5af21b7f89d2643d58ce78'] = 'Status transakcji oczekującej na płatność';

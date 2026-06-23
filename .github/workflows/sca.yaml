@@ -3,28 +3,98 @@ name: Static code analysis
 on: [push]
 
 jobs:
-  analyse:
+  # Check that there are no syntax errors in the project
+  php-linter:
+    name: PHP Syntax check 7.2-8.2
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
 
-      - uses: shivammathur/setup-php@v2
+      - name: PHP syntax checker 7.2
+        uses: prestashop/github-action-php-lint/7.2@master
+        continue-on-error: true
+
+      - name: PHP syntax checker 7.3
+        uses: prestashop/github-action-php-lint/7.3@master
+        continue-on-error: true
+
+      - name: PHP syntax checker 7.4
+        uses: prestashop/github-action-php-lint/7.4@master
+        continue-on-error: true
+
+      - name: PHP syntax checker 8.0
+        uses: prestashop/github-action-php-lint/8.0@master
+
+      - name: PHP syntax checker 8.1
+        uses: prestashop/github-action-php-lint/8.1@master
+
+      - name: PHP syntax checker 8.2
+        uses: prestashop/github-action-php-lint/8.2@master
+
+
+  # Check that the PHP code follows the coding standards
+#  php-cs-fixer:
+#    name: PHP-CS-Fixer
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2.0.0
+#
+#      - name: Run PHP-CS-Fixer
+#        uses: prestashopcorp/github-action-php-cs-fixer@master
+
+  # Run PHPStan against the module and a PrestaShop release
+  phpstan:
+    name: PHPStan
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - presta-version: '1.7.7.8'
+            experimental: true
+
+          - presta-version: '1.7.8.11'
+            experimental: true
+
+          - presta-version: '8.1.7'
+            experimental: false
+
+          - presta-version: '8.2.6'
+            experimental: false
+
+          - presta-version: '9.0.3'
+            experimental: true
+
+          - presta-version: '9.1.3'
+            experimental: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+
+      # Add vendor folder in cache to make next builds faster
+      - name: Cache vendor folder
+        uses: actions/cache@v3
         with:
-          php-version: 8.2
-          extensions: none, bcmath, curl, dom, fileinfo, gd, iconv, intl, mbstring, pdo_mysql, simplexml, soap, sockets, tokenizer, xsl, xml, xmlwriter, zip, fileinfo
-          coverage: none
+          path: vendor
+          key: php-${{ hashFiles('composer.lock') }}
 
-      - run: composer validate --strict
+      # Add composer local folder in cache to make next builds faster
+      - name: Cache composer folder
+        uses: actions/cache@v3
+        with:
+          path: ~/.composer/cache
+          key: php-composer-cache-${{ hashFiles('composer.lock') }}
 
-      - run: composer install --no-interaction --prefer-dist
+      - run: composer install -o --no-interaction --prefer-dist
 
-      - run: composer normalize --diff --dry-run --indent-size=4 --indent-style=space
+      # Docker images prestashop/prestashop may be used, even if the shop remains uninstalled
+      - name: Pull PrestaShop files (Tag ${{ matrix.presta-version }})
+        run: docker run -tid --rm -v ps-volume:/var/www/html --name temp-ps prestashop/prestashop:${{ matrix.presta-version }}
 
-      - run: composer cs:fixer -- --dry-run
-
-      - run: composer cs:sniffer
-
-      - run: composer cs:phpstan
-
-      - run: composer cs:psalm -- --no-progress --shepherd
+      # Run a container for PHPStan, having access to the module content and PrestaShop sources.
+      # This tool is outside the composer.json because of the compatibility with PHP 5.6
+      - name : Run PHPStan (Tag ${{ matrix.presta-version }})
+        run: docker run --rm --volumes-from temp-ps -v $PWD:/web/module -e _PS_ROOT_DIR_=/var/www/html --workdir=/web/module ghcr.io/devgine/composer-php:v2-php8.2-alpine php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit=1G

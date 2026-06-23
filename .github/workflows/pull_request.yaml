@@ -21,22 +21,45 @@ jobs:
           extensions: none, curl, dom, mbstring, simplexml, tokenizer, xml, xmlwriter, json, fileinfo
           coverage: none
 
-      - run: composer install --no-dev
+      - run: composer install --no-dev -o
 
       - run: git archive --output=tpay-prestashop.zip HEAD --prefix=tpay/
 
       - run: mkdir tpay && mv vendor tpay/
       - run: zip -ur tpay-prestashop.zip tpay/
+      - run: zip -d tpay-prestashop.zip "tpay/_dev/*"
+      - run: zip -d tpay-prestashop.zip "tpay/.github/*"
+      - run: zip -d tpay-prestashop.zip "tpay/.php*"
+      - run: zip -d tpay-prestashop.zip "tpay/.gitignore"
 
-      - run: mkdir plugin && unzip tpay-prestashop.zip -d plugin
+      - name: Build marketplace zip
+        run: |
+          cp tpay-prestashop.zip tpay-prestashop-marketplace.zip
+          mkdir -p marketplace_patch/tpay
+          unzip -j tpay-prestashop.zip "tpay/tpay.php" -d marketplace_patch/tpay/
+          sed -i "s/define('_TPAY_MARKETPLACE_RELEASE', false)/define('_TPAY_MARKETPLACE_RELEASE', true)/" marketplace_patch/tpay/tpay.php
+          cd marketplace_patch && zip -u ../tpay-prestashop-marketplace.zip tpay/tpay.php
+
+      - run: mkdir plugin-standalone && unzip tpay-prestashop.zip -d plugin-standalone
+      - run: mkdir plugin-marketplace && unzip tpay-prestashop-marketplace.zip -d plugin-marketplace
 
       - uses: actions/upload-artifact@v4
-        id: plugin-upload
+        id: upload-standalone
         with:
           name: 'tpay-prestashop'
-          path: 'plugin/'
+          path: 'plugin-standalone/'
+          include-hidden-files: true
+
+      - uses: actions/upload-artifact@v4
+        id: upload-marketplace
+        with:
+          name: 'tpay-prestashop-marketplace'
+          path: 'plugin-marketplace/'
+          include-hidden-files: true
 
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
-            Tpay Prestashop plugin - ${{ steps.plugin-upload.outputs.artifact-url }}
+            Tpay Prestashop plugin
+            - Standalone: ${{ steps.upload-standalone.outputs.artifact-url }}
+            - Marketplace: ${{ steps.upload-marketplace.outputs.artifact-url }}

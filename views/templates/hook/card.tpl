@@ -1,15 +1,27 @@
-{*
-* NOTICE OF LICENSE
-*
-* This file is licenced under the Software License Agreement.
-* With the purchase or the installation of the software in your application
-* you accept the licence agreement.
-*
-* You must not modify, adapt or create derivative works of this source code
-*
-*  @author    tpay.com
-*  @copyright 2010-2022 tpay.com
-*  @license   LICENSE.txt
+{**
+* @author Krajowy Integrator Płatności S.A.
+* @copyright Krajowy Integrator Płatności S.A.
+* @license MIT
+* 
+* Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+* 
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
 *}
 <div class="tpay-wrapper tpay-card-wrapper" data-payment-type="card">
 	<form method="post" id="card_payment_form" name="card_payment_form">
@@ -23,23 +35,23 @@
 					</div>
 
 					{foreach from=$saved_cards item=card}
-						<div class="tpay-cards__item" data-card-id="{$card['id']}">
+						<div class="tpay-cards__item" data-card-id="{$card['id']|intval}">
 							<div class="tpay-cards__item-inner">
 
 								<div class="custom-radio">
-									<input type="radio" name="savedId" id="cardN{$card['id']}" value="{$card['id']}"/>
+									<input type="radio" name="savedId" id="cardN{$card['id']|intval}" value="{$card['id']|intval}"/>
 									<span></span>
 								</div>
 
-								<label for="cardN{$card['id']}" style="text-align:left; margin: 0;">
-									**** {$card['card_shortcode']}
-									<p>{$card['card_vendor']}</p>
+								<label for="cardN{$card['id']|intval}" style="text-align:left; margin: 0;">
+									**** {$card['card_shortcode']|escape:'html':'UTF-8'}
+									<p>{$card['card_vendor']|escape:'html':'UTF-8'}</p>
 								</label>
 
 								<div class="" style="margin-left: auto;">
 									<a href="{url entity='module' name='tpay' controller='savedCards' params=['action' => 'deleteCard','ajax' => true]}"
-									   data-link-action="delete-credit-card" data-id="{$card['id']}"
-									   data-token="{Tools::getToken()}">
+									   data-link-action="delete-credit-card" data-id="{$card['id']|intval}"
+									   data-token="{Tools::getToken()|escape:'html':'UTF-8'}">
 										<i class="material-icons"></i>
 									</a>
 								</div>
@@ -143,7 +155,7 @@
 						{l s='Please accept the store rules' d='Modules.Tpay.Shop'}
 					</span>
 			</div>
-			<input type="hidden" name="redirect_type" id="redirect_type" value="{$card_type}"/>
+			<input type="hidden" name="redirect_type" id="redirect_type" value="{$card_type|escape:'html':'UTF-8'}"/>
 		</div>
 
 		{if $card_type === 'widget'}
