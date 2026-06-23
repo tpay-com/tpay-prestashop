@@ -31,6 +31,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+define('_TPAY_MARKETPLACE_RELEASE', false);
+
 use Configuration as Cfg;
 use Prestashop\ModuleLibMboInstaller\DependencyBuilder;
 use Psr\Log\LoggerInterface;
@@ -152,12 +154,13 @@ class Tpay extends PaymentModule
         $this->confirmUninstall = $this->trans('Delete this module?', [], 'Modules.Tpay.Admin');
         $this->hookDispatcher = new HookDispatcher($this);
 
-        $mboInstaller = new DependencyBuilder($this);
-        if (!$mboInstaller->areDependenciesMet()) {
-            $dependencies = $mboInstaller->handleDependencies();
-            $this->smarty->assign('dependencies', $dependencies);
-            $this->display(__FILE__, 'views/templates/admin/dependency_builder.tpl');
-            exit;
+        if(_TPAY_MARKETPLACE_RELEASE) {
+            $mboInstaller = new DependencyBuilder($this);
+            if (!$mboInstaller->areDependenciesMet()) {
+                $dependencies = $mboInstaller->handleDependencies();
+                $this->smarty->assign('dependencies', $dependencies);
+                exit($this->fetch('module:tpay/views/templates/admin/dependency_builder.tpl'));
+            }
         }
     }
 
