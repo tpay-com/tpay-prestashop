@@ -165,7 +165,7 @@ class FactoryState
             return \OrderState::existsLocalizedNameInDatabase($name, $idLang, $excludeIdOrderState);
         }
 
-        return (bool) \Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
+        return (bool) \Db::getInstance((bool)_PS_USE_SQL_SLAVE_)->getValue(
             'SELECT COUNT(*) AS count'
             . ' FROM ' . _DB_PREFIX_ . 'order_state_lang osl'
             . ' INNER JOIN ' . _DB_PREFIX_ . 'order_state os ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = ' . $idLang . ')'
