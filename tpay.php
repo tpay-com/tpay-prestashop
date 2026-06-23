@@ -155,8 +155,7 @@ class Tpay extends PaymentModule
         $this->hookDispatcher = new HookDispatcher($this);
 
         // @phpstan-ignore-next-line
-        if (_TPAY_MARKETPLACE_RELEASE)
-        {
+        if (_TPAY_MARKETPLACE_RELEASE) {
             $mboInstaller = new DependencyBuilder($this);
             if (!$mboInstaller->areDependenciesMet()) {
                 $dependencies = $mboInstaller->handleDependencies();
