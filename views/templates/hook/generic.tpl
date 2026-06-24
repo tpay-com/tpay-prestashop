@@ -10,11 +10,12 @@
     {if isset($channelId) && $channelId == $blikBnplId}
         <div class="blik-info">
             <details class="tpay-collapsible-desc">
-                <summary style="font-size:0.85rem;cursor: pointer">{l s='What is BLIK Pay Later?' d='Modules.Tpay.Shop'}</summary>
+                <summary style="font-size:0.85rem;cursor: pointer;text-decoration:underline;">{l s='What is BLIK Pay Later?' d='Modules.Tpay.Shop'}</summary>
                 <p style="font-size:0.85rem;margin-top:10px;">{l s='BLIK Pay Later lets you defer payment for online purchases for 30 days, up to 4,000 PLN.' d='Modules.Tpay.Shop'}</p>
             </details>
         </div>
     {/if}
-
-    {include file="module:tpay/views/templates/hook/regulations.tpl"}
+    <div class="generic-regulation-wrapper">
+        {include file="module:tpay/views/templates/hook/regulations.tpl"}
+    </div>
 </div>
