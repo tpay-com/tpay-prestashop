@@ -10,6 +10,18 @@
   margin-bottom: 40px;
   position: relative;
 
+  .custom-checkbox input[type=checkbox]+span {
+    border-radius: 4px;
+    border-color: #072653;
+  }
+
+  .custom-checkbox input[type=checkbox]+span .checkbox-checked {
+    background-color: #072653;
+    color: white;
+    border-radius: 4px;
+    border-color: #072653;
+  }
+
   .custom-checkbox span.wrong {
     border: 1px solid hsl(348, 100%, 61%);
   }
@@ -17,14 +29,36 @@
   .wrong {
     border: 1px solid hsl(348, 100%, 61%);
   }
+
+  p {
+    color: #072653;
+  }
 }
 
 .tpay-regulations {
   padding: 0.9rem 0 0.5rem;
 
+  :first-child {
+      margin-bottom: 0;
+  }
+
+  :last-child {
+    margin-bottom: 0;
+  }
+
   &__content {
     margin-bottom: 0.6rem;
-    font-size: 0.7rem;
+    font-size: 12px;
+    color: #072653;
+    font-weight: 400;
+    a {
+      color: #072653;
+      text-decoration: underline;
+    }
+    img {
+      margin-left: 16px;
+      margin-top: 0 !important;;
+    }
   }
 }
 
@@ -43,12 +77,28 @@
       display: flex;
       align-items: center;
       margin-bottom: 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: #072653;
+      width: 100%;
+      justify-content: space-between;
     }
 
     > label img {
       height: 32px;
       padding: 4px;
     }
+  }
+
+  .custom-radio {
+    background: #fff;
+    border: #D8D8D8 1px solid;
+  }
+  .custom-radio:has(input[type="radio"]:checked) {
+    border: #2953C6 1px solid;
+  }
+  .custom-radio input[type=radio]:checked+span {
+    background-color: #2953C6;
   }
 }
 
@@ -83,12 +133,28 @@ body#checkout .additional-information {
 
 .tpay-radio-payments {
 
+  .tpay-blik-input {
+    text-align: left;
+    color: #072653;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .tpay-blik-input::placeholder {
+    color: #B9B9BB;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
   label {
     color: #072653;
   }
 
   &--blik {
-    max-width: 500px;
+    max-width: 100%;
+    padding: 0 24px;
+    @media (max-width: 640px) {
+      padding: 0 8px;
+    }
   }
 
   &__radio {
@@ -96,12 +162,14 @@ body#checkout .additional-information {
     align-content: center;
     margin: 0;
     position: relative;
-    padding: 15px 20px;
+    padding: 0 20px 15px 20px;
     height: 100%;
-    border: 1px solid #D8D8D8;
-    border-radius: 6px;
     cursor: pointer;
     transition: all .3s cubic-bezier(0.335, 0.010, 0.030, 1.360);
+
+    @media (max-width: 640px) {
+      padding: 0 16px 15px 16px;
+    }
 
     .tpay-logo--small {
       display: none;
@@ -124,7 +192,7 @@ body#checkout .additional-information {
 
   &__description {
     display: none;
-    margin-top: 12px;
+    //margin-top: 12px;
     transition: all .4s cubic-bezier(0.335, 0.010, 0.030, 1.360);
     margin-bottom: 20px;
 
@@ -139,7 +207,6 @@ body#checkout .additional-information {
   }
 
   &__item {
-    padding-bottom: 12px;
 
     label {
       font-weight: 700;
@@ -172,14 +239,27 @@ body#checkout .additional-information {
 
 #tpay-blik-form .tpay-radio-payments__radio--active .tpay-radio-payments__description {
   display: block;
+  margin-bottom: 12px;
+
 }
 
 #tpay-blik-form .tpay-radio-payments > .tpay-radio-payments__description {
   display: block;
 }
 
+.separator-line {
+  border-top: 1px solid #EEEDF0;
+  width: 100%;
+  padding: 16px 0;
+  &.blik-code {
+    padding-bottom: 0;
+  }
+}
 
 #tpay-blik-form {
+  .tpay-radio-payments__radio--active {
+    border: none;
+  }
   .tpay-radio-payments__item.tpay-blik--use {
     .tpay-radio-payments__content {
       label {
@@ -200,8 +280,22 @@ body#checkout section.checkout-step .payment-options label {
   text-align: left;
 }
 
+.tpay-collapsible-desc {
+  margin-left: 26px;
+  color: #072653;
+  p {
+    color: #072653;
+  }
+}
+
+.generic-regulation-wrapper {
+  .tpay-regulations {
+    margin-left: 26px;
+  }
+}
+
 .tpay-error {
-  color: #ff3860;
+  color: #E82B2B;
   font-size: 12px;
   font-weight: 500;
   padding: 10px 0;
