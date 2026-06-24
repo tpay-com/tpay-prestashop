@@ -123,6 +123,22 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         }
 
         $order = new Order((int) $transaction['order_id']);
+
+        if (!$this->validateCurrency($order, $notification)) {
+            $notificationCurrency = $notification->tr_currency ? $notification->tr_currency->getValue() : null;
+
+            PrestaShopLogger::addLog(
+                sprintf(
+                    'Currency mismatch: order=%s, notification=%s',
+                    (new Currency((int) $order->id_currency))->iso_code,
+                    var_export($notificationCurrency, true)
+                ),
+                3
+            );
+
+            throw new TpayException('Order currency mismatch');
+        }
+
         if (!$this->validateAmount($order, $notification)) {
             PrestaShopLogger::addLog(
                 sprintf(
@@ -231,5 +247,25 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         $notificationAmount = number_format((float) $notification->tr_amount->getValue(), 2, '.', '');
 
         return $orderAmount === $notificationAmount;
+    }
+
+    private function validateCurrency(Order $order, BasicPayment $notification): bool
+    {
+        $value = null;
+
+        if (isset($notification->tr_currency) && $notification->tr_currency) {
+            $value = $notification->tr_currency->getValue();
+        }
+
+        if (!is_string($value) || '' === trim($value)) {
+            return true;
+        }
+
+        $notificationCurrency = strtoupper(trim($value));
+
+        $currency = new Currency((int) $order->id_currency);
+        $orderCurrency = $currency->iso_code;
+
+        return strtoupper(trim($orderCurrency)) === $notificationCurrency;
     }
 }
