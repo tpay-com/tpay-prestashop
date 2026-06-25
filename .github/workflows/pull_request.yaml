@@ -27,10 +27,10 @@ jobs:
 
       - run: mkdir tpay && mv vendor tpay/
       - run: zip -ur tpay-prestashop.zip tpay/
-      - run: zip -d tpay-prestashop.zip "tpay/_dev/*"
-      - run: zip -d tpay-prestashop.zip "tpay/.github/*"
-      - run: zip -d tpay-prestashop.zip "tpay/.php*"
-      - run: zip -d tpay-prestashop.zip "tpay/.gitignore"
+      - run: zip -d tpay-prestashop.zip "tpay/_dev/*" || true
+      - run: zip -d tpay-prestashop.zip "tpay/.github/*" || true
+      - run: zip -d tpay-prestashop.zip "tpay/.php*" || true
+      - run: zip -d tpay-prestashop.zip "tpay/.gitignore" || true
 
       - name: Build marketplace zip
         run: |
@@ -59,6 +59,7 @@ jobs:
 
       - uses: mshick/add-pr-comment@v2
         with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           message: |
             Tpay Prestashop plugin
             - Standalone: ${{ steps.upload-standalone.outputs.artifact-url }}
