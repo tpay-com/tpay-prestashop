@@ -44,7 +44,10 @@
         },
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "prepend-autoloader": false
+        "prepend-autoloader": false,
+        "platform": {
+            "php": "7.4"
+        }
     },
     "scripts": {
         "build:prod": "composer install -v --no-dev",
