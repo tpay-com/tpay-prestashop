@@ -198,12 +198,12 @@ function CardPayment(url, pubkey)
 
     function checkForm()
     {
-        const savedCards = document.querySelector('input[name=savedId]');
+        const savedCards = document.querySelectorAll('input[name=savedId]');
         let cardRedirectType = document.querySelector('input[name=redirect_type]');
         if (cardRedirectType.value === 'redirect'){
             return validateClause(termsOfServiceInput)
         }
-
+        const selectedSavedCard = [...savedCards].find(card => card.checked);
         let isValidForm = false;
         if (
 	        (
@@ -214,7 +214,7 @@ function CardPayment(url, pubkey)
 	        ) ||
 	        (
 		        validateClause(termsOfServiceInput) &&
-		        (savedCards && savedCards.checked === true)
+                selectedSavedCard
 	        )
         ) {
             isValidForm = true;
@@ -279,12 +279,14 @@ document.addEventListener("DOMContentLoaded", function (e) {
 function handleCardForm(newCardForm)
 {
     const savedCards = document.querySelectorAll('input[name=savedId]');
+    const separatorLine = document.querySelector('.separator-line');
 
     if (savedCards) {
         for (const card of savedCards) {
             card.addEventListener('click', (e) => {
                 newCardForm.classList.remove('tpay-fadeIn');
                 newCardForm.classList.add('tpay-fadeOut');
+                separatorLine.style.display = 'none';
             }, false)
         }
     }

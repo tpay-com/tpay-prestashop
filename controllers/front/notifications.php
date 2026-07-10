@@ -89,6 +89,36 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         exit;
     }
 
+    /**
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    public function addTestModeNoteToOrder(Order $order): void
+    {
+        $id_customer_thread = CustomerThread::getIdCustomerThreadByEmailAndIdOrder($order->getCustomer()->email, $order->id);
+        if (!$id_customer_thread) {
+            $customer_thread = new CustomerThread();
+            $customer_thread->id_contact = 0;
+            $customer_thread->id_customer = (int) $order->id_customer;
+            $customer_thread->id_shop = (int) $this->context->shop->id;
+            $customer_thread->id_order = (int) $order->id;
+            $customer_thread->id_lang = (int) $this->context->language->id;
+            $customer_thread->email = $order->getCustomer()->email;
+            $customer_thread->status = 'open';
+            $customer_thread->token = Tools::passwdGen(12);
+            $customer_thread->add();
+        } else {
+            $customer_thread = new CustomerThread((int) $id_customer_thread);
+        }
+
+        $customer_message = new CustomerMessage();
+        $customer_message->id_customer_thread = $customer_thread->id;
+        $customer_message->message = 'Odebrano potwierdzenie płatności Tpay w trybie testowym - środki nie zostały pobrane od klienta';
+        $customer_message->id_employee = 0;
+        $customer_message->private = 1;
+        $customer_message->add();
+    }
+
     private function handleNotification($notification): void
     {
         switch (true) {
@@ -128,6 +158,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
 
     private function handleBasicPayment($notification): void
     {
+        /** @var BasicPayment $notification */
         if ($notification->isTestNotification()) {
             PrestaShopLogger::addLog(
                 'Odebrano testowe powiadomienie: ' . print_r($notification->getNotificationAssociative(), true)
@@ -162,6 +193,22 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         }
 
         $order = new Order((int) $transaction['order_id']);
+
+        if (!$this->validateCurrency($order, $notification)) {
+            $notificationCurrency = $notification->tr_currency ? $notification->tr_currency->getValue() : null;
+
+            PrestaShopLogger::addLog(
+                sprintf(
+                    'Currency mismatch: order=%s, notification=%s',
+                    (new Currency((int) $order->id_currency))->iso_code,
+                    var_export($notificationCurrency, true)
+                ),
+                3
+            );
+
+            throw new TpayException('Order currency mismatch');
+        }
+
         if (!$this->validateAmount($order, $notification)) {
             PrestaShopLogger::addLog(
                 sprintf(
@@ -173,6 +220,21 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
             );
 
             throw new TpayException('Order amount mismatch');
+        }
+
+        if (1 === $notification->test_mode->getValue()) {
+            PrestaShopLogger::addLog(
+                sprintf(
+                    'Powiadomienie Tpay dla zamówienia w trybie testowym %s (%s)',
+                    $order->id,
+                    $notification->tr_id->getValue()
+                ),
+                1
+            );
+
+            $this->addTestModeNoteToOrder($order);
+
+            return;
         }
 
         $this->transactionStatusUpdate(
@@ -269,5 +331,25 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         $notificationAmount = number_format((float) $notification->tr_amount->getValue(), 2, '.', '');
 
         return $orderAmount === $notificationAmount;
+    }
+
+    private function validateCurrency(Order $order, BasicPayment $notification): bool
+    {
+        $value = null;
+
+        if (isset($notification->tr_currency) && $notification->tr_currency) {
+            $value = $notification->tr_currency->getValue();
+        }
+
+        if (!is_string($value) || '' === trim($value)) {
+            return true;
+        }
+
+        $notificationCurrency = strtoupper(trim($value));
+
+        $currency = new Currency((int) $order->id_currency);
+        $orderCurrency = $currency->iso_code;
+
+        return strtoupper(trim($orderCurrency)) === $notificationCurrency;
     }
 }
