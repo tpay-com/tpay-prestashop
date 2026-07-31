@@ -146,7 +146,7 @@ class Tpay extends PaymentModule
         $this->currencies = true;
         $this->currencies_mode = 'checkbox';
         $this->is_eu_compatible = 1;
-        $this->module_key = 'f2eb0ce26233d0b517ba41e81f2e62fe';
+        $this->module_key = 'f8ad0a8693d800e90299cac0878e550c';
         parent::__construct();
 
         $this->displayName = $this->trans('Tpay', [], 'Modules.Tpay.Admin');
