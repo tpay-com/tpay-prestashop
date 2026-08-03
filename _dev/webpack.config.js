@@ -30,6 +30,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 
 let config = {
 	// devtool: "source-map",
+	devtool: false,
 	target: ["web", "es5"],
 	entry: {
 		main: [
@@ -202,7 +203,7 @@ if (process.env.NODE_ENV === 'production') {
 	}
 }
 //
-config.mode = 'development';
-// config.mode = 'production';
+// config.mode = 'development';
+config.mode = 'production';
 
 module.exports = config;
