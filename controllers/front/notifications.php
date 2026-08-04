@@ -348,7 +348,7 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
     {
         $value = null;
 
-        if (isset($notification->tr_currency) && $notification->tr_currency) {
+        if (isset($notification->tr_currency)) {
             $value = $notification->tr_currency->getValue();
         }
 
