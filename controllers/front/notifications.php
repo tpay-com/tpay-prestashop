@@ -115,7 +115,12 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         $customer_message->id_customer_thread = $customer_thread->id;
         $customer_message->message = 'Odebrano potwierdzenie płatności Tpay w trybie testowym - środki nie zostały pobrane od klienta';
         $customer_message->id_employee = 0;
-        $customer_message->private = 1;
+        //backward compatibility
+        if (CustomerMessageCore::$definition['fields']['private']['type'] == ObjectModel::TYPE_INT) {
+            $customer_message->private = 1;
+        } else {
+            $customer_message->private = true;
+        }
         $customer_message->add();
     }
 
@@ -195,7 +200,11 @@ class TpayNotificationsModuleFrontController extends ModuleFrontController
         $order = new Order((int) $transaction['order_id']);
 
         if (!$this->validateCurrency($order, $notification)) {
-            $notificationCurrency = $notification->tr_currency ? $notification->tr_currency->getValue() : null;
+            $notificationCurrency = null;
+
+            if ($notification->tr_currency) {
+                $notificationCurrency = $notification->tr_currency->getValue();
+            }
 
             PrestaShopLogger::addLog(
                 sprintf(
