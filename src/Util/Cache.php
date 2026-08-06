@@ -76,7 +76,9 @@ final class Cache
                 continue;
             }
 
-            unlink($file);
+            if(!is_dir($file)) {
+                unlink($file);
+            }
         }
 
         return true;
