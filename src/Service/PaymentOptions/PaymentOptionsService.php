@@ -1,28 +1,39 @@
 <?php
-
 /**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
  *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 declare(strict_types=1);
 
 namespace Tpay\Service\PaymentOptions;
 
-use Configuration;
-use Context;
-use Exception;
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
-use PrestaShopException;
-use PrestaShopLogger;
-use Tpay;
 use Tpay\Config\Config;
 use Tpay\Factory\PaymentOptionsFactory;
 use Tpay\Service\ConstraintValidator;
@@ -37,28 +48,32 @@ class PaymentOptionsService
     private $transfers;
     private $bankChannels;
 
+    /** @var \Context */
+    private $context;
+
     /** @var ConstraintValidator */
     private $constraintValidator;
 
     /**
-     * @throws PrestaShopException
-     * @throws Exception
+     * @throws \PrestaShopException
+     * @throws \Exception
      */
-    public function __construct(Tpay $module)
+    public function __construct(\Tpay $module, \Context $context)
     {
         $this->module = $module;
+        $this->context = $context;
         $this->constraintValidator = new ConstraintValidator($module);
         $this->getGroup();
     }
 
-    /** @throws PrestaShopException */
+    /** @throws \PrestaShopException */
     public function getGroup(): void
     {
         try {
             $this->getPaymentGroups();
-        } catch (PrestaShopException $e) {
-            PrestaShopLogger::addLog('Error getGroup '.$e->getMessage(), 4);
-            throw new PrestaShopException($e->getMessage());
+        } catch (\PrestaShopException $e) {
+            \PrestaShopLogger::addLog('Error getGroup ' . $e->getMessage(), 4);
+            throw new \PrestaShopException($e->getMessage());
         }
     }
 
@@ -66,7 +81,7 @@ class PaymentOptionsService
     public function createTransferPaymentChannel(): void
     {
         $payment = [
-            'img' => Context::getContext()->shop->getBaseURL(true).'modules/tpay/views/img/tpay.svg',
+            'img' => $this->context->shop->getBaseURL(true) . 'modules/tpay/views/img/tpay.svg',
             'gateways' => $this->getGroupTransfers(),
             'id' => Config::GATEWAY_TRANSFER,
             'mainChannel' => Config::GATEWAY_TRANSFER,
@@ -83,7 +98,7 @@ class PaymentOptionsService
         $payments = array_filter(
             array_map(
                 function (array $paymentData) {
-                    $optionClass = PaymentOptionsFactory::getOptionById((int) $paymentData['mainChannel']);
+                    $optionClass = PaymentOptionsFactory::getOptionById((int) $paymentData['mainChannel'], $this->context);
 
                     if (is_object($optionClass)) {
                         $gateway = new PaymentType($optionClass);
@@ -135,7 +150,7 @@ class PaymentOptionsService
                 continue;
             }
 
-            $gateway = new PaymentType(new Generic());
+            $gateway = new PaymentType(new Generic($this->context));
             $result[] = $gateway->getPaymentOption($this->module, new PaymentOption(), $channel);
         }
 
@@ -147,7 +162,7 @@ class PaymentOptionsService
         $this->channels[] = $array;
     }
 
-    /** @throws Exception */
+    /** @throws \Exception */
     private function getSeparatePayments(array $channels): array
     {
         $paymentsMethods = [
@@ -172,13 +187,13 @@ class PaymentOptionsService
 
     private function hasActiveCard(): bool
     {
-        return Configuration::get('TPAY_CARD_ACTIVE') || !empty(Configuration::get('TPAY_CARD_RSA'));
+        return \Configuration::get('TPAY_CARD_ACTIVE') || !empty(\Configuration::get('TPAY_CARD_RSA'));
     }
 
     /**
      * Grouping of payments delivered from api
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function getPaymentGroups(): void
     {
@@ -247,7 +262,7 @@ class PaymentOptionsService
     /**
      * Downloading payment gateways to the online money transfer group
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function groupTransfer(array $channels, array $compareArray): array
     {
@@ -266,7 +281,7 @@ class PaymentOptionsService
     private function genericPayments(): array
     {
         $generics = Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS') ? json_decode(Helper::getMultistoreConfigurationValue('TPAY_GENERIC_PAYMENTS')) : [];
-        $channels = unserialize(Cache::get('channels', 'N;'));
+        $channels = json_decode(Cache::get('channels', 'null'), true);
 
         if (null === $channels) {
             $channels = array_filter(
@@ -279,7 +294,7 @@ class PaymentOptionsService
                 $channels[$channel['id']] = $channel;
             }
 
-            Cache::set('channels', serialize($channels));
+            Cache::set('channels', json_encode($channels));
         }
 
         return array_filter(
@@ -294,7 +309,7 @@ class PaymentOptionsService
                         return;
                     }
 
-                    $gateway = new PaymentType(new Generic());
+                    $gateway = new PaymentType(new Generic($this->context));
 
                     return $gateway->getPaymentOption($this->module, new PaymentOption(), $channel);
                 },

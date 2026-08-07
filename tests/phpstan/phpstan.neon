@@ -1,0 +1,14 @@
+includes:
+  - %currentWorkingDirectory%/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
+    
+parameters:
+  paths:
+    - ../../src
+    - ../../tpay.php
+
+  excludePaths:
+    - ../../src/Util/Logger/PsrLoggerV3.php
+
+  reportUnmatchedIgnoredErrors: false
+  level: 5
+  treatPhpDocTypesAsCertain: false

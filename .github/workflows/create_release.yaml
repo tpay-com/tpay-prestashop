@@ -30,12 +30,24 @@ jobs:
           extensions: none, curl, dom, mbstring, simplexml, tokenizer, xml, xmlwriter, json, fileinfo
           coverage: none
 
-      - run: composer install --no-dev
+      - run: composer install --no-dev -o
 
       - run: git archive --output=tpay-prestashop.zip HEAD --prefix=tpay/
 
       - run: mkdir tpay && mv vendor tpay/
       - run: zip -ur tpay-prestashop.zip tpay/
+      - run: zip -d tpay-prestashop.zip "tpay/_dev/*"
+      - run: zip -d tpay-prestashop.zip "tpay/.github/*"
+      - run: zip -d tpay-prestashop.zip "tpay/.php*"
+      - run: zip -d tpay-prestashop.zip "tpay/.gitignore"
+
+      - name: Build marketplace zip
+        run: |
+          cp tpay-prestashop.zip tpay-prestashop-marketplace.zip
+          mkdir -p marketplace_patch/tpay
+          unzip -j tpay-prestashop.zip "tpay/tpay.php" -d marketplace_patch/tpay/
+          sed -i "s/define('_TPAY_MARKETPLACE_RELEASE', false)/define('_TPAY_MARKETPLACE_RELEASE', true)/" marketplace_patch/tpay/tpay.php
+          cd marketplace_patch && zip -u ../tpay-prestashop-marketplace.zip tpay/tpay.php
 
       - name: Create Github release
         uses: ncipollo/release-action@v1
@@ -43,4 +55,4 @@ jobs:
           tag: ${{ github.event.inputs.version }}
           name: "v${{ github.event.inputs.version }}"
           generateReleaseNotes: true
-          artifacts: tpay-prestashop.zip
+          artifacts: "tpay-prestashop.zip,tpay-prestashop-marketplace.zip"

@@ -1,3 +1,28 @@
+{**
+* @author Krajowy Integrator Płatności S.A.
+* @copyright Krajowy Integrator Płatności S.A.
+* @license MIT
+* 
+* Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+* 
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*}
 {if $blikUrl}
     <link rel="stylesheet" href="{$assets_path|escape:'htmlall':'UTF-8'}views/css/payment.css">
     <div class="payment-section">
@@ -49,10 +74,10 @@
                         </p>
                         <p class="info-text">
                             {l s="Paying, you accept the" d='Modules.Tpay.Shop'} <a
-                                    href="{$regulationUrl}"
+                                    href="{$regulationUrl|escape:'html':'UTF-8'}"
                                     target="_blank">{l s="terms and conditions." d='Modules.Tpay.Shop'}</a> {l s="The administrator of the personal data is Krajowy Integrator Płatności spółka akcyjna, based in Poznań." d='Modules.Tpay.Shop'}
                             <a
-                                    href="{$clauseUrl}"
+                                    href="{$clauseUrl|escape:'html':'UTF-8'}"
                                     target="_blank">{l s="Read the full content." d='Modules.Tpay.Shop'}</a>
                         </p>
                     </div>
@@ -120,9 +145,9 @@
             const paymentButton = document.getElementById('payment-button');
             const blikCodeInput = document.getElementById('blik-code');
             const paymentsInputs = document.getElementsByName('payment');
-            const action = '{$action}';
+            const action = '{$action|escape:'javascript':'UTF-8'}';
 
-            let currentTransactionId = "{$transactionId}";
+            let currentTransactionId = "{$transactionId|escape:'javascript':'UTF-8'}";
 
             if (parseInt(parseInt(localStorage.getItem('tpay_transaction_counter'))) === 3) {
                 document.querySelector('.payment-section').style.display = 'block';
@@ -152,12 +177,12 @@
             function checkOrder() {
                 let paymentData = {
                     action: 'blik0Status',
-                    cartId: "{$cartId}",
+                    cartId: "{$cartId|escape:'javascript':'UTF-8'}",
                     transactionId: currentTransactionId
                 };
                 const data = (new URLSearchParams(paymentData)).toString();
 
-                fetch("{$blikUrl nofilter}", {
+                fetch("{$blikUrl|escape:'javascript':'UTF-8'}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -244,7 +269,7 @@
             function pay() {
                 let paymentData = {
                     action: 'blik0Status',
-                    cartId: "{$cartId}",
+                    cartId: "{$cartId|escape:'javascript':'UTF-8'}",
                     transactionId: currentTransactionId
                 };
 
@@ -270,7 +295,7 @@
                 const data = (new URLSearchParams(paymentData)).toString();
                 localStorage.setItem('tpay_transaction_counter', parseInt(localStorage.getItem('tpay_transaction_counter')) + 1);
 
-                fetch("{$blikUrl nofilter}", {
+                fetch("{$blikUrl|escape:'javascript':'UTF-8'}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -324,11 +349,11 @@
             function payTransfer(paymentData) {
                 setFormState(true);
                 paymentData.action = 'payByTransfer';
-                paymentData.orderIdForTransfer = "{$orderId}";
+                paymentData.orderIdForTransfer = "{$orderId|escape:'javascript':'UTF-8'}";
 
                 const data = (new URLSearchParams(paymentData)).toString();
 
-                fetch("{$blikUrl nofilter}", {
+                fetch("{$blikUrl|escape:'javascript':'UTF-8'}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',

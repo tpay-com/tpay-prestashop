@@ -1,5 +1,29 @@
 <?php
-
+/**
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
+ *
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -68,7 +92,7 @@ class TpayConfigurationController extends ModuleAdminController
             $content .= $this->getWarningMultishopHtml();
         } else {
             $content .= $this->displayForm();
-            $content .= $this->context->smarty->fetch('module:tpay/views/templates/_admin/configuration.tpl');
+            $content .= $this->context->smarty->fetch('module:tpay/views/templates/admin/configuration.tpl');
         }
 
         $this->context->smarty->assign(['content' => $content]);
@@ -146,7 +170,7 @@ class TpayConfigurationController extends ModuleAdminController
 
     public function postProcess()
     {
-        if (Tools::isSubmit('submit'.$this->module->name)) {
+        if (Tools::isSubmit('submit' . $this->module->name)) {
             try {
                 if (!$this->validatePostProcess()) {
                     return false;
@@ -154,7 +178,7 @@ class TpayConfigurationController extends ModuleAdminController
 
                 $output = '';
 
-                $settings = new ConfigurationSaveForm(new ConfigurationAdapter(0));
+                $settings = new ConfigurationSaveForm(new ConfigurationAdapter(0), $this->context->shop);
                 $settings->execute(true);
                 $authorization = $this->module->authorization();
 
@@ -205,7 +229,7 @@ class TpayConfigurationController extends ModuleAdminController
         $helper->title = $this->module->displayName;
         $helper->show_toolbar = true;
         $helper->toolbar_scroll = true;
-        $helper->submit_action = 'submit'.$this->module->name;
+        $helper->submit_action = 'submit' . $this->module->name;
 
         return $helper->generateForm($fields_form);
     }
@@ -214,12 +238,12 @@ class TpayConfigurationController extends ModuleAdminController
     {
         if (Shop::CONTEXT_GROUP == Shop::getContext()) {
             return '<p class="alert alert-warning">'
-                .$this->trans(
+                . $this->trans(
                     'You cannot manage from a "Group Shop" context, select directly the shop you want to edit',
                     [],
                     'Modules.Tpay.Admin'
                 )
-                .'</p>';
+                . '</p>';
         }
 
         return '';

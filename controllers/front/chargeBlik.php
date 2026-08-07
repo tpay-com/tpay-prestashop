@@ -1,8 +1,35 @@
 <?php
+/**
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
+ *
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 use Configuration as Cfg;
 use Tpay\CustomerData;
 use Tpay\Handler\BasicPaymentHandler;
+use Tpay\Repository\BlikRepository;
+use Tpay\Repository\TransactionsRepository;
 use Tpay\Service\SurchargeService;
 use Tpay\Service\TransactionService;
 use Tpay\Util\Helper;
@@ -11,6 +38,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+/**
+ * @property Tpay $module
+ */
 class TpayChargeBlikModuleFrontController extends ModuleFrontController
 {
     public const TYPE = 'blik';
@@ -106,6 +136,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $transaction = $this->createBlikZero($transactionParams, $blikCode, $customer->isGuest() ? null : $cart);
         $transactionId = $transaction['transactionId'];
 
+        /** @var TransactionsRepository $transactionRepository */
         $transactionRepository = $this->module->getService('tpay.repository.transaction');
         $transactionExists = $transactionRepository->getTransactionByTransactionId($transactionId);
 
@@ -148,6 +179,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         $transactionId = $transaction['transactionId'];
 
         $this->cancelTransaction($oldTransactionId);
+        /** @var TransactionsRepository $transactionRepository */
         $transactionRepository = $this->module->getService('tpay.repository.transaction');
         $transactionExists = $transactionRepository->getTransactionByTransactionId($oldTransactionId);
 
@@ -254,7 +286,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             null,
             [],
             (int) $this->context->currency->id,
-            $customer->isGuest() ? 0 : 1,
+            !$customer->isGuest(),
             $customer->secure_key
         );
     }
@@ -264,7 +296,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
      */
     private function getOrderTotal($cart): float
     {
-        $surcharge = new SurchargeService();
+        $surcharge = new SurchargeService($this->context->cart);
         $orderTotal = $cart->getOrderTotal();
         $surchargeTotal = $surcharge->getSurchargeValue($orderTotal);
 
@@ -290,13 +322,13 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
     private function getBlikAlias($cart, $blikCode = '')
     {
         // Use new blik token
-        $userAlias = 'user_'.$cart->id_customer.'_'.Helper::generateRandomString(5);
+        $userAlias = 'user_' . $cart->id_customer . '_' . Helper::generateRandomString(5);
 
         // Use alias
         if (empty($blikCode)) {
-            $userAlias = $this->module->getService('tpay.repository.blik')->getBlikAliasIdByUserId(
-                $cart->id_customer
-            );
+            /** @var BlikRepository $blikRepository */
+            $blikRepository = $this->module->getService('tpay.repository.blik');
+            $userAlias = $blikRepository->getBlikAliasIdByUserId($cart->id_customer);
         }
 
         return $userAlias;
@@ -352,7 +384,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             );
         }
 
-        if (empty($transactionParams['payer']['email']) || !$transactionParams['payer']['email']) {
+        if (empty($transactionParams['payer']['email'])) {
             $transactionParams['payer']['email'] = $customer->email;
         }
 
@@ -369,6 +401,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
         }
 
         $this->cancelTransaction($oldTransactionId);
+        /** @var TransactionsRepository $transactionRepository */
         $transactionRepository = $this->module->getService('tpay.repository.transaction');
         $transactionExists = $transactionRepository->getTransactionByTransactionId($oldTransactionId);
 
@@ -397,7 +430,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
             foreach ($result['payments']['attempts'] as $error) {
                 if ('' != $error['paymentErrorCode']) {
-                    $errors++;
+                    ++$errors;
                 }
             }
 
@@ -415,7 +448,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
             }
 
             sleep(1);
-            $i++;
+            ++$i;
         } while (!$stop);
 
         return $result;

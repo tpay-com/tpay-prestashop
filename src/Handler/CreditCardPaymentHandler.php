@@ -1,50 +1,67 @@
 <?php
-
 /**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
  *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 declare(strict_types=1);
 
 namespace Tpay\Handler;
 
-use Context;
-use Customer;
-use Exception;
-use Order;
-use PrestaShopLogger;
-use Tools;
-use Tpay;
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Tpay\Config\Config;
 use Tpay\Exception\PaymentException;
 use Tpay\Exception\TransactionException;
+use Tpay\Repository\CreditCardsRepository;
+use Tpay\Service\CardService;
+use Tpay\Service\TransactionService;
+use Tpay\Util\SecretHash;
 
 class CreditCardPaymentHandler implements PaymentMethodHandler
 {
     public const TYPE = 'cards';
 
+    /** @var CreditCardsRepository */
     private $cardRepository;
+
+    /** @var CardService */
     private $cardService;
     private $clientData;
 
-    /** @var Tpay */
+    /** @var \Tpay */
     private $module;
 
-    /** @var Order */
+    /** @var \Order */
     private $order;
 
-    /** @var Customer */
+    /** @var \Customer */
     private $customer;
 
-    /** @var Context */
+    /** @var \Context */
     private $context;
 
     public function getName(): string
@@ -56,14 +73,8 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
      * @throws TransactionException
      * @throws PaymentException
      */
-    public function createPayment(
-        Tpay $module,
-        Order $order,
-        Customer $customer,
-        Context $context,
-        array $clientData,
-        array $data
-    ) {
+    public function createPayment(\Tpay $module, \Order $order, \Customer $customer, \Context $context, array $clientData, array $data)
+    {
         $this->module = $module;
         $this->order = $order;
         $this->customer = $customer;
@@ -71,8 +82,12 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         $this->context = $context;
 
         $savedId = $data['savedId'] ?? null;
-        $this->cardRepository = $module->getService('tpay.repository.credit_card');
-        $this->cardService = $module->getService('tpay.service.card_service');
+        /** @var CreditCardsRepository $cardRepository */
+        $cardRepository = $module->getService('tpay.repository.credit_card');
+        $this->cardRepository = $cardRepository;
+        /** @var CardService $cardService */
+        $cardService = $module->getService('tpay.service.card_service');
+        $this->cardService = $cardService;
         $this->updateLang($data);
 
         if ($savedId) {
@@ -85,11 +100,12 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     /**
      * Process of saving the transaction
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function initTransactionProcess($transaction, $orderId): void
     {
         if (isset($transaction['transactionId'])) {
+            /** @var TransactionService $transactionService */
             $transactionService = $this->module->getService('tpay.service.transaction');
             $transactionService->transactionProcess(
                 $transaction,
@@ -116,8 +132,8 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         $savedCard = $this->cardService->transactionSavedCard($savedCardId, $this->customer->id);
 
         if (empty($savedCard)) {
-            PrestaShopLogger::addLog('Unauthorized payment try (empty token)', 3);
-            Tools::redirect($transaction['transactionPaymentUrl']);
+            \PrestaShopLogger::addLog('Unauthorized payment try (empty token)', 3);
+            \Tools::redirect($transaction['transactionPaymentUrl']);
         }
 
         $this->payBySavedCard($savedCard, $transaction);
@@ -127,7 +143,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
      * Create new card
      *
      * @throws PaymentException|TransactionException
-     * @throws Exception
+     * @throws \Exception
      */
     private function processPaymentNewCard(): void
     {
@@ -138,11 +154,11 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
             $response = $this->makeCardPayment($transaction);
 
             if ('failure' === $response['result']) {
-                Tools::redirect($response['transactionPaymentUrl']);
+                \Tools::redirect($response['transactionPaymentUrl']);
             }
 
             if (isset($response['status']) && 'correct' === $response['status']) {
-                Tools::redirect(
+                \Tools::redirect(
                     $this->context->link->getModuleLink(
                         'tpay',
                         'confirmation',
@@ -157,11 +173,11 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
             if (isset($response['transactionPaymentUrl'])) {
                 $this->initTransactionProcess($transaction, $this->order->id);
 
-                Tools::redirect($response['transactionPaymentUrl']);
+                \Tools::redirect($response['transactionPaymentUrl']);
             }
         }
-        PrestaShopLogger::addLog('Unable to create new card payment. Response: '.json_encode($transaction), 3);
-        Tools::redirect(
+        \PrestaShopLogger::addLog('Unable to create new card payment. Response: ' . json_encode($transaction), 3);
+        \Tools::redirect(
             $this->context->link->getModuleLink(
                 'tpay',
                 'ordererror'
@@ -185,6 +201,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
         );
 
         if (isset($result['result'], $result['status']) && 'correct' === $result['status']) {
+            /** @var TransactionService $transactionService */
             $transactionService = $this->module->getService('tpay.service.transaction');
             $transactionService->transactionProcess(
                 $transaction,
@@ -193,7 +210,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
                 false
             );
 
-            Tools::redirect(
+            \Tools::redirect(
                 $this->context->link->getModuleLink(
                     'tpay',
                     'confirmation',
@@ -205,7 +222,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
             );
         }
 
-        Tools::redirect($transaction['transactionPaymentUrl']);
+        \Tools::redirect($transaction['transactionPaymentUrl']);
     }
 
     /**
@@ -230,15 +247,17 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     private function makeCardPayment($transaction)
     {
         $cardDataInput = filter_input(INPUT_POST, 'carddata', FILTER_SANITIZE_STRING);
         $cardHashInput = filter_input(INPUT_POST, 'card_hash', FILTER_SANITIZE_STRING);
-        $cartHash = $this->module->getService('tpay.util.secret_hash')->getValue();
+        /** @var SecretHash $secretHash */
+        $secretHash = $this->module->getService('tpay.util.secret_hash');
+        $cartHash = $secretHash->getValue();
 
-        $cardHash = sha1($cardHashInput.$cartHash);
+        $cardHash = sha1($cardHashInput . $cartHash);
         $saveCard = false;
 
         if (isset($_POST['card_save'])) {

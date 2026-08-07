@@ -1,23 +1,39 @@
 <?php
-
 /**
- * NOTICE OF LICENSE
- * This file is licenced under the Software License Agreement.
- * With the purchase or the installation of the software in your application
- * you accept the licence agreement.
- * You must not modify, adapt or create derivative works of this source code
+ * @author Krajowy Integrator Płatności S.A.
+ * @copyright Krajowy Integrator Płatności S.A.
+ * @license MIT
  *
- * @author    Tpay
- * @copyright 2010-2022 tpay.com
- * @license   LICENSE.txt
+ * Copyright (c) 2026 Krajowy Integrator Płatności S.A.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 declare(strict_types=1);
 
 namespace Tpay\Hook;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Configuration as Cfg;
-use Media;
 use Tpay\Config\Config;
 
 class Design extends AbstractHook
@@ -31,10 +47,10 @@ class Design extends AbstractHook
     /** Module header register scripts and styles. */
     public function displayHeader(): void
     {
-        $this->context->controller->addCSS($this->module->getPath().'views/css/main.css');
-        $this->context->controller->addJS($this->module->getPath().'views/js/main.min.js');
+        $this->context->controller->addCSS($this->module->getPath() . 'views/css/main.css');
+        $this->context->controller->addJS($this->module->getPath() . 'views/js/main.min.js');
         if (Cfg::get('TPAY_AUTO_CANCEL_ACTIVE') && Cfg::get('TPAY_AUTO_CANCEL_FRONTEND_RUN')) {
-            $this->context->controller->addJS($this->module->getPath().'cron.php', false);
+            $this->context->controller->addJS($this->module->getPath() . 'cron.php', false);
         }
 
         $ajax = $this->context->link->getModuleLink('tpay', 'ajax', [], true);
@@ -49,7 +65,7 @@ class Design extends AbstractHook
             ]
         );
         $translator = $this->module->getTranslator();
-        Media::addJsDef(
+        \Media::addJsDef(
             [
                 'messages' => [
                     'payment_error' => $translator->trans('Payment error', [], 'Modules.Tpay.Shop'),
@@ -108,7 +124,7 @@ class Design extends AbstractHook
         );
 
         if (Cfg::get('TPAY_CARD_ACTIVE') && Cfg::get('TPAY_CARD_RSA')) {
-            Media::addJsDef(
+            \Media::addJsDef(
                 [
                     'redirect_path' => $this->context->link->getModuleLink(
                         'tpay',
@@ -120,15 +136,15 @@ class Design extends AbstractHook
                 ]
             );
 
-            $this->context->controller->addJS($this->module->getPath().'views/js/jquery.formance.min.js');
-            $this->context->controller->addJS($this->module->getPath().'views/js/jsencrypt.min.js');
-            $this->context->controller->addJS($this->module->getPath().'views/js/string_routines.js');
-            $this->context->controller->addJS($this->module->getPath().'views/js/jquery.payment.js');
-            $this->context->controller->addJS($this->module->getPath().'views/js/cardPayment.js');
+            $this->context->controller->addJS($this->module->getPath() . 'views/js/jquery.formance.min.js');
+            $this->context->controller->addJS($this->module->getPath() . 'views/js/jsencrypt.min.js');
+            $this->context->controller->addJS($this->module->getPath() . 'views/js/string_routines.js');
+            $this->context->controller->addJS($this->module->getPath() . 'views/js/jquery.payment.js');
+            $this->context->controller->addJS($this->module->getPath() . 'views/js/cardPayment.js');
         }
 
         if (Cfg::get('TPAY_BLIK_ACTIVE') && Cfg::get('TPAY_BLIK_WIDGET')) {
-            $this->context->controller->addJS($this->module->getPath().'views/js/blikPayment.js');
+            $this->context->controller->addJS($this->module->getPath() . 'views/js/blikPayment.js');
         }
     }
 
