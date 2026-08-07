@@ -65,7 +65,7 @@ class ErrorState implements StateType
             $name[$lang['id_lang']] = $this->stateLanguage[$lang['iso_code']]
                 ?? $this->stateLanguage['pl'];
         }
-        if (version_compare(_PS_VERSION_, '1.7.8.0', '<')) {
+        if (version_compare(_PS_VERSION_, '1.7.7.0', '<')) {
             $name = reset($name);
         }
 
