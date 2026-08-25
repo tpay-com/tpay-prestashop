@@ -135,7 +135,7 @@ class Tpay extends PaymentModule
     {
         $this->name = 'tpay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.15.0';
+        $this->version = '1.15.1';
         $this->author = 'Krajowy Integrator Płatności S.A.';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
@@ -146,7 +146,7 @@ class Tpay extends PaymentModule
         $this->currencies = true;
         $this->currencies_mode = 'checkbox';
         $this->is_eu_compatible = 1;
-        $this->module_key = 'f8ad0a8693d800e90299cac0878e550c';
+        $this->module_key = 'f2eb0ce26233d0b517ba41e81f2e62fe';
         parent::__construct();
 
         $this->displayName = $this->trans('Tpay', [], 'Modules.Tpay.Admin');
