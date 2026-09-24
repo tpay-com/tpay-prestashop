@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- Payment channels list is cached for an hour (per environment and merchant account) instead of being fetched from the API on every render of the payment options; saving the module settings clears the cache
+- When the channels request fails (rate limit, outage) the last known list (up to 24 h) is used, so the payment options stay in the checkout
+
 ## [1.15.1]
 
 ### Fixed

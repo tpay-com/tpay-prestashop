@@ -31,6 +31,7 @@ if (!defined('_PS_VERSION_')) {
 use Configuration as Cfg;
 use Tpay\Adapter\ConfigurationAdapter;
 use Tpay\Install\ConfigurationSaveForm;
+use Tpay\Service\PaymentOptions\PaymentOptionsService;
 use Tpay\Util\AdminFormBuilder;
 use Tpay\Util\Helper;
 
@@ -189,6 +190,8 @@ class TpayConfigurationController extends ModuleAdminController
                 }
 
                 Tools::clearSmartyCache();
+
+                PaymentOptionsService::clearChannelsCache();
 
                 if ($this->errors) {
                     echo $output;
