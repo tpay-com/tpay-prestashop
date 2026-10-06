@@ -38,10 +38,14 @@ use Tpay\Config\Config;
 
 class SurchargeService
 {
-    /** @var \Cart */
+    /** @var \Cart|null */
     private $cart;
 
-    public function __construct(\Cart $cart)
+    /**
+     * Cart may be null in contexts without a cart (e.g. back office), where only
+     * order-based methods are used.
+     */
+    public function __construct(?\Cart $cart = null)
     {
         $this->cart = $cart;
     }
@@ -58,7 +62,7 @@ class SurchargeService
         }
 
         if (!$orderTotal) {
-            $orderTotal = (float) $this->cart->getOrderTotal(true, \Cart::BOTH);
+            $orderTotal = (float) $this->getCart()->getOrderTotal(true, \Cart::BOTH);
         }
 
         $surchargeValue = $this->parseSurchargeValue();
@@ -76,7 +80,7 @@ class SurchargeService
     /** @throws \Exception */
     public function getTotalOrderAndSurchargeCost(): float
     {
-        $orderTotal = (float) $this->cart->getOrderTotal(true, \Cart::BOTH);
+        $orderTotal = (float) $this->getCart()->getOrderTotal(true, \Cart::BOTH);
         $surcharge = $this->getSurchargeValue($orderTotal);
 
         return (float) ($orderTotal + $surcharge);
@@ -99,6 +103,20 @@ class SurchargeService
     public function hasOrderSurcharge($repository, $orderId): bool
     {
         return (bool) $repository->getSurchargeValueByOrderId($orderId);
+    }
+
+    /** @throws \Exception */
+    private function getCart(): \Cart
+    {
+        if (!$this->cart instanceof \Cart) {
+            $this->cart = \Context::getContext()->cart;
+        }
+
+        if (!$this->cart instanceof \Cart) {
+            throw new \Exception('Cart is not available in the current context');
+        }
+
+        return $this->cart;
     }
 
     private function parseSurchargeValue(): float
