@@ -2,6 +2,10 @@ includes:
   - %currentWorkingDirectory%/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
     
 parameters:
+  # Match the CI analyzer runtime so PHP 8 native types in PrestaShop dependencies
+  # are not parsed using Composer's PHP 7.4 platform setting.
+  phpVersion: 80200
+
   paths:
     - ../../src
     - ../../tpay.php

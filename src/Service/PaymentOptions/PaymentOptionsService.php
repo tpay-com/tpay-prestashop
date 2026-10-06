@@ -81,6 +81,8 @@ class PaymentOptionsService
     public function createTransferPaymentChannel(): void
     {
         $payment = [
+            // PrestaShop 1.7 incorrectly documents this boolean flag as a string.
+            // @phpstan-ignore argument.type
             'img' => $this->context->shop->getBaseURL(true) . 'modules/tpay/views/img/tpay.svg',
             'gateways' => $this->getGroupTransfers(),
             'id' => Config::GATEWAY_TRANSFER,
