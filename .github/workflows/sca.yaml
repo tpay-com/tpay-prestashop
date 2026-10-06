@@ -54,27 +54,21 @@ jobs:
       matrix:
         include:
           - presta-version: '1.7.7.8'
-            phpstan-config: tests/phpstan/phpstan.neon
             experimental: true
 
           - presta-version: '1.7.8.11'
-            phpstan-config: tests/phpstan/phpstan.neon
             experimental: true
 
           - presta-version: '8.1.7'
-            phpstan-config: tests/phpstan/phpstan.neon
             experimental: false
 
           - presta-version: '8.2.6'
-            phpstan-config: tests/phpstan/phpstan.neon
             experimental: false
 
           - presta-version: '9.0.3'
-            phpstan-config: tests/phpstan/phpstan-php8.neon
             experimental: true
 
           - presta-version: '9.1.3'
-            phpstan-config: tests/phpstan/phpstan-php8.neon
             experimental: true
     steps:
       - name: Checkout
@@ -103,4 +97,4 @@ jobs:
       # Run a container for PHPStan, having access to the module content and PrestaShop sources.
       # This tool is outside the composer.json because of the compatibility with PHP 5.6
       - name : Run PHPStan (Tag ${{ matrix.presta-version }})
-        run: docker run --rm --volumes-from temp-ps -v $PWD:/web/module -e _PS_ROOT_DIR_=/var/www/html --workdir=/web/module ghcr.io/devgine/composer-php:v2-php8.2-alpine php vendor/bin/phpstan analyse --configuration=${{ matrix.phpstan-config }} --memory-limit=1G
+        run: docker run --rm --volumes-from temp-ps -v $PWD:/web/module -e _PS_ROOT_DIR_=/var/www/html --workdir=/web/module ghcr.io/devgine/composer-php:v2-php8.2-alpine php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit=1G

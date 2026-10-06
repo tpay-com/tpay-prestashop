@@ -2,6 +2,9 @@ includes:
   - %currentWorkingDirectory%/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
     
 parameters:
+  # Recognize native PHP 8 types in modern PrestaShop dependencies.
+  phpVersion: 80200
+
   stubFiles:
     - stubs/OrderState.stub
 
@@ -11,6 +14,11 @@ parameters:
 
   excludePaths:
     - ../../src/Util/Logger/PsrLoggerV3.php
+
+  ignoreErrors:
+    # PrestaShop 1.7's Symfony kernel uses the legacy Serializable interface.
+    - identifier: class.serializable
+      path: ../../src/Util/LegacyAppKernel.php
 
   reportUnmatchedIgnoredErrors: false
   level: 5
