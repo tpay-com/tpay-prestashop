@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   build of the module. The MBO dependency check now only runs while an admin controller is
   handling the request, and no longer crashes the whole shop if the Symfony router can't be
   built.
+- Prevent automatic transaction cancellation from breaking checkout when frontend execution is enabled.
 
 ## [1.15.1]
 
