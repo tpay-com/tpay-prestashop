@@ -45,7 +45,7 @@ class PaymentOptionsService
 {
     /** Channels list cache */
     private const CHANNELS_CACHE_KEY = 'channels_list';
-    private const CHANNELS_CACHE_TTL = 3600;
+    private const CHANNELS_CACHE_TTL = 900;
     private const CHANNELS_STALE_TTL = 86400;
 
     private $module;
