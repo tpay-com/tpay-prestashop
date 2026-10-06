@@ -408,6 +408,9 @@ class Tpay extends PaymentModule
         $transactionRepository = $this->getService('tpay.repository.transaction');
         $transaction = $transactionRepository->getTransactionByOrderId($params['order']->id);
 
+        if ($transaction && $this->isCardPayment($transaction)) {
+            return '';
+        }
         if ($transaction && 'pending' == $transaction['status'] && $this->isBlikPayment($transaction)) {
             $moduleLink = $this->getContext()->link->getModuleLink('tpay', 'chargeBlik', [], true);
 
@@ -474,6 +477,11 @@ class Tpay extends PaymentModule
     private function isTransferOrCardPayment($transaction): bool
     {
         return 'transfer' === $transaction['payment_type'] || 'cards' === $transaction['payment_type'];
+    }
+
+    private function isCardPayment($transaction): bool
+    {
+        return 'cards' === $transaction['payment_type'];
     }
 
     /** Module call API. */
