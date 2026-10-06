@@ -153,32 +153,6 @@ class Tpay extends PaymentModule
         $this->description = $this->trans('Accepting online payments', [], 'Modules.Tpay.Admin');
         $this->confirmUninstall = $this->trans('Delete this module?', [], 'Modules.Tpay.Admin');
         $this->hookDispatcher = new HookDispatcher($this);
-
-        // @phpstan-ignore-next-line
-        if (_TPAY_MARKETPLACE_RELEASE && $this->context->controller instanceof AdminController) {
-            // DependencyBuilder relies on the Symfony admin router/kernel (see
-            // module-lib-mbo-installer::buildRouter()), which is only guaranteed to be
-            // available while an admin controller is handling the request. Running this on
-            // every module instantiation (e.g. on front-office pages via hooks like
-            // displayHeader, or in cron/CLI contexts) throws an uncaught "Unable to retrieve
-            // Symfony AppKernel" exception and takes down the whole storefront. Restrict the
-            // check to admin context and fail safe if the router still can't be built.
-            try {
-                $mboInstaller = new DependencyBuilder($this);
-                if (!$mboInstaller->areDependenciesMet()) {
-                    $dependencies = $mboInstaller->handleDependencies();
-                    $this->smarty->assign('dependencies', $dependencies);
-                    exit($this->fetch('module:tpay/views/templates/admin/dependency_builder.tpl'));
-                }
-            } catch (Exception $e) {
-                PrestaShopLogger::addLog(
-                    'Tpay: unable to check MBO dependencies (' . $e->getMessage() . ')',
-                    3,
-                    null,
-                    'Tpay'
-                );
-            }
-        }
     }
 
     /** Boot API when it's needed */
