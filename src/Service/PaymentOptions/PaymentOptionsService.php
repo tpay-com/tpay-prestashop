@@ -43,6 +43,11 @@ use Tpay\Util\Helper;
 
 class PaymentOptionsService
 {
+    /** Channels list cache */
+    private const CHANNELS_CACHE_KEY = 'channels_list';
+    private const CHANNELS_CACHE_TTL = 3600;
+    private const CHANNELS_STALE_TTL = 86400;
+
     private $module;
     private $channels;
     private $transfers;
@@ -199,7 +204,7 @@ class PaymentOptionsService
      */
     private function getPaymentGroups(): void
     {
-        $channels = $this->module->api->transactions()->getChannels()['channels'] ?? [];
+        $channels = $this->getChannelsList();
         $this->bankChannels = $channels;
 
         if (!empty($channels)) {
@@ -208,6 +213,77 @@ class PaymentOptionsService
             $this->channels = $this->groupChannel($channels, $separatePayments);
             $this->updateTransfers($this->groupTransfer($channels, $separatePayments));
         }
+    }
+
+    /**
+     * Channels list from the API, cached for CHANNELS_CACHE_TTL seconds
+     *
+     * @throws \Throwable when the API fails and no cached list exists
+     */
+    private function getChannelsList(): array
+    {
+        $cacheKey = self::getChannelsCacheKey();
+        $cached = Cache::get($cacheKey);
+
+        if (is_string($cached)) {
+            $decoded = json_decode($cached, true);
+
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+
+        try {
+            $channels = $this->module->api->transactions()->getChannels()['channels'] ?? [];
+        } catch (\Throwable $exception) {
+            $stale = Cache::get($cacheKey . '_stale');
+            $decoded = is_string($stale) ? json_decode($stale, true) : null;
+
+            if (is_array($decoded)) {
+                \PrestaShopLogger::addLog(
+                    sprintf('Tpay: channels request failed (%s), using the last cached list', $exception->getMessage()),
+                    2
+                );
+
+                return $decoded;
+            }
+
+            throw $exception;
+        }
+
+        if (!empty($channels)) {
+            $encoded = json_encode($channels);
+            Cache::set($cacheKey, $encoded, self::CHANNELS_CACHE_TTL);
+            Cache::set($cacheKey . '_stale', $encoded, self::CHANNELS_STALE_TTL);
+        }
+
+        return $channels;
+    }
+
+    /** One entry per environment and merchant account */
+    private static function getChannelsCacheKey(?bool $sandbox = null): string
+    {
+        if (null === $sandbox) {
+            $sandbox = (bool) Helper::getMultistoreConfigurationValue('TPAY_SANDBOX');
+        }
+
+        return sprintf(
+            '%s_%s_%s',
+            self::CHANNELS_CACHE_KEY,
+            $sandbox ? 'sandbox' : 'production',
+            md5((string) Helper::getMultistoreConfigurationValue('TPAY_CLIENT_ID'))
+        );
+    }
+
+    public static function clearChannelsCache(): void
+    {
+        foreach ([true, false] as $sandbox) {
+            $key = self::getChannelsCacheKey($sandbox);
+            Cache::delete($key);
+            Cache::delete($key . '_stale');
+        }
+
+        Cache::delete('channels');
     }
 
     private function updateTransfers(array $transfers): void
