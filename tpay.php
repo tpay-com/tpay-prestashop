@@ -135,7 +135,7 @@ class Tpay extends PaymentModule
     {
         $this->name = 'tpay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.15.1';
+        $this->version = '1.15.2';
         $this->author = 'Krajowy Integrator Płatności S.A.';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
@@ -153,16 +153,6 @@ class Tpay extends PaymentModule
         $this->description = $this->trans('Accepting online payments', [], 'Modules.Tpay.Admin');
         $this->confirmUninstall = $this->trans('Delete this module?', [], 'Modules.Tpay.Admin');
         $this->hookDispatcher = new HookDispatcher($this);
-
-        // @phpstan-ignore-next-line
-        if (_TPAY_MARKETPLACE_RELEASE) {
-            $mboInstaller = new DependencyBuilder($this);
-            if (!$mboInstaller->areDependenciesMet()) {
-                $dependencies = $mboInstaller->handleDependencies();
-                $this->smarty->assign('dependencies', $dependencies);
-                exit($this->fetch('module:tpay/views/templates/admin/dependency_builder.tpl'));
-            }
-        }
     }
 
     /** Boot API when it's needed */
@@ -418,6 +408,9 @@ class Tpay extends PaymentModule
         $transactionRepository = $this->getService('tpay.repository.transaction');
         $transaction = $transactionRepository->getTransactionByOrderId($params['order']->id);
 
+        if ($transaction && $this->isCardPayment($transaction)) {
+            return '';
+        }
         if ($transaction && 'pending' == $transaction['status'] && $this->isBlikPayment($transaction)) {
             $moduleLink = $this->getContext()->link->getModuleLink('tpay', 'chargeBlik', [], true);
 
@@ -484,6 +477,11 @@ class Tpay extends PaymentModule
     private function isTransferOrCardPayment($transaction): bool
     {
         return 'transfer' === $transaction['payment_type'] || 'cards' === $transaction['payment_type'];
+    }
+
+    private function isCardPayment($transaction): bool
+    {
+        return 'cards' === $transaction['payment_type'];
     }
 
     /** Module call API. */

@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.15.2]
+
+### Fixed
+- Fatal error on the storefront (`Unable to retrieve Symfony AppKernel`) in the marketplace
+  build of the module. The MBO dependency check now only runs while an admin controller is
+  handling the request, and no longer crashes the whole shop if the Symfony router can't be
+  built.
+- Prevent automatic transaction cancellation from breaking checkout when frontend execution is enabled.
+ 
+### Changed
+- Payment channels list is cached for 15 minutes (per environment and merchant account) instead of being fetched from
+  the API on every render of the payment options; saving the module settings clears the cache.
+  When the channels request fails (rate limit, outage) the last known list (up to 24 h) is used,
+  so the payment options stay in the checkout.
+- Hides Tpay transaction status widget from success page for cards payments.
+- Removed unused CSS import for `tabler-icons`
+
 ## [1.15.1]
 
 ### Fixed

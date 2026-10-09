@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
 
 class ContextFactory
 {
-    /** @return \Cart */
+    /** @return \Cart|null */
     public static function getCart()
     {
         return self::getContext()->cart;

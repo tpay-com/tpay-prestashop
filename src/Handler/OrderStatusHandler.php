@@ -71,9 +71,12 @@ class OrderStatusHandler
         if (!in_array($orderStateId, $orderStatusesHistory)) {
             if (!$error) {
                 if (version_compare(_PS_VERSION_, '8.0.0', '>=')) {
+                    // PHPStan also checks this branch against PrestaShop 1.7's float annotation.
+                    // @phpstan-ignore argument.type
                     $order->addOrderPayment((string) $order->getOrdersTotalPaid(), 'Tpay', $tpayPaymentId);
                 } else {
-                    // @phpstan-ignore-next-line
+                    // PHPStan also checks this branch against PrestaShop 8+'s string annotation.
+                    // @phpstan-ignore argument.type
                     $order->addOrderPayment((float) $order->getOrdersTotalPaid(), 'Tpay', $tpayPaymentId);
                 }
             }

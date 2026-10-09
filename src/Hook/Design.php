@@ -50,7 +50,10 @@ class Design extends AbstractHook
         $this->context->controller->addCSS($this->module->getPath() . 'views/css/main.css');
         $this->context->controller->addJS($this->module->getPath() . 'views/js/main.min.js');
         if (Cfg::get('TPAY_AUTO_CANCEL_ACTIVE') && Cfg::get('TPAY_AUTO_CANCEL_FRONTEND_RUN')) {
-            $this->context->controller->addJS($this->module->getPath() . 'cron.php', false);
+            \Media::addJsDef([
+                'tpay_auto_cancel_url' => $this->context->link->getModuleLink('tpay', 'cron', [], true),
+            ]);
+            $this->context->controller->addJS($this->module->getPath() . 'views/js/autoCancel.js');
         }
 
         $ajax = $this->context->link->getModuleLink('tpay', 'ajax', [], true);

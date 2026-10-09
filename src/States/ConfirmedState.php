@@ -60,8 +60,10 @@ class ConfirmedState implements StateType
     public function create(): \OrderState
     {
         $name = [];
+        $templates = [];
 
         foreach (\Language::getLanguages() as $lang) {
+            $templates[$lang['id_lang']] = 'payment';
             $name[$lang['id_lang']] = $this->stateLanguage[$lang['iso_code']]
                 ?? $this->stateLanguage['pl'];
         }
@@ -73,7 +75,7 @@ class ConfirmedState implements StateType
         $this->orderState->send_email = true;
         $this->orderState->invoice = true;
         $this->orderState->color = '#00DE69';
-        $this->orderState->template = 'payment';
+        $this->orderState->template = $templates;
         $this->orderState->unremovable = false;
         $this->orderState->logable = true;
         $this->orderState->module_name = $this->moduleName;
