@@ -24,7 +24,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 global $_MODULE;
 $_MODULE = [];
 $_MODULE['<{tpay}prestashop>admin_3f984e2e893f87bc9b60d5b3f6867255'] = 'Opłata za płatność online:';
