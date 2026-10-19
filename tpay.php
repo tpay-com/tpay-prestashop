@@ -34,7 +34,6 @@ if (!defined('_PS_VERSION_')) {
 define('_TPAY_MARKETPLACE_RELEASE', false);
 
 use Configuration as Cfg;
-use Prestashop\ModuleLibMboInstaller\DependencyBuilder;
 use Psr\Log\LoggerInterface;
 use Tpay\Config\Config;
 use Tpay\Exception\BaseException;
