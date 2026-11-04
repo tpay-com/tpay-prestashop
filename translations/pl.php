@@ -79,7 +79,7 @@ $_MODULE['<{tpay}prestashop>admin_d8061fcea5d39a9ff0f6c054a90fa9d1'] = 'Bezpośr
 $_MODULE['<{tpay}prestashop>admin_2b56754cc77ff1052b95dcdfbf491ad8'] = 'Kwota zwrotu';
 $_MODULE['<{tpay}prestashop>admin_9a49152f05f1c38bc892d4c3530c0d18'] = 'Data zwrotu';
 $_MODULE['<{tpay}prestashop>admin_bdfbd27201a382ded201f75ddca04ba0'] = "Błąd podczas wykonywania zwrotu.
-                                   Sprawdź czy wartość\u{a0}zwrotu nie przekracza wartości zamówienia.";
+ Sprawdź czy wartość\u{a0}zwrotu nie przekracza wartości zamówienia.";
 $_MODULE['<{tpay}prestashop>admin_e13ae084c076802ae1b4ce8d01ec33bd'] = 'Błąd podczas wykonywania zwrotu. Wartość kwoty jest poza zadeklarowaną precyzją.';
 $_MODULE['<{tpay}prestashop>admin_392c5733b9355eda0b5e81ac9cb31d2d'] = 'Błąd podczas wykonywania zwrotu. Podany identyfikator transakcji nie istnieje, jest niedostępny lub transakcja została opłacona.';
 $_MODULE['<{tpay}prestashop>admin_2f5f589b85e66cd6d6f2c3372665a369'] = 'Błąd podczas wykonywania zwrotu. Okres zwrotu dla tej transakcji wygasł.';
@@ -131,10 +131,10 @@ $_MODULE['<{tpay}prestashop>admin_4f926a308ced7be330c37a4dbdde1811'] = 'Panelu A
 $_MODULE['<{tpay}prestashop>admin_4a5336964a8a665940152d53fa1ca0a6'] = 'i sprawdź, czy BLIK Płacę Później jest aktywny. Jeśli ta metoda płatności nie jest włączona, aktywuj ją, a następnie ponownie włącz ją w swoim sklepie.';
 $_MODULE['<{tpay}prestashop>admin_088abb131ffb45a419d9c5080297f68f'] = 'BLIK Płacę Później to usługa płatności odroczonych dla transakcji od 30 PLN do 4000 PLN. Pieniądze za sprzedany towar otrzymasz od razu, a Klient będzie miał 30 dni na dokonanie płatności.';
 $_MODULE['<{tpay}prestashop>admin_d59048f21fd887ad520398ce677be586'] = 'Dowiedz się więcej';
-$_MODULE['<{tpay}prestashop>admin_9d34f4ec2ae75a549eec01e2f6868a52'] = 'Płatność kartą';
-$_MODULE['<{tpay}prestashop>admin_ac794f27a2403fc70aa3b05954b56bca'] = 'Pokaż metodę jako osobną płatność';
+$_MODULE['<{tpay}prestashop>admin_9d34f4ec2ae75a549eec01e2f6868a52'] = 'Płatność\u{a0}kartą';
+$_MODULE['<{tpay}prestashop>admin_ac794f27a2403fc70aa3b05954b56bca'] = 'Pokaż metodę jako osobną\u{a0}płatność';
 $_MODULE['<{tpay}prestashop>admin_bdfbd27201a382ded201f75ddca04ba0'] = 'Błąd podczas wykonywania zwrotu.
-                                   Sprawdź czy wartość zwrotu nie przekracza wartości zamówienia.';
+                                   Sprawdź czy wartość\u{a0}zwrotu nie przekracza wartości zamówienia.';
 $_MODULE['<{tpay}prestashop>shop_9dda1ce369a35b3d0a4993e05745bc99'] = 'Produkt';
 $_MODULE['<{tpay}prestashop>shop_d9569fc09d7f6c6492c580cc964d23e0'] = 'Ilość';
 $_MODULE['<{tpay}prestashop>shop_c2d69e8ff767359a3bff5870ae4f156d'] = 'Cena łączna';
