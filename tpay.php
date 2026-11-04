@@ -135,7 +135,7 @@ class Tpay extends PaymentModule
     {
         $this->name = 'tpay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.15.2';
+        $this->version = '1.16.2';
         $this->author = 'Krajowy Integrator Płatności S.A.';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
