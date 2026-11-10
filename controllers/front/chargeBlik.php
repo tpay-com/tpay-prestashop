@@ -127,7 +127,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
      */
     public function createTransaction($address, $customer, $context, $cart, $order)
     {
-        $transactionParams = $this->getCustomerData($address, $customer, $context, $cart, $order, self::TYPE);
+        $transactionParams = $this->getCustomerData($address, $customer, $context, $order, self::TYPE);
 
         $isoCode = Language::getLanguage($cart->id_lang)['iso_code'];
         $transactionParams['lang'] = in_array($isoCode, ['pl', 'en']) ? $isoCode : 'en';
@@ -169,7 +169,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
      */
     public function payBlikTransaction($address, $customer, $context, $cart, $order, $oldTransactionId)
     {
-        $transactionParams = $this->getCustomerData($address, $customer, $context, $cart, $order, self::TYPE);
+        $transactionParams = $this->getCustomerData($address, $customer, $context, $order, self::TYPE);
 
         $isoCode = Language::getLanguage($cart->id_lang)['iso_code'];
         $transactionParams['lang'] = in_array($isoCode, ['pl', 'en']) ? $isoCode : 'en';
@@ -241,9 +241,9 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
      *
      * @throws Exception
      */
-    public function getCustomerData($address, $customer, $context, $cart, $order, $type): array
+    public function getCustomerData($address, $customer, $context, $order, $type): array
     {
-        $customerData = new CustomerData($address, $customer, $context, $cart, $order);
+        $customerData = new CustomerData($address, $customer, $context, $order);
 
         if (self::TYPE === $type) {
             $customerData->createBlikCallbacks(self::TYPE);
@@ -371,7 +371,7 @@ class TpayChargeBlikModuleFrontController extends ModuleFrontController
 
     private function payByTransfer($address, $customer, $context, $cart, $order, string $oldTransactionId)
     {
-        $transactionParams = $this->getCustomerData($address, $customer, $context, $cart, $order, 'transfer');
+        $transactionParams = $this->getCustomerData($address, $customer, $context, $order, 'transfer');
         $transactionParams['amount'] = $order->total_paid - $order->total_paid_real;
         $isoCode = Language::getLanguage($cart->id_lang)['iso_code'];
         $transactionParams['lang'] = in_array($isoCode, ['pl', 'en']) ? $isoCode : 'en';

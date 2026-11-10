@@ -35,7 +35,6 @@ if (!defined('_PS_VERSION_')) {
 
 use Configuration as Cfg;
 use Tpay\Builder\PayerDataBuilder;
-use Tpay\Service\SurchargeService;
 
 class CustomerData
 {
@@ -48,9 +47,6 @@ class CustomerData
     /** @var \Context */
     private $context;
 
-    /** @var \Cart */
-    private $cart;
-
     /** @var array<string, mixed> */
     private $customerDetails = [];
 
@@ -58,12 +54,11 @@ class CustomerData
     private $order;
 
     /** @throws \Exception */
-    public function __construct(\AddressCore $address, \Customer $customer, \Context $context, \Cart $cart, \Order $order)
+    public function __construct(\AddressCore $address, \Customer $customer, \Context $context, \Order $order)
     {
         $this->address = $address;
         $this->customer = $customer;
         $this->context = $context;
-        $this->cart = $cart;
         $this->order = $order;
 
         $this->setBasicClient();
