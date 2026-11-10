@@ -82,7 +82,7 @@ class PaymentHandler
             $this->order
         );
         $customer->createCallbacks($this->order, $this->paymentMethodHandler->getName());
-        $customer->createDescription($this->order);
+        $customer->createDescription();
 
         return $customer->getData();
     }

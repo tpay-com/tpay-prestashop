@@ -74,39 +74,10 @@ class CustomerData
         return $this->customerDetails;
     }
 
-    /**
-     * @throws \PrestaShopDatabaseException
-     * @throws \PrestaShopException
-     * @throws \Exception
-     */
-    public function getOrderTotalAmount(): string
+    public function createDescription()
     {
-        $surcharge = new SurchargeService($this->cart);
-        $orderTotal = floatval($this->order->total_paid_tax_incl);
-        $surchargeTotal = $surcharge->getSurchargeValue($orderTotal);
-        $total = $orderTotal + $surchargeTotal;
-
-        return (string) $total;
-    }
-
-    public function createDescription($order = null)
-    {
-        $context = $this->context;
-        $customer = $context->customer;
-        $firstName = $customer->firstname;
-        $lastName = $customer->lastname;
-
-        // @phpstan-ignore-next-line
-        $context->cookie->customer_firstname = $firstName;
-        // @phpstan-ignore-next-line
-        $context->cookie->customer_lastname = $lastName;
-
-        $this->customerDetails['description'] = '#BLIK - ' . $firstName . ' ' . $lastName;
-
-        if ($order) {
-            $reference = $order->reference;
-            $this->customerDetails['description'] = $this->getCustomerTitle($reference, $context->cookie);
-        }
+        $customer = $this->order->getCustomer();
+        $this->customerDetails['description'] = '#' . $this->order->reference . ' - ' . $customer->firstname . ' ' . $customer->lastname;
     }
 
     public function createCallbacks($order, $type): void
@@ -185,7 +156,7 @@ class CustomerData
      */
     private function setBasicClient(): void
     {
-        $orderTotal = $this->getOrderTotalAmount();
+        $orderTotal = $this->order->total_paid_tax_incl;
         $phoneNumber = (!empty($this->address->phone_mobile) && strlen($this->address->phone_mobile) > 3) ? $this->address->phone_mobile : ($this->address->phone ?: '000');
         $email = $this->context->cookie->email ?? $this->customer->email;
         $customerFirstName = !empty($this->context->cookie->customer_firstname) ? $this->context->cookie->customer_firstname : $this->customer->firstname;
