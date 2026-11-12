@@ -36,6 +36,7 @@ if (!defined('_PS_VERSION_')) {
 use Tpay\Config\Config;
 use Tpay\Exception\PaymentException;
 use Tpay\Exception\TransactionException;
+use Tpay\OpenApi\Utilities\SensitiveDataMasker;
 use Tpay\Repository\CreditCardsRepository;
 use Tpay\Service\CardService;
 use Tpay\Service\TransactionService;
@@ -176,7 +177,7 @@ class CreditCardPaymentHandler implements PaymentMethodHandler
                 \Tools::redirect($response['transactionPaymentUrl']);
             }
         }
-        \PrestaShopLogger::addLog('Unable to create new card payment. Response: ' . json_encode($transaction), 3);
+        \PrestaShopLogger::addLog('Unable to create new card payment. Response: ' . json_encode(SensitiveDataMasker::maskData($transaction)), 3);
         \Tools::redirect(
             $this->context->link->getModuleLink(
                 'tpay',
