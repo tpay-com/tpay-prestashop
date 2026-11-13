@@ -420,6 +420,10 @@
         <source>invalid amount</source>
         <target>nieprawidłowa kwota</target>
       </trans-unit>
+      <trans-unit id="132c0711f61578c9f8d78825e7ad90e6">
+        <source>If you offer customers traditional bank transfers (postal orders), set the transaction validity time to a minimum of 3 days. With a shorter timeframe, the order will be canceled before the funds are booked, and the customer's delayed payment will be automatically refunded. Alternatively, disable payment methods with extended processing times.</source>
+        <target>Uwaga! Jeśli udostępniasz klientom przelew tradycyjny (druczek), ustaw czas ważności transakcji na min. 3 dni. Przy krótszym czasie zamówienie zostanie anulowane przed zaksięgowaniem, a opóźniona wpłata klienta zostanie automatycznie zwrócona. Alternatywa: wyłącz metody płatności z wydłużonym czasem księgowania.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
