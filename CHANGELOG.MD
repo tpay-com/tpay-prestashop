@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated Tpay OpenAPI SDK to version 2.6.0
 
+### Fixed
+
+- Fixed issue where creating transaction may recalulate totals for existing order
+
 ## [1.15.2]
 
 ### Fixed
