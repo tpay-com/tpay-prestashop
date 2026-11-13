@@ -390,6 +390,7 @@ class AdminFormBuilder
                 [
                     'type' => 'text',
                     'label' => $this->translator->trans('Cancel orders and transactions after days', [], 'Modules.Tpay.Admin'),
+                    'desc' => $this->translator->trans('If you offer customers traditional bank transfers (postal orders), set the transaction validity time to a minimum of 3 days. With a shorter timeframe, the order will be canceled before the funds are booked, and the customer\'s delayed payment will be automatically refunded. Alternatively, disable payment methods with extended processing times.', [], 'Modules.Tpay.Admin'),
                     'name' => 'TPAY_AUTO_CANCEL_DAYS',
                     'required' => true,
                 ],
