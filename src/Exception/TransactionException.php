@@ -29,6 +29,8 @@ declare(strict_types=1);
 
 namespace Tpay\Exception;
 
+use Tpay\OpenApi\Utilities\SensitiveDataMasker;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -37,6 +39,6 @@ class TransactionException extends \Exception
 {
     public static function unableToCreateTransaction(array $data): self
     {
-        return new self(sprintf('Unable to create transaction. Response: %s', json_encode($data)));
+        return new self(sprintf('Unable to create transaction. Response: %s', json_encode(SensitiveDataMasker::maskData($data))));
     }
 }

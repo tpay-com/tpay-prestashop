@@ -35,6 +35,7 @@ if (!defined('_PS_VERSION_')) {
 
 use Tpay\Exception\PaymentException;
 use Tpay\Exception\TransactionException;
+use Tpay\OpenApi\Utilities\SensitiveDataMasker;
 use Tpay\Service\TransactionService;
 use Tpay\Util\Helper;
 
@@ -69,7 +70,7 @@ class BasicPaymentHandler implements PaymentMethodHandler
 
         $this->initTransactionProcess($transaction, (int) $order->id);
 
-        throw new PaymentException('Unable to create payment method. Response: ' . json_encode($transaction));
+        throw new PaymentException('Unable to create payment method. Response: ' . json_encode(SensitiveDataMasker::maskData($transaction)));
     }
 
     /**
