@@ -135,6 +135,7 @@ $_MODULE['<{tpay}prestashop>admin_9d34f4ec2ae75a549eec01e2f6868a52'] = 'Płatno�
 $_MODULE['<{tpay}prestashop>admin_ac794f27a2403fc70aa3b05954b56bca'] = 'Pokaż metodę jako osobną\u{a0}płatność';
 $_MODULE['<{tpay}prestashop>admin_bdfbd27201a382ded201f75ddca04ba0'] = 'Błąd podczas wykonywania zwrotu.
                                    Sprawdź czy wartość\u{a0}zwrotu nie przekracza wartości zamówienia.';
+$_MODULE['<{tpay}prestashop>admin_132c0711f61578c9f8d78825e7ad90e6'] = 'Uwaga! Jeśli udostępniasz klientom przelew tradycyjny (druczek), ustaw czas ważności transakcji na min. 3 dni. Przy krótszym czasie zamówienie zostanie anulowane przed zaksięgowaniem, a opóźniona wpłata klienta zostanie automatycznie zwrócona. Alternatywa: wyłącz metody płatności z wydłużonym czasem księgowania.';
 $_MODULE['<{tpay}prestashop>shop_9dda1ce369a35b3d0a4993e05745bc99'] = 'Produkt';
 $_MODULE['<{tpay}prestashop>shop_d9569fc09d7f6c6492c580cc964d23e0'] = 'Ilość';
 $_MODULE['<{tpay}prestashop>shop_c2d69e8ff767359a3bff5870ae4f156d'] = 'Cena łączna';
